@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PixelEditor
@@ -15,6 +8,12 @@ namespace PixelEditor
         public frm_PixelEditor()
         {
             InitializeComponent();
+        }
+
+        private void frm_PixelEditor_Load(object sender, EventArgs e)
+        {
+            dbx_ViewingArea.NewImage(256, 256);
+            dbx_ViewingArea.GenerateGrid(16);
         }
     }
 }

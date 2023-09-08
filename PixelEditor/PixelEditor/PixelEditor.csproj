@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\DrawingBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DrawingBox.Designer.cs">
+      <DependentUpon>DrawingBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="frm_PixelEditor.cs">
       <SubType>Form</SubType>
     </Compile>
