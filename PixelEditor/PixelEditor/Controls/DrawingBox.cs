@@ -35,5 +35,14 @@ namespace PixelEditor.Controls
                 gridGenerator.DrawLine(linePen, y * cellSize, 0, y * cellSize, this.Height);
             }
         }
+
+        public void DrawPixel(int xPos, int yPos, int pixelSize, Color pixelColor)
+        {
+            Graphics pixelDraw = Graphics.FromImage(this.Image);
+            Brush pixelBrush = new SolidBrush(pixelColor);
+
+            // Gets the correct position of the rectangle from the mouse position, then fills it in without affecting the grid
+            pixelDraw.FillRectangle(pixelBrush, xPos - xPos % pixelSize + 1, yPos - yPos % pixelSize + 1, pixelSize - 1, pixelSize - 1);
+        }
     }
 }

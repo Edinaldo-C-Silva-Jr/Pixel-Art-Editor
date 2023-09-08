@@ -39,6 +39,7 @@
             this.dbx_ViewingArea.Size = new System.Drawing.Size(10, 10);
             this.dbx_ViewingArea.TabIndex = 0;
             this.dbx_ViewingArea.TabStop = false;
+            this.dbx_ViewingArea.Click += new System.EventHandler(this.dbx_ViewingArea_Click);
             // 
             // frm_PixelEditor
             // 
