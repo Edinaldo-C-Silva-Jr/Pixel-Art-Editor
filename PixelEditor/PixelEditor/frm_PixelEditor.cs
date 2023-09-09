@@ -15,6 +15,8 @@ namespace PixelEditor
         {
             dbx_ViewingArea.NewImage(256, 256);
             dbx_ViewingArea.GenerateGrid(16);
+
+            tbl_Colors.GenerateColorGrid(2, 8);
         }
 
         private void dbx_ViewingArea_Click(object sender, EventArgs e)
