@@ -30,6 +30,7 @@
         {
             this.dbx_ViewingArea = new PixelEditor.Controls.DrawingBox();
             this.tbl_Colors = new PixelEditor.Controls.ColorTable();
+            this.clr_ColorPicker = new System.Windows.Forms.ColorDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dbx_ViewingArea)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,6 +75,7 @@
 
         private Controls.DrawingBox dbx_ViewingArea;
         private Controls.ColorTable tbl_Colors;
+        private System.Windows.Forms.ColorDialog clr_ColorPicker;
     }
 }
 

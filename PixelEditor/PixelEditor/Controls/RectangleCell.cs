@@ -14,12 +14,24 @@ namespace PixelEditor.Controls
     {
         public RectangleCell()
         {
-            this.Size = new Size(30, 30);
             this.Dock = DockStyle.Fill;
+            this.Size = new Size(30, 30);
             this.Margin = new Padding(0, 0, 0, 0);
             this.BackColor = Color.White;
 
             InitializeComponent();
+        }
+
+        public void SelectCell()
+        {
+            this.Size = new Size(26, 26);
+            this.Margin = new Padding(2, 2, 2, 2);
+        }
+
+        public void DeselectCell()
+        {
+            this.Size = new Size(30, 30);
+            this.Margin = new Padding(0, 0, 0, 0);
         }
     }
 }

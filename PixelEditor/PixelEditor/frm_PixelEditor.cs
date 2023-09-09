@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PixelEditor.Controls;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -16,7 +17,7 @@ namespace PixelEditor
             dbx_ViewingArea.NewImage(256, 256);
             dbx_ViewingArea.GenerateGrid(16);
 
-            tbl_Colors.GenerateColorGrid(2, 8);
+            tbl_Colors.GenerateColorGrid(2, 8, new EventHandler(ColorCellClicked));
         }
 
         private void dbx_ViewingArea_Click(object sender, EventArgs e)
@@ -25,6 +26,24 @@ namespace PixelEditor
 
             dbx_ViewingArea.DrawPixel(mouseClick.X, mouseClick.Y, 16, Color.Black);
             dbx_ViewingArea.Refresh();
+        }
+
+        public void ColorCellClicked(object sender, EventArgs e)
+        {
+            MouseEventArgs mouseClick = (MouseEventArgs)e;
+            RectangleCell cell = sender as RectangleCell;
+
+            if (mouseClick.Button == MouseButtons.Right)
+            {
+                DialogResult colorpicked = clr_ColorPicker.ShowDialog();
+
+                if (colorpicked == DialogResult.OK)
+                {
+                    cell.BackColor = clr_ColorPicker.Color;
+                }
+            }
+
+            tbl_Colors.ChangeCurrentCell(cell);
         }
     }
 }
