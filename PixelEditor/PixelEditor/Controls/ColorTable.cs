@@ -53,5 +53,10 @@ namespace PixelEditor.Controls
 
             this.ResumeLayout();
         }
+
+        public Color GetCurrentColor()
+        {
+            return this.GetControlFromPosition(currentCellColumn, currentCellRow).BackColor;
+        }
     }
 }

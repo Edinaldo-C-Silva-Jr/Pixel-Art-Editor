@@ -24,11 +24,11 @@ namespace PixelEditor
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
 
-            dbx_ViewingArea.DrawPixel(mouseClick.X, mouseClick.Y, 16, Color.Black);
+            dbx_ViewingArea.DrawPixel(mouseClick.X, mouseClick.Y, 16, tbl_Colors.GetCurrentColor());
             dbx_ViewingArea.Refresh();
         }
 
-        public void ColorCellClicked(object sender, EventArgs e)
+        private void ColorCellClicked(object sender, EventArgs e)
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
             RectangleCell cell = sender as RectangleCell;
