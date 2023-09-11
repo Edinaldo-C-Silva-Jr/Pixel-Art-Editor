@@ -15,9 +15,10 @@ namespace PixelEditor
 
         private void frm_PixelEditor_Load(object sender, EventArgs e)
         {
-            dbx_ViewingArea.NewImage(256, 256);
-            dbx_ViewingArea.GenerateGrid(16);
-
+            int height = (int)nmb_PixelHeight.Value;
+            int width = (int)nmb_PixelWidth.Value;
+            int zoom = (int)nmb_ViewingZoom.Value;
+            dbx_ViewingArea.GenerateNewImage(height * zoom, width * zoom, zoom, true);
             tbl_Colors.GenerateColorGrid(2, 8, new EventHandler(ColorCellClicked));
         }
 
@@ -25,7 +26,7 @@ namespace PixelEditor
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
 
-            dbx_ViewingArea.DrawPixel(mouseClick.X, mouseClick.Y, (int)nmb_ViewingZoom.Value, tbl_Colors.GetCurrentColor());
+            dbx_ViewingArea.DrawPixel(mouseClick.X, mouseClick.Y, (int)nmb_ViewingZoom.Value, tbl_Colors.GetCurrentColor(), false);
             dbx_ViewingArea.Refresh();
         }
 
@@ -53,8 +54,7 @@ namespace PixelEditor
             int width = (int)nmb_PixelWidth.Value;
             int zoom = (int)nmb_ViewingZoom.Value;
 
-            dbx_ViewingArea.NewImage(width*zoom, height*zoom);
-            dbx_ViewingArea.GenerateGrid(zoom);
+            dbx_ViewingArea.GenerateNewImage(height * zoom, width * zoom, zoom, false);
         }
     }
 }
