@@ -25,12 +25,12 @@ namespace PixelEditor.Controls
             Graphics gridGenerator = Graphics.FromImage(this.Image);
             Pen linePen = new Pen(Color.Gray);
 
-            for (int x = 0; x < this.Width / cellSize + 1; x++)
+            for (int x = 0; x < this.Height / cellSize + 1; x++)
             {
                 gridGenerator.DrawLine(linePen, 0, x * cellSize, this.Width, x * cellSize);
             }
 
-            for (int y = 0; y < this.Height / cellSize + 1; y++)
+            for (int y = 0; y < this.Width / cellSize + 1; y++)
             {
                 gridGenerator.DrawLine(linePen, y * cellSize, 0, y * cellSize, this.Height);
             }

@@ -58,6 +58,12 @@
     <Compile Include="Controls\DrawingBox.Designer.cs">
       <DependentUpon>DrawingBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NumberBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\NumberBox.Designer.cs">
+      <DependentUpon>NumberBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RectangleCell.cs">
       <SubType>UserControl</SubType>
     </Compile>

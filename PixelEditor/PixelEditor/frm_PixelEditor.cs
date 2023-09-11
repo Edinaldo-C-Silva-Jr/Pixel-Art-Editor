@@ -1,5 +1,6 @@
 ﻿using PixelEditor.Controls;
 using System;
+using System.Media;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -24,7 +25,7 @@ namespace PixelEditor
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
 
-            dbx_ViewingArea.DrawPixel(mouseClick.X, mouseClick.Y, 16, tbl_Colors.GetCurrentColor());
+            dbx_ViewingArea.DrawPixel(mouseClick.X, mouseClick.Y, (int)nmb_ViewingZoom.Value, tbl_Colors.GetCurrentColor());
             dbx_ViewingArea.Refresh();
         }
 
@@ -44,6 +45,16 @@ namespace PixelEditor
             }
 
             tbl_Colors.ChangeCurrentCell(cell);
+        }
+
+        private void btn_PixelSize_Click(object sender, EventArgs e)
+        {
+            int height = (int)nmb_PixelHeight.Value;
+            int width = (int)nmb_PixelWidth.Value;
+            int zoom = (int)nmb_ViewingZoom.Value;
+
+            dbx_ViewingArea.NewImage(width*zoom, height*zoom);
+            dbx_ViewingArea.GenerateGrid(zoom);
         }
     }
 }
