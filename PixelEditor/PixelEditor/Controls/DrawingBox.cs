@@ -28,7 +28,6 @@ namespace PixelEditor.Controls
                         GenerateCheckerGrid(cellSize);
                         break;
                     }
-
             }
         }
 
@@ -64,13 +63,13 @@ namespace PixelEditor.Controls
 
             bool white = true;
 
-            for (int y = 0; y < this.Width / cellSize; y++)
+            for (int y = 0; y < this.Height / cellSize; y++)
             {
-                for (int x = 0; x < this.Height / cellSize; x++)
+                for (int x = 0; x < this.Width / cellSize; x++)
                 {
                     if (white)
                     {
-                        gridGenerator.FillRectangle(whiteBrush, cellSize*x, cellSize*y, cellSize, cellSize);
+                        gridGenerator.FillRectangle(whiteBrush, cellSize * x, cellSize * y, cellSize, cellSize);
                     }
                     else
                     {
@@ -79,7 +78,10 @@ namespace PixelEditor.Controls
 
                     white = !white;
                 }
-                white = !white;
+                if ((this.Width / cellSize) % 2 == 0 )
+                {
+                    white = !white;
+                }
             }
         }
 
@@ -95,7 +97,7 @@ namespace PixelEditor.Controls
             }
             else
             {
-                // Gets the correct position of the rectangle from the mouse position, the 1 pixel offsets aren't needed for a checkers grid
+                // Gets the correct position of the rectangle from the mouse position, the 1 pixel offsets aren't needed for a checkers or empty grid
                 pixelDraw.FillRectangle(pixelBrush, xPos - xPos % pixelSize, yPos - yPos % pixelSize, pixelSize, pixelSize);
             }
         }
