@@ -109,7 +109,7 @@
             // 
             this.nmb_ViewingZoom.Location = new System.Drawing.Point(145, 20);
             this.nmb_ViewingZoom.Maximum = new decimal(new int[] {
-            16,
+            256,
             0,
             0,
             0});
@@ -131,7 +131,12 @@
             // 
             this.nmb_PixelWidth.Location = new System.Drawing.Point(50, 45);
             this.nmb_PixelWidth.Maximum = new decimal(new int[] {
-            512,
+            4096,
+            0,
+            0,
+            0});
+            this.nmb_PixelWidth.Minimum = new decimal(new int[] {
+            5,
             0,
             0,
             0});
@@ -143,6 +148,7 @@
             0,
             0,
             0});
+            this.nmb_PixelWidth.ValueChanged += new System.EventHandler(this.SizeValuesChanged);
             // 
             // tbl_Colors
             // 
@@ -171,7 +177,12 @@
             // 
             this.nmb_PixelHeight.Location = new System.Drawing.Point(50, 20);
             this.nmb_PixelHeight.Maximum = new decimal(new int[] {
-            512,
+            4096,
+            0,
+            0,
+            0});
+            this.nmb_PixelHeight.Minimum = new decimal(new int[] {
+            5,
             0,
             0,
             0});
@@ -183,6 +194,7 @@
             0,
             0,
             0});
+            this.nmb_PixelHeight.ValueChanged += new System.EventHandler(this.SizeValuesChanged);
             // 
             // frm_PixelEditor
             // 

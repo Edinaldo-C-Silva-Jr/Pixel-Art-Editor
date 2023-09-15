@@ -11,7 +11,7 @@ namespace PixelEditor.Controls
             InitializeComponent();
         }
 
-        public void GenerateNewImage(int xSize, int ySize, int cellSize, int gridType)
+        public void GenerateNewImage(int ySize, int xSize, int cellSize, int gridType)
         {
             NewImage(xSize, ySize);
 

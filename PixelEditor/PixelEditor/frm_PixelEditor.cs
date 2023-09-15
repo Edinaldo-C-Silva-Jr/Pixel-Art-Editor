@@ -58,5 +58,23 @@ namespace PixelEditor
 
             dbx_ViewingArea.GenerateNewImage(height * zoom, width * zoom, zoom, cbb_Grid.SelectedIndex);
         }
+
+        private void CalculateMaximumZoom(int size)
+        {
+            int zoom = 4096 / size;
+            nmb_ViewingZoom.Maximum = zoom;
+        }
+
+        private void SizeValuesChanged(object sender, EventArgs e)
+        {
+            if (nmb_PixelHeight.Value > nmb_PixelWidth .Value)
+            {
+                CalculateMaximumZoom((int)nmb_PixelHeight.Value);
+            }
+            else
+            {
+                CalculateMaximumZoom((int)nmb_PixelWidth.Value);
+            }
+        }
     }
 }
