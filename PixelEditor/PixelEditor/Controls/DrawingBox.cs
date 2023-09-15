@@ -11,17 +11,24 @@ namespace PixelEditor.Controls
             InitializeComponent();
         }
 
-        public void GenerateNewImage(int xSize, int ySize, int cellSize, bool lineGrid)
+        public void GenerateNewImage(int xSize, int ySize, int cellSize, int gridType)
         {
-            if (lineGrid)
+            NewImage(xSize, ySize);
+
+            switch (gridType)
             {
-                NewImage(xSize + 1, ySize + 1); // The size is set to 1 pixel larger in order to fit the grid outline
-                GenerateLineGrid(cellSize);
-            }
-            else
-            {
-                NewImage(xSize, ySize);
-                GenerateCheckerGrid(cellSize);
+                case 1: // Line Grid
+                    {
+                        NewImage(xSize + 1, ySize + 1); // The size is set to 1 pixel larger in order to fit the grid outline
+                        GenerateLineGrid(cellSize);
+                        break;
+                    }
+                case 2: // Checkered Grid
+                    {
+                        GenerateCheckerGrid(cellSize);
+                        break;
+                    }
+
             }
         }
 
@@ -76,12 +83,12 @@ namespace PixelEditor.Controls
             }
         }
 
-        public void DrawPixel(int xPos, int yPos, int pixelSize, Color pixelColor, bool lineGrid)
+        public void DrawPixel(int xPos, int yPos, int pixelSize, Color pixelColor, int gridType)
         {
             Graphics pixelDraw = Graphics.FromImage(this.Image);
             Brush pixelBrush = new SolidBrush(pixelColor);
 
-            if (lineGrid)
+            if (gridType == 1)
             {
                 // Gets the correct position of the rectangle from the mouse position, then fills it with a 1 pixel offset in order to not affect the grid
                 pixelDraw.FillRectangle(pixelBrush, xPos - xPos % pixelSize + 1, yPos - yPos % pixelSize + 1, pixelSize - 1, pixelSize - 1);
