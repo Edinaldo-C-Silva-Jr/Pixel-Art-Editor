@@ -11,7 +11,7 @@ namespace PixelEditor.Controls
             InitializeComponent();
         }
 
-        public void GenerateNewImage(int ySize, int xSize, int cellSize, int gridType)
+        public void GenerateNewImage(int xSize, int ySize, int cellSize, int gridType)
         {
             NewImage(xSize, ySize);
 
@@ -19,7 +19,6 @@ namespace PixelEditor.Controls
             {
                 case 1: // Line Grid
                     {
-                        NewImage(xSize + 1, ySize + 1); // The size is set to 1 pixel larger in order to fit the grid outline
                         GenerateLineGrid(cellSize);
                         break;
                     }
@@ -35,8 +34,7 @@ namespace PixelEditor.Controls
         {
             this.Width = xSize;
             this.Height = ySize;
-
-            this.Image = new Bitmap(this.Width, this.Height);
+            this.Image = new Bitmap(xSize, ySize);
         }
 
         private void GenerateLineGrid(int cellSize)
@@ -44,12 +42,12 @@ namespace PixelEditor.Controls
             Graphics gridGenerator = Graphics.FromImage(this.Image);
             Pen linePen = new Pen(Color.Gray);
 
-            for (int x = 0; x < this.Height / cellSize + 1; x++)
+            for (int x = 1; x < this.Image.Height / cellSize; x++)
             {
                 gridGenerator.DrawLine(linePen, 0, x * cellSize, this.Width, x * cellSize);
             }
 
-            for (int y = 0; y < this.Width / cellSize + 1; y++)
+            for (int y = 1; y < this.Image.Width / cellSize; y++)
             {
                 gridGenerator.DrawLine(linePen, y * cellSize, 0, y * cellSize, this.Height);
             }
@@ -63,9 +61,9 @@ namespace PixelEditor.Controls
 
             bool white = true;
 
-            for (int y = 0; y < this.Height / cellSize; y++)
+            for (int y = 0; y < this.Image.Height / cellSize; y++)
             {
-                for (int x = 0; x < this.Width / cellSize; x++)
+                for (int x = 0; x < this.Image.Width / cellSize; x++)
                 {
                     if (white)
                     {
@@ -78,7 +76,7 @@ namespace PixelEditor.Controls
 
                     white = !white;
                 }
-                if ((this.Width / cellSize) % 2 == 0 )
+                if ((this.Image.Width / cellSize) % 2 == 0 )
                 {
                     white = !white;
                 }
