@@ -17,29 +17,35 @@ namespace PixelEditor
         {
             cbb_Grid.SelectedIndex = 0;
 
-            int height = (int)nmb_PixelHeight.Value;
-            int width = (int)nmb_PixelWidth.Value;
-            int zoom = (int)nmb_ViewingZoom.Value;
-            dbx_ViewingArea.GenerateNewImage(height * zoom, width * zoom, zoom, cbb_Grid.SelectedIndex);
-            tbl_Colors.GenerateColorGrid(2, 8, new EventHandler(ColorCellClicked));
+            SetViewingAreaSize();
+            SetColorAmount();
 
             RelocateControls();
         }
 
+        private void SetViewingAreaSize()
+        {
+            int height = (int)nmb_PixelHeight.Value;
+            int width = (int)nmb_PixelWidth.Value;
+            int zoom = (int)nmb_ViewingZoom.Value;
+            dbx_ViewingArea.GenerateNewImage(width * zoom, height * zoom, zoom, cbb_Grid.SelectedIndex);
+        }
+
+        private void SetColorAmount()
+        {
+            int rows = 2;
+            int columns = 8;
+            tbl_Colors.GenerateColorGrid(rows, columns, new EventHandler(ColorCellClicked));
+            pnl_Colors.DefineNewSize(272, 69);
+        }
+
         private void RelocateControls()
         {
-            pnl_ViewingArea.Size = new Size(dbx_ViewingArea.Width + 2, dbx_ViewingArea.Height + 2);
-
-            if (pnl_ViewingArea.Width > 514)
-            {
-                pnl_ViewingArea.Width = 514;
-            }
-            if (pnl_ViewingArea.Height > 514)
-            {
-                pnl_ViewingArea.Height = 514;
-            }
+            this.SuspendLayout();
+            pnl_ViewingArea.DefineNewSize(514, 514);
 
             pnl_Colors.Location = new Point(pnl_Colors.Location.X, pnl_ViewingArea.Location.Y + pnl_ViewingArea.Height + 10);
+            this.ResumeLayout();
         }
 
         private void dbx_ViewingArea_Click(object sender, EventArgs e)
@@ -70,11 +76,7 @@ namespace PixelEditor
 
         private void btn_PixelSize_Click(object sender, EventArgs e)
         {
-            int height = (int)nmb_PixelHeight.Value;
-            int width = (int)nmb_PixelWidth.Value;
-            int zoom = (int)nmb_ViewingZoom.Value;
-
-            dbx_ViewingArea.GenerateNewImage(width * zoom, height * zoom, zoom, cbb_Grid.SelectedIndex);
+            SetViewingAreaSize();
             RelocateControls();
         }
 

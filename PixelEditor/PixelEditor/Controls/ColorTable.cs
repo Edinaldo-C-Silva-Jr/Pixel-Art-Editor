@@ -16,9 +16,11 @@ namespace PixelEditor.Controls
 
         public void GenerateColorGrid(int colorRows, int colorColumns, EventHandler cellClick)
         {
-            // The size of the table is 30 (cell size) x amount of cells + 1 pixel per cell (to account for the margin) + 1 pixel for the final margin
-            // Thus is becomes 31 * amount of cells + 1
-            this.Size = new Size(31 * colorColumns + 1, 31 * colorRows + 1);
+            int cellSize = DefineCellSize(colorColumns);
+
+            // The size of the table is cell size x amount of cells + 1 pixel per cell (to account for the margin) + 1 pixel for the final margin
+            // Thus is becomes (cell size + 1) * amount of cells + 1
+            this.Size = new Size((cellSize + 1) * colorColumns + 1, (cellSize + 1) * colorRows + 1);
 
             this.RowStyles.Clear();
             this.ColumnStyles.Clear();
@@ -31,12 +33,22 @@ namespace PixelEditor.Controls
                 for (int x = 0; x < colorColumns; x++)
                 {
                     RectangleCell cellTemplate = new RectangleCell();
+                    cellTemplate.SetCellSize(cellSize);
                     cellTemplate.Click += cellClick;
                     this.Controls.Add(cellTemplate, x, y);
                 }
             }
 
             this.Refresh();
+        }
+
+        private int DefineCellSize(int columns)
+        {
+            if (columns < 9)
+            {
+                return 32;
+            }
+            return 16;
         }
 
         public void ChangeCurrentCell(RectangleCell newCell)

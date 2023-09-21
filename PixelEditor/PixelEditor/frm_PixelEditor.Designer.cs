@@ -35,19 +35,19 @@
             this.lbl_ViewingZoom = new System.Windows.Forms.Label();
             this.cbb_Grid = new System.Windows.Forms.ComboBox();
             this.lbl_Grid = new System.Windows.Forms.Label();
-            this.pnl_ViewingArea = new System.Windows.Forms.Panel();
+            this.pnl_Colors = new PixelEditor.Controls.BackgroundPanel();
+            this.tbl_Colors = new PixelEditor.Controls.ColorTable();
+            this.pnl_ViewingArea = new PixelEditor.Controls.BackgroundPanel();
             this.dbx_ViewingArea = new PixelEditor.Controls.DrawingBox();
             this.nmb_PixelHeight = new PixelEditor.Controls.NumberBox();
             this.nmb_ViewingZoom = new PixelEditor.Controls.NumberBox();
             this.nmb_PixelWidth = new PixelEditor.Controls.NumberBox();
-            this.tbl_Colors = new PixelEditor.Controls.ColorTable();
-            this.pnl_Colors = new System.Windows.Forms.Panel();
+            this.pnl_Colors.SuspendLayout();
             this.pnl_ViewingArea.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dbx_ViewingArea)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmb_PixelHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmb_ViewingZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmb_PixelWidth)).BeginInit();
-            this.pnl_Colors.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_PixelSize
@@ -109,6 +109,31 @@
             this.lbl_Grid.Text = "Grid";
             this.lbl_Grid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // pnl_Colors
+            // 
+            this.pnl_Colors.AutoScroll = true;
+            this.pnl_Colors.AutoScrollMargin = new System.Drawing.Size(1, 1);
+            this.pnl_Colors.BackColor = System.Drawing.Color.Black;
+            this.pnl_Colors.Controls.Add(this.tbl_Colors);
+            this.pnl_Colors.Location = new System.Drawing.Point(10, 160);
+            this.pnl_Colors.Name = "pnl_Colors";
+            this.pnl_Colors.Size = new System.Drawing.Size(50, 50);
+            this.pnl_Colors.TabIndex = 19;
+            // 
+            // tbl_Colors
+            // 
+            this.tbl_Colors.BackColor = System.Drawing.SystemColors.Control;
+            this.tbl_Colors.ColumnCount = 1;
+            this.tbl_Colors.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tbl_Colors.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tbl_Colors.Location = new System.Drawing.Point(1, 1);
+            this.tbl_Colors.Name = "tbl_Colors";
+            this.tbl_Colors.RowCount = 1;
+            this.tbl_Colors.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tbl_Colors.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tbl_Colors.Size = new System.Drawing.Size(20, 20);
+            this.tbl_Colors.TabIndex = 1;
+            // 
             // pnl_ViewingArea
             // 
             this.pnl_ViewingArea.AutoScroll = true;
@@ -118,7 +143,7 @@
             this.pnl_ViewingArea.Location = new System.Drawing.Point(10, 110);
             this.pnl_ViewingArea.Name = "pnl_ViewingArea";
             this.pnl_ViewingArea.Size = new System.Drawing.Size(40, 40);
-            this.pnl_ViewingArea.TabIndex = 16;
+            this.pnl_ViewingArea.TabIndex = 18;
             // 
             // dbx_ViewingArea
             // 
@@ -198,30 +223,6 @@
             0});
             this.nmb_PixelWidth.ValueChanged += new System.EventHandler(this.SizeValuesChanged);
             // 
-            // tbl_Colors
-            // 
-            this.tbl_Colors.BackColor = System.Drawing.Color.Black;
-            this.tbl_Colors.ColumnCount = 1;
-            this.tbl_Colors.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tbl_Colors.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tbl_Colors.Location = new System.Drawing.Point(3, 3);
-            this.tbl_Colors.Name = "tbl_Colors";
-            this.tbl_Colors.RowCount = 1;
-            this.tbl_Colors.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tbl_Colors.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tbl_Colors.Size = new System.Drawing.Size(20, 20);
-            this.tbl_Colors.TabIndex = 1;
-            // 
-            // pnl_Colors
-            // 
-            this.pnl_Colors.AutoSize = true;
-            this.pnl_Colors.BackColor = System.Drawing.Color.White;
-            this.pnl_Colors.Controls.Add(this.tbl_Colors);
-            this.pnl_Colors.Location = new System.Drawing.Point(10, 160);
-            this.pnl_Colors.Name = "pnl_Colors";
-            this.pnl_Colors.Size = new System.Drawing.Size(50, 50);
-            this.pnl_Colors.TabIndex = 17;
-            // 
             // frm_PixelEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -229,7 +230,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1184, 761);
+            this.ClientSize = new System.Drawing.Size(484, 261);
             this.Controls.Add(this.pnl_Colors);
             this.Controls.Add(this.pnl_ViewingArea);
             this.Controls.Add(this.nmb_PixelHeight);
@@ -244,14 +245,13 @@
             this.Name = "frm_PixelEditor";
             this.Text = "Pixel Art Editor";
             this.Load += new System.EventHandler(this.frm_PixelEditor_Load);
+            this.pnl_Colors.ResumeLayout(false);
             this.pnl_ViewingArea.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dbx_ViewingArea)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmb_PixelHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmb_ViewingZoom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmb_PixelWidth)).EndInit();
-            this.pnl_Colors.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -269,8 +269,8 @@
         private System.Windows.Forms.ComboBox cbb_Grid;
         private System.Windows.Forms.Label lbl_Grid;
         private Controls.NumberBox nmb_PixelHeight;
-        private System.Windows.Forms.Panel pnl_ViewingArea;
-        private System.Windows.Forms.Panel pnl_Colors;
+        private Controls.BackgroundPanel pnl_ViewingArea;
+        private Controls.BackgroundPanel pnl_Colors;
     }
 }
 
