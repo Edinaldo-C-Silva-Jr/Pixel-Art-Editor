@@ -39,7 +39,7 @@ namespace PixelEditor
                 pnl_ViewingArea.Height = 514;
             }
 
-            tbl_Colors.Location = new Point(tbl_Colors.Location.X, pnl_ViewingArea.Location.Y + pnl_ViewingArea.Height + 10);
+            pnl_Colors.Location = new Point(pnl_Colors.Location.X, pnl_ViewingArea.Location.Y + pnl_ViewingArea.Height + 10);
         }
 
         private void dbx_ViewingArea_Click(object sender, EventArgs e)

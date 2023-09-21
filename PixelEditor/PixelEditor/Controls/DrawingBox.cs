@@ -44,12 +44,12 @@ namespace PixelEditor.Controls
 
             for (int x = 1; x < this.Image.Height / cellSize; x++)
             {
-                gridGenerator.DrawLine(linePen, 0, x * cellSize, this.Width, x * cellSize);
+                gridGenerator.DrawLine(linePen, 0, x * cellSize - 1, this.Width, x * cellSize - 1);
             }
 
             for (int y = 1; y < this.Image.Width / cellSize; y++)
             {
-                gridGenerator.DrawLine(linePen, y * cellSize, 0, y * cellSize, this.Height);
+                gridGenerator.DrawLine(linePen, y * cellSize - 1, 0, y * cellSize - 1, this.Height);
             }
         }
 
@@ -76,7 +76,7 @@ namespace PixelEditor.Controls
 
                     white = !white;
                 }
-                if ((this.Image.Width / cellSize) % 2 == 0 )
+                if ((this.Image.Width / cellSize) % 2 == 0)
                 {
                     white = !white;
                 }
@@ -88,15 +88,12 @@ namespace PixelEditor.Controls
             Graphics pixelDraw = Graphics.FromImage(this.Image);
             Brush pixelBrush = new SolidBrush(pixelColor);
 
+            // Gets the correct position of the rectangle from the mouse position, the 1 pixel offsets aren't needed for a checkers or empty grid
+            pixelDraw.FillRectangle(pixelBrush, xPos - xPos % pixelSize, yPos - yPos % pixelSize, pixelSize, pixelSize);
+            
             if (gridType == 1)
             {
-                // Gets the correct position of the rectangle from the mouse position, then fills it with a 1 pixel offset in order to not affect the grid
-                pixelDraw.FillRectangle(pixelBrush, xPos - xPos % pixelSize + 1, yPos - yPos % pixelSize + 1, pixelSize - 1, pixelSize - 1);
-            }
-            else
-            {
-                // Gets the correct position of the rectangle from the mouse position, the 1 pixel offsets aren't needed for a checkers or empty grid
-                pixelDraw.FillRectangle(pixelBrush, xPos - xPos % pixelSize, yPos - yPos % pixelSize, pixelSize, pixelSize);
+                GenerateLineGrid(pixelSize);
             }
         }
     }
