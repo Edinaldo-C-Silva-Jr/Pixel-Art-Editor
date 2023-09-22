@@ -140,7 +140,7 @@
             // 
             // lbl_gridColor
             // 
-            this.lbl_gridColor.Location = new System.Drawing.Point(0, 15);
+            this.lbl_gridColor.Location = new System.Drawing.Point(0, 10);
             this.lbl_gridColor.Name = "lbl_gridColor";
             this.lbl_gridColor.Size = new System.Drawing.Size(30, 20);
             this.lbl_gridColor.TabIndex = 3;

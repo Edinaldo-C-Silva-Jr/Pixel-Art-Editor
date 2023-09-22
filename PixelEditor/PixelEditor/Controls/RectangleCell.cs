@@ -13,6 +13,7 @@ namespace PixelEditor.Controls
     public partial class RectangleCell : UserControl
     {
         private int cellSize;
+        private bool visibleSelection = true;
 
         public RectangleCell()
         {
@@ -25,6 +26,18 @@ namespace PixelEditor.Controls
             InitializeComponent();
         }
 
+        public RectangleCell(Color color, bool selectable)
+        {
+            cellSize = 32;
+            this.Dock = DockStyle.Fill;
+            this.Size = new Size(cellSize, cellSize);
+            this.Margin = new Padding(0, 0, 0, 0);
+            this.BackColor = color;
+            this.visibleSelection = selectable;
+
+            InitializeComponent();
+        }
+
         public void SetCellSize(int size)
         {
             this.cellSize = size;
@@ -32,14 +45,20 @@ namespace PixelEditor.Controls
 
         public void SelectCell()
         {
-            this.Size = new Size(cellSize - 4, cellSize - 4);
-            this.Margin = new Padding(2, 2, 2, 2);
+            if (visibleSelection)
+            {
+                this.Size = new Size(cellSize - 4, cellSize - 4);
+                this.Margin = new Padding(2, 2, 2, 2);
+            }
         }
 
         public void DeselectCell()
         {
-            this.Size = new Size(cellSize, cellSize);
-            this.Margin = new Padding(0, 0, 0, 0);
+            if (visibleSelection)
+            {
+                this.Size = new Size(cellSize, cellSize);
+                this.Margin = new Padding(0, 0, 0, 0);
+            }
         }
     }
 }

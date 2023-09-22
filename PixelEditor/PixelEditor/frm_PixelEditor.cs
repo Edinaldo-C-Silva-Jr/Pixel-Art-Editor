@@ -47,7 +47,7 @@ namespace PixelEditor
             lbl_gridColor.Size = new Size(65, 20);
             lbl_gridColor.Text = "Grid Color:";
             
-            tbl_GridColor.GenerateColorGrid(1, 1, new EventHandler(ColorCellClicked));
+            tbl_GridColor.GenerateColorGrid(1, 1, new EventHandler(ColorCellClicked), Color.LightGray, false);
             tbl_GridColor.Location = new Point(lbl_gridColor.Location.X + lbl_gridColor.Width, tbl_GridColor.Location.Y);
         }
 
