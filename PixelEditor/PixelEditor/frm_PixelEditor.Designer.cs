@@ -36,6 +36,8 @@
             this.cbb_Grid = new System.Windows.Forms.ComboBox();
             this.lbl_Grid = new System.Windows.Forms.Label();
             this.pnl_Colors = new PixelEditor.Controls.BackgroundPanel();
+            this.tbl_GridColor = new PixelEditor.Controls.ColorTable();
+            this.lbl_gridColor = new System.Windows.Forms.Label();
             this.tbl_Colors = new PixelEditor.Controls.ColorTable();
             this.pnl_ViewingArea = new PixelEditor.Controls.BackgroundPanel();
             this.dbx_ViewingArea = new PixelEditor.Controls.DrawingBox();
@@ -113,12 +115,37 @@
             // 
             this.pnl_Colors.AutoScroll = true;
             this.pnl_Colors.AutoScrollMargin = new System.Drawing.Size(1, 1);
-            this.pnl_Colors.BackColor = System.Drawing.Color.Black;
+            this.pnl_Colors.BackColor = System.Drawing.Color.White;
+            this.pnl_Colors.Controls.Add(this.tbl_GridColor);
+            this.pnl_Colors.Controls.Add(this.lbl_gridColor);
             this.pnl_Colors.Controls.Add(this.tbl_Colors);
             this.pnl_Colors.Location = new System.Drawing.Point(10, 160);
             this.pnl_Colors.Name = "pnl_Colors";
-            this.pnl_Colors.Size = new System.Drawing.Size(50, 50);
+            this.pnl_Colors.Size = new System.Drawing.Size(70, 80);
             this.pnl_Colors.TabIndex = 19;
+            // 
+            // tbl_GridColor
+            // 
+            this.tbl_GridColor.BackColor = System.Drawing.SystemColors.Control;
+            this.tbl_GridColor.ColumnCount = 1;
+            this.tbl_GridColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tbl_GridColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tbl_GridColor.Location = new System.Drawing.Point(35, 5);
+            this.tbl_GridColor.Name = "tbl_GridColor";
+            this.tbl_GridColor.RowCount = 1;
+            this.tbl_GridColor.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tbl_GridColor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tbl_GridColor.Size = new System.Drawing.Size(20, 20);
+            this.tbl_GridColor.TabIndex = 5;
+            // 
+            // lbl_gridColor
+            // 
+            this.lbl_gridColor.Location = new System.Drawing.Point(0, 15);
+            this.lbl_gridColor.Name = "lbl_gridColor";
+            this.lbl_gridColor.Size = new System.Drawing.Size(30, 20);
+            this.lbl_gridColor.TabIndex = 3;
+            this.lbl_gridColor.Text = "GC:";
+            this.lbl_gridColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tbl_Colors
             // 
@@ -126,7 +153,7 @@
             this.tbl_Colors.ColumnCount = 1;
             this.tbl_Colors.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tbl_Colors.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tbl_Colors.Location = new System.Drawing.Point(1, 1);
+            this.tbl_Colors.Location = new System.Drawing.Point(1, 45);
             this.tbl_Colors.Name = "tbl_Colors";
             this.tbl_Colors.RowCount = 1;
             this.tbl_Colors.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -230,7 +257,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(484, 261);
+            this.ClientSize = new System.Drawing.Size(484, 311);
             this.Controls.Add(this.pnl_Colors);
             this.Controls.Add(this.pnl_ViewingArea);
             this.Controls.Add(this.nmb_PixelHeight);
@@ -271,6 +298,8 @@
         private Controls.NumberBox nmb_PixelHeight;
         private Controls.BackgroundPanel pnl_ViewingArea;
         private Controls.BackgroundPanel pnl_Colors;
+        private System.Windows.Forms.Label lbl_gridColor;
+        private Controls.ColorTable tbl_GridColor;
     }
 }
 

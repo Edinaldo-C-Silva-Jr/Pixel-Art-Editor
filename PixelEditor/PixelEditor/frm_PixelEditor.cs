@@ -17,8 +17,9 @@ namespace PixelEditor
         {
             cbb_Grid.SelectedIndex = 0;
 
-            SetViewingAreaSize();
             SetColorAmount();
+            SetGridColors();
+            SetViewingAreaSize();
 
             RelocateControls();
         }
@@ -28,7 +29,9 @@ namespace PixelEditor
             int height = (int)nmb_PixelHeight.Value;
             int width = (int)nmb_PixelWidth.Value;
             int zoom = (int)nmb_ViewingZoom.Value;
-            dbx_ViewingArea.GenerateNewImage(width * zoom, height * zoom, zoom, cbb_Grid.SelectedIndex);
+            int gridType = cbb_Grid.SelectedIndex;
+            Color gridColor = tbl_GridColor.GetCurrentColor(); 
+            dbx_ViewingArea.GenerateNewImage(width * zoom, height * zoom, zoom, gridType, gridColor);
         }
 
         private void SetColorAmount()
@@ -36,7 +39,16 @@ namespace PixelEditor
             int rows = 2;
             int columns = 8;
             tbl_Colors.GenerateColorGrid(rows, columns, new EventHandler(ColorCellClicked));
-            pnl_Colors.DefineNewSize(272, 69);
+            pnl_Colors.DefineNewSize(400, 200);
+        }
+
+        private void SetGridColors()
+        {
+            lbl_gridColor.Size = new Size(65, 20);
+            lbl_gridColor.Text = "Grid Color:";
+            
+            tbl_GridColor.GenerateColorGrid(1, 1, new EventHandler(ColorCellClicked));
+            tbl_GridColor.Location = new Point(lbl_gridColor.Location.X + lbl_gridColor.Width, tbl_GridColor.Location.Y);
         }
 
         private void RelocateControls()
@@ -60,6 +72,7 @@ namespace PixelEditor
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
             RectangleCell cell = sender as RectangleCell;
+            ColorTable cellParent = cell.Parent as ColorTable;
 
             if (mouseClick.Button == MouseButtons.Right)
             {
@@ -71,7 +84,7 @@ namespace PixelEditor
                 }
             }
 
-            tbl_Colors.ChangeCurrentCell(cell);
+            cellParent.ChangeCurrentCell(cell);
         }
 
         private void btn_PixelSize_Click(object sender, EventArgs e)

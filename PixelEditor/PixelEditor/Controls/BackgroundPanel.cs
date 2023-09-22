@@ -21,22 +21,25 @@ namespace PixelEditor.Controls
         private void CheckChildControlSize()
         {
             int highestWidth = 0, highestHeight = 0;
+            int totalChildControlWidth, totalChildControlHeight;
 
             foreach (Control c in this.Controls)
             {
-                if (c.Width > highestWidth)
+                totalChildControlWidth = c.Location.X + c.Width;
+                if (totalChildControlWidth > highestWidth)
                 {
-                    highestWidth = c.Width;
+                    highestWidth = totalChildControlWidth;
                 }
 
-                if (c.Height > highestHeight)
+                totalChildControlHeight = c.Location.Y + c.Height;
+                if (totalChildControlHeight > highestHeight)
                 {
-                    highestHeight = c.Height;
+                    highestHeight = totalChildControlHeight;
                 }
             }
 
-            this.Width = highestWidth + 2;
-            this.Height = highestHeight + 2;
+            this.Width = highestWidth + 1;
+            this.Height = highestHeight + 1;
         }
 
         public void CheckMaximumSize(int maxWidth, int maxHeight)

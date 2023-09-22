@@ -13,7 +13,7 @@ namespace PixelEditor.Controls
             InitializeComponent();
         }
 
-        public void GenerateNewImage(int xSize, int ySize, int cellSize, int gridType)
+        public void GenerateNewImage(int xSize, int ySize, int cellSize, int gridType, Color gridColor)
         {
             NewImage(xSize, ySize);
 
@@ -21,12 +21,12 @@ namespace PixelEditor.Controls
             {
                 case 1: // Line Grid
                     {
-                        GenerateLineGrid(cellSize);
+                        GenerateLineGrid(cellSize, gridColor);
                         break;
                     }
                 case 2: // Checkered Grid
                     {
-                        GenerateCheckerGrid(cellSize);
+                        GenerateCheckerGrid(cellSize, gridColor);
                         break;
                     }
             }
@@ -39,20 +39,20 @@ namespace PixelEditor.Controls
             this.Image = new Bitmap(xSize, ySize);
         }
 
-        private void GenerateLineGrid(int cellSize)
+        private void GenerateLineGrid(int cellSize, Color gridColor)
         {
             lineGrid = new Bitmap(this.Width, this.Height);
             lineGrid.MakeTransparent();
 
             Graphics gridGenerator = Graphics.FromImage(lineGrid);
-            Pen linePen = new Pen(Color.Gray);
+            Pen linePen = new Pen(gridColor);
 
-            for (int x = 1; x < this.Height / cellSize; x++)
+            for (int x = 1; x < this.Height / cellSize + 1; x++)
             {
                 gridGenerator.DrawLine(linePen, 0, x * cellSize - 1, this.Width, x * cellSize - 1);
             }
 
-            for (int y = 1; y < this.Width / cellSize; y++)
+            for (int y = 1; y < this.Width / cellSize + 1; y++)
             {
                 gridGenerator.DrawLine(linePen, y * cellSize - 1, 0, y * cellSize - 1, this.Height);
             }
@@ -61,11 +61,11 @@ namespace PixelEditor.Controls
             gridMerger.DrawImage(lineGrid, 0, 0);
         }
 
-        private void GenerateCheckerGrid(int cellSize)
+        private void GenerateCheckerGrid(int cellSize, Color gridColor)
         {
             Graphics gridGenerator = Graphics.FromImage(this.Image);
             Brush whiteBrush = new SolidBrush(Color.White);
-            Brush grayBrush = new SolidBrush(Color.LightGray);
+            Brush gridBrush = new SolidBrush(gridColor);
 
             bool white = true;
 
@@ -79,7 +79,7 @@ namespace PixelEditor.Controls
                     }
                     else
                     {
-                        gridGenerator.FillRectangle(grayBrush, cellSize * x, cellSize * y, cellSize, cellSize);
+                        gridGenerator.FillRectangle(gridBrush, cellSize * x, cellSize * y, cellSize, cellSize);
                     }
 
                     white = !white;
