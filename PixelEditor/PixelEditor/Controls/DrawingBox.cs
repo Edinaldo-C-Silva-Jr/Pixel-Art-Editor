@@ -5,6 +5,8 @@ namespace PixelEditor.Controls
 {
     public partial class DrawingBox : PictureBox
     {
+        private Bitmap lineGrid;
+
         public DrawingBox()
         {
             this.DoubleBuffered = true;
@@ -39,18 +41,24 @@ namespace PixelEditor.Controls
 
         private void GenerateLineGrid(int cellSize)
         {
-            Graphics gridGenerator = Graphics.FromImage(this.Image);
+            lineGrid = new Bitmap(this.Width, this.Height);
+            lineGrid.MakeTransparent();
+
+            Graphics gridGenerator = Graphics.FromImage(lineGrid);
             Pen linePen = new Pen(Color.Gray);
 
-            for (int x = 1; x < this.Image.Height / cellSize; x++)
+            for (int x = 1; x < this.Height / cellSize; x++)
             {
                 gridGenerator.DrawLine(linePen, 0, x * cellSize - 1, this.Width, x * cellSize - 1);
             }
 
-            for (int y = 1; y < this.Image.Width / cellSize; y++)
+            for (int y = 1; y < this.Width / cellSize; y++)
             {
                 gridGenerator.DrawLine(linePen, y * cellSize - 1, 0, y * cellSize - 1, this.Height);
             }
+
+            Graphics gridMerger = Graphics.FromImage(this.Image);
+            gridMerger.DrawImage(lineGrid, 0, 0);
         }
 
         private void GenerateCheckerGrid(int cellSize)
@@ -61,9 +69,9 @@ namespace PixelEditor.Controls
 
             bool white = true;
 
-            for (int y = 0; y < this.Image.Height / cellSize; y++)
+            for (int y = 0; y < this.Height / cellSize; y++)
             {
-                for (int x = 0; x < this.Image.Width / cellSize; x++)
+                for (int x = 0; x < this.Width / cellSize; x++)
                 {
                     if (white)
                     {
@@ -76,7 +84,7 @@ namespace PixelEditor.Controls
 
                     white = !white;
                 }
-                if ((this.Image.Width / cellSize) % 2 == 0)
+                if ((this.Width / cellSize) % 2 == 0)
                 {
                     white = !white;
                 }
@@ -93,7 +101,7 @@ namespace PixelEditor.Controls
             
             if (gridType == 1)
             {
-                GenerateLineGrid(pixelSize);
+                pixelDraw.DrawImage(lineGrid, 0, 0);
             }
         }
     }
