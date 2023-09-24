@@ -15,20 +15,9 @@ namespace PixelEditor.Controls
         private int cellSize;
         private bool visibleSelection = true;
 
-        public RectangleCell()
+        public RectangleCell(int cellSize, Color color, bool selectable)
         {
-            cellSize = 32;
-            this.Dock = DockStyle.Fill;
-            this.Size = new Size(cellSize, cellSize);
-            this.Margin = new Padding(0, 0, 0, 0);
-            this.BackColor = Color.White;
-
-            InitializeComponent();
-        }
-
-        public RectangleCell(Color color, bool selectable)
-        {
-            cellSize = 32;
+            this.cellSize = cellSize;
             this.Dock = DockStyle.Fill;
             this.Size = new Size(cellSize, cellSize);
             this.Margin = new Padding(0, 0, 0, 0);
@@ -41,6 +30,7 @@ namespace PixelEditor.Controls
         public void SetCellSize(int size)
         {
             this.cellSize = size;
+            this.Size = new Size(cellSize, cellSize);
         }
 
         public void SelectCell()

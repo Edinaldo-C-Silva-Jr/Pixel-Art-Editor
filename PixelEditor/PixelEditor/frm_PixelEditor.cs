@@ -16,12 +16,13 @@ namespace PixelEditor
         private void frm_PixelEditor_Load(object sender, EventArgs e)
         {
             cbb_Grid.SelectedIndex = 0;
+            cbb_ColorAmount.SelectedIndex = 3;
 
             SetColorAmount();
-            SetGridColors();
+            OrganizeColorsPanel();
             SetViewingAreaSize();
 
-            RelocateControls();
+            ReorganizeControls();
         }
 
         private void SetViewingAreaSize()
@@ -36,25 +37,29 @@ namespace PixelEditor
 
         private void SetColorAmount()
         {
-            int rows = 2;
-            int columns = 8;
-            tbl_Colors.GenerateColorGrid(rows, columns, new EventHandler(ColorCellClicked));
-            pnl_Colors.DefineNewSize(400, 200);
+            int colorAmount = int.Parse(cbb_ColorAmount.SelectedItem.ToString());
+            tbl_Colors.GenerateColorGrid(colorAmount, 16, new EventHandler(ColorCellClicked));
         }
 
-        private void SetGridColors()
+        private void OrganizeColorsPanel()
         {
+            lbl_ColorAmount.Size = new Size(80, 20);
+            lbl_ColorAmount.Text = "Color Amount";
+
             lbl_gridColor.Size = new Size(65, 20);
             lbl_gridColor.Text = "Grid Color:";
+
+            cbb_ColorAmount.Location = new Point(lbl_ColorAmount.Location.X + lbl_ColorAmount.Width, cbb_ColorAmount.Location.Y);
             
-            tbl_GridColor.GenerateColorGrid(1, 1, new EventHandler(ColorCellClicked), Color.LightGray, false);
+            tbl_GridColor.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked), Color.Gray, false);
             tbl_GridColor.Location = new Point(lbl_gridColor.Location.X + lbl_gridColor.Width, tbl_GridColor.Location.Y);
         }
 
-        private void RelocateControls()
+        private void ReorganizeControls()
         {
             this.SuspendLayout();
             pnl_ViewingArea.DefineNewSize(514, 514);
+            pnl_Colors.DefineNewSize(500, 300);
 
             pnl_Colors.Location = new Point(pnl_Colors.Location.X, pnl_ViewingArea.Location.Y + pnl_ViewingArea.Height + 10);
             this.ResumeLayout();
@@ -90,7 +95,7 @@ namespace PixelEditor
         private void btn_PixelSize_Click(object sender, EventArgs e)
         {
             SetViewingAreaSize();
-            RelocateControls();
+            ReorganizeControls();
         }
 
         private void CalculateMaximumZoom(int size)
@@ -109,6 +114,12 @@ namespace PixelEditor
             {
                 CalculateMaximumZoom((int)nmb_PixelWidth.Value);
             }
+        }
+
+        private void cbb_ColorAmount_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetColorAmount();
+            ReorganizeControls();
         }
     }
 }

@@ -36,6 +36,8 @@
             this.cbb_Grid = new System.Windows.Forms.ComboBox();
             this.lbl_Grid = new System.Windows.Forms.Label();
             this.pnl_Colors = new PixelEditor.Controls.BackgroundPanel();
+            this.cbb_ColorAmount = new System.Windows.Forms.ComboBox();
+            this.lbl_ColorAmount = new System.Windows.Forms.Label();
             this.tbl_GridColor = new PixelEditor.Controls.ColorTable();
             this.lbl_gridColor = new System.Windows.Forms.Label();
             this.tbl_Colors = new PixelEditor.Controls.ColorTable();
@@ -116,13 +118,40 @@
             this.pnl_Colors.AutoScroll = true;
             this.pnl_Colors.AutoScrollMargin = new System.Drawing.Size(1, 1);
             this.pnl_Colors.BackColor = System.Drawing.Color.White;
+            this.pnl_Colors.Controls.Add(this.cbb_ColorAmount);
+            this.pnl_Colors.Controls.Add(this.lbl_ColorAmount);
             this.pnl_Colors.Controls.Add(this.tbl_GridColor);
             this.pnl_Colors.Controls.Add(this.lbl_gridColor);
             this.pnl_Colors.Controls.Add(this.tbl_Colors);
             this.pnl_Colors.Location = new System.Drawing.Point(10, 160);
             this.pnl_Colors.Name = "pnl_Colors";
-            this.pnl_Colors.Size = new System.Drawing.Size(70, 80);
+            this.pnl_Colors.Size = new System.Drawing.Size(90, 120);
             this.pnl_Colors.TabIndex = 19;
+            // 
+            // cbb_ColorAmount
+            // 
+            this.cbb_ColorAmount.FormattingEnabled = true;
+            this.cbb_ColorAmount.Items.AddRange(new object[] {
+            "2",
+            "4",
+            "8",
+            "16",
+            "32",
+            "64"});
+            this.cbb_ColorAmount.Location = new System.Drawing.Point(30, 10);
+            this.cbb_ColorAmount.Name = "cbb_ColorAmount";
+            this.cbb_ColorAmount.Size = new System.Drawing.Size(40, 21);
+            this.cbb_ColorAmount.TabIndex = 7;
+            this.cbb_ColorAmount.SelectedIndexChanged += new System.EventHandler(this.cbb_ColorAmount_SelectedIndexChanged);
+            // 
+            // lbl_ColorAmount
+            // 
+            this.lbl_ColorAmount.Location = new System.Drawing.Point(0, 10);
+            this.lbl_ColorAmount.Name = "lbl_ColorAmount";
+            this.lbl_ColorAmount.Size = new System.Drawing.Size(30, 20);
+            this.lbl_ColorAmount.TabIndex = 6;
+            this.lbl_ColorAmount.Text = "CA:";
+            this.lbl_ColorAmount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tbl_GridColor
             // 
@@ -130,7 +159,7 @@
             this.tbl_GridColor.ColumnCount = 1;
             this.tbl_GridColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tbl_GridColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tbl_GridColor.Location = new System.Drawing.Point(35, 5);
+            this.tbl_GridColor.Location = new System.Drawing.Point(35, 45);
             this.tbl_GridColor.Name = "tbl_GridColor";
             this.tbl_GridColor.RowCount = 1;
             this.tbl_GridColor.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -140,7 +169,7 @@
             // 
             // lbl_gridColor
             // 
-            this.lbl_gridColor.Location = new System.Drawing.Point(0, 10);
+            this.lbl_gridColor.Location = new System.Drawing.Point(0, 50);
             this.lbl_gridColor.Name = "lbl_gridColor";
             this.lbl_gridColor.Size = new System.Drawing.Size(30, 20);
             this.lbl_gridColor.TabIndex = 3;
@@ -153,7 +182,7 @@
             this.tbl_Colors.ColumnCount = 1;
             this.tbl_Colors.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tbl_Colors.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tbl_Colors.Location = new System.Drawing.Point(1, 45);
+            this.tbl_Colors.Location = new System.Drawing.Point(1, 85);
             this.tbl_Colors.Name = "tbl_Colors";
             this.tbl_Colors.RowCount = 1;
             this.tbl_Colors.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -300,6 +329,8 @@
         private Controls.BackgroundPanel pnl_Colors;
         private System.Windows.Forms.Label lbl_gridColor;
         private Controls.ColorTable tbl_GridColor;
+        private System.Windows.Forms.ComboBox cbb_ColorAmount;
+        private System.Windows.Forms.Label lbl_ColorAmount;
     }
 }
 

@@ -14,8 +14,10 @@ namespace PixelEditor.Controls
 
         public void DefineNewSize(int maxWidth, int maxHeight)
         {
+            this.SuspendLayout();
             CheckChildControlSize();
             CheckMaximumSize(maxWidth, maxHeight);
+            this.ResumeLayout();
         }
 
         private void CheckChildControlSize()
