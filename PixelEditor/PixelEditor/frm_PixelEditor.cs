@@ -146,5 +146,14 @@ namespace PixelEditor
             SetColorAmount();
             ReorganizeControls();
         }
+
+        private void dbx_ViewingArea_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                dbx_ViewingArea.DrawPixelByClick(e.X, e.Y, (int)nmb_ViewingZoom.Value, tbl_Colors.GetCurrentColor(), cbb_Grid.SelectedIndex);
+                dbx_ViewingArea.Refresh();
+            }
+        }
     }
 }

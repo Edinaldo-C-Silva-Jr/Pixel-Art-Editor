@@ -209,6 +209,7 @@
             this.dbx_ViewingArea.TabIndex = 0;
             this.dbx_ViewingArea.TabStop = false;
             this.dbx_ViewingArea.Click += new System.EventHandler(this.dbx_ViewingArea_Click);
+            this.dbx_ViewingArea.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dbx_ViewingArea_MouseMove);
             // 
             // nmb_PixelHeight
             // 
