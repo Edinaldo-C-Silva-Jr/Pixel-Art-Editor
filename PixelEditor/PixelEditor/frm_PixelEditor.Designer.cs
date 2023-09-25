@@ -128,6 +128,7 @@
             // 
             // cbb_ColorAmount
             // 
+            this.cbb_ColorAmount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbb_ColorAmount.FormattingEnabled = true;
             this.cbb_ColorAmount.Items.AddRange(new object[] {
             "2",

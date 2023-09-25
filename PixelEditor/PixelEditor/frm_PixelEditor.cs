@@ -1,6 +1,5 @@
 ﻿using PixelEditor.Controls;
 using System;
-using System.Media;
 using System.Drawing;
 using System.Windows.Forms;
 
