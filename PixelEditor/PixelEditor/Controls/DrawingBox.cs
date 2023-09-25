@@ -5,7 +5,7 @@ namespace PixelEditor.Controls
 {
     public partial class DrawingBox : PictureBox
     {
-        private Bitmap lineGrid;
+        private Bitmap lineGrid = new Bitmap(1, 1);
 
         public DrawingBox()
         {
@@ -91,14 +91,30 @@ namespace PixelEditor.Controls
             }
         }
 
-        public void DrawPixel(int xPos, int yPos, int pixelSize, Color pixelColor, int gridType)
+        public void DrawPixelByPosition(int xPosPixel, int yPosPixel, int pixelSize, Color pixelColor, int gridType)
+        {
+            int xPos = pixelSize * xPosPixel;
+            int yPos = pixelSize * yPosPixel;
+
+            DrawPixel(xPos, yPos, pixelSize, pixelColor, gridType);
+        }
+
+        public void DrawPixelByClick(int xPosMouse, int yPosMouse, int pixelSize, Color pixelColor, int gridType)
+        {
+            int xPos = xPosMouse - xPosMouse % pixelSize;
+            int yPos = yPosMouse - yPosMouse % pixelSize;
+
+            DrawPixel(xPos, yPos, pixelSize, pixelColor, gridType);
+        }
+
+        private void DrawPixel(int xPos, int yPos, int pixelSize, Color pixelColor, int gridType)
         {
             Graphics pixelDraw = Graphics.FromImage(this.Image);
             Brush pixelBrush = new SolidBrush(pixelColor);
 
             // Gets the correct position of the rectangle from the mouse position, the 1 pixel offsets aren't needed for a checkers or empty grid
-            pixelDraw.FillRectangle(pixelBrush, xPos - xPos % pixelSize, yPos - yPos % pixelSize, pixelSize, pixelSize);
-            
+            pixelDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
+
             if (gridType == 1)
             {
                 pixelDraw.DrawImage(lineGrid, 0, 0);

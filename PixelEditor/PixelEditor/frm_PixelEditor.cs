@@ -68,7 +68,7 @@ namespace PixelEditor
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
 
-            dbx_ViewingArea.DrawPixel(mouseClick.X, mouseClick.Y, (int)nmb_ViewingZoom.Value, tbl_Colors.GetCurrentColor(), cbb_Grid.SelectedIndex);
+            dbx_ViewingArea.DrawPixelByClick(mouseClick.X, mouseClick.Y, (int)nmb_ViewingZoom.Value, tbl_Colors.GetCurrentColor(), cbb_Grid.SelectedIndex);
             dbx_ViewingArea.Refresh();
         }
 
@@ -84,11 +84,37 @@ namespace PixelEditor
 
                 if (colorpicked == DialogResult.OK)
                 {
+                    SwapColorInImage(cell.BackColor, clr_ColorPicker.Color);
                     cell.BackColor = clr_ColorPicker.Color;
                 }
             }
 
             cellParent.ChangeCurrentCell(cell);
+        }
+
+        private void SwapColorInImage(Color oldColor, Color newColor)
+        {
+            int height = (int)nmb_PixelHeight.Value;
+            int width = (int)nmb_PixelWidth.Value;
+            int zoom = (int)nmb_ViewingZoom.Value;
+            int gridType = cbb_Grid.SelectedIndex;
+            Color pixelColor;
+
+            Bitmap image = new Bitmap(dbx_ViewingArea.Image);
+            
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    pixelColor = image.GetPixel(x*zoom, y*zoom);
+                    if (oldColor.ToArgb() == pixelColor.ToArgb())
+                    {
+                        dbx_ViewingArea.DrawPixelByPosition(x, y, zoom, newColor, gridType);
+                    }
+                }
+            }
+
+            dbx_ViewingArea.Refresh();
         }
 
         private void btn_PixelSize_Click(object sender, EventArgs e)
