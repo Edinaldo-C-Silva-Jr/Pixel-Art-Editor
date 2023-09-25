@@ -8,8 +8,6 @@ namespace PixelEditor.Controls
         public BackgroundPanel()
         {
             InitializeComponent();
-            this.AutoScroll = true;
-            this.AutoScrollMargin = new Size(1, 1);
         }
 
         public void DefineNewSize(int maxWidth, int maxHeight)

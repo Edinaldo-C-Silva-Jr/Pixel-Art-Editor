@@ -115,8 +115,6 @@
             // 
             // pnl_Colors
             // 
-            this.pnl_Colors.AutoScroll = true;
-            this.pnl_Colors.AutoScrollMargin = new System.Drawing.Size(1, 1);
             this.pnl_Colors.BackColor = System.Drawing.Color.White;
             this.pnl_Colors.Controls.Add(this.cbb_ColorAmount);
             this.pnl_Colors.Controls.Add(this.lbl_ColorAmount);

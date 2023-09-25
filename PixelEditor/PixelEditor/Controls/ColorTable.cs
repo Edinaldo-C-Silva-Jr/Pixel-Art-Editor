@@ -37,6 +37,7 @@ namespace PixelEditor.Controls
             // Thus is becomes (cell size + 1) * amount of cells + 1
             this.Size = new Size((cellSize + 1) * columns + 1, (cellSize + 1) * rows + 1);
 
+            this.Controls.Clear();
             this.RowStyles.Clear();
             this.ColumnStyles.Clear();
             this.RowCount = rows;

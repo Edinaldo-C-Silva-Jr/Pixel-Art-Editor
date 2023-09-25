@@ -31,7 +31,7 @@ namespace PixelEditor
             int width = (int)nmb_PixelWidth.Value;
             int zoom = (int)nmb_ViewingZoom.Value;
             int gridType = cbb_Grid.SelectedIndex;
-            Color gridColor = tbl_GridColor.GetCurrentColor(); 
+            Color gridColor = tbl_GridColor.GetCurrentColor();
             dbx_ViewingArea.GenerateNewImage(width * zoom, height * zoom, zoom, gridType, gridColor);
         }
 
@@ -59,7 +59,7 @@ namespace PixelEditor
         {
             this.SuspendLayout();
             pnl_ViewingArea.DefineNewSize(514, 514);
-            pnl_Colors.DefineNewSize(500, 300);
+            pnl_Colors.DefineNewSize(300, 200);
 
             pnl_Colors.Location = new Point(pnl_Colors.Location.X, pnl_ViewingArea.Location.Y + pnl_ViewingArea.Height + 10);
             this.ResumeLayout();
