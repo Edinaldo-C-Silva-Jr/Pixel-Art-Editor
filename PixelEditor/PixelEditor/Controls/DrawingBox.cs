@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace PixelEditor.Controls
@@ -67,26 +68,24 @@ namespace PixelEditor.Controls
             Brush whiteBrush = new SolidBrush(Color.White);
             Brush gridBrush = new SolidBrush(gridColor);
 
-            bool white = true;
+            Bitmap gridPiece = new Bitmap(16 * cellSize, 16 * cellSize);
+            Graphics gridPieceBuilder = Graphics.FromImage(gridPiece);
 
-            for (int y = 0; y < this.Height / cellSize; y++)
+            gridPieceBuilder.FillRectangle(whiteBrush, 0, 0, gridPiece.Width, gridPiece.Height);
+            for (int y = 0; y < 16; y++)
             {
-                for (int x = 0; x < this.Width / cellSize; x++)
+                int xStart = y % 2;
+                for (int x = xStart; x < 16; x += 2)
                 {
-                    if (white)
-                    {
-                        gridGenerator.FillRectangle(whiteBrush, cellSize * x, cellSize * y, cellSize, cellSize);
-                    }
-                    else
-                    {
-                        gridGenerator.FillRectangle(gridBrush, cellSize * x, cellSize * y, cellSize, cellSize);
-                    }
-
-                    white = !white;
+                    gridPieceBuilder.FillRectangle(gridBrush, cellSize * x, cellSize * y, cellSize, cellSize);
                 }
-                if ((this.Width / cellSize) % 2 == 0)
+            }
+
+            for (int y = 0; y < this.Height / cellSize; y += 16)
+            {
+                for (int x = 0; x < this.Width / cellSize; x += 16)
                 {
-                    white = !white;
+                    gridGenerator.DrawImage(gridPiece, cellSize * x, cellSize * y);
                 }
             }
         }
