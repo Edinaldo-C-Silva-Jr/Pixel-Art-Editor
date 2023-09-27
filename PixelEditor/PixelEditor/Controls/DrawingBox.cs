@@ -22,7 +22,10 @@ namespace PixelEditor.Controls
             {
                 case 1: // Line Grid
                     {
-                        GenerateLineGrid(cellSize, gridColor);
+                        if (cellSize > 2)
+                        {
+                            GenerateLineGrid(cellSize, gridColor);
+                        }
                         break;
                     }
                 case 2: // Checkered Grid
@@ -64,26 +67,28 @@ namespace PixelEditor.Controls
 
         private void GenerateCheckerGrid(int cellSize, Color gridColor)
         {
+            int pieceSize = 32;
+
             Graphics gridGenerator = Graphics.FromImage(this.Image);
             Brush whiteBrush = new SolidBrush(Color.White);
             Brush gridBrush = new SolidBrush(gridColor);
 
-            Bitmap gridPiece = new Bitmap(16 * cellSize, 16 * cellSize);
+            Bitmap gridPiece = new Bitmap(pieceSize * cellSize, pieceSize * cellSize);
             Graphics gridPieceBuilder = Graphics.FromImage(gridPiece);
 
             gridPieceBuilder.FillRectangle(whiteBrush, 0, 0, gridPiece.Width, gridPiece.Height);
-            for (int y = 0; y < 16; y++)
+            for (int y = 0; y < pieceSize; y++)
             {
                 int xStart = y % 2;
-                for (int x = xStart; x < 16; x += 2)
+                for (int x = xStart; x < pieceSize; x += 2)
                 {
                     gridPieceBuilder.FillRectangle(gridBrush, cellSize * x, cellSize * y, cellSize, cellSize);
                 }
             }
 
-            for (int y = 0; y < this.Height / cellSize; y += 16)
+            for (int y = 0; y < this.Height / cellSize; y += pieceSize)
             {
-                for (int x = 0; x < this.Width / cellSize; x += 16)
+                for (int x = 0; x < this.Width / cellSize; x += pieceSize)
                 {
                     gridGenerator.DrawImage(gridPiece, cellSize * x, cellSize * y);
                 }
