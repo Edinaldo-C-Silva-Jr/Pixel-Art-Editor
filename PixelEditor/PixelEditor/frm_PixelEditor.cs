@@ -1,6 +1,8 @@
 ﻿using PixelEditor.Controls;
 using System;
+using System.IO;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace PixelEditor
@@ -154,6 +156,20 @@ namespace PixelEditor
                 dbx_ViewingArea.DrawPixelByClick(e.X, e.Y, (int)nmb_ViewingZoom.Value, tbl_Colors.GetCurrentColor(), cbb_Grid.SelectedIndex);
                 dbx_ViewingArea.Refresh();
             }
+        }
+
+        private void btn_SaveImage_Click(object sender, EventArgs e)
+        {
+            string directory = "C:\\Users\\" + Environment.UserName + "\\Documents\\PixelEditor\\SavedImages\\";
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            string filename = directory + "PixelImage_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".png";
+
+            dbx_ViewingArea.Image.Save(filename, ImageFormat.Png);
         }
     }
 }

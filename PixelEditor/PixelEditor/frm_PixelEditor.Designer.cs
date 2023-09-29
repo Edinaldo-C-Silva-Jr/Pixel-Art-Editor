@@ -46,6 +46,7 @@
             this.nmb_PixelHeight = new PixelEditor.Controls.NumberBox();
             this.nmb_ViewingZoom = new PixelEditor.Controls.NumberBox();
             this.nmb_PixelWidth = new PixelEditor.Controls.NumberBox();
+            this.btn_SaveImage = new System.Windows.Forms.Button();
             this.pnl_Colors.SuspendLayout();
             this.pnl_ViewingArea.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dbx_ViewingArea)).BeginInit();
@@ -279,6 +280,16 @@
             0});
             this.nmb_PixelWidth.ValueChanged += new System.EventHandler(this.SizeValuesChanged);
             // 
+            // btn_SaveImage
+            // 
+            this.btn_SaveImage.Location = new System.Drawing.Point(230, 20);
+            this.btn_SaveImage.Name = "btn_SaveImage";
+            this.btn_SaveImage.Size = new System.Drawing.Size(50, 20);
+            this.btn_SaveImage.TabIndex = 20;
+            this.btn_SaveImage.Text = "Save";
+            this.btn_SaveImage.UseVisualStyleBackColor = true;
+            this.btn_SaveImage.Click += new System.EventHandler(this.btn_SaveImage_Click);
+            // 
             // frm_PixelEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -287,6 +298,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(484, 311);
+            this.Controls.Add(this.btn_SaveImage);
             this.Controls.Add(this.pnl_Colors);
             this.Controls.Add(this.pnl_ViewingArea);
             this.Controls.Add(this.nmb_PixelHeight);
@@ -331,6 +343,7 @@
         private Controls.ColorTable tbl_GridColor;
         private System.Windows.Forms.ComboBox cbb_ColorAmount;
         private System.Windows.Forms.Label lbl_ColorAmount;
+        private System.Windows.Forms.Button btn_SaveImage;
     }
 }
 
