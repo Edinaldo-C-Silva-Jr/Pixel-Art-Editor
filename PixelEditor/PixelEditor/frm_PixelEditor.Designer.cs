@@ -35,6 +35,7 @@
             this.lbl_ViewingZoom = new System.Windows.Forms.Label();
             this.cbb_Grid = new System.Windows.Forms.ComboBox();
             this.lbl_Grid = new System.Windows.Forms.Label();
+            this.btn_SaveImage = new System.Windows.Forms.Button();
             this.pnl_Colors = new PixelEditor.Controls.BackgroundPanel();
             this.cbb_ColorAmount = new System.Windows.Forms.ComboBox();
             this.lbl_ColorAmount = new System.Windows.Forms.Label();
@@ -46,7 +47,7 @@
             this.nmb_PixelHeight = new PixelEditor.Controls.NumberBox();
             this.nmb_ViewingZoom = new PixelEditor.Controls.NumberBox();
             this.nmb_PixelWidth = new PixelEditor.Controls.NumberBox();
-            this.btn_SaveImage = new System.Windows.Forms.Button();
+            this.chk_Transparency = new System.Windows.Forms.CheckBox();
             this.pnl_Colors.SuspendLayout();
             this.pnl_ViewingArea.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dbx_ViewingArea)).BeginInit();
@@ -113,6 +114,16 @@
             this.lbl_Grid.TabIndex = 15;
             this.lbl_Grid.Text = "Grid";
             this.lbl_Grid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btn_SaveImage
+            // 
+            this.btn_SaveImage.Location = new System.Drawing.Point(230, 20);
+            this.btn_SaveImage.Name = "btn_SaveImage";
+            this.btn_SaveImage.Size = new System.Drawing.Size(50, 20);
+            this.btn_SaveImage.TabIndex = 20;
+            this.btn_SaveImage.Text = "Save";
+            this.btn_SaveImage.UseVisualStyleBackColor = true;
+            this.btn_SaveImage.Click += new System.EventHandler(this.btn_SaveImage_Click);
             // 
             // pnl_Colors
             // 
@@ -280,15 +291,14 @@
             0});
             this.nmb_PixelWidth.ValueChanged += new System.EventHandler(this.SizeValuesChanged);
             // 
-            // btn_SaveImage
+            // chk_Transparency
             // 
-            this.btn_SaveImage.Location = new System.Drawing.Point(230, 20);
-            this.btn_SaveImage.Name = "btn_SaveImage";
-            this.btn_SaveImage.Size = new System.Drawing.Size(50, 20);
-            this.btn_SaveImage.TabIndex = 20;
-            this.btn_SaveImage.Text = "Save";
-            this.btn_SaveImage.UseVisualStyleBackColor = true;
-            this.btn_SaveImage.Click += new System.EventHandler(this.btn_SaveImage_Click);
+            this.chk_Transparency.Location = new System.Drawing.Point(290, 20);
+            this.chk_Transparency.Name = "chk_Transparency";
+            this.chk_Transparency.Size = new System.Drawing.Size(115, 20);
+            this.chk_Transparency.TabIndex = 21;
+            this.chk_Transparency.Text = "Use Transparency";
+            this.chk_Transparency.UseVisualStyleBackColor = true;
             // 
             // frm_PixelEditor
             // 
@@ -298,6 +308,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(484, 311);
+            this.Controls.Add(this.chk_Transparency);
             this.Controls.Add(this.btn_SaveImage);
             this.Controls.Add(this.pnl_Colors);
             this.Controls.Add(this.pnl_ViewingArea);
@@ -344,6 +355,7 @@
         private System.Windows.Forms.ComboBox cbb_ColorAmount;
         private System.Windows.Forms.Label lbl_ColorAmount;
         private System.Windows.Forms.Button btn_SaveImage;
+        private System.Windows.Forms.CheckBox chk_Transparency;
     }
 }
 

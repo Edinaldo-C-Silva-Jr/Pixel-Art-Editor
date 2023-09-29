@@ -14,9 +14,9 @@ namespace PixelEditor.Controls
             InitializeComponent();
         }
 
-        public void GenerateNewImage(int xSize, int ySize, int cellSize, int gridType, Color gridColor)
+        public void GenerateNewImage(int xSize, int ySize, int cellSize, int gridType, Color gridColor, bool transparent)
         {
-            NewImage(xSize, ySize);
+            NewImage(xSize, ySize, transparent);
 
             switch (gridType)
             {
@@ -36,11 +36,19 @@ namespace PixelEditor.Controls
             }
         }
 
-        private void NewImage(int xSize, int ySize)
+        private void NewImage(int xSize, int ySize, bool transparent)
         {
             this.Width = xSize;
             this.Height = ySize;
-            this.Image = new Bitmap(xSize, ySize);
+            Bitmap image = new Bitmap(xSize, ySize);
+            Graphics imageFiller = Graphics.FromImage(image);
+            imageFiller.Clear(Color.White);
+
+            if (transparent)
+            {
+                image.MakeTransparent(Color.White);
+            }
+            this.Image = image;
         }
 
         private void GenerateLineGrid(int cellSize, Color gridColor)

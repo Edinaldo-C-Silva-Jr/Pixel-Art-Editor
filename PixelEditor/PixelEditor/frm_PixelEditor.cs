@@ -33,7 +33,7 @@ namespace PixelEditor
             int zoom = (int)nmb_ViewingZoom.Value;
             int gridType = cbb_Grid.SelectedIndex;
             Color gridColor = tbl_GridColor.GetCurrentColor();
-            dbx_ViewingArea.GenerateNewImage(width * zoom, height * zoom, zoom, gridType, gridColor);
+            dbx_ViewingArea.GenerateNewImage(width * zoom, height * zoom, zoom, gridType, gridColor, chk_Transparency.Checked);
         }
 
         private void SetColorAmount()
