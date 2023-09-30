@@ -36,6 +36,7 @@
             this.cbb_Grid = new System.Windows.Forms.ComboBox();
             this.lbl_Grid = new System.Windows.Forms.Label();
             this.btn_SaveImage = new System.Windows.Forms.Button();
+            this.chk_Transparency = new System.Windows.Forms.CheckBox();
             this.pnl_Colors = new PixelEditor.Controls.BackgroundPanel();
             this.cbb_ColorAmount = new System.Windows.Forms.ComboBox();
             this.lbl_ColorAmount = new System.Windows.Forms.Label();
@@ -47,7 +48,6 @@
             this.nmb_PixelHeight = new PixelEditor.Controls.NumberBox();
             this.nmb_ViewingZoom = new PixelEditor.Controls.NumberBox();
             this.nmb_PixelWidth = new PixelEditor.Controls.NumberBox();
-            this.chk_Transparency = new System.Windows.Forms.CheckBox();
             this.pnl_Colors.SuspendLayout();
             this.pnl_ViewingArea.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dbx_ViewingArea)).BeginInit();
@@ -124,6 +124,15 @@
             this.btn_SaveImage.Text = "Save";
             this.btn_SaveImage.UseVisualStyleBackColor = true;
             this.btn_SaveImage.Click += new System.EventHandler(this.btn_SaveImage_Click);
+            // 
+            // chk_Transparency
+            // 
+            this.chk_Transparency.Location = new System.Drawing.Point(290, 20);
+            this.chk_Transparency.Name = "chk_Transparency";
+            this.chk_Transparency.Size = new System.Drawing.Size(115, 20);
+            this.chk_Transparency.TabIndex = 21;
+            this.chk_Transparency.Text = "Use Transparency";
+            this.chk_Transparency.UseVisualStyleBackColor = true;
             // 
             // pnl_Colors
             // 
@@ -290,15 +299,6 @@
             0,
             0});
             this.nmb_PixelWidth.ValueChanged += new System.EventHandler(this.SizeValuesChanged);
-            // 
-            // chk_Transparency
-            // 
-            this.chk_Transparency.Location = new System.Drawing.Point(290, 20);
-            this.chk_Transparency.Name = "chk_Transparency";
-            this.chk_Transparency.Size = new System.Drawing.Size(115, 20);
-            this.chk_Transparency.TabIndex = 21;
-            this.chk_Transparency.Text = "Use Transparency";
-            this.chk_Transparency.UseVisualStyleBackColor = true;
             // 
             // frm_PixelEditor
             // 

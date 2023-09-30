@@ -9,6 +9,8 @@ namespace PixelEditor
 {
     public partial class frm_PixelEditor : Form
     {
+        private Bitmap originalImage = new Bitmap(1, 1);
+
         public frm_PixelEditor()
         {
             InitializeComponent();
@@ -18,22 +20,14 @@ namespace PixelEditor
         {
             cbb_Grid.SelectedIndex = 0;
             cbb_ColorAmount.SelectedIndex = 3;
+            chk_Transparency.Checked = false;
 
             SetColorAmount();
             OrganizeColorsPanel();
+
             SetViewingAreaSize();
 
             ReorganizeControls();
-        }
-
-        private void SetViewingAreaSize()
-        {
-            int height = (int)nmb_PixelHeight.Value;
-            int width = (int)nmb_PixelWidth.Value;
-            int zoom = (int)nmb_ViewingZoom.Value;
-            int gridType = cbb_Grid.SelectedIndex;
-            Color gridColor = tbl_GridColor.GetCurrentColor();
-            dbx_ViewingArea.GenerateNewImage(width * zoom, height * zoom, zoom, gridType, gridColor, chk_Transparency.Checked);
         }
 
         private void SetColorAmount()
@@ -51,9 +45,29 @@ namespace PixelEditor
             lbl_gridColor.Text = "Grid Color:";
 
             cbb_ColorAmount.Location = new Point(lbl_ColorAmount.Location.X + lbl_ColorAmount.Width, cbb_ColorAmount.Location.Y);
-            
+
             tbl_GridColor.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked), Color.Gray, false);
             tbl_GridColor.Location = new Point(lbl_gridColor.Location.X + lbl_gridColor.Width, tbl_GridColor.Location.Y);
+        }
+
+        private void SetViewingAreaSize()
+        {
+            int height = (int)nmb_PixelHeight.Value;
+            int width = (int)nmb_PixelWidth.Value;
+            int zoom = (int)nmb_ViewingZoom.Value;
+            int gridType = cbb_Grid.SelectedIndex;
+            Color gridColor = tbl_GridColor.GetCurrentColor();
+
+            originalImage = new Bitmap(width * zoom, height * zoom);
+            Graphics imageFiller = Graphics.FromImage(originalImage);
+            imageFiller.Clear(Color.White);
+
+            if (chk_Transparency.Checked)
+            {
+                originalImage.MakeTransparent(Color.White);
+            }
+
+            dbx_ViewingArea.SetNewImage(originalImage, zoom, gridType, gridColor, chk_Transparency.Checked);
         }
 
         private void ReorganizeControls()
@@ -70,7 +84,7 @@ namespace PixelEditor
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
 
-            dbx_ViewingArea.DrawPixelByClick(mouseClick.X, mouseClick.Y, (int)nmb_ViewingZoom.Value, tbl_Colors.GetCurrentColor(), cbb_Grid.SelectedIndex);
+            originalImage = dbx_ViewingArea.DrawPixelByClick(originalImage, mouseClick.X, mouseClick.Y, (int)nmb_ViewingZoom.Value, tbl_Colors.GetCurrentColor(), cbb_Grid.SelectedIndex);
             dbx_ViewingArea.Refresh();
         }
 
@@ -111,7 +125,7 @@ namespace PixelEditor
                     pixelColor = image.GetPixel(x*zoom, y*zoom);
                     if (oldColor.ToArgb() == pixelColor.ToArgb())
                     {
-                        dbx_ViewingArea.DrawPixelByPosition(x, y, zoom, newColor, gridType);
+                        originalImage = dbx_ViewingArea.DrawPixelByPosition(originalImage, x, y, zoom, newColor, gridType);
                     }
                 }
             }
@@ -153,7 +167,7 @@ namespace PixelEditor
         {
             if (e.Button == MouseButtons.Left)
             {
-                dbx_ViewingArea.DrawPixelByClick(e.X, e.Y, (int)nmb_ViewingZoom.Value, tbl_Colors.GetCurrentColor(), cbb_Grid.SelectedIndex);
+                originalImage = dbx_ViewingArea.DrawPixelByClick(originalImage, e.X, e.Y, (int)nmb_ViewingZoom.Value, tbl_Colors.GetCurrentColor(), cbb_Grid.SelectedIndex);
                 dbx_ViewingArea.Refresh();
             }
         }
@@ -169,7 +183,7 @@ namespace PixelEditor
 
             string filename = directory + "PixelImage_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".png";
 
-            dbx_ViewingArea.Image.Save(filename, ImageFormat.Png);
+            originalImage.Save(filename, ImageFormat.Png);
         }
     }
 }
