@@ -8,6 +8,7 @@ namespace PixelEditor.Controls
     {
         private Bitmap imageWithGrid = new Bitmap(1, 1);
         private Bitmap lineGrid = new Bitmap(1, 1);
+        private Bitmap pixelLineGrid = new Bitmap(1, 1);
 
         public DrawingBox()
         {
@@ -46,7 +47,11 @@ namespace PixelEditor.Controls
             lineGrid = new Bitmap(this.Width, this.Height);
             lineGrid.MakeTransparent();
 
+            pixelLineGrid = new Bitmap(cellSize, cellSize);
+            pixelLineGrid.MakeTransparent();
+
             Graphics gridGenerator = Graphics.FromImage(lineGrid);
+            Graphics pixelLineGridGenerator = Graphics.FromImage(pixelLineGrid);
             Pen linePen = new Pen(gridColor);
 
             for (int x = 1; x < this.Height / cellSize + 1; x++)
@@ -58,6 +63,9 @@ namespace PixelEditor.Controls
             {
                 gridGenerator.DrawLine(linePen, y * cellSize - 1, 0, y * cellSize - 1, this.Height);
             }
+
+            pixelLineGridGenerator.DrawLine(linePen, 0, cellSize -1, cellSize -1, cellSize -1);
+            pixelLineGridGenerator.DrawLine(linePen, cellSize - 1, 0, cellSize - 1, cellSize - 1);
 
             Graphics gridMerger = Graphics.FromImage(this.Image);
             gridMerger.DrawImage(lineGrid, 0, 0);
@@ -119,9 +127,9 @@ namespace PixelEditor.Controls
             pixelDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
             gridDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
 
-            if (gridType == 1)
+            if (gridType == 1 && pixelSize > 2)
             {
-                gridDraw.DrawImage(lineGrid, 0, 0);
+                gridDraw.DrawImage(pixelLineGrid, xPos, yPos);
             }
 
             this.Image = imageWithGrid;
