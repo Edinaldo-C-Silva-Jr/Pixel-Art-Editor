@@ -48,6 +48,7 @@
             this.nmb_PixelHeight = new PixelEditor.Controls.NumberBox();
             this.nmb_ViewingZoom = new PixelEditor.Controls.NumberBox();
             this.nmb_PixelWidth = new PixelEditor.Controls.NumberBox();
+            this.chk_ChangeColor = new System.Windows.Forms.CheckBox();
             this.pnl_Colors.SuspendLayout();
             this.pnl_ViewingArea.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dbx_ViewingArea)).BeginInit();
@@ -300,6 +301,16 @@
             0});
             this.nmb_PixelWidth.ValueChanged += new System.EventHandler(this.SizeValuesChanged);
             // 
+            // chk_ChangeColor
+            // 
+            this.chk_ChangeColor.AutoSize = true;
+            this.chk_ChangeColor.Location = new System.Drawing.Point(290, 45);
+            this.chk_ChangeColor.Name = "chk_ChangeColor";
+            this.chk_ChangeColor.Size = new System.Drawing.Size(139, 17);
+            this.chk_ChangeColor.TabIndex = 22;
+            this.chk_ChangeColor.Text = "Change Colors In Image";
+            this.chk_ChangeColor.UseVisualStyleBackColor = true;
+            // 
             // frm_PixelEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -308,6 +319,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(484, 311);
+            this.Controls.Add(this.chk_ChangeColor);
             this.Controls.Add(this.chk_Transparency);
             this.Controls.Add(this.btn_SaveImage);
             this.Controls.Add(this.pnl_Colors);
@@ -331,6 +343,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nmb_ViewingZoom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmb_PixelWidth)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -356,6 +369,7 @@
         private System.Windows.Forms.Label lbl_ColorAmount;
         private System.Windows.Forms.Button btn_SaveImage;
         private System.Windows.Forms.CheckBox chk_Transparency;
+        private System.Windows.Forms.CheckBox chk_ChangeColor;
     }
 }
 

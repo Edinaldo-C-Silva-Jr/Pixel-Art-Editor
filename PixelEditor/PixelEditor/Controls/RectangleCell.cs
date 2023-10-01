@@ -7,6 +7,7 @@ namespace PixelEditor.Controls
     {
         private int cellSize;
         private bool visibleSelection = true;
+        private bool defaultColor = true;
 
         public RectangleCell(int cellSize, Color color, bool selectable)
         {
@@ -36,6 +37,16 @@ namespace PixelEditor.Controls
                 this.Size = new Size(cellSize, cellSize);
                 this.Margin = new Padding(0, 0, 0, 0);
             }
+        }
+
+        public bool IsColorDefault()
+        {
+            return defaultColor;
+        }
+
+        public void SetIfDefaultColor(bool isDefault)
+        {
+            defaultColor = isDefault;
         }
     }
 }

@@ -21,6 +21,7 @@ namespace PixelEditor
             cbb_Grid.SelectedIndex = 0;
             cbb_ColorAmount.SelectedIndex = 3;
             chk_Transparency.Checked = false;
+            chk_ChangeColor.Checked = true;
 
             SetColorAmount();
             OrganizeColorsPanel();
@@ -52,6 +53,8 @@ namespace PixelEditor
 
         private void SetViewingAreaSize()
         {
+            Color defaultColor = Color.FromArgb(254, 254, 254);
+
             int height = (int)nmb_PixelHeight.Value;
             int width = (int)nmb_PixelWidth.Value;
             int zoom = (int)nmb_ViewingZoom.Value;
@@ -60,11 +63,11 @@ namespace PixelEditor
 
             originalImage = new Bitmap(width * zoom, height * zoom);
             Graphics imageFiller = Graphics.FromImage(originalImage);
-            imageFiller.Clear(Color.White);
+            imageFiller.Clear(defaultColor);
 
             if (chk_Transparency.Checked)
             {
-                originalImage.MakeTransparent(Color.White);
+                originalImage.MakeTransparent(defaultColor);
             }
 
             dbx_ViewingArea.SetNewImage(originalImage, zoom, gridType, gridColor, chk_Transparency.Checked);
@@ -100,8 +103,12 @@ namespace PixelEditor
 
                 if (colorpicked == DialogResult.OK)
                 {
-                    SwapColorInImage(cell.BackColor, clr_ColorPicker.Color);
+                    if (!(cell.IsColorDefault()) && chk_ChangeColor.Checked)
+                    {
+                        SwapColorInImage(cell.BackColor, clr_ColorPicker.Color);
+                    }
                     cell.BackColor = clr_ColorPicker.Color;
+                    cell.SetIfDefaultColor(false);
                 }
             }
 
