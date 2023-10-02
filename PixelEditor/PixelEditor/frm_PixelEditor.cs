@@ -41,14 +41,18 @@ namespace PixelEditor
         {
             lbl_ColorAmount.Size = new Size(80, 20);
             lbl_ColorAmount.Text = "Color Amount";
-
-            lbl_gridColor.Size = new Size(65, 20);
-            lbl_gridColor.Text = "Grid Color:";
-
             cbb_ColorAmount.Location = new Point(lbl_ColorAmount.Location.X + lbl_ColorAmount.Width, cbb_ColorAmount.Location.Y);
 
+            lbl_gridColor.Size = new Size(65, 20);
+            lbl_gridColor.Text = "Grid Color";
             tbl_GridColor.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked), Color.Gray, false);
             tbl_GridColor.Location = new Point(lbl_gridColor.Location.X + lbl_gridColor.Width, tbl_GridColor.Location.Y);
+
+            lbl_BackgroundColor.Size = new Size(100, 20);
+            lbl_BackgroundColor.Text = "Background Color";
+            lbl_BackgroundColor.Location = new Point(tbl_GridColor.Location.X + tbl_GridColor.Width, lbl_BackgroundColor.Location.Y);
+            tbl_BackgroundColor.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked), Color.FromArgb(254, 254, 254), false);
+            tbl_BackgroundColor.Location = new Point(lbl_BackgroundColor.Location.X + lbl_BackgroundColor.Width, tbl_BackgroundColor.Location.Y);
         }
 
         private void SetViewingAreaSize()

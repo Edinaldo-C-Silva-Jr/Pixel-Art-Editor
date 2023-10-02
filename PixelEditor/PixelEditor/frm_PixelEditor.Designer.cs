@@ -38,6 +38,8 @@
             this.btn_SaveImage = new System.Windows.Forms.Button();
             this.chk_Transparency = new System.Windows.Forms.CheckBox();
             this.pnl_Colors = new PixelEditor.Controls.BackgroundPanel();
+            this.tbl_BackgroundColor = new PixelEditor.Controls.ColorTable();
+            this.lbl_BackgroundColor = new System.Windows.Forms.Label();
             this.cbb_ColorAmount = new System.Windows.Forms.ComboBox();
             this.lbl_ColorAmount = new System.Windows.Forms.Label();
             this.tbl_GridColor = new PixelEditor.Controls.ColorTable();
@@ -138,6 +140,8 @@
             // pnl_Colors
             // 
             this.pnl_Colors.BackColor = System.Drawing.Color.White;
+            this.pnl_Colors.Controls.Add(this.tbl_BackgroundColor);
+            this.pnl_Colors.Controls.Add(this.lbl_BackgroundColor);
             this.pnl_Colors.Controls.Add(this.cbb_ColorAmount);
             this.pnl_Colors.Controls.Add(this.lbl_ColorAmount);
             this.pnl_Colors.Controls.Add(this.tbl_GridColor);
@@ -145,8 +149,31 @@
             this.pnl_Colors.Controls.Add(this.tbl_Colors);
             this.pnl_Colors.Location = new System.Drawing.Point(10, 160);
             this.pnl_Colors.Name = "pnl_Colors";
-            this.pnl_Colors.Size = new System.Drawing.Size(90, 120);
+            this.pnl_Colors.Size = new System.Drawing.Size(150, 120);
             this.pnl_Colors.TabIndex = 19;
+            // 
+            // tbl_BackgroundColor
+            // 
+            this.tbl_BackgroundColor.BackColor = System.Drawing.SystemColors.Control;
+            this.tbl_BackgroundColor.ColumnCount = 1;
+            this.tbl_BackgroundColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tbl_BackgroundColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tbl_BackgroundColor.Location = new System.Drawing.Point(115, 45);
+            this.tbl_BackgroundColor.Name = "tbl_BackgroundColor";
+            this.tbl_BackgroundColor.RowCount = 1;
+            this.tbl_BackgroundColor.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tbl_BackgroundColor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tbl_BackgroundColor.Size = new System.Drawing.Size(20, 20);
+            this.tbl_BackgroundColor.TabIndex = 6;
+            // 
+            // lbl_BackgroundColor
+            // 
+            this.lbl_BackgroundColor.Location = new System.Drawing.Point(80, 50);
+            this.lbl_BackgroundColor.Name = "lbl_BackgroundColor";
+            this.lbl_BackgroundColor.Size = new System.Drawing.Size(30, 20);
+            this.lbl_BackgroundColor.TabIndex = 8;
+            this.lbl_BackgroundColor.Text = "BC:";
+            this.lbl_BackgroundColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cbb_ColorAmount
             // 
@@ -318,7 +345,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(484, 311);
+            this.ClientSize = new System.Drawing.Size(653, 575);
             this.Controls.Add(this.chk_ChangeColor);
             this.Controls.Add(this.chk_Transparency);
             this.Controls.Add(this.btn_SaveImage);
@@ -370,6 +397,8 @@
         private System.Windows.Forms.Button btn_SaveImage;
         private System.Windows.Forms.CheckBox chk_Transparency;
         private System.Windows.Forms.CheckBox chk_ChangeColor;
+        private Controls.ColorTable tbl_BackgroundColor;
+        private System.Windows.Forms.Label lbl_BackgroundColor;
     }
 }
 
