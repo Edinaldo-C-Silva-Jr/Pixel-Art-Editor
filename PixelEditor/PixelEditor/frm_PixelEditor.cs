@@ -50,14 +50,14 @@ namespace PixelEditor
 
             lbl_BackgroundColor.Size = new Size(100, 20);
             lbl_BackgroundColor.Text = "Background Color";
-            lbl_BackgroundColor.Location = new Point(tbl_GridColor.Location.X + tbl_GridColor.Width, lbl_BackgroundColor.Location.Y);
+            lbl_BackgroundColor.Location = new Point(tbl_GridColor.Location.X + tbl_GridColor.Width + 10, lbl_BackgroundColor.Location.Y);
             tbl_BackgroundColor.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked), Color.FromArgb(254, 254, 254), false);
             tbl_BackgroundColor.Location = new Point(lbl_BackgroundColor.Location.X + lbl_BackgroundColor.Width, tbl_BackgroundColor.Location.Y);
         }
 
         private void SetViewingAreaSize()
         {
-            Color defaultColor = Color.FromArgb(254, 254, 254);
+            Color defaultColor = tbl_BackgroundColor.GetCurrentColor();
 
             int height = (int)nmb_PixelHeight.Value;
             int width = (int)nmb_PixelWidth.Value;
@@ -74,7 +74,7 @@ namespace PixelEditor
                 originalImage.MakeTransparent(defaultColor);
             }
 
-            dbx_ViewingArea.SetNewImage(originalImage, zoom, gridType, gridColor, chk_Transparency.Checked);
+            dbx_ViewingArea.SetNewImage(originalImage, zoom, gridType, gridColor);
         }
 
         private void ReorganizeControls()
@@ -111,6 +111,11 @@ namespace PixelEditor
                     {
                         SwapColorInImage(cell.BackColor, clr_ColorPicker.Color);
                     }
+                    if (cellParent.Name == "tbl_BackgroundColor")
+                    {
+                        ChangeImageTransparency(chk_Transparency.Checked, tbl_BackgroundColor.GetCurrentColor(), clr_ColorPicker.Color);
+                    }
+
                     cell.BackColor = clr_ColorPicker.Color;
                     cell.SetIfDefaultColor(false);
                 }
@@ -195,6 +200,40 @@ namespace PixelEditor
             string filename = directory + "PixelImage_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".png";
 
             originalImage.Save(filename, ImageFormat.Png);
+        }
+
+        private void chk_Transparency_CheckedChanged(object sender, EventArgs e)
+        {
+            Color color = tbl_BackgroundColor.GetCurrentColor();
+            ChangeImageTransparency(chk_Transparency.Checked, color, color);
+            if (chk_Transparency.Checked)
+            {
+                lbl_BackgroundColor.Text = "Transparency Color";
+            }
+            else
+            {
+                lbl_BackgroundColor.Text = "Background Color";
+            }
+        }
+
+        private void ChangeImageTransparency(bool transparent, Color oldColor, Color newColor)
+        {
+            originalImage.MakeTransparent(oldColor);
+            
+            if (!transparent)
+            {
+                int height = (int)nmb_PixelHeight.Value;
+                int width = (int)nmb_PixelWidth.Value;
+                int zoom = (int)nmb_ViewingZoom.Value;
+                Bitmap temporaryImage = new Bitmap(width * zoom, height * zoom);
+                Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
+
+                temporaryGraphics.Clear(newColor);
+                temporaryGraphics.DrawImage(originalImage, 0, 0);
+                originalImage = temporaryImage;
+
+                dbx_ViewingArea.SetNewImage(originalImage, zoom, (int)cbb_Grid.SelectedIndex, tbl_GridColor.GetCurrentColor());
+            }
         }
     }
 }

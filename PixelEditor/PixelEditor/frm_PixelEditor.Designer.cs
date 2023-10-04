@@ -136,6 +136,7 @@
             this.chk_Transparency.TabIndex = 21;
             this.chk_Transparency.Text = "Use Transparency";
             this.chk_Transparency.UseVisualStyleBackColor = true;
+            this.chk_Transparency.CheckedChanged += new System.EventHandler(this.chk_Transparency_CheckedChanged);
             // 
             // pnl_Colors
             // 
@@ -251,7 +252,7 @@
             // 
             // dbx_ViewingArea
             // 
-            this.dbx_ViewingArea.BackColor = System.Drawing.Color.White;
+            this.dbx_ViewingArea.BackColor = System.Drawing.SystemColors.Control;
             this.dbx_ViewingArea.Location = new System.Drawing.Point(1, 1);
             this.dbx_ViewingArea.Name = "dbx_ViewingArea";
             this.dbx_ViewingArea.Size = new System.Drawing.Size(20, 20);

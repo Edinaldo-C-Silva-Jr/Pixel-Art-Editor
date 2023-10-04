@@ -16,7 +16,7 @@ namespace PixelEditor.Controls
             InitializeComponent();
         }
 
-        public void SetNewImage(Bitmap originalImage, int cellSize, int gridType, Color gridColor, bool transparent)
+        public void SetNewImage(Bitmap originalImage, int cellSize, int gridType, Color gridColor)
         {
             this.Width = originalImage.Width;
             this.Height = originalImage.Height;
@@ -40,6 +40,7 @@ namespace PixelEditor.Controls
                         break;
                     }
             }
+            this.Refresh();
         }
 
         private void GenerateLineGrid(int cellSize, Color gridColor)
