@@ -1,4 +1,5 @@
 using PixelArtEditor.Controls;
+using PixelArtEditor.Grid;
 using System.Drawing.Imaging;
 
 namespace PixelArtEditor
@@ -14,7 +15,8 @@ namespace PixelArtEditor
 
         private void PixelArtEditorForm_Load(object sender, EventArgs e)
         {
-            GridTypeComboBox.SelectedIndex = 0;
+            GridTypeComboBox.DataSource = Enum.GetValues(typeof(GridType));
+            GridTypeComboBox.SelectedItem = GridType.None;
             ColorAmountComboBox.SelectedIndex = 3;
             TransparencyCheckBox.Checked = false;
             ColorChangeCheckBox.Checked = true;
@@ -58,7 +60,7 @@ namespace PixelArtEditor
             int height = (int)PixelHeightNumberBox.Value;
             int width = (int)PixelWidthNumberBox.Value;
             int zoom = (int)ViewingZoomNumberBox.Value;
-            int gridType = GridTypeComboBox.SelectedIndex;
+            GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
             Color gridColor = GridColorTable.GetCurrentColor();
 
             originalImage = new Bitmap(width * zoom, height * zoom);
@@ -87,7 +89,7 @@ namespace PixelArtEditor
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
 
-            originalImage = ViewingAreaDrawingBox.DrawPixelByClick(originalImage, mouseClick.X, mouseClick.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), GridTypeComboBox.SelectedIndex);
+            originalImage = ViewingAreaDrawingBox.DrawPixelByClick(originalImage, mouseClick.X, mouseClick.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
             ViewingAreaDrawingBox.Refresh();
         }
 
@@ -125,7 +127,7 @@ namespace PixelArtEditor
             int height = (int)PixelHeightNumberBox.Value;
             int width = (int)PixelWidthNumberBox.Value;
             int zoom = (int)ViewingZoomNumberBox.Value;
-            int gridType = GridTypeComboBox.SelectedIndex;
+            GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
             Color pixelColor;
 
             Bitmap image = new Bitmap(ViewingAreaDrawingBox.Image);
@@ -179,7 +181,7 @@ namespace PixelArtEditor
         {
             if (e.Button == MouseButtons.Left)
             {
-                originalImage = ViewingAreaDrawingBox.DrawPixelByClick(originalImage, e.X, e.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), GridTypeComboBox.SelectedIndex);
+                originalImage = ViewingAreaDrawingBox.DrawPixelByClick(originalImage, e.X, e.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
                 ViewingAreaDrawingBox.Refresh();
             }
         }
@@ -221,6 +223,7 @@ namespace PixelArtEditor
                 int height = (int)PixelHeightNumberBox.Value;
                 int width = (int)PixelWidthNumberBox.Value;
                 int zoom = (int)ViewingZoomNumberBox.Value;
+                GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
                 Bitmap temporaryImage = new Bitmap(width * zoom, height * zoom);
                 Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
 
@@ -228,7 +231,7 @@ namespace PixelArtEditor
                 temporaryGraphics.DrawImage(originalImage, 0, 0);
                 originalImage = temporaryImage;
 
-                ViewingAreaDrawingBox.SetNewImage(originalImage, zoom, (int)GridTypeComboBox.SelectedIndex, PaletteColorTable.GetCurrentColor());
+                ViewingAreaDrawingBox.SetNewImage(originalImage, zoom, gridType, GridColorTable.GetCurrentColor());
             }
         }
     }

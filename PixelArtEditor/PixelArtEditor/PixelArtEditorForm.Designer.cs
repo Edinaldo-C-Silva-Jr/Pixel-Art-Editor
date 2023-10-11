@@ -131,7 +131,6 @@
             // 
             GridTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             GridTypeComboBox.FormattingEnabled = true;
-            GridTypeComboBox.Items.AddRange(new object[] { "None", "Line", "Checker" });
             GridTypeComboBox.Location = new Point(165, 39);
             GridTypeComboBox.Name = "GridTypeComboBox";
             GridTypeComboBox.Size = new Size(70, 23);

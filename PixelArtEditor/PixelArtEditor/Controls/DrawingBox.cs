@@ -1,4 +1,6 @@
-﻿namespace PixelArtEditor.Controls
+﻿using PixelArtEditor.Grid;
+
+namespace PixelArtEditor.Controls
 {
     public partial class DrawingBox : PictureBox
     {
@@ -12,7 +14,7 @@
             InitializeComponent();
         }
 
-        public void SetNewImage(Bitmap originalImage, int cellSize, int gridType, Color gridColor)
+        public void SetNewImage(Bitmap originalImage, int cellSize, GridType gridType, Color gridColor)
         {
             this.Width = originalImage.Width;
             this.Height = originalImage.Height;
@@ -22,7 +24,7 @@
 
             switch (gridType)
             {
-                case 1: // Line Grid
+                case GridType.Line:
                     {
                         if (cellSize > 2)
                         {
@@ -30,7 +32,7 @@
                         }
                         break;
                     }
-                case 2: // Checkered Grid
+                case GridType.Checker:
                     {
                         GenerateCheckerGrid(cellSize, gridColor);
                         break;
@@ -98,7 +100,7 @@
             }
         }
 
-        public Bitmap DrawPixelByPosition(Bitmap image, int xPosPixel, int yPosPixel, int pixelSize, Color pixelColor, int gridType)
+        public Bitmap DrawPixelByPosition(Bitmap image, int xPosPixel, int yPosPixel, int pixelSize, Color pixelColor, GridType gridType)
         {
             int xPos = pixelSize * xPosPixel;
             int yPos = pixelSize * yPosPixel;
@@ -106,7 +108,7 @@
             return DrawPixel(image, xPos, yPos, pixelSize, pixelColor, gridType);
         }
 
-        public Bitmap DrawPixelByClick(Bitmap image, int xPosMouse, int yPosMouse, int pixelSize, Color pixelColor, int gridType)
+        public Bitmap DrawPixelByClick(Bitmap image, int xPosMouse, int yPosMouse, int pixelSize, Color pixelColor, GridType gridType)
         {
             int xPos = xPosMouse - xPosMouse % pixelSize;
             int yPos = yPosMouse - yPosMouse % pixelSize;
@@ -114,7 +116,7 @@
             return DrawPixel(image, xPos, yPos, pixelSize, pixelColor, gridType);
         }
 
-        private Bitmap DrawPixel(Bitmap image, int xPos, int yPos, int pixelSize, Color pixelColor, int gridType)
+        private Bitmap DrawPixel(Bitmap image, int xPos, int yPos, int pixelSize, Color pixelColor, GridType gridType)
         {
             Graphics pixelDraw = Graphics.FromImage(image);
             Graphics gridDraw = Graphics.FromImage(imageWithGrid);
@@ -124,7 +126,7 @@
             pixelDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
             gridDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
 
-            if (gridType == 1 && pixelSize > 2)
+            if (gridType == GridType.Line && pixelSize > 2)
             {
                 gridDraw.DrawImage(pixelLineGrid, xPos, yPos);
             }
