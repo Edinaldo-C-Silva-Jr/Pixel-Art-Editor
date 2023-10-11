@@ -1,6 +1,6 @@
-﻿namespace PixelEditor.Controls
+﻿namespace PixelArtEditor.Controls
 {
-    partial class DrawingBox
+    partial class BackgroundPanel
     {
         /// <summary> 
         /// Variável de designer necessária.

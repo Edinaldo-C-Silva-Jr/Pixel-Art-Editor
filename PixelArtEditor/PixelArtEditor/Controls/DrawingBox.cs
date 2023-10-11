@@ -1,8 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-
-namespace PixelEditor.Controls
+﻿namespace PixelArtEditor.Controls
 {
     public partial class DrawingBox : PictureBox
     {
@@ -65,7 +61,7 @@ namespace PixelEditor.Controls
                 gridGenerator.DrawLine(linePen, y * cellSize - 1, 0, y * cellSize - 1, this.Height);
             }
 
-            pixelLineGridGenerator.DrawLine(linePen, 0, cellSize -1, cellSize -1, cellSize -1);
+            pixelLineGridGenerator.DrawLine(linePen, 0, cellSize - 1, cellSize - 1, cellSize - 1);
             pixelLineGridGenerator.DrawLine(linePen, cellSize - 1, 0, cellSize - 1, cellSize - 1);
 
             Graphics gridMerger = Graphics.FromImage(this.Image);

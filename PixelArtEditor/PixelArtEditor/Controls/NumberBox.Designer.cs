@@ -1,6 +1,6 @@
-﻿namespace PixelEditor.Controls
+﻿namespace PixelArtEditor.Controls
 {
-    partial class ColorTable
+    partial class NumberBox
     {
         /// <summary> 
         /// Variável de designer necessária.
@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         }
 
         #endregion

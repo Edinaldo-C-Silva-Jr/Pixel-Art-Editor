@@ -1,4 +1,4 @@
-﻿namespace PixelEditor.Controls
+﻿namespace PixelArtEditor.Controls
 {
     partial class RectangleCell
     {

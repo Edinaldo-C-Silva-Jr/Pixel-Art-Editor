@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace PixelEditor.Controls
+﻿namespace PixelArtEditor.Controls
 {
     public partial class BackgroundPanel : Panel
     {
