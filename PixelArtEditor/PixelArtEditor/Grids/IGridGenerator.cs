@@ -6,6 +6,6 @@
 
         public Bitmap ApplyGridFullImage(Bitmap originalImage);
 
-        public Bitmap ApplyGridSinglePixel(Bitmap originalImage);
+        public Bitmap ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition);
     }
 }
