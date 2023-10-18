@@ -2,9 +2,9 @@
 {
     internal class CheckerGrid : IGridGenerator
     {
-        Bitmap checkerGridPiece = new(1, 1);
-        Bitmap checkerGridWhitePixel = new(1, 1);
-        Bitmap checkerGridColorPixel = new(1, 1);
+        Bitmap? checkerGridPiece;
+        Bitmap? checkerGridWhitePixel;
+        Bitmap? checkerGridColorPixel;
 
         public void GenerateGrid(Bitmap originalImage, int cellSize, Color gridColor)
         {
@@ -31,6 +31,13 @@
             gridPixelBuilder.Clear(gridColor);
         }
 
+        /// <summary>
+        /// Calculates the size to use when generating the grid piece, based on the size of the full image.
+        /// This method returns a size that will make grid generation more efficient, by splitting the full grid into smaller pieces that will be copied to fill the image.
+        /// The method returns a single dimension, which should match the parameter passed. (If the method was passed a width value, it returns a width value) 
+        /// </summary>
+        /// <param name="sizePixelLength">The length of the image side, in pixel cells (not counting the zoom)</param>
+        /// <returns>The optimized grid piece length for the image passed.</returns>
         private int DefineGridPieceSize(int sidePixelLength)
         {
             return (int)Math.Sqrt(sidePixelLength);
@@ -38,6 +45,11 @@
 
         public Bitmap ApplyGridFullImage(Bitmap originalImage)
         {
+            if (checkerGridPiece == null)
+            {
+                return originalImage;
+            }
+
             using Graphics gridMerger = Graphics.FromImage(originalImage);
 
             for (int y = 0; y < originalImage.Height / checkerGridPiece.Height; y++)
@@ -53,6 +65,11 @@
 
         public Bitmap ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition)
         {
+            if (checkerGridColorPixel == null || checkerGridWhitePixel == null)
+            {
+                return originalImage;
+            }
+
             using Graphics gridPixelMerger = Graphics.FromImage(originalImage);
 
             int positionParity = (xPosition % 2 + yPosition % 2) % 2;

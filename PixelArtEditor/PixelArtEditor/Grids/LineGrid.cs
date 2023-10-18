@@ -1,9 +1,12 @@
 ﻿namespace PixelArtEditor.Grids
 {
+    /// <summary>
+    /// Implements a line based grid, where every cell is separated by a single pixel thick line of a specified color.
+    /// </summary>
     internal class LineGrid : IGridGenerator
     {
-        Bitmap lineGridPiece = new(1, 1);
-        Bitmap lineGridSinglePixel = new(1, 1);
+        Bitmap? lineGridPiece;
+        Bitmap? lineGridSinglePixel;
 
         public void GenerateGrid(Bitmap originalImage, int cellSize, Color gridColor)
         {
@@ -31,6 +34,13 @@
             gridPixelBuilder.DrawLine(gridPen, cellSize - 1, 0, cellSize - 1, cellSize - 1);
         }
 
+        /// <summary>
+        /// Calculates the size to use when generating the grid piece, based on the size of the full image.
+        /// This method returns a size that will make grid generation more efficient, by splitting the full grid into smaller pieces that will be copied to fill the image.
+        /// The method returns a single dimension, which should match the parameter passed. (If the method was passed a width value, it returns a width value) 
+        /// </summary>
+        /// <param name="sizePixelLength">The length of the image side, in pixel cells (not counting the zoom)</param>
+        /// <returns>The optimized grid piece length for the image passed.</returns>
         private int DefineGridPieceSize(int sizePixelLength)
         {
             int amountOfIterations = 10000, gridPieceSize, sizeWithLeastIterations = 0, amountOfGridPieces;
@@ -65,6 +75,11 @@
 
         public Bitmap ApplyGridFullImage(Bitmap originalImage)
         {
+            if (lineGridPiece == null)
+            {
+                return originalImage;
+            }
+
             using Graphics gridMerger = Graphics.FromImage(originalImage);
             for (int y = 0; y < originalImage.Height / lineGridPiece.Height; y++)
             {
@@ -78,6 +93,11 @@
 
         public Bitmap ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition)
         {
+            if (lineGridSinglePixel == null)
+            {
+                return originalImage;
+            }
+
             using Graphics lineGridPixelMerger = Graphics.FromImage(originalImage);
             lineGridPixelMerger.DrawImage(lineGridSinglePixel, xPosition, yPosition);
             return originalImage;
