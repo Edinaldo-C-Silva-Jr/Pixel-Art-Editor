@@ -8,8 +8,8 @@
 
         public void GenerateGrid(Bitmap originalImage, int cellSize, Color gridColor)
         {
-            int gridPieceWidth = DefineGridPieceSize(originalImage.Width, cellSize);
-            int gridPieceHeight = DefineGridPieceSize(originalImage.Height, cellSize);
+            int gridPieceWidth = DefineGridPieceSize(originalImage.Width / cellSize);
+            int gridPieceHeight = DefineGridPieceSize(originalImage.Height / cellSize);
 
             checkerGridPiece = new Bitmap(gridPieceWidth, gridPieceHeight);
 
@@ -31,9 +31,9 @@
             gridPixelBuilder.Clear(gridColor);
         }
 
-        private int DefineGridPieceSize(int totalSideLength, int cellSize)
+        private int DefineGridPieceSize(int sidePixelLength)
         {
-            return (int)Math.Sqrt(totalSideLength) * cellSize;
+            return (int)Math.Sqrt(sidePixelLength);
         }
 
         public Bitmap ApplyGridFullImage(Bitmap originalImage)
