@@ -1,5 +1,4 @@
 using PixelArtEditor.Controls;
-using PixelArtEditor.Grid;
 using PixelArtEditor.Grids;
 using System.Drawing.Imaging;
 

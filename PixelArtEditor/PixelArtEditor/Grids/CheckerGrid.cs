@@ -20,7 +20,7 @@
             {
                 for (int x = y % 2; x < checkerGridPiece.Width; x += 2)
                 {
-                    gridBuilder.FillRectangle(gridBrush, cellSize*x, cellSize*y, cellSize, cellSize);
+                    gridBuilder.FillRectangle(gridBrush, cellSize * x, cellSize * y, cellSize, cellSize);
                 }
             }
 
@@ -44,7 +44,7 @@
             {
                 for (int x = 0; x < originalImage.Width / checkerGridPiece.Width; x++)
                 {
-                    gridMerger.DrawImage(checkerGridPiece, checkerGridPiece.Width*x, checkerGridPiece.Height*y);
+                    gridMerger.DrawImage(checkerGridPiece, checkerGridPiece.Width * x, checkerGridPiece.Height * y);
                 }
             }
 

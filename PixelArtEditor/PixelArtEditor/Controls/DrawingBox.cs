@@ -1,4 +1,4 @@
-﻿using PixelArtEditor.Grid;
+﻿using PixelArtEditor.Grids;
 
 namespace PixelArtEditor.Controls
 {

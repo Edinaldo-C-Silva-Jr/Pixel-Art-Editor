@@ -1,4 +1,4 @@
-﻿namespace PixelArtEditor.Grid
+﻿namespace PixelArtEditor.Grids
 {
     public enum GridType
     {
