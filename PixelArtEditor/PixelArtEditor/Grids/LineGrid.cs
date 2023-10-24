@@ -5,19 +5,27 @@
     /// </summary>
     internal class LineGrid : IGridGenerator
     {
-        Bitmap? lineGridPiece;
-        Bitmap? lineGridSinglePixel;
+        /// <summary>
+        /// A piece of a line based grid. It is used to fill the entire image with the grid.
+        /// </summary>
+        private Bitmap? LineGridPiece { get; set; }
+
+        /// <summary>
+        /// A single pixel of a line based grid.
+        /// It is used to restore the grid on a single pixel of the image, to avoid having to reapply the entire grid.
+        /// </summary>
+        private Bitmap? LineGridSinglePixel { get; set; }
 
         public void GenerateGrid(Bitmap originalImage, int cellSize, Color gridColor)
         {
             int gridPieceWidth = DefineGridPieceSize(originalImage.Width / cellSize);
             int gridPieceHeight = DefineGridPieceSize(originalImage.Height / cellSize);
 
-            lineGridPiece = new Bitmap(gridPieceWidth, gridPieceHeight);
-            lineGridPiece.MakeTransparent();
+            LineGridPiece = new Bitmap(gridPieceWidth, gridPieceHeight);
+            LineGridPiece.MakeTransparent();
 
             using Pen gridPen = new(gridColor);
-            using Graphics gridBuilder = Graphics.FromImage(lineGridPiece);
+            using Graphics gridBuilder = Graphics.FromImage(LineGridPiece);
 
             for (int x = 1; x < gridPieceHeight / cellSize + 1; x++)
             {
@@ -28,8 +36,8 @@
                 gridBuilder.DrawLine(gridPen, cellSize * y - 1, 0, cellSize * y - 1, gridPieceWidth);
             }
 
-            lineGridSinglePixel = new Bitmap(cellSize, cellSize);
-            using Graphics gridPixelBuilder = Graphics.FromImage(lineGridSinglePixel);
+            LineGridSinglePixel = new Bitmap(cellSize, cellSize);
+            using Graphics gridPixelBuilder = Graphics.FromImage(LineGridSinglePixel);
             gridPixelBuilder.DrawLine(gridPen, 0, cellSize - 1, cellSize - 1, cellSize - 1);
             gridPixelBuilder.DrawLine(gridPen, cellSize - 1, 0, cellSize - 1, cellSize - 1);
         }
@@ -39,27 +47,27 @@
         /// This method returns a size that will make grid generation more efficient, by splitting the full grid into smaller pieces that will be copied to fill the image.
         /// The method returns a single dimension, which should match the parameter passed. (If the method was passed a width value, it returns a width value) 
         /// </summary>
-        /// <param name="sizePixelLength">The length of the image side, in pixel cells (not counting the zoom)</param>
+        /// <param name="sidePixelLength">The length of the image side, in pixel cells (not counting the zoom)</param>
         /// <returns>The optimized grid piece length for the image passed.</returns>
-        private int DefineGridPieceSize(int sizePixelLength)
+        private int DefineGridPieceSize(int sidePixelLength)
         {
             int amountOfIterations = 10000, gridPieceSize, sizeWithLeastIterations = 0, amountOfGridPieces;
 
-            for (int i = 1; i < Math.Sqrt(sizePixelLength) + 1; i++)
+            for (int i = 1; i < Math.Sqrt(sidePixelLength) + 1; i++)
             {
-                gridPieceSize = sizePixelLength / i;
-                if (sizePixelLength % i != 0)
+                gridPieceSize = sidePixelLength / i;
+                if (sidePixelLength % i != 0)
                 {
                     gridPieceSize++;
                 }
 
-                if (sizePixelLength % gridPieceSize != 0)
+                if (sidePixelLength % gridPieceSize != 0)
                 {
-                    amountOfGridPieces = (int)Math.Pow(sizePixelLength / gridPieceSize + 1, 2);
+                    amountOfGridPieces = (int)Math.Pow(sidePixelLength / gridPieceSize + 1, 2);
                 }
                 else
                 {
-                    amountOfGridPieces = (int)Math.Pow(sizePixelLength / gridPieceSize, 2);
+                    amountOfGridPieces = (int)Math.Pow(sidePixelLength / gridPieceSize, 2);
                 }
 
                 int totalIterations = amountOfGridPieces + gridPieceSize * 2;
@@ -75,17 +83,17 @@
 
         public Bitmap ApplyGridFullImage(Bitmap originalImage)
         {
-            if (lineGridPiece == null)
+            if (LineGridPiece == null)
             {
                 return originalImage;
             }
 
             using Graphics gridMerger = Graphics.FromImage(originalImage);
-            for (int y = 0; y < originalImage.Height / lineGridPiece.Height; y++)
+            for (int y = 0; y < originalImage.Height / LineGridPiece.Height; y++)
             {
-                for (int x = 0; x < originalImage.Width / lineGridPiece.Width; x++)
+                for (int x = 0; x < originalImage.Width / LineGridPiece.Width; x++)
                 {
-                    gridMerger.DrawImage(lineGridPiece, lineGridPiece.Width * x, lineGridPiece.Height * y);
+                    gridMerger.DrawImage(LineGridPiece, LineGridPiece.Width * x, LineGridPiece.Height * y);
                 }
             }
             return originalImage;
@@ -93,13 +101,13 @@
 
         public Bitmap ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition)
         {
-            if (lineGridSinglePixel == null)
+            if (LineGridSinglePixel == null)
             {
                 return originalImage;
             }
 
             using Graphics lineGridPixelMerger = Graphics.FromImage(originalImage);
-            lineGridPixelMerger.DrawImage(lineGridSinglePixel, xPosition, yPosition);
+            lineGridPixelMerger.DrawImage(LineGridSinglePixel, xPosition, yPosition);
             return originalImage;
         }
     }
