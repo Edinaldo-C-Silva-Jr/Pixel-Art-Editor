@@ -78,7 +78,7 @@ namespace PixelArtEditor
         private IGridGenerator DefineGridType()
         {
             GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
-            
+
             switch (gridType)
             {
                 case GridType.Line:
@@ -126,7 +126,7 @@ namespace PixelArtEditor
 
                 if (colorpicked == DialogResult.OK)
                 {
-                    if (!(cell.IsColorDefault()) && ColorChangeCheckBox.Checked)
+                    if (!(cell.DefaultColor) && ColorChangeCheckBox.Checked)
                     {
                         SwapColorInImage(cell.BackColor, ColorPickerDialog.Color);
                     }
@@ -135,8 +135,7 @@ namespace PixelArtEditor
                         ChangeImageTransparency(TransparencyCheckBox.Checked, BackgroundColorTable.GetCurrentColor(), ColorPickerDialog.Color);
                     }
 
-                    cell.BackColor = ColorPickerDialog.Color;
-                    cell.SetIfDefaultColor(false);
+                    cell.ChangeCellColor(ColorPickerDialog.Color);
                 }
             }
 
@@ -245,13 +244,15 @@ namespace PixelArtEditor
                 int width = (int)PixelWidthNumberBox.Value;
                 int zoom = (int)ViewingZoomNumberBox.Value;
                 Bitmap temporaryImage = new Bitmap(width * zoom, height * zoom);
+                IGridGenerator generator = DefineGridType();
+
                 Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
 
                 temporaryGraphics.Clear(newColor);
                 temporaryGraphics.DrawImage(originalImage, 0, 0);
                 originalImage = temporaryImage;
 
-                ViewingAreaDrawingBox.SetNewImage(new LineGrid(), originalImage, zoom, GridColorTable.GetCurrentColor());
+                ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, GridColorTable.GetCurrentColor());
             }
         }
     }
