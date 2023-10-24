@@ -16,7 +16,7 @@ namespace PixelArtEditor
         private void PixelArtEditorForm_Load(object sender, EventArgs e)
         {
             GridTypeComboBox.DataSource = Enum.GetValues(typeof(GridType));
-            GridTypeComboBox.SelectedItem = GridType.None;
+            GridTypeComboBox.SelectedItem = GridType.Line;
             ColorAmountComboBox.SelectedIndex = 3;
             TransparencyCheckBox.Checked = false;
             ColorChangeCheckBox.Checked = true;
@@ -60,8 +60,8 @@ namespace PixelArtEditor
             int height = (int)PixelHeightNumberBox.Value;
             int width = (int)PixelWidthNumberBox.Value;
             int zoom = (int)ViewingZoomNumberBox.Value;
-            GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
             Color gridColor = GridColorTable.GetCurrentColor();
+            IGridGenerator generator = DefineGridType();
 
             originalImage = new Bitmap(width * zoom, height * zoom);
             Graphics imageFiller = Graphics.FromImage(originalImage);
@@ -72,7 +72,28 @@ namespace PixelArtEditor
                 originalImage.MakeTransparent(defaultColor);
             }
 
-            ViewingAreaDrawingBox.SetNewImage(originalImage, zoom, gridType, gridColor);
+            ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor);
+        }
+
+        private IGridGenerator DefineGridType()
+        {
+            GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
+            
+            switch (gridType)
+            {
+                case GridType.Line:
+                    {
+                        return new LineGrid();
+                    }
+                case GridType.Checker:
+                    {
+                        return new CheckerGrid();
+                    }
+                default:
+                    {
+                        return null;
+                    }
+            }
         }
 
         private void ReorganizeControls()
@@ -223,7 +244,6 @@ namespace PixelArtEditor
                 int height = (int)PixelHeightNumberBox.Value;
                 int width = (int)PixelWidthNumberBox.Value;
                 int zoom = (int)ViewingZoomNumberBox.Value;
-                GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
                 Bitmap temporaryImage = new Bitmap(width * zoom, height * zoom);
                 Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
 
@@ -231,7 +251,7 @@ namespace PixelArtEditor
                 temporaryGraphics.DrawImage(originalImage, 0, 0);
                 originalImage = temporaryImage;
 
-                ViewingAreaDrawingBox.SetNewImage(originalImage, zoom, gridType, GridColorTable.GetCurrentColor());
+                ViewingAreaDrawingBox.SetNewImage(new LineGrid(), originalImage, zoom, GridColorTable.GetCurrentColor());
             }
         }
     }

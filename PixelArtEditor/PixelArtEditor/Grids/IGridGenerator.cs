@@ -3,7 +3,7 @@
     /// <summary>
     /// Interface for generating and applying a grid to images shown in the Drawing Box
     /// </summary>
-    internal interface IGridGenerator
+    public interface IGridGenerator
     {
         /// <summary>
         /// Generates a grid, saving it into a property, so it can be applied to an image with the ApplyGridFullImage method.

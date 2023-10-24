@@ -18,8 +18,8 @@
 
         public void GenerateGrid(Bitmap originalImage, int cellSize, Color gridColor)
         {
-            int gridPieceWidth = DefineGridPieceSize(originalImage.Width / cellSize);
-            int gridPieceHeight = DefineGridPieceSize(originalImage.Height / cellSize);
+            int gridPieceWidth = DefineGridPieceSize(originalImage.Width / cellSize) * cellSize;
+            int gridPieceHeight = DefineGridPieceSize(originalImage.Height / cellSize) * cellSize;
 
             LineGridPiece = new Bitmap(gridPieceWidth, gridPieceHeight);
             LineGridPiece.MakeTransparent();
