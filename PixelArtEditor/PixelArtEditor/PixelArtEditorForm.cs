@@ -16,7 +16,7 @@ namespace PixelArtEditor
         private void PixelArtEditorForm_Load(object sender, EventArgs e)
         {
             GridTypeComboBox.DataSource = Enum.GetValues(typeof(GridType));
-            GridTypeComboBox.SelectedItem = GridType.Line;
+            GridTypeComboBox.SelectedItem = GridType.None;
             ColorAmountComboBox.SelectedIndex = 3;
             TransparencyCheckBox.Checked = false;
             ColorChangeCheckBox.Checked = true;
@@ -91,7 +91,7 @@ namespace PixelArtEditor
                     }
                 default:
                     {
-                        return null;
+                        return new NoGrid();
                     }
             }
         }
