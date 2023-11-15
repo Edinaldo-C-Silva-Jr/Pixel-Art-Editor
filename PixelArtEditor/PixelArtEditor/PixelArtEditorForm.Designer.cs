@@ -135,6 +135,7 @@
             GridTypeComboBox.Name = "GridTypeComboBox";
             GridTypeComboBox.Size = new Size(70, 23);
             GridTypeComboBox.TabIndex = 7;
+            GridTypeComboBox.SelectedIndexChanged += GridTypeComboBox_SelectedIndexChanged;
             // 
             // SetNewImageSizeButton
             // 

@@ -15,6 +15,8 @@ namespace PixelArtEditor
 
         private void PixelArtEditorForm_Load(object sender, EventArgs e)
         {
+            OrganizeColorsPanel();
+
             GridTypeComboBox.DataSource = Enum.GetValues(typeof(GridType));
             GridTypeComboBox.SelectedItem = GridType.None;
             ColorAmountComboBox.SelectedIndex = 3;
@@ -22,8 +24,6 @@ namespace PixelArtEditor
             ColorChangeCheckBox.Checked = true;
 
             SetColorAmount();
-            OrganizeColorsPanel();
-
             SetViewingAreaSize();
 
             ReorganizeControls();
@@ -75,25 +75,28 @@ namespace PixelArtEditor
             ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor);
         }
 
+        /// <summary>
+        /// Method that defines which Grid implementation to use based on the currently selected Grid Type.
+        /// It returns a grid implementation set to the current image size.
+        /// </summary>
+        /// <returns>A grid implementation of the currently defined grid type.</returns>
         private IGridGenerator DefineGridType()
         {
-            GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
+            int zoom = (int)ViewingZoomNumberBox.Value;
+            Color gridColor = GridColorTable.GetCurrentColor();
 
-            switch (gridType)
+            GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
+            IGridGenerator gridGenerator;
+
+            gridGenerator = gridType switch
             {
-                case GridType.Line:
-                    {
-                        return new LineGrid();
-                    }
-                case GridType.Checker:
-                    {
-                        return new CheckerGrid();
-                    }
-                default:
-                    {
-                        return new NoGrid();
-                    }
-            }
+                GridType.Line => new LineGrid(),
+                GridType.Checker => new CheckerGrid(),
+                _ => new NoGrid()
+            };
+
+            gridGenerator.GenerateGrid(originalImage, zoom, gridColor);
+            return gridGenerator;
         }
 
         private void ReorganizeControls()
@@ -254,6 +257,12 @@ namespace PixelArtEditor
 
                 ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, GridColorTable.GetCurrentColor());
             }
+        }
+
+        private void GridTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            IGridGenerator gridApply = DefineGridType();
+            ViewingAreaDrawingBox.ApplyNewGrid(gridApply, originalImage);
         }
     }
 }

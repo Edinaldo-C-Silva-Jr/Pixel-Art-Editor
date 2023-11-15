@@ -18,10 +18,14 @@ namespace PixelArtEditor.Controls
             this.Width = originalImage.Width;
             this.Height = originalImage.Height;
 
-            imageWithGrid = new Bitmap(originalImage);
-
-            gridGenerator.GenerateGrid(originalImage, cellSize, gridColor);
             imageWithGrid = gridGenerator.ApplyGridFullImage(originalImage);
+            this.Image = imageWithGrid;
+            this.Refresh();
+        }
+
+        public void ApplyNewGrid(IGridGenerator gridApply, Bitmap imageToApplyGrid)
+        {
+            imageWithGrid = gridApply.ApplyGridFullImage(imageToApplyGrid);
             this.Image = imageWithGrid;
             this.Refresh();
         }
