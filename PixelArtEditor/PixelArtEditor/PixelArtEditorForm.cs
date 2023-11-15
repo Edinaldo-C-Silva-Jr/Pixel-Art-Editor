@@ -73,6 +73,9 @@ namespace PixelArtEditor
             }
 
             ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor);
+
+            TestBox.Height = ViewingAreaDrawingBox.Height;
+            TestBox.Width = ViewingAreaDrawingBox.Width;
         }
 
         /// <summary>
@@ -113,7 +116,7 @@ namespace PixelArtEditor
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
 
-            originalImage = ViewingAreaDrawingBox.DrawPixelByClick(originalImage, mouseClick.X, mouseClick.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
+            originalImage = ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, mouseClick.X, mouseClick.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
             ViewingAreaDrawingBox.Refresh();
         }
 
@@ -162,7 +165,7 @@ namespace PixelArtEditor
                     pixelColor = image.GetPixel(x * zoom, y * zoom);
                     if (oldColor.ToArgb() == pixelColor.ToArgb())
                     {
-                        originalImage = ViewingAreaDrawingBox.DrawPixelByPosition(originalImage, x, y, zoom, newColor, gridType);
+                        originalImage = ViewingAreaDrawingBox.DrawPixelByPosition(DefineGridType(), originalImage, x, y, zoom, newColor, gridType);
                     }
                 }
             }
@@ -204,9 +207,10 @@ namespace PixelArtEditor
         {
             if (e.Button == MouseButtons.Left)
             {
-                originalImage = ViewingAreaDrawingBox.DrawPixelByClick(originalImage, e.X, e.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
+                originalImage = ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, e.X, e.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
                 ViewingAreaDrawingBox.Refresh();
             }
+            TestBox.Image = originalImage;
         }
 
         private void SaveImageButton_Click(object sender, EventArgs e)
@@ -259,7 +263,11 @@ namespace PixelArtEditor
             }
         }
 
-        private void GridTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Method called when a change is made to the Gridtype ComboBox.
+        /// It changes the implementation of grids used to the newly selected grid type, then applies the new grid type to the image in the drawing area.
+        /// </summary>
+        private void GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage(object sender, EventArgs e)
         {
             IGridGenerator gridApply = DefineGridType();
             ViewingAreaDrawingBox.ApplyNewGrid(gridApply, originalImage);

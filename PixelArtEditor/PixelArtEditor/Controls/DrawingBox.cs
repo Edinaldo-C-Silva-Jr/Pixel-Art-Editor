@@ -5,11 +5,10 @@ namespace PixelArtEditor.Controls
     public partial class DrawingBox : PictureBox
     {
         private Bitmap imageWithGrid = new Bitmap(1, 1);
-        private Bitmap pixelLineGrid = new Bitmap(1, 1);
 
         public DrawingBox()
         {
-            this.DoubleBuffered = true;
+            DoubleBuffered = true;
             InitializeComponent();
         }
 
@@ -18,48 +17,55 @@ namespace PixelArtEditor.Controls
             this.Width = originalImage.Width;
             this.Height = originalImage.Height;
 
+            imageWithGrid = new Bitmap(originalImage);
             imageWithGrid = gridGenerator.ApplyGridFullImage(originalImage);
             this.Image = imageWithGrid;
             this.Refresh();
         }
 
-        public void ApplyNewGrid(IGridGenerator gridApply, Bitmap imageToApplyGrid)
+        /// <summary>
+        /// Applies a new grid type to the existing image. This method doesn't override the actual image when applying the grid.
+        /// </summary>
+        /// <param name="gridApply">The IGridGenerator implementation used to apply the grid.</param>
+        /// <param name="originalImage">The original image to use when applying the grid.</param>
+        public void ApplyNewGrid(IGridGenerator gridApply, Bitmap originalImage)
         {
+            Bitmap imageToApplyGrid = new(originalImage);
+
             imageWithGrid = gridApply.ApplyGridFullImage(imageToApplyGrid);
             this.Image = imageWithGrid;
             this.Refresh();
         }
 
-        public Bitmap DrawPixelByPosition(Bitmap image, int xPosPixel, int yPosPixel, int pixelSize, Color pixelColor, GridType gridType)
+        public Bitmap DrawPixelByPosition(IGridGenerator gridGenerator, Bitmap image, int xPosPixel, int yPosPixel, int pixelSize, Color pixelColor, GridType gridType)
         {
             int xPos = pixelSize * xPosPixel;
             int yPos = pixelSize * yPosPixel;
 
-            return DrawPixel(image, xPos, yPos, pixelSize, pixelColor, gridType);
+            return DrawPixel(gridGenerator, image, xPos, yPos, pixelSize, pixelColor);
         }
 
-        public Bitmap DrawPixelByClick(Bitmap image, int xPosMouse, int yPosMouse, int pixelSize, Color pixelColor, GridType gridType)
+        public Bitmap DrawPixelByClick(IGridGenerator gridGenerator, Bitmap image, int xPosMouse, int yPosMouse, int pixelSize, Color pixelColor, GridType gridType)
         {
             int xPos = xPosMouse - xPosMouse % pixelSize;
             int yPos = yPosMouse - yPosMouse % pixelSize;
 
-            return DrawPixel(image, xPos, yPos, pixelSize, pixelColor, gridType);
+            return DrawPixel(gridGenerator, image, xPos, yPos, pixelSize, pixelColor);
         }
 
-        private Bitmap DrawPixel(Bitmap image, int xPos, int yPos, int pixelSize, Color pixelColor, GridType gridType)
+        private Bitmap DrawPixel(IGridGenerator gridGenerator, Bitmap image, int xPos, int yPos, int pixelSize, Color pixelColor)
         {
-            Graphics pixelDraw = Graphics.FromImage(image);
+            Bitmap imageToDraw = new(image);
+
+            Graphics pixelDraw = Graphics.FromImage(imageToDraw);
             Graphics gridDraw = Graphics.FromImage(imageWithGrid);
             Brush pixelBrush = new SolidBrush(pixelColor);
 
-            // Gets the correct position of the rectangle from the mouse position, the 1 pixel offsets aren't needed for a checkers or empty grid
+            // Gets the correct position of the rectangle from the mouse position
             pixelDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
             gridDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
 
-            if (gridType == GridType.Line && pixelSize > 2)
-            {
-                gridDraw.DrawImage(pixelLineGrid, xPos, yPos);
-            }
+            imageWithGrid = gridGenerator.ApplyGridSinglePixel(image, xPos, yPos);
 
             this.Image = imageWithGrid;
 

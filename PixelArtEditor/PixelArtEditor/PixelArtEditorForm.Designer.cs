@@ -51,12 +51,16 @@
             ColorAmountLabel = new Label();
             TransparencyCheckBox = new CheckBox();
             ColorChangeCheckBox = new CheckBox();
+            TestBox = new Controls.DrawingBox();
+            backgroundPanel1 = new Controls.BackgroundPanel();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
             ViewingAreaBackgroundPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ViewingAreaDrawingBox).BeginInit();
             ColorAreaBackgroundPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)TestBox).BeginInit();
+            backgroundPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // PixelWidthLabel
@@ -135,7 +139,7 @@
             GridTypeComboBox.Name = "GridTypeComboBox";
             GridTypeComboBox.Size = new Size(70, 23);
             GridTypeComboBox.TabIndex = 7;
-            GridTypeComboBox.SelectedIndexChanged += GridTypeComboBox_SelectedIndexChanged;
+            GridTypeComboBox.SelectedIndexChanged += GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage;
             // 
             // SetNewImageSizeButton
             // 
@@ -290,6 +294,22 @@
             ColorChangeCheckBox.Text = "Change Color in Image";
             ColorChangeCheckBox.UseVisualStyleBackColor = true;
             // 
+            // TestBox
+            // 
+            TestBox.Location = new Point(3, 3);
+            TestBox.Name = "TestBox";
+            TestBox.Size = new Size(26, 28);
+            TestBox.TabIndex = 0;
+            TestBox.TabStop = false;
+            // 
+            // backgroundPanel1
+            // 
+            backgroundPanel1.Controls.Add(TestBox);
+            backgroundPanel1.Location = new Point(379, 61);
+            backgroundPanel1.Name = "backgroundPanel1";
+            backgroundPanel1.Size = new Size(398, 344);
+            backgroundPanel1.TabIndex = 14;
+            // 
             // PixelArtEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -297,6 +317,7 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(800, 450);
+            Controls.Add(backgroundPanel1);
             Controls.Add(ColorChangeCheckBox);
             Controls.Add(TransparencyCheckBox);
             Controls.Add(ColorAreaBackgroundPanel);
@@ -320,6 +341,8 @@
             ViewingAreaBackgroundPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)ViewingAreaDrawingBox).EndInit();
             ColorAreaBackgroundPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)TestBox).EndInit();
+            backgroundPanel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -348,5 +371,7 @@
         private Controls.ColorTable PaletteColorTable;
         private CheckBox TransparencyCheckBox;
         private CheckBox ColorChangeCheckBox;
+        private Controls.DrawingBox TestBox;
+        private Controls.BackgroundPanel backgroundPanel1;
     }
 }
