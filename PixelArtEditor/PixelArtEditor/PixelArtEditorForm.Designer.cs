@@ -51,6 +51,8 @@
             ColorAmountLabel = new Label();
             TransparencyCheckBox = new CheckBox();
             ColorChangeCheckBox = new CheckBox();
+            LoadImageButton = new Button();
+            FileLoadDialog = new OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
@@ -104,13 +106,12 @@
             // ViewingZoomNumberBox
             // 
             ViewingZoomNumberBox.Location = new Point(165, 9);
-            ViewingZoomNumberBox.Maximum = new decimal(new int[] { 4096, 0, 0, 0 });
-            ViewingZoomNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
+            ViewingZoomNumberBox.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
+            ViewingZoomNumberBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             ViewingZoomNumberBox.Name = "ViewingZoomNumberBox";
             ViewingZoomNumberBox.Size = new Size(50, 23);
             ViewingZoomNumberBox.TabIndex = 5;
             ViewingZoomNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
-            ViewingZoomNumberBox.KeyDown += SizeNumberBoxes_KeyDown;
             // 
             // ViewingZoomLabel
             // 
@@ -293,6 +294,16 @@
             ColorChangeCheckBox.Text = "Change Color in Image";
             ColorChangeCheckBox.UseVisualStyleBackColor = true;
             // 
+            // LoadImageButton
+            // 
+            LoadImageButton.Location = new Point(220, 70);
+            LoadImageButton.Name = "LoadImageButton";
+            LoadImageButton.Size = new Size(80, 30);
+            LoadImageButton.TabIndex = 14;
+            LoadImageButton.Text = "Load Image";
+            LoadImageButton.UseVisualStyleBackColor = true;
+            LoadImageButton.Click += LoadImageButton_Click;
+            // 
             // PixelArtEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -300,6 +311,7 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(800, 450);
+            Controls.Add(LoadImageButton);
             Controls.Add(ColorChangeCheckBox);
             Controls.Add(TransparencyCheckBox);
             Controls.Add(ColorAreaBackgroundPanel);
@@ -351,5 +363,7 @@
         private Controls.ColorTable PaletteColorTable;
         private CheckBox TransparencyCheckBox;
         private CheckBox ColorChangeCheckBox;
+        private Button LoadImageButton;
+        private OpenFileDialog FileLoadDialog;
     }
 }

@@ -277,5 +277,33 @@ namespace PixelArtEditor
                 ReorganizeControls();
             }
         }
+
+        private void LoadImageButton_Click(object sender, EventArgs e)
+        {
+            string directory = "C:\\Users\\" + Environment.UserName + "\\Documents\\PixelEditor\\SavedImages\\";
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            FileLoadDialog.InitialDirectory = directory;
+
+            DialogResult result = FileLoadDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                originalImage = new(FileLoadDialog.FileName);
+                int zoom = (int)ViewingZoomNumberBox.Value;
+                PixelWidthNumberBox.Value = originalImage.Width / zoom;
+                PixelHeightNumberBox.Value = originalImage.Height / zoom;
+
+                IGridGenerator generator = DefineGridType();
+                Color gridColor = GridColorTable.GetCurrentColor();
+                ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor);
+
+                ReorganizeControls();
+            }
+        }
     }
 }
