@@ -17,8 +17,8 @@ namespace PixelArtEditor.Controls
             this.Width = originalImage.Width;
             this.Height = originalImage.Height;
 
-            imageWithGrid = new Bitmap(originalImage);
-            imageWithGrid = gridGenerator.ApplyGridFullImage(originalImage);
+            imageWithGrid = new(originalImage);
+            gridGenerator.ApplyGridFullImage(imageWithGrid);
             this.Image = imageWithGrid;
             this.Refresh();
         }
@@ -30,9 +30,9 @@ namespace PixelArtEditor.Controls
         /// <param name="originalImage">The original image to use when applying the grid.</param>
         public void ApplyNewGrid(IGridGenerator gridApply, Bitmap originalImage)
         {
-            Bitmap imageToApplyGrid = new(originalImage);
+            imageWithGrid = new(originalImage);
 
-            imageWithGrid = gridApply.ApplyGridFullImage(imageToApplyGrid);
+            gridApply.ApplyGridFullImage(imageWithGrid);
             this.Image = imageWithGrid;
             this.Refresh();
         }
@@ -63,7 +63,7 @@ namespace PixelArtEditor.Controls
             pixelDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
             gridDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
 
-            imageWithGrid = gridGenerator.ApplyGridSinglePixel(imageWithGrid, xPos, yPos);
+            gridGenerator.ApplyGridSinglePixel(imageWithGrid, xPos, yPos);
 
             this.Image = imageWithGrid;
         }

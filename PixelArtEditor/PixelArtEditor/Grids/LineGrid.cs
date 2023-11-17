@@ -82,38 +82,34 @@
             return sizeWithLeastIterations;
         }
 
-        public Bitmap ApplyGridFullImage(Bitmap originalImage)
+        public void ApplyGridFullImage(Bitmap imageWithGrid)
         {
             if (LineGridPiece == null)
             {
-                return originalImage;
+                return;
             }
 
-            Bitmap imageToApplyGrid = new(originalImage);
-            using Graphics gridMerger = Graphics.FromImage(imageToApplyGrid);
+            using Graphics gridMerger = Graphics.FromImage(imageWithGrid);
 
-            for (int y = 0; y < imageToApplyGrid.Height / LineGridPiece.Height + 1; y++)
+            for (int y = 0; y < imageWithGrid.Height / LineGridPiece.Height + 1; y++)
             {
-                for (int x = 0; x < imageToApplyGrid.Width / LineGridPiece.Width + 1; x++)
+                for (int x = 0; x < imageWithGrid.Width / LineGridPiece.Width + 1; x++)
                 {
                     gridMerger.DrawImage(LineGridPiece, LineGridPiece.Width * x, LineGridPiece.Height * y);
                 }
             }
-            return imageToApplyGrid;
         }
 
-        public Bitmap ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition)
+        public void ApplyGridSinglePixel(Bitmap imageWithGrid, int xPosition, int yPosition)
         {
             if (LineGridSinglePixel == null)
             {
-                return originalImage;
+                return;
             }
 
-            Bitmap imageToApplyGrid = new(originalImage);
-            using Graphics lineGridPixelMerger = Graphics.FromImage(imageToApplyGrid);
+            using Graphics lineGridPixelMerger = Graphics.FromImage(imageWithGrid);
             
             lineGridPixelMerger.DrawImage(LineGridSinglePixel, xPosition, yPosition);
-            return imageToApplyGrid;
         }
     }
 }

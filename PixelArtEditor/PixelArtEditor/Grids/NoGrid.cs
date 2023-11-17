@@ -9,18 +9,18 @@
         /// Simply returns the original image, since no grid should be applied.
         /// </summary>
         /// <returns>The original image, since no grid is applied.</returns>
-        public Bitmap ApplyGridFullImage(Bitmap originalImage)
+        public void ApplyGridFullImage(Bitmap originalImage)
         {
-            return originalImage;
+            return;
         }
 
         /// <summary>
         /// Simply returns the original image, since no grid should be applied.
         /// </summary>
         /// <returns>The original image, since no grid is applied.</returns>
-        public Bitmap ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition)
+        public void ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition)
         {
-            return originalImage;
+            return;
         }
 
         /// <summary>

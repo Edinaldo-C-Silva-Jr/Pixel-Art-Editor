@@ -19,8 +19,7 @@
         /// If the grid has not been generated, this simply returns the image.
         /// </summary>
         /// <param name="originalImage">The image where the grid will be applied.</param>
-        /// <returns>The image with the grid applied in its entirety.</returns>
-        public Bitmap ApplyGridFullImage(Bitmap originalImage);
+        public void ApplyGridFullImage(Bitmap originalImage);
 
         /// <summary>
         /// Applies a single pixel of the grid to a specific place in the image.
@@ -29,7 +28,6 @@
         /// <param name="originalImage">The image where the grid pixel will be applied.</param>
         /// <param name="xPosition">The horizontal position where the pixel will be applied.</param>
         /// <param name="yPosition">The vertical position where the pixel will be applied.</param>
-        /// <returns>The image with the grid pixel applied in the specified position.</returns>
-        public Bitmap ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition);
+        public void ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition);
     }
 }
