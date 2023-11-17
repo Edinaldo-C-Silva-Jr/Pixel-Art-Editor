@@ -66,17 +66,18 @@
                 return originalImage;
             }
 
-            using Graphics gridMerger = Graphics.FromImage(originalImage);
+            Bitmap imageToApplyGrid = new(originalImage);
+            using Graphics gridMerger = Graphics.FromImage(imageToApplyGrid);
 
-            for (int y = 0; y < originalImage.Height / CheckerGridPiece.Height; y++)
+            for (int y = 0; y < imageToApplyGrid.Height / CheckerGridPiece.Height; y++)
             {
-                for (int x = 0; x < originalImage.Width / CheckerGridPiece.Width; x++)
+                for (int x = 0; x < imageToApplyGrid.Width / CheckerGridPiece.Width; x++)
                 {
                     gridMerger.DrawImage(CheckerGridPiece, CheckerGridPiece.Width * x, CheckerGridPiece.Height * y);
                 }
             }
 
-            return originalImage;
+            return imageToApplyGrid;
         }
 
         public Bitmap ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition)
@@ -86,7 +87,8 @@
                 return originalImage;
             }
 
-            using Graphics gridPixelMerger = Graphics.FromImage(originalImage);
+            Bitmap imageToApplyGrid = new(originalImage);
+            using Graphics gridPixelMerger = Graphics.FromImage(imageToApplyGrid);
 
             int positionParity = (xPosition % 2 + yPosition % 2) % 2;
             if (Convert.ToBoolean(positionParity))
@@ -98,7 +100,7 @@
                 gridPixelMerger.DrawImage(CheckerGridWhitePixel, xPosition, yPosition);
             }
 
-            return originalImage;
+            return imageToApplyGrid;
         }
     }
 }

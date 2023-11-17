@@ -37,6 +37,7 @@
             }
 
             LineGridSinglePixel = new Bitmap(cellSize, cellSize);
+            LineGridSinglePixel.MakeTransparent();
             using Graphics gridPixelBuilder = Graphics.FromImage(LineGridSinglePixel);
             gridPixelBuilder.DrawLine(gridPen, 0, cellSize - 1, cellSize - 1, cellSize - 1);
             gridPixelBuilder.DrawLine(gridPen, cellSize - 1, 0, cellSize - 1, cellSize - 1);
@@ -88,15 +89,17 @@
                 return originalImage;
             }
 
-            using Graphics gridMerger = Graphics.FromImage(originalImage);
-            for (int y = 0; y < originalImage.Height / LineGridPiece.Height; y++)
+            Bitmap imageToApplyGrid = new(originalImage);
+            using Graphics gridMerger = Graphics.FromImage(imageToApplyGrid);
+            
+            for (int y = 0; y < imageToApplyGrid.Height / LineGridPiece.Height; y++)
             {
-                for (int x = 0; x < originalImage.Width / LineGridPiece.Width; x++)
+                for (int x = 0; x < imageToApplyGrid.Width / LineGridPiece.Width; x++)
                 {
                     gridMerger.DrawImage(LineGridPiece, LineGridPiece.Width * x, LineGridPiece.Height * y);
                 }
             }
-            return originalImage;
+            return imageToApplyGrid;
         }
 
         public Bitmap ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition)
@@ -106,9 +109,11 @@
                 return originalImage;
             }
 
-            using Graphics lineGridPixelMerger = Graphics.FromImage(originalImage);
+            Bitmap imageToApplyGrid = new(originalImage);
+            using Graphics lineGridPixelMerger = Graphics.FromImage(imageToApplyGrid);
+            
             lineGridPixelMerger.DrawImage(LineGridSinglePixel, xPosition, yPosition);
-            return originalImage;
+            return imageToApplyGrid;
         }
     }
 }

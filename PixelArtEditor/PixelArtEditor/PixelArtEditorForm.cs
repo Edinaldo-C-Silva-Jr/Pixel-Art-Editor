@@ -73,9 +73,6 @@ namespace PixelArtEditor
             }
 
             ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor);
-
-            TestBox.Height = ViewingAreaDrawingBox.Height;
-            TestBox.Width = ViewingAreaDrawingBox.Width;
         }
 
         /// <summary>
@@ -210,7 +207,6 @@ namespace PixelArtEditor
                 originalImage = ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, e.X, e.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
                 ViewingAreaDrawingBox.Refresh();
             }
-            TestBox.Image = originalImage;
         }
 
         private void SaveImageButton_Click(object sender, EventArgs e)

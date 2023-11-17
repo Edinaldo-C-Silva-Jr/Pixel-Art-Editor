@@ -55,9 +55,7 @@ namespace PixelArtEditor.Controls
 
         private Bitmap DrawPixel(IGridGenerator gridGenerator, Bitmap image, int xPos, int yPos, int pixelSize, Color pixelColor)
         {
-            Bitmap imageToDraw = new(image);
-
-            Graphics pixelDraw = Graphics.FromImage(imageToDraw);
+            Graphics pixelDraw = Graphics.FromImage(image);
             Graphics gridDraw = Graphics.FromImage(imageWithGrid);
             Brush pixelBrush = new SolidBrush(pixelColor);
 
@@ -65,7 +63,7 @@ namespace PixelArtEditor.Controls
             pixelDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
             gridDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
 
-            imageWithGrid = gridGenerator.ApplyGridSinglePixel(image, xPos, yPos);
+            imageWithGrid = gridGenerator.ApplyGridSinglePixel(imageWithGrid, xPos, yPos);
 
             this.Image = imageWithGrid;
 
