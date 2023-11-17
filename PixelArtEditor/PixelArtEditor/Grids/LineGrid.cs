@@ -91,10 +91,10 @@
 
             Bitmap imageToApplyGrid = new(originalImage);
             using Graphics gridMerger = Graphics.FromImage(imageToApplyGrid);
-            
-            for (int y = 0; y < imageToApplyGrid.Height / LineGridPiece.Height; y++)
+
+            for (int y = 0; y < imageToApplyGrid.Height / LineGridPiece.Height + 1; y++)
             {
-                for (int x = 0; x < imageToApplyGrid.Width / LineGridPiece.Width; x++)
+                for (int x = 0; x < imageToApplyGrid.Width / LineGridPiece.Width + 1; x++)
                 {
                     gridMerger.DrawImage(LineGridPiece, LineGridPiece.Width * x, LineGridPiece.Height * y);
                 }

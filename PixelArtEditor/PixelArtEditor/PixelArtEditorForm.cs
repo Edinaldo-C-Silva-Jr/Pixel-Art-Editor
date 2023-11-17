@@ -113,7 +113,7 @@ namespace PixelArtEditor
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
 
-            originalImage = ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, mouseClick.X, mouseClick.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
+            ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, mouseClick.X, mouseClick.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
             ViewingAreaDrawingBox.Refresh();
         }
 
@@ -162,7 +162,7 @@ namespace PixelArtEditor
                     pixelColor = image.GetPixel(x * zoom, y * zoom);
                     if (oldColor.ToArgb() == pixelColor.ToArgb())
                     {
-                        originalImage = ViewingAreaDrawingBox.DrawPixelByPosition(DefineGridType(), originalImage, x, y, zoom, newColor, gridType);
+                        ViewingAreaDrawingBox.DrawPixelByPosition(DefineGridType(), originalImage, x, y, zoom, newColor, gridType);
                     }
                 }
             }
@@ -204,7 +204,7 @@ namespace PixelArtEditor
         {
             if (e.Button == MouseButtons.Left)
             {
-                originalImage = ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, e.X, e.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
+                ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, e.X, e.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
                 ViewingAreaDrawingBox.Refresh();
             }
         }

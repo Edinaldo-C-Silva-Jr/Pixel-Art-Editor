@@ -37,27 +37,27 @@ namespace PixelArtEditor.Controls
             this.Refresh();
         }
 
-        public Bitmap DrawPixelByPosition(IGridGenerator gridGenerator, Bitmap image, int xPosPixel, int yPosPixel, int pixelSize, Color pixelColor, GridType gridType)
+        public void DrawPixelByPosition(IGridGenerator gridGenerator, Bitmap image, int xPosPixel, int yPosPixel, int pixelSize, Color pixelColor, GridType gridType)
         {
             int xPos = pixelSize * xPosPixel;
             int yPos = pixelSize * yPosPixel;
 
-            return DrawPixel(gridGenerator, image, xPos, yPos, pixelSize, pixelColor);
+            DrawPixel(gridGenerator, image, xPos, yPos, pixelSize, pixelColor);
         }
 
-        public Bitmap DrawPixelByClick(IGridGenerator gridGenerator, Bitmap image, int xPosMouse, int yPosMouse, int pixelSize, Color pixelColor, GridType gridType)
+        public void DrawPixelByClick(IGridGenerator gridGenerator, Bitmap image, int xPosMouse, int yPosMouse, int pixelSize, Color pixelColor, GridType gridType)
         {
             int xPos = xPosMouse - xPosMouse % pixelSize;
             int yPos = yPosMouse - yPosMouse % pixelSize;
 
-            return DrawPixel(gridGenerator, image, xPos, yPos, pixelSize, pixelColor);
+            DrawPixel(gridGenerator, image, xPos, yPos, pixelSize, pixelColor);
         }
 
-        private Bitmap DrawPixel(IGridGenerator gridGenerator, Bitmap image, int xPos, int yPos, int pixelSize, Color pixelColor)
+        private void DrawPixel(IGridGenerator gridGenerator, Bitmap image, int xPos, int yPos, int pixelSize, Color pixelColor)
         {
-            Graphics pixelDraw = Graphics.FromImage(image);
-            Graphics gridDraw = Graphics.FromImage(imageWithGrid);
-            Brush pixelBrush = new SolidBrush(pixelColor);
+            using Graphics pixelDraw = Graphics.FromImage(image);
+            using Graphics gridDraw = Graphics.FromImage(imageWithGrid);
+            using Brush pixelBrush = new SolidBrush(pixelColor);
 
             // Gets the correct position of the rectangle from the mouse position
             pixelDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
@@ -66,8 +66,6 @@ namespace PixelArtEditor.Controls
             imageWithGrid = gridGenerator.ApplyGridSinglePixel(imageWithGrid, xPos, yPos);
 
             this.Image = imageWithGrid;
-
-            return image;
         }
     }
 }

@@ -56,12 +56,16 @@
         /// <returns>The optimized grid piece length for the image passed.</returns>
         private int DefineGridPieceSize(int sidePixelLength)
         {
-            return (int)Math.Sqrt(sidePixelLength);
+            int gridPieceSize = (int)Math.Sqrt(sidePixelLength);
+
+            gridPieceSize += gridPieceSize % 2; // Ensures the grid piece size is an even number. This is needed to keep the alternating colors when tiling the image.
+
+            return gridPieceSize;
         }
 
         public Bitmap ApplyGridFullImage(Bitmap originalImage)
         {
-            if (CheckerGridPiece == null)
+            if (CheckerGridPiece == null) // Does nothing if the grid wasn't previously generated
             {
                 return originalImage;
             }
@@ -69,20 +73,19 @@
             Bitmap imageToApplyGrid = new(originalImage);
             using Graphics gridMerger = Graphics.FromImage(imageToApplyGrid);
 
-            for (int y = 0; y < imageToApplyGrid.Height / CheckerGridPiece.Height; y++)
+            for (int y = 0; y < imageToApplyGrid.Height / CheckerGridPiece.Height + 1; y++) // Iterates the amount of times needed to cover the full image horizontally
             {
-                for (int x = 0; x < imageToApplyGrid.Width / CheckerGridPiece.Width; x++)
+                for (int x = 0; x < imageToApplyGrid.Width / CheckerGridPiece.Width + 1; x++) // Iterates the amount of times needed to cover the full image vertically
                 {
                     gridMerger.DrawImage(CheckerGridPiece, CheckerGridPiece.Width * x, CheckerGridPiece.Height * y);
                 }
             }
-
             return imageToApplyGrid;
         }
 
         public Bitmap ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition)
         {
-            if (CheckerGridColorPixel == null || CheckerGridWhitePixel == null)
+            if (CheckerGridColorPixel == null || CheckerGridWhitePixel == null) // Does nothing if the grid wasn't previously generated
             {
                 return originalImage;
             }
@@ -90,7 +93,7 @@
             Bitmap imageToApplyGrid = new(originalImage);
             using Graphics gridPixelMerger = Graphics.FromImage(imageToApplyGrid);
 
-            int positionParity = (xPosition % 2 + yPosition % 2) % 2;
+            int positionParity = (xPosition % 2 + yPosition % 2) % 2; // Gets the parity to know whether this is a colored or white pixel on the grid
             if (Convert.ToBoolean(positionParity))
             {
                 gridPixelMerger.DrawImage(CheckerGridColorPixel, xPosition, yPosition);
