@@ -78,6 +78,7 @@
             PixelWidthNumberBox.TabIndex = 1;
             PixelWidthNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
             PixelWidthNumberBox.ValueChanged += SizeValuesChanged;
+            PixelWidthNumberBox.KeyDown += SizeNumberBoxes_KeyDown;
             // 
             // PixelHeightNumberBox
             // 
@@ -89,6 +90,7 @@
             PixelHeightNumberBox.TabIndex = 3;
             PixelHeightNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
             PixelHeightNumberBox.ValueChanged += SizeValuesChanged;
+            PixelHeightNumberBox.KeyDown += SizeNumberBoxes_KeyDown;
             // 
             // PixelHeightLabel
             // 
@@ -108,6 +110,7 @@
             ViewingZoomNumberBox.Size = new Size(50, 23);
             ViewingZoomNumberBox.TabIndex = 5;
             ViewingZoomNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
+            ViewingZoomNumberBox.KeyDown += SizeNumberBoxes_KeyDown;
             // 
             // ViewingZoomLabel
             // 

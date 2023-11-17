@@ -268,5 +268,14 @@ namespace PixelArtEditor
             IGridGenerator gridApply = DefineGridType();
             ViewingAreaDrawingBox.ApplyNewGrid(gridApply, originalImage);
         }
+
+        private void SizeNumberBoxes_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SetViewingAreaSize();
+                ReorganizeControls();
+            }
+        }
     }
 }

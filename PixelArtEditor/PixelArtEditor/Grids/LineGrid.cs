@@ -27,16 +27,16 @@
             using Pen gridPen = new(gridColor);
             using Graphics gridBuilder = Graphics.FromImage(LineGridPiece);
 
-            for (int x = 1; x < gridPieceHeight / cellSize + 1; x++) // Draws the horizontal lines of the grid
+            for (int x = 1; x < gridPieceWidth / cellSize + 1; x++) // Draws the vertical lines of the grid.
             {
-                gridBuilder.DrawLine(gridPen, 0, cellSize * x - 1, gridPieceHeight, cellSize * x - 1);
+                gridBuilder.DrawLine(gridPen, cellSize * x - 1, 0, cellSize * x - 1, gridPieceHeight);
             }
-            for (int y = 1; y < gridPieceWidth / cellSize + 1; y++) // Draws the vertical lines of the grid
+            for (int y = 1; y < gridPieceHeight / cellSize + 1; y++) // Draws the horizontal lines of the grid.
             {
-                gridBuilder.DrawLine(gridPen, cellSize * y - 1, 0, cellSize * y - 1, gridPieceWidth);
+                gridBuilder.DrawLine(gridPen, 0, cellSize * y - 1, gridPieceWidth, cellSize * y - 1);
             }
 
-            // Generates the single pixel grid piece
+            // Generates the single pixel grid piece.
             LineGridSinglePixel = new Bitmap(cellSize, cellSize);
             LineGridSinglePixel.MakeTransparent();
 
@@ -55,50 +55,54 @@
         /// <returns>The optimized grid piece length for the image passed.</returns>
         private int DefineGridPieceSize(int sidePixelLength)
         {
-            // TODO: Revise the size calculations
+            int leastAmountOActions = 10000, gridPieceSize, sizeWithLeastActions = 0, amountOfGridPieces;
 
-            int amountOfIterations = 10000, gridPieceSize, sizeWithLeastIterations = 0, amountOfGridPieces;
-
+            // Finds the best size to use for the current side length.
+            // This is done by testing how many actions are needed to fill the full image when using different grid piece sizes.
+            // The tests are based on two values:
+            // 1 - The amount of lines needed to build the grid piece, which is the side length divided by a given arbitrary value.
+            // 2 - The amount of times the grid piece with the above size will be applied to cover the full image, which is the side length divided by the grid piece size, squared.
+            // These amounts are then added together to see the total amount of actions needed to build the grid and cover the image with it.
+            // For the sake of simplicity, the tests assume the image is a square.
             for (int i = 1; i < Math.Sqrt(sidePixelLength) + 1; i++)
             {
-                gridPieceSize = sidePixelLength / i;
-                if (sidePixelLength % i != 0)
+                gridPieceSize = sidePixelLength / i; // The arbitrary value used to test the grid piece is i.
+                if (sidePixelLength % i != 0) // If the above division has a remainder, the grid would end up too short. If that's the case, increase grid size by 1.
                 {
                     gridPieceSize++;
                 }
 
-                if (sidePixelLength % gridPieceSize != 0)
+                if (sidePixelLength % gridPieceSize != 0) // Checks if the side length is a multiple of the grid piece size.
                 {
-                    amountOfGridPieces = (int)Math.Pow(sidePixelLength / gridPieceSize + 1, 2);
+                    amountOfGridPieces = (int)Math.Pow(sidePixelLength / gridPieceSize + 1, 2); // If it isn't, one extra grid piece will be needed in each line to cover the image, so the division needs to be added 1 before being squared.
                 }
                 else
                 {
-                    amountOfGridPieces = (int)Math.Pow(sidePixelLength / gridPieceSize, 2);
+                    amountOfGridPieces = (int)Math.Pow(sidePixelLength / gridPieceSize, 2); // If it is, then just square the division.
                 }
 
-                int totalIterations = amountOfGridPieces + gridPieceSize * 2;
-                if (totalIterations < amountOfIterations)
+                int totalActions = amountOfGridPieces + gridPieceSize * 2;
+                if (totalActions < leastAmountOActions) // If the amount of actions on this test is lower than the current lower amount...
                 {
-                    amountOfIterations = totalIterations;
-                    sizeWithLeastIterations = gridPieceSize;
+                    leastAmountOActions = totalActions;
+                    sizeWithLeastActions = gridPieceSize; // Define this grid piece size as the most efficient.
                 }
             }
-
-            return sizeWithLeastIterations;
+            return sizeWithLeastActions;
         }
 
         public void ApplyGridFullImage(Bitmap imageWithGrid)
         {
-            if (LineGridPiece == null) // Does nothing if the grid wasn't previously generated
+            if (LineGridPiece == null) // Does nothing if the grid wasn't previously generated.
             {
                 return;
             }
 
             using Graphics gridMerger = Graphics.FromImage(imageWithGrid);
 
-            for (int y = 0; y < imageWithGrid.Height / LineGridPiece.Height + 1; y++) // Iterates the amount of times needed to cover the full image horizontally
+            for (int y = 0; y < imageWithGrid.Height / LineGridPiece.Height + 1; y++) // Iterates the amount of times needed to cover the full image vertically.
             {
-                for (int x = 0; x < imageWithGrid.Width / LineGridPiece.Width + 1; x++) // Iterates the amount of times needed to cover the full image vertically
+                for (int x = 0; x < imageWithGrid.Width / LineGridPiece.Width + 1; x++) // Iterates the amount of times needed to cover the full image horizontally.
                 {
                     gridMerger.DrawImage(LineGridPiece, LineGridPiece.Width * x, LineGridPiece.Height * y);
                 }
@@ -107,13 +111,12 @@
 
         public void ApplyGridSinglePixel(Bitmap imageWithGrid, int xPosition, int yPosition)
         {
-            if (LineGridSinglePixel == null) // Does nothing if the grid wasn't previously generated
+            if (LineGridSinglePixel == null) // Does nothing if the grid wasn't previously generated.
             {
                 return;
             }
 
             using Graphics lineGridPixelMerger = Graphics.FromImage(imageWithGrid);
-            
             lineGridPixelMerger.DrawImage(LineGridSinglePixel, xPosition, yPosition);
         }
     }
