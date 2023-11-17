@@ -31,15 +31,16 @@
 
             using SolidBrush gridBrush = new(gridColor);
             using Graphics gridBuilder = Graphics.FromImage(CheckerGridPiece);
-            gridBuilder.Clear(Color.White);
-            for (int y = 0; y < CheckerGridPiece.Height; y++)
+            gridBuilder.Clear(Color.White); // Makes the grid piece completely white, so only the colored part needs to be drawn
+            for (int y = 0; y < CheckerGridPiece.Height; y++) 
             {
-                for (int x = y % 2; x < CheckerGridPiece.Width; x += 2)
+                for (int x = y % 2; x < CheckerGridPiece.Width; x += 2) // Iterates on alternating pixels to draw the colored part of the checkered grid
                 {
                     gridBuilder.FillRectangle(gridBrush, cellSize * x, cellSize * y, cellSize, cellSize);
                 }
             }
 
+            // Generates the single pixel grid pieces
             CheckerGridWhitePixel = new Bitmap(cellSize, cellSize);
 
             CheckerGridColorPixel = new Bitmap(cellSize, cellSize);

@@ -16,14 +16,14 @@
 
         /// <summary>
         /// Applies a previously generated grid to the specified image, filling the entire image with it.
-        /// If the grid has not been generated, this simply returns the image.
+        /// If the grid has not been generated, it does nothing.
         /// </summary>
         /// <param name="originalImage">The image where the grid will be applied.</param>
         public void ApplyGridFullImage(Bitmap originalImage);
 
         /// <summary>
         /// Applies a single pixel of the grid to a specific place in the image.
-        /// If the grid has not been generated, thsi simply returns the image.
+        /// If the grid has not been generated, it does nothing.
         /// </summary>
         /// <param name="originalImage">The image where the grid pixel will be applied.</param>
         /// <param name="xPosition">The horizontal position where the pixel will be applied.</param>

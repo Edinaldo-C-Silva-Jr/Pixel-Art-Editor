@@ -8,7 +8,6 @@
         /// <summary>
         /// Simply returns the original image, since no grid should be applied.
         /// </summary>
-        /// <returns>The original image, since no grid is applied.</returns>
         public void ApplyGridFullImage(Bitmap originalImage)
         {
             return;
@@ -17,7 +16,6 @@
         /// <summary>
         /// Simply returns the original image, since no grid should be applied.
         /// </summary>
-        /// <returns>The original image, since no grid is applied.</returns>
         public void ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition)
         {
             return;
