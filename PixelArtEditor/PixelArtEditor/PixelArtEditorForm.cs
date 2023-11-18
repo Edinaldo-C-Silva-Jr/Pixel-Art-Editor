@@ -6,73 +6,90 @@ namespace PixelArtEditor
 {
     public partial class PixelArtEditorForm : Form
     {
-        private Bitmap originalImage = new Bitmap(1, 1);
+        // The original image that is being drawn on in the editor
+        private Bitmap originalImage = new(1, 1);
 
         public PixelArtEditorForm()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Runs all the initialization methods.
+        /// Initializes the control values, default values, position and text values, builds the color tables and creates a default blank image.
+        /// </summary>
         private void PixelArtEditorForm_Load(object sender, EventArgs e)
         {
-            OrganizeColorsPanel();
-
-            GridTypeComboBox.DataSource = Enum.GetValues(typeof(GridType));
-            GridTypeComboBox.SelectedItem = GridType.None;
-            ColorAmountComboBox.SelectedIndex = 3;
-            TransparencyCheckBox.Checked = false;
-            ColorChangeCheckBox.Checked = true;
-
-            SetColorAmount();
-            SetViewingAreaSize();
-
+            InitializeControlValues();
+            InitializeColorsPanel();
+            SetPaletteColorAmount();
+            SetNewImageAndViewingAreaSize();
             ReorganizeControls();
         }
 
-        private void SetColorAmount()
+        /// <summary>
+        /// Sets all the location and text values to the controls in the ColorAreaBackgroundPanel.
+        /// Builds the panel programatically as to prevent Designer clutter.
+        /// </summary>
+        private void InitializeColorsPanel()
         {
-            int colorAmount = int.Parse(ColorAmountComboBox.SelectedItem.ToString());
-            PaletteColorTable.GenerateColorGrid(colorAmount, 16, new EventHandler(ColorCellClicked));
-        }
-
-        private void OrganizeColorsPanel()
-        {
+            // Sets the text and size of the Color Amount Label, and moves the ComboBox accordingly
             ColorAmountLabel.Size = new Size(90, 20);
             ColorAmountLabel.Text = "Color Amount";
             ColorAmountComboBox.Location = new Point(ColorAmountLabel.Location.X + ColorAmountLabel.Width, ColorAmountComboBox.Location.Y);
 
+            // Sets the text and size of the Grid Color Label, and moves the ColorTable accordingly
             GridColorLabel.Size = new Size(65, 20);
             GridColorLabel.Text = "Grid Color";
-            GridColorTable.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked), Color.Gray, false);
             GridColorTable.Location = new Point(GridColorLabel.Location.X + GridColorLabel.Width, GridColorTable.Location.Y);
-
+            
+            // Sets the text, size and location of the Background Color Label, and moves the ColorTable accordingly
             BackgroundColorLabel.Size = new Size(110, 20);
             BackgroundColorLabel.Text = "Background Color";
             BackgroundColorLabel.Location = new Point(GridColorTable.Location.X + GridColorTable.Width + 10, BackgroundColorLabel.Location.Y);
-            BackgroundColorTable.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked), Color.FromArgb(254, 254, 254), false);
             BackgroundColorTable.Location = new Point(BackgroundColorLabel.Location.X + BackgroundColorLabel.Width, BackgroundColorTable.Location.Y);
         }
 
-        private void SetViewingAreaSize()
+        /// <summary>
+        /// Sets all the default values for controls that need a default value.
+        /// Also initializes the ColorTables and ComboBoxes
+        /// </summary>
+        private void InitializeControlValues()
         {
-            Color defaultColor = BackgroundColorTable.GetCurrentColor();
+            // Generates the ColorTables for Grid Color and Background Color.
+            GridColorTable.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked), Color.Gray, false);
+            BackgroundColorTable.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked), Color.FromArgb(254, 254, 254), false);
 
+            // Defines the values for the GridType ComboBox based on the GridType Enum values.
+            GridTypeComboBox.DataSource = Enum.GetValues(typeof(GridType));
+
+            // Sets default values for the ComboBoxes and CheckBoxes
+            GridTypeComboBox.SelectedItem = GridType.None;
+            ColorAmountComboBox.SelectedIndex = 3;
+            TransparencyCheckBox.Checked = false;
+            ColorChangeCheckBox.Checked = true;
+        }
+
+        /// <summary>
+        /// Sets the amount of colors shown in the Palette ColorTable based on the amount of colors selected in the ComboBox. 
+        /// </summary>
+        private void SetPaletteColorAmount()
+        {
+            int colorAmount = int.Parse(ColorAmountComboBox.SelectedItem.ToString()!);
+            PaletteColorTable.GenerateColorGrid(colorAmount, 16, new EventHandler(ColorCellClicked!));
+        }
+
+        /// <summary>
+        /// Gets the values for the image's width, height and zoom amount from the respective ComboBoxes and returns them as a tuple.
+        /// </summary>
+        /// <returns>A tuple of Width, Height and Zoom values, in this order.</returns>
+        private (int width, int height, int zoom) GetImageSizeValues()
+        {
             int height = (int)PixelHeightNumberBox.Value;
             int width = (int)PixelWidthNumberBox.Value;
             int zoom = (int)ViewingZoomNumberBox.Value;
-            Color gridColor = GridColorTable.GetCurrentColor();
-            IGridGenerator generator = DefineGridType();
 
-            originalImage = new Bitmap(width * zoom, height * zoom);
-            Graphics imageFiller = Graphics.FromImage(originalImage);
-            imageFiller.Clear(defaultColor);
-
-            if (TransparencyCheckBox.Checked)
-            {
-                originalImage.MakeTransparent(defaultColor);
-            }
-
-            ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor);
+            return (width, height, zoom);
         }
 
         /// <summary>
@@ -82,7 +99,7 @@ namespace PixelArtEditor
         /// <returns>A grid implementation of the currently defined grid type.</returns>
         private IGridGenerator DefineGridType()
         {
-            int zoom = (int)ViewingZoomNumberBox.Value;
+            (_, _, int zoom) = GetImageSizeValues();
             Color gridColor = GridColorTable.GetCurrentColor();
 
             GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
@@ -97,6 +114,32 @@ namespace PixelArtEditor
 
             gridGenerator.GenerateGrid(originalImage, zoom, gridColor);
             return gridGenerator;
+        }
+
+        /// <summary>
+        /// Creates a new blank image using the current image size, zoom values and transparency settings.
+        /// Then sets it in the ViewingArea DrawingBox with the appropriate grid.
+        /// </summary>
+        private void SetNewImageAndViewingAreaSize()
+        {
+            // Gets current image and color values
+            (int width, int height, int zoom) = GetImageSizeValues();
+            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
+            Color gridColor = GridColorTable.GetCurrentColor();
+            IGridGenerator gridGenerator = DefineGridType();
+
+            // Creates the image
+            originalImage = new Bitmap(width * zoom, height * zoom);
+            Graphics imageFiller = Graphics.FromImage(originalImage);
+            imageFiller.Clear(backgroundColor);
+
+            // Changes transparency
+            if (TransparencyCheckBox.Checked)
+            {
+                originalImage.MakeTransparent(backgroundColor);
+            }
+
+            ViewingAreaDrawingBox.SetNewImage(gridGenerator, originalImage, zoom, gridColor);
         }
 
         private void ReorganizeControls()
@@ -172,7 +215,7 @@ namespace PixelArtEditor
 
         private void SetNewImageSizeButton_Click(object sender, EventArgs e)
         {
-            SetViewingAreaSize();
+            SetNewImageAndViewingAreaSize();
             ReorganizeControls();
         }
 
@@ -196,7 +239,7 @@ namespace PixelArtEditor
 
         private void ColorAmountComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SetColorAmount();
+            SetPaletteColorAmount();
             ReorganizeControls();
         }
 
@@ -273,7 +316,7 @@ namespace PixelArtEditor
         {
             if (e.KeyCode == Keys.Enter)
             {
-                SetViewingAreaSize();
+                SetNewImageAndViewingAreaSize();
                 ReorganizeControls();
             }
         }

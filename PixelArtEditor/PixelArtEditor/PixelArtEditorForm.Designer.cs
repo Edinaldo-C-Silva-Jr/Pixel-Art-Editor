@@ -243,7 +243,7 @@
             BackgroundColorLabel.Name = "BackgroundColorLabel";
             BackgroundColorLabel.Size = new Size(30, 20);
             BackgroundColorLabel.TabIndex = 15;
-            BackgroundColorLabel.Text = "GC";
+            BackgroundColorLabel.Text = "BC";
             // 
             // GridColorTable
             // 
