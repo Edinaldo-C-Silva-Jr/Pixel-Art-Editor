@@ -72,6 +72,8 @@
                 return;
             }
 
+            using Bitmap temporaryImage = new(imageWithGrid);
+            temporaryImage.MakeTransparent();
             using Graphics gridMerger = Graphics.FromImage(imageWithGrid);
 
             for (int y = 0; y < imageWithGrid.Height / CheckerGridPiece.Height + 1; y++) // Iterates the amount of times needed to cover the full image vertically.
@@ -81,6 +83,8 @@
                     gridMerger.DrawImage(CheckerGridPiece, CheckerGridPiece.Width * x, CheckerGridPiece.Height * y);
                 }
             }
+
+            gridMerger.DrawImage(temporaryImage, 0, 0);
         }
 
         public void ApplyGridSinglePixel(Bitmap imageWithGrid, int xPosition, int yPosition)

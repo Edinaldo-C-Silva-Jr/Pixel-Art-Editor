@@ -57,8 +57,8 @@ namespace PixelArtEditor
         private void InitializeControlValues()
         {
             // Generates the ColorTables for Grid Color and Background Color.
-            GridColorTable.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked), Color.Gray, false);
-            BackgroundColorTable.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked), Color.FromArgb(254, 254, 254), false);
+            GridColorTable.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked!), Color.Gray, false);
+            BackgroundColorTable.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked!), Color.FromArgb(254, 254, 254), false);
 
             // Defines the values for the GridType ComboBox based on the GridType Enum values.
             GridTypeComboBox.DataSource = Enum.GetValues(typeof(GridType));
@@ -163,8 +163,8 @@ namespace PixelArtEditor
         private void ColorCellClicked(object sender, EventArgs e)
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
-            RectangleCell cell = sender as RectangleCell;
-            ColorTable cellParent = cell.Parent as ColorTable;
+            RectangleCell? cell = sender as RectangleCell;
+            ColorTable? cellParent = cell!.Parent as ColorTable;
 
             if (mouseClick.Button == MouseButtons.Right)
             {
@@ -176,7 +176,7 @@ namespace PixelArtEditor
                     {
                         SwapColorInImage(cell.BackColor, ColorPickerDialog.Color);
                     }
-                    if (cellParent.Name == "tbl_BackgroundColor")
+                    if (cellParent!.Name == "tbl_BackgroundColor")
                     {
                         ChangeImageTransparency(TransparencyCheckBox.Checked, BackgroundColorTable.GetCurrentColor(), ColorPickerDialog.Color);
                     }
@@ -185,7 +185,7 @@ namespace PixelArtEditor
                 }
             }
 
-            cellParent.ChangeCurrentCell(cell);
+            cellParent!.ChangeCurrentCell(cell);
         }
 
         private void SwapColorInImage(Color oldColor, Color newColor)
@@ -196,7 +196,7 @@ namespace PixelArtEditor
             GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
             Color pixelColor;
 
-            Bitmap image = new Bitmap(ViewingAreaDrawingBox.Image);
+            Bitmap image = new Bitmap(originalImage);
 
             for (int y = 0; y < height; y++)
             {

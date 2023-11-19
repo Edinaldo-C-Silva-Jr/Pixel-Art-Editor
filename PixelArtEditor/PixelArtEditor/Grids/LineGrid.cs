@@ -18,6 +18,13 @@
 
         public void GenerateGrid(Bitmap originalImage, int cellSize, Color gridColor)
         {
+            if (cellSize < 4) // Only generates grid if the zoom is at least 4, as to prevent the grid from covering too much of the image
+            {
+                LineGridPiece = null;
+                LineGridSinglePixel = null;
+                return;
+            }
+
             int gridPieceWidth = DefineGridPieceSize(originalImage.Width / cellSize) * cellSize;
             int gridPieceHeight = DefineGridPieceSize(originalImage.Height / cellSize) * cellSize;
 
