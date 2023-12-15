@@ -98,7 +98,7 @@
             return sizeWithLeastActions;
         }
 
-        public void ApplyGridFullImage(Bitmap imageWithGrid)
+        public void ApplyGridFullImage(Bitmap imageWithGrid, Color backgroundColor)
         {
             if (LineGridPiece == null) // Does nothing if the grid wasn't previously generated.
             {

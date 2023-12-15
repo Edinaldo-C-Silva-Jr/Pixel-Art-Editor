@@ -19,7 +19,8 @@
         /// If the grid has not been generated, it does nothing.
         /// </summary>
         /// <param name="originalImage">The image where the grid will be applied.</param>
-        public void ApplyGridFullImage(Bitmap originalImage);
+        /// <param name="backgroundColor">The color used for the image's background.</param>
+        public void ApplyGridFullImage(Bitmap originalImage, Color backgroundColor);
 
         /// <summary>
         /// Applies a single pixel of the grid to a specific place in the image.

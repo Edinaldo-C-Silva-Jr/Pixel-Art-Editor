@@ -12,13 +12,13 @@ namespace PixelArtEditor.Controls
             InitializeComponent();
         }
 
-        public void SetNewImage(IGridGenerator gridGenerator, Bitmap originalImage, int cellSize, Color gridColor)
+        public void SetNewImage(IGridGenerator gridGenerator, Bitmap originalImage, int cellSize, Color gridColor, Color backgroundColor)
         {
             this.Width = originalImage.Width;
             this.Height = originalImage.Height;
 
             imageWithGrid = new(originalImage);
-            gridGenerator.ApplyGridFullImage(imageWithGrid);
+            gridGenerator.ApplyGridFullImage(imageWithGrid, backgroundColor);
             this.Image = imageWithGrid;
             this.Refresh();
         }
@@ -28,11 +28,11 @@ namespace PixelArtEditor.Controls
         /// </summary>
         /// <param name="gridApply">The IGridGenerator implementation used to apply the grid.</param>
         /// <param name="originalImage">The original image to use when applying the grid.</param>
-        public void ApplyNewGrid(IGridGenerator gridApply, Bitmap originalImage)
+        public void ApplyNewGrid(IGridGenerator gridApply, Bitmap originalImage, Color backgroundColor)
         {
             imageWithGrid = new(originalImage);
 
-            gridApply.ApplyGridFullImage(imageWithGrid);
+            gridApply.ApplyGridFullImage(imageWithGrid, backgroundColor);
             this.Image = imageWithGrid;
             this.Refresh();
         }

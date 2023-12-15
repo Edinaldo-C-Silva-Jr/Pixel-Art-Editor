@@ -139,7 +139,7 @@ namespace PixelArtEditor
                 originalImage.MakeTransparent(backgroundColor);
             }
 
-            ViewingAreaDrawingBox.SetNewImage(gridGenerator, originalImage, zoom, gridColor);
+            ViewingAreaDrawingBox.SetNewImage(gridGenerator, originalImage, zoom, gridColor, backgroundColor);
         }
 
         private void ReorganizeControls()
@@ -289,6 +289,8 @@ namespace PixelArtEditor
                 int height = (int)PixelHeightNumberBox.Value;
                 int width = (int)PixelWidthNumberBox.Value;
                 int zoom = (int)ViewingZoomNumberBox.Value;
+                Color gridColor = GridColorTable.GetCurrentColor();
+                Color backgroundColor = BackgroundColorTable.GetCurrentColor();
                 Bitmap temporaryImage = new Bitmap(width * zoom, height * zoom);
                 IGridGenerator generator = DefineGridType();
 
@@ -298,7 +300,7 @@ namespace PixelArtEditor
                 temporaryGraphics.DrawImage(originalImage, 0, 0);
                 originalImage = temporaryImage;
 
-                ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, GridColorTable.GetCurrentColor());
+                ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor, backgroundColor);
             }
         }
 
@@ -309,7 +311,8 @@ namespace PixelArtEditor
         private void GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage(object sender, EventArgs e)
         {
             IGridGenerator gridApply = DefineGridType();
-            ViewingAreaDrawingBox.ApplyNewGrid(gridApply, originalImage);
+            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
+            ViewingAreaDrawingBox.ApplyNewGrid(gridApply, originalImage, backgroundColor);
         }
 
         private void SizeNumberBoxes_KeyDown(object sender, KeyEventArgs e)
@@ -343,7 +346,8 @@ namespace PixelArtEditor
 
                 IGridGenerator generator = DefineGridType();
                 Color gridColor = GridColorTable.GetCurrentColor();
-                ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor);
+                Color backgroundColor = BackgroundColorTable.GetCurrentColor();
+                ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor, backgroundColor);
 
                 ReorganizeControls();
             }

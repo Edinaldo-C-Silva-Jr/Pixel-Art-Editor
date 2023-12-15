@@ -12,15 +12,15 @@
 
         public void GenerateColorGrid(int colorAmount, int size, EventHandler cellClick, Color color, bool visiblySelectable)
         {
-            GenerateGrid(colorAmount, size, cellClick, color, visiblySelectable);
+            GenerateCellGrid(colorAmount, size, cellClick, color, visiblySelectable);
         }
 
         public void GenerateColorGrid(int colorAmount, int size, EventHandler cellClick)
         {
-            GenerateGrid(colorAmount, size, cellClick, Color.White, true);
+            GenerateCellGrid(colorAmount, size, cellClick, Color.White, true);
         }
 
-        private void GenerateGrid(int colorAmount, int size, EventHandler cellClick, Color color, bool selectable)
+        private void GenerateCellGrid(int colorAmount, int size, EventHandler cellClick, Color color, bool selectable)
         {
             this.SuspendLayout();
 

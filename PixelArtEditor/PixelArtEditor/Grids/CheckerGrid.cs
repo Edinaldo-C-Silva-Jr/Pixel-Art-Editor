@@ -65,7 +65,7 @@
             return gridPieceSize;
         }
 
-        public void ApplyGridFullImage(Bitmap imageWithGrid)
+        public void ApplyGridFullImage(Bitmap imageWithGrid, Color backgroundColor)
         {
             if (CheckerGridPiece == null) // Does nothing if the grid wasn't previously generated.
             {
@@ -73,7 +73,7 @@
             }
 
             using Bitmap temporaryImage = new(imageWithGrid);
-            temporaryImage.MakeTransparent();
+            temporaryImage.MakeTransparent(backgroundColor);
             using Graphics gridMerger = Graphics.FromImage(imageWithGrid);
 
             for (int y = 0; y < imageWithGrid.Height / CheckerGridPiece.Height + 1; y++) // Iterates the amount of times needed to cover the full image vertically.
