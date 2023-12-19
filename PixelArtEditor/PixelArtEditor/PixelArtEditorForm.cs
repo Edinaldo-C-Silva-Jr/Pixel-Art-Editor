@@ -10,8 +10,9 @@ namespace PixelArtEditor
         private Bitmap originalImage = new(1, 1);
 
         private Bitmap clipboardImage = new(1, 1);
-        private Rectangle selectedArea = Rectangle.Empty;
-        private (int X, int Y) selectionStart;
+        private Point selectionStart = new();
+        private Rectangle selectedArea = new();
+        private readonly SolidBrush selectionBrush = new(Color.FromArgb(128, 32, 196, 255));
 
         public PixelArtEditorForm()
         {
@@ -261,6 +262,11 @@ namespace PixelArtEditor
                 ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, e.X, e.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
                 ViewingAreaDrawingBox.Refresh();
             }
+
+            if (e.Button == MouseButtons.Right)
+            {
+                ChangeRectangleSelection(e.Location);
+            }
         }
 
         private void SaveImageButton_Click(object sender, EventArgs e)
@@ -379,21 +385,10 @@ namespace PixelArtEditor
         {
             if (e.Button == MouseButtons.Right)
             {
-                selectionStart.X = e.Location.X - e.Location.X % (int)ViewingZoomNumberBox.Value;
-                selectionStart.Y = e.Location.Y - e.Location.Y % (int)ViewingZoomNumberBox.Value;
-            }
-        }
+                selectionStart.X = e.Location.X;
+                selectionStart.Y = e.Location.Y;
 
-        private void ViewingAreaDrawingBox_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                int zoom = (int)ViewingZoomNumberBox.Value;
-                (int X, int Y) selectionEnd;
-                selectionEnd.X = e.Location.X - e.Location.X % zoom + zoom;
-                selectionEnd.Y = e.Location.Y - e.Location.Y % zoom + zoom;
-
-                selectedArea = new Rectangle(selectionStart.X, selectionStart.Y, selectionEnd.X - selectionStart.X, selectionEnd.Y - selectionStart.Y);
+                ChangeRectangleSelection(e.Location);
             }
         }
 
@@ -417,6 +412,52 @@ namespace PixelArtEditor
                 Color backgroundColor = BackgroundColorTable.GetCurrentColor();
                 ViewingAreaDrawingBox.SetNewImage(generator, originalImage, (int)ViewingZoomNumberBox.Value, gridColor, backgroundColor);
             }
+        }
+
+        private void ViewingAreaDrawingBox_Paint(object sender, PaintEventArgs e)
+        {
+            if (selectedArea != Rectangle.Empty)
+            {
+                e.Graphics.FillRectangle(selectionBrush, selectedArea);
+            }
+        }
+
+        private void ChangeRectangleSelection(Point location)
+        {
+            int zoom = (int)ViewingZoomNumberBox.Value;
+            Point selectionEnd = new()
+            {
+                X = location.X,
+                Y = location.Y
+            };
+
+            if (selectionEnd.X < selectionStart.X)
+            {
+                selectedArea.X = selectionEnd.X - selectionEnd.X % zoom;
+                selectionEnd.X = selectionStart.X - selectionStart.X % zoom + zoom;
+            }
+            else
+            {
+                selectedArea.X = selectionStart.X - selectionStart.X % zoom;
+                selectionEnd.X = selectionEnd.X - selectionEnd.X % zoom + zoom;
+            }
+
+            selectedArea.Y = selectionStart.Y;
+            if (selectionEnd.Y < selectionStart.Y)
+            {
+                selectedArea.Y = selectionEnd.Y - selectionEnd.Y % zoom;
+                selectionEnd.Y = selectionStart.Y - selectionStart.Y % zoom + zoom;
+            }
+            else
+            {
+                selectedArea.Y = selectionStart.Y - selectionStart.Y % zoom;
+                selectionEnd.Y = selectionEnd.Y - selectionEnd.Y % zoom + zoom;
+            }
+
+            selectedArea.Width = selectionEnd.X - selectedArea.X;
+            selectedArea.Height = selectionEnd.Y - selectedArea.Y;
+
+            ViewingAreaDrawingBox.Invalidate();
         }
     }
 }

@@ -184,9 +184,9 @@
             ViewingAreaDrawingBox.TabIndex = 0;
             ViewingAreaDrawingBox.TabStop = false;
             ViewingAreaDrawingBox.Click += ViewingAreaDrawingBox_Click;
+            ViewingAreaDrawingBox.Paint += ViewingAreaDrawingBox_Paint;
             ViewingAreaDrawingBox.MouseDown += ViewingAreaDrawingBox_MouseDown;
             ViewingAreaDrawingBox.MouseMove += ViewingAreaDrawingBox_MouseMove;
-            ViewingAreaDrawingBox.MouseUp += ViewingAreaDrawingBox_MouseUp;
             // 
             // ColorAreaBackgroundPanel
             // 
