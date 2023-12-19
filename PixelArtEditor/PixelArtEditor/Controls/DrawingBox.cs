@@ -16,8 +16,6 @@ namespace PixelArtEditor.Controls
         {
             this.Width = width;
             this.Height = height;
-
-
         }
 
         public void SetNewImage(IGridGenerator gridGenerator, Bitmap originalImage, int cellSize, Color gridColor, Color backgroundColor)

@@ -9,6 +9,10 @@ namespace PixelArtEditor
         // The original image that is being drawn on in the editor
         private Bitmap originalImage = new(1, 1);
 
+        private Bitmap clipboardImage = new(1, 1);
+        private Rectangle selectedArea = Rectangle.Empty;
+        private (int X, int Y) selectionStart;
+
         public PixelArtEditorForm()
         {
             InitializeComponent();
@@ -68,6 +72,7 @@ namespace PixelArtEditor
             ColorAmountComboBox.SelectedIndex = 3;
             TransparencyCheckBox.Checked = false;
             ColorChangeCheckBox.Checked = true;
+            ResizeOnLoadCheckBox.Checked = true;
         }
 
         /// <summary>
@@ -157,8 +162,12 @@ namespace PixelArtEditor
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
 
-            ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, mouseClick.X, mouseClick.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
-            ViewingAreaDrawingBox.Refresh();
+            if (mouseClick.Button == MouseButtons.Left)
+            {
+                selectedArea = Rectangle.Empty;
+                ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, mouseClick.X, mouseClick.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
+                ViewingAreaDrawingBox.Refresh();
+            }
         }
 
         private void ColorCellClicked(object sender, EventArgs e)
@@ -248,6 +257,7 @@ namespace PixelArtEditor
         {
             if (e.Button == MouseButtons.Left)
             {
+                selectedArea = Rectangle.Empty;
                 ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, e.X, e.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
                 ViewingAreaDrawingBox.Refresh();
             }
@@ -362,6 +372,50 @@ namespace PixelArtEditor
                 ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor, backgroundColor);
 
                 ReorganizeControls();
+            }
+        }
+
+        private void ViewingAreaDrawingBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                selectionStart.X = e.Location.X - e.Location.X % (int)ViewingZoomNumberBox.Value;
+                selectionStart.Y = e.Location.Y - e.Location.Y % (int)ViewingZoomNumberBox.Value;
+            }
+        }
+
+        private void ViewingAreaDrawingBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                int zoom = (int)ViewingZoomNumberBox.Value;
+                (int X, int Y) selectionEnd;
+                selectionEnd.X = e.Location.X - e.Location.X % zoom + zoom;
+                selectionEnd.Y = e.Location.Y - e.Location.Y % zoom + zoom;
+
+                selectedArea = new Rectangle(selectionStart.X, selectionStart.Y, selectionEnd.X - selectionStart.X, selectionEnd.Y - selectionStart.Y);
+            }
+        }
+
+        private void CopyButton_Click(object sender, EventArgs e)
+        {
+            if (selectedArea != Rectangle.Empty)
+            {
+                clipboardImage = originalImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
+            }
+        }
+
+        private void PasteButton_Click(object sender, EventArgs e)
+        {
+            if (selectedArea != Rectangle.Empty)
+            {
+                using Graphics pasteGraphics = Graphics.FromImage(originalImage);
+                pasteGraphics.DrawImage(clipboardImage, new Point(selectedArea.X, selectedArea.Y));
+
+                IGridGenerator generator = DefineGridType();
+                Color gridColor = GridColorTable.GetCurrentColor();
+                Color backgroundColor = BackgroundColorTable.GetCurrentColor();
+                ViewingAreaDrawingBox.SetNewImage(generator, originalImage, (int)ViewingZoomNumberBox.Value, gridColor, backgroundColor);
             }
         }
     }

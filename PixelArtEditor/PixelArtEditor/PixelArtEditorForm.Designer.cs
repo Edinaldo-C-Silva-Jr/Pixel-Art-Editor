@@ -54,6 +54,8 @@
             LoadImageButton = new Button();
             FileLoadDialog = new OpenFileDialog();
             ResizeOnLoadCheckBox = new CheckBox();
+            CopyButton = new Button();
+            PasteButton = new Button();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
@@ -182,7 +184,9 @@
             ViewingAreaDrawingBox.TabIndex = 0;
             ViewingAreaDrawingBox.TabStop = false;
             ViewingAreaDrawingBox.Click += ViewingAreaDrawingBox_Click;
+            ViewingAreaDrawingBox.MouseDown += ViewingAreaDrawingBox_MouseDown;
             ViewingAreaDrawingBox.MouseMove += ViewingAreaDrawingBox_MouseMove;
+            ViewingAreaDrawingBox.MouseUp += ViewingAreaDrawingBox_MouseUp;
             // 
             // ColorAreaBackgroundPanel
             // 
@@ -315,6 +319,26 @@
             ResizeOnLoadCheckBox.Text = "Resize on Load";
             ResizeOnLoadCheckBox.UseVisualStyleBackColor = true;
             // 
+            // CopyButton
+            // 
+            CopyButton.Location = new Point(310, 70);
+            CopyButton.Name = "CopyButton";
+            CopyButton.Size = new Size(50, 30);
+            CopyButton.TabIndex = 16;
+            CopyButton.Text = "Copy";
+            CopyButton.UseVisualStyleBackColor = true;
+            CopyButton.Click += CopyButton_Click;
+            // 
+            // PasteButton
+            // 
+            PasteButton.Location = new Point(360, 70);
+            PasteButton.Name = "PasteButton";
+            PasteButton.Size = new Size(50, 30);
+            PasteButton.TabIndex = 17;
+            PasteButton.Text = "Paste";
+            PasteButton.UseVisualStyleBackColor = true;
+            PasteButton.Click += PasteButton_Click;
+            // 
             // PixelArtEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -322,6 +346,8 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(800, 450);
+            Controls.Add(PasteButton);
+            Controls.Add(CopyButton);
             Controls.Add(ResizeOnLoadCheckBox);
             Controls.Add(LoadImageButton);
             Controls.Add(ColorChangeCheckBox);
@@ -379,5 +405,7 @@
         private Button LoadImageButton;
         private OpenFileDialog FileLoadDialog;
         private CheckBox ResizeOnLoadCheckBox;
+        private Button CopyButton;
+        private Button PasteButton;
     }
 }
