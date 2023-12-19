@@ -42,7 +42,7 @@ namespace PixelArtEditor
             GridColorLabel.Size = new Size(65, 20);
             GridColorLabel.Text = "Grid Color";
             GridColorTable.Location = new Point(GridColorLabel.Location.X + GridColorLabel.Width, GridColorTable.Location.Y);
-            
+
             // Sets the text, size and location of the Background Color Label, and moves the ColorTable accordingly
             BackgroundColorLabel.Size = new Size(110, 20);
             BackgroundColorLabel.Text = "Background Color";
@@ -139,6 +139,7 @@ namespace PixelArtEditor
                 originalImage.MakeTransparent(backgroundColor);
             }
 
+            ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
             ViewingAreaDrawingBox.SetNewImage(gridGenerator, originalImage, zoom, gridColor, backgroundColor);
         }
 
@@ -341,8 +342,19 @@ namespace PixelArtEditor
             {
                 originalImage = new(FileLoadDialog.FileName);
                 int zoom = (int)ViewingZoomNumberBox.Value;
-                PixelWidthNumberBox.Value = originalImage.Width / zoom;
-                PixelHeightNumberBox.Value = originalImage.Height / zoom;
+
+                if (ResizeOnLoadCheckBox.Checked)
+                {
+                    ViewingAreaDrawingBox.SetNewSize(originalImage.Width, originalImage.Height);
+                }
+                else
+                {
+                    using Bitmap newOriginalImage = new(ViewingAreaDrawingBox.Width, ViewingAreaDrawingBox.Height);
+                    using Graphics newImageGraphics = Graphics.FromImage(newOriginalImage);
+                    newImageGraphics.DrawImage(originalImage, 0, 0);
+
+                    originalImage = new(newOriginalImage);
+                }
 
                 IGridGenerator generator = DefineGridType();
                 Color gridColor = GridColorTable.GetCurrentColor();

@@ -12,11 +12,16 @@ namespace PixelArtEditor.Controls
             InitializeComponent();
         }
 
+        public void SetNewSize(int width, int height)
+        {
+            this.Width = width;
+            this.Height = height;
+
+
+        }
+
         public void SetNewImage(IGridGenerator gridGenerator, Bitmap originalImage, int cellSize, Color gridColor, Color backgroundColor)
         {
-            this.Width = originalImage.Width;
-            this.Height = originalImage.Height;
-
             imageWithGrid = new(originalImage);
             gridGenerator.ApplyGridFullImage(imageWithGrid, backgroundColor);
             this.Image = imageWithGrid;

@@ -53,6 +53,7 @@
             ColorChangeCheckBox = new CheckBox();
             LoadImageButton = new Button();
             FileLoadDialog = new OpenFileDialog();
+            ResizeOnLoadCheckBox = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
@@ -304,6 +305,16 @@
             LoadImageButton.UseVisualStyleBackColor = true;
             LoadImageButton.Click += LoadImageButton_Click;
             // 
+            // ResizeOnLoadCheckBox
+            // 
+            ResizeOnLoadCheckBox.AutoSize = true;
+            ResizeOnLoadCheckBox.Location = new Point(380, 10);
+            ResizeOnLoadCheckBox.Name = "ResizeOnLoadCheckBox";
+            ResizeOnLoadCheckBox.Size = new Size(104, 19);
+            ResizeOnLoadCheckBox.TabIndex = 15;
+            ResizeOnLoadCheckBox.Text = "Resize on Load";
+            ResizeOnLoadCheckBox.UseVisualStyleBackColor = true;
+            // 
             // PixelArtEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -311,6 +322,7 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(800, 450);
+            Controls.Add(ResizeOnLoadCheckBox);
             Controls.Add(LoadImageButton);
             Controls.Add(ColorChangeCheckBox);
             Controls.Add(TransparencyCheckBox);
@@ -336,6 +348,7 @@
             ((System.ComponentModel.ISupportInitialize)ViewingAreaDrawingBox).EndInit();
             ColorAreaBackgroundPanel.ResumeLayout(false);
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -365,5 +378,6 @@
         private CheckBox ColorChangeCheckBox;
         private Button LoadImageButton;
         private OpenFileDialog FileLoadDialog;
+        private CheckBox ResizeOnLoadCheckBox;
     }
 }
