@@ -431,6 +431,15 @@ namespace PixelArtEditor
                 Y = location.Y
             };
 
+            if (selectionEnd.X >= ViewingAreaDrawingBox.Width)
+            {
+                selectionEnd.X = ViewingAreaDrawingBox.Width - 1;
+            }
+            if (selectionEnd.Y >= ViewingAreaDrawingBox.Height)
+            {
+                selectionEnd.Y = ViewingAreaDrawingBox.Height - 1;
+            }
+
             if (selectionEnd.X < selectionStart.X)
             {
                 selectedArea.X = selectionEnd.X - selectionEnd.X % zoom;
