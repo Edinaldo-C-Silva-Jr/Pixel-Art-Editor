@@ -137,7 +137,7 @@ namespace PixelArtEditor
 
             // Creates the image
             originalImage = new Bitmap(width * zoom, height * zoom);
-            Graphics imageFiller = Graphics.FromImage(originalImage);
+            using Graphics imageFiller = Graphics.FromImage(originalImage);
             imageFiller.Clear(backgroundColor);
 
             // Changes transparency
