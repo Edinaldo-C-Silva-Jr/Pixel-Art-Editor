@@ -115,6 +115,7 @@
             ViewingZoomNumberBox.Size = new Size(50, 23);
             ViewingZoomNumberBox.TabIndex = 5;
             ViewingZoomNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
+            ViewingZoomNumberBox.ValueChanged += ViewingZoomNumberBox_ValueChanged;
             // 
             // ViewingZoomLabel
             // 

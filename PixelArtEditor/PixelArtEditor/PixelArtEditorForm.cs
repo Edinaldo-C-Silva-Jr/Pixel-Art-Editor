@@ -1,5 +1,6 @@
 using PixelArtEditor.Controls;
 using PixelArtEditor.Grids;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
 namespace PixelArtEditor
@@ -440,6 +441,15 @@ namespace PixelArtEditor
                 selectionEnd.Y = ViewingAreaDrawingBox.Height - 1;
             }
 
+            if (selectionEnd.X < 0)
+            {
+                selectionEnd.X = 0;
+            }
+            if (selectionEnd.Y < 0)
+            {
+                selectionEnd.Y = 0;
+            }
+
             if (selectionEnd.X < selectionStart.X)
             {
                 selectedArea.X = selectionEnd.X - selectionEnd.X % zoom;
@@ -467,6 +477,28 @@ namespace PixelArtEditor
             selectedArea.Height = selectionEnd.Y - selectedArea.Y;
 
             ViewingAreaDrawingBox.Invalidate();
+        }
+
+        private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            (int width, int height, int zoom) = GetImageSizeValues();
+            IGridGenerator generator = DefineGridType();
+            Color gridColor = GridColorTable.GetCurrentColor();
+            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
+
+            Bitmap zoomedImage = new Bitmap(width * zoom, height * zoom);
+            Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
+            zoomGraphics.SmoothingMode = SmoothingMode.HighQuality;
+            zoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            zoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            zoomGraphics.DrawImage(originalImage, 0, 0, zoomedImage.Width, zoomedImage.Height);
+
+            originalImage = new(zoomedImage);
+
+            ViewingAreaDrawingBox.SetNewSize(zoomedImage.Width, zoomedImage.Height);
+            ViewingAreaDrawingBox.SetNewImage(generator, zoomedImage, zoom, gridColor, backgroundColor);
+
+            ReorganizeControls();
         }
     }
 }
