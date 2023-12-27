@@ -218,10 +218,14 @@
             // PaletteColorTable
             // 
             PaletteColorTable.BackColor = SystemColors.Control;
+            PaletteColorTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            PaletteColorTable.CellSize = 16;
+            PaletteColorTable.CellVisibleSelection = true;
             PaletteColorTable.ColumnCount = 1;
             PaletteColorTable.ColumnStyles.Add(new ColumnStyle());
             PaletteColorTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             PaletteColorTable.Location = new Point(1, 80);
+            PaletteColorTable.MaximumCellAmount = 64;
             PaletteColorTable.Name = "PaletteColorTable";
             PaletteColorTable.RowCount = 2;
             PaletteColorTable.RowStyles.Add(new RowStyle());
@@ -232,10 +236,14 @@
             // BackgroundColorTable
             // 
             BackgroundColorTable.BackColor = SystemColors.Control;
+            BackgroundColorTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            BackgroundColorTable.CellSize = 30;
+            BackgroundColorTable.CellVisibleSelection = false;
             BackgroundColorTable.ColumnCount = 1;
             BackgroundColorTable.ColumnStyles.Add(new ColumnStyle());
             BackgroundColorTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             BackgroundColorTable.Location = new Point(90, 40);
+            BackgroundColorTable.MaximumCellAmount = 1;
             BackgroundColorTable.Name = "BackgroundColorTable";
             BackgroundColorTable.RowCount = 1;
             BackgroundColorTable.RowStyles.Add(new RowStyle());
@@ -254,10 +262,14 @@
             // GridColorTable
             // 
             GridColorTable.BackColor = SystemColors.Control;
+            GridColorTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            GridColorTable.CellSize = 30;
+            GridColorTable.CellVisibleSelection = false;
             GridColorTable.ColumnCount = 1;
             GridColorTable.ColumnStyles.Add(new ColumnStyle());
             GridColorTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             GridColorTable.Location = new Point(30, 40);
+            GridColorTable.MaximumCellAmount = 1;
             GridColorTable.Name = "GridColorTable";
             GridColorTable.RowCount = 2;
             GridColorTable.RowStyles.Add(new RowStyle());

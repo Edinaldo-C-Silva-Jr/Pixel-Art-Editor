@@ -63,8 +63,8 @@ namespace PixelArtEditor
         private void InitializeControlValues()
         {
             // Generates the ColorTables for Grid Color and Background Color.
-            GridColorTable.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked!), Color.Gray, false);
-            BackgroundColorTable.GenerateColorGrid(1, 30, new EventHandler(ColorCellClicked!), Color.FromArgb(254, 254, 254), false);
+            GridColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked!), Color.Gray);
+            BackgroundColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked!), Color.FromArgb(254, 254, 254));
 
             // Defines the values for the GridType ComboBox based on the GridType Enum values.
             GridTypeComboBox.DataSource = Enum.GetValues(typeof(GridType));
@@ -83,7 +83,7 @@ namespace PixelArtEditor
         private void SetPaletteColorAmount()
         {
             int colorAmount = int.Parse(ColorAmountComboBox.SelectedItem.ToString()!);
-            PaletteColorTable.GenerateColorGrid(colorAmount, 16, new EventHandler(ColorCellClicked!));
+            PaletteColorTable.GenerateColorGrid(colorAmount, new EventHandler(ColorCellClicked!));
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace PixelArtEditor
 
                 if (colorpicked == DialogResult.OK)
                 {
-                    if (!(cell.DefaultColor) && ColorChangeCheckBox.Checked)
+                    if (!cell.DefaultColor && ColorChangeCheckBox.Checked)
                     {
                         SwapColorInImage(cell.BackColor, ColorPickerDialog.Color);
                     }
