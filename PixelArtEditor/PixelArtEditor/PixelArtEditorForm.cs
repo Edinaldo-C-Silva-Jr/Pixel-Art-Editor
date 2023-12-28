@@ -153,8 +153,8 @@ namespace PixelArtEditor
         private void ReorganizeControls()
         {
             this.SuspendLayout();
-            ViewingAreaBackgroundPanel.DefineNewSize(514, 514);
-            ColorAreaBackgroundPanel.DefineNewSize(300, 200);
+            ViewingAreaBackgroundPanel.ResizePanelToFitControls();
+            ColorAreaBackgroundPanel.ResizePanelToFitControls();
 
             ColorAreaBackgroundPanel.Location = new Point(ColorAreaBackgroundPanel.Location.X, ViewingAreaBackgroundPanel.Location.Y + ViewingAreaBackgroundPanel.Height + 10);
             this.ResumeLayout();
@@ -225,7 +225,7 @@ namespace PixelArtEditor
             ViewingAreaDrawingBox.Refresh();
         }
 
-        private void SetNewImageSizeButton_Click(object sender, EventArgs e)
+        private void SetNewImageButton_Click(object sender, EventArgs e)
         {
             SetNewImageAndViewingAreaSize();
             ReorganizeControls();
@@ -234,6 +234,10 @@ namespace PixelArtEditor
         private void CalculateMaximumZoom(int size)
         {
             int zoom = 4096 / size;
+            if (zoom > 64)
+            {
+                zoom = 64;
+            }
             ViewingZoomNumberBox.Maximum = zoom;
         }
 

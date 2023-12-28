@@ -36,7 +36,7 @@
             ViewingZoomLabel = new Label();
             GridTypeLabel = new Label();
             GridTypeComboBox = new ComboBox();
-            SetNewImageSizeButton = new Button();
+            SetNewImageButton = new Button();
             SaveImageButton = new Button();
             ColorPickerDialog = new ColorDialog();
             ViewingAreaBackgroundPanel = new Controls.BackgroundPanel();
@@ -147,15 +147,15 @@
             GridTypeComboBox.TabIndex = 7;
             GridTypeComboBox.SelectedIndexChanged += GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage;
             // 
-            // SetNewImageSizeButton
+            // SetNewImageButton
             // 
-            SetNewImageSizeButton.Location = new Point(15, 70);
-            SetNewImageSizeButton.Name = "SetNewImageSizeButton";
-            SetNewImageSizeButton.Size = new Size(90, 30);
-            SetNewImageSizeButton.TabIndex = 8;
-            SetNewImageSizeButton.Text = "Set New Size";
-            SetNewImageSizeButton.UseVisualStyleBackColor = true;
-            SetNewImageSizeButton.Click += SetNewImageSizeButton_Click;
+            SetNewImageButton.Location = new Point(15, 70);
+            SetNewImageButton.Name = "SetNewImageButton";
+            SetNewImageButton.Size = new Size(80, 30);
+            SetNewImageButton.TabIndex = 8;
+            SetNewImageButton.Text = "New Image";
+            SetNewImageButton.UseVisualStyleBackColor = true;
+            SetNewImageButton.Click += SetNewImageButton_Click;
             // 
             // SaveImageButton
             // 
@@ -174,6 +174,8 @@
             ViewingAreaBackgroundPanel.BackColor = Color.Black;
             ViewingAreaBackgroundPanel.Controls.Add(ViewingAreaDrawingBox);
             ViewingAreaBackgroundPanel.Location = new Point(10, 120);
+            ViewingAreaBackgroundPanel.MaximumHeight = 514;
+            ViewingAreaBackgroundPanel.MaximumWidth = 514;
             ViewingAreaBackgroundPanel.Name = "ViewingAreaBackgroundPanel";
             ViewingAreaBackgroundPanel.Size = new Size(40, 40);
             ViewingAreaBackgroundPanel.TabIndex = 10;
@@ -202,6 +204,8 @@
             ColorAreaBackgroundPanel.Controls.Add(GridColorLabel);
             ColorAreaBackgroundPanel.Controls.Add(ColorAmountLabel);
             ColorAreaBackgroundPanel.Location = new Point(10, 170);
+            ColorAreaBackgroundPanel.MaximumHeight = 200;
+            ColorAreaBackgroundPanel.MaximumWidth = 300;
             ColorAreaBackgroundPanel.Name = "ColorAreaBackgroundPanel";
             ColorAreaBackgroundPanel.Size = new Size(120, 120);
             ColorAreaBackgroundPanel.TabIndex = 11;
@@ -392,7 +396,7 @@
             Controls.Add(ColorAreaBackgroundPanel);
             Controls.Add(ViewingAreaBackgroundPanel);
             Controls.Add(SaveImageButton);
-            Controls.Add(SetNewImageSizeButton);
+            Controls.Add(SetNewImageButton);
             Controls.Add(GridTypeComboBox);
             Controls.Add(GridTypeLabel);
             Controls.Add(ViewingZoomNumberBox);
@@ -424,7 +428,7 @@
         private Label ViewingZoomLabel;
         private Label GridTypeLabel;
         private ComboBox GridTypeComboBox;
-        private Button SetNewImageSizeButton;
+        private Button SetNewImageButton;
         private Button SaveImageButton;
         private ColorDialog ColorPickerDialog;
         private Controls.BackgroundPanel ViewingAreaBackgroundPanel;

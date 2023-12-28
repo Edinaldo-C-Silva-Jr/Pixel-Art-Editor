@@ -1,55 +1,92 @@
 ﻿namespace PixelArtEditor.Controls
 {
+    /// <summary>
+    /// A panel control that is used as a background for other controls.
+    /// It has curstom resize methods to adapt to the controls inside of it.
+    /// </summary>
     public partial class BackgroundPanel : Panel
     {
+        /// <summary>
+        /// The maximum allowed width this control can have. 
+        /// Once it reaches this maximum size, growing any further will enable scroll bars.
+        /// </summary>
+        public int MaximumWidth { get; set; }
+
+        /// <summary>
+        /// The maximum allowed height this control can have. 
+        /// Once it reaches this maximum size, growing any further will enable scroll bars.
+        /// </summary>
+        public int MaximumHeight { get; set; }
+
         public BackgroundPanel()
         {
             InitializeComponent();
         }
 
-        public void DefineNewSize(int maxWidth, int maxHeight)
+        /// <summary>
+        /// Resizes the panel in order to fit all controls inside it. Then compares that size to the maximum allowed size. 
+        /// If the new size is bigger than the allowed size, reduces the control and enables scroll bars.
+        /// </summary>
+        public void ResizePanelToFitControls()
         {
-            this.SuspendLayout();
+            SuspendLayout();
+
             CheckChildControlSize();
-            CheckMaximumSize(maxWidth, maxHeight);
-            this.ResumeLayout();
+            CheckMaximumAllowedSize();
+
+            ResumeLayout();
         }
 
+        /// <summary>
+        /// Checks the size of all controls inside the panel and changes its width and height to fit all of them.
+        /// </summary>
         private void CheckChildControlSize()
         {
-            int highestWidth = 0, highestHeight = 0;
+            int highestChildWidth = 0, highestChildHeight = 0;
             int totalChildControlWidth, totalChildControlHeight;
 
-            foreach (Control c in this.Controls)
+            foreach (Control child in Controls)
             {
-                totalChildControlWidth = c.Location.X + c.Width;
-                if (totalChildControlWidth > highestWidth)
+                // The "Total Width" represents the size the panel needs to be to contain the child control.
+                // This takes in consideration the child control's position and its width.
+                totalChildControlWidth = child.Location.X + child.Width;
+                if (totalChildControlWidth > highestChildWidth)
                 {
-                    highestWidth = totalChildControlWidth;
+                    highestChildWidth = totalChildControlWidth;
                 }
 
-                totalChildControlHeight = c.Location.Y + c.Height;
-                if (totalChildControlHeight > highestHeight)
+                totalChildControlHeight = child.Location.Y + child.Height;
+                if (totalChildControlHeight > highestChildHeight)
                 {
-                    highestHeight = totalChildControlHeight;
+                    highestChildHeight = totalChildControlHeight;
                 }
             }
 
-            this.Width = highestWidth + 1;
-            this.Height = highestHeight + 1;
+            // Makes the panel 1 pixel bigger than the size needed to contain all controls inside it.
+            Width = highestChildWidth + 1;
+            Height = highestChildHeight + 1;
         }
 
-        public void CheckMaximumSize(int maxWidth, int maxHeight)
+        /// <summary>
+        /// Checks the maximum size of the control after being resized.
+        /// If the new size is bigger than the maximum size, it gets reduced so the scroll bars are enabled.
+        /// </summary>
+        public void CheckMaximumAllowedSize()
         {
-            if (this.Width > maxWidth)
+            // The rectangle that represents the display area of the control.
+            // This is used to get the control's size regardless of the position of the scroll bars.
+            Rectangle controlSize = DisplayRectangle;
+
+            // If the current width is bigger than the maximum allowed size...
+            if (controlSize.Width > MaximumWidth)
             {
-                this.Width = maxWidth;
-                this.Height += SystemInformation.VerticalScrollBarWidth;
+                Width = MaximumWidth; // Reduce the width, which will cause scroll bars to appear...
+                Height += SystemInformation.VerticalScrollBarWidth; // And increase the height to compensate for the scroll bars being inside the control.
             }
-            if (this.Height > maxHeight)
+            if (controlSize.Height > MaximumHeight)
             {
-                this.Height = maxHeight;
-                this.Width += SystemInformation.HorizontalScrollBarHeight;
+                Height = MaximumHeight;
+                Width += SystemInformation.HorizontalScrollBarHeight;
             }
         }
     }
