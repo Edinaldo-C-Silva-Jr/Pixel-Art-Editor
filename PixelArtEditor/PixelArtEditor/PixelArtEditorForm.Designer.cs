@@ -56,6 +56,8 @@
             ResizeOnLoadCheckBox = new CheckBox();
             CopyButton = new Button();
             PasteButton = new Button();
+            LoadPaletteButton = new Button();
+            SavePaletteButton = new Button();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
@@ -352,6 +354,26 @@
             PasteButton.UseVisualStyleBackColor = true;
             PasteButton.Click += PasteButton_Click;
             // 
+            // LoadPaletteButton
+            // 
+            LoadPaletteButton.Location = new Point(506, 70);
+            LoadPaletteButton.Name = "LoadPaletteButton";
+            LoadPaletteButton.Size = new Size(80, 30);
+            LoadPaletteButton.TabIndex = 19;
+            LoadPaletteButton.Text = "Load Palette";
+            LoadPaletteButton.UseVisualStyleBackColor = true;
+            LoadPaletteButton.Click += LoadPaletteButton_Click;
+            // 
+            // SavePaletteButton
+            // 
+            SavePaletteButton.Location = new Point(416, 70);
+            SavePaletteButton.Name = "SavePaletteButton";
+            SavePaletteButton.Size = new Size(80, 30);
+            SavePaletteButton.TabIndex = 18;
+            SavePaletteButton.Text = "Save Palette";
+            SavePaletteButton.UseVisualStyleBackColor = true;
+            SavePaletteButton.Click += SavePaletteButton_Click;
+            // 
             // PixelArtEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -359,6 +381,8 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(800, 450);
+            Controls.Add(LoadPaletteButton);
+            Controls.Add(SavePaletteButton);
             Controls.Add(PasteButton);
             Controls.Add(CopyButton);
             Controls.Add(ResizeOnLoadCheckBox);
@@ -420,5 +444,7 @@
         private CheckBox ResizeOnLoadCheckBox;
         private Button CopyButton;
         private Button PasteButton;
+        private Button LoadPaletteButton;
+        private Button SavePaletteButton;
     }
 }

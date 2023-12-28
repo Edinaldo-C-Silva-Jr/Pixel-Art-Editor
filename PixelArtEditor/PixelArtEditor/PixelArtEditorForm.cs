@@ -500,5 +500,38 @@ namespace PixelArtEditor
 
             ReorganizeControls();
         }
+
+        private void SavePaletteButton_Click(object sender, EventArgs e)
+        {
+            string directory = "C:\\Users\\" + Environment.UserName + "\\Documents\\PixelEditor\\SavedPalettes\\";
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            string filename = directory + "Palette_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".txt";
+            string paletteValues = PaletteColorTable.GetAllColorValues();
+            File.WriteAllText(filename, paletteValues);
+        }
+
+        private void LoadPaletteButton_Click(object sender, EventArgs e)
+        {
+            string directory = "C:\\Users\\" + Environment.UserName + "\\Documents\\PixelEditor\\SavedPalettes\\";
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            FileLoadDialog.InitialDirectory = directory;
+            DialogResult result = FileLoadDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                string paletteValues = File.ReadAllText(FileLoadDialog.FileName);
+                PaletteColorTable.SetAllColorValues(paletteValues);
+            }
+        }
     }
 }

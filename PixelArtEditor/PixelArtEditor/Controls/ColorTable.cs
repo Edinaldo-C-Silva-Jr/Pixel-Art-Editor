@@ -205,5 +205,30 @@
         {
             return GetControlFromPosition(CurrentCellColumn, CurrentCellRow).BackColor;
         }
+
+        public string GetAllColorValues()
+        {
+            string paletteColors = String.Empty;
+
+            for (int i = 0; i < MaximumCellAmount; i++)
+            {
+                paletteColors += $"{CellList[i].BackColor.ToArgb()}|";
+            }
+
+            return paletteColors;
+        }
+
+        public void SetAllColorValues(string paletteColors)
+        {
+            string[] colorValues = paletteColors.Split('|');
+
+            for (int i = 0; i < MaximumCellAmount; i++)
+            {
+                if (int.TryParse(colorValues[i], out int colorARGB))
+                {
+                    CellList[i].BackColor = Color.FromArgb(colorARGB);
+                }
+            }
+        }
     }
 }
