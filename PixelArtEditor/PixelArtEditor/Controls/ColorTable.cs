@@ -206,6 +206,10 @@
             return GetControlFromPosition(CurrentCellColumn, CurrentCellRow).BackColor;
         }
 
+        /// <summary>
+        /// Compiles the ARGB values of the color of all cells in the Color Table into a string, separating the values with a |.
+        /// </summary>
+        /// <returns>A string containing the ARGB value of each cell color, separated by a |.</returns>
         public string GetAllColorValues()
         {
             string paletteColors = String.Empty;
@@ -218,15 +222,20 @@
             return paletteColors;
         }
 
+        /// <summary>
+        /// Reads ARGB values out of a string and applies them into each cell within the Color Table. The ARBG values should be separated by a |.
+        /// </summary>
+        /// <param name="paletteColors">The string containing a list of ARGB values, separated by a |.</param>
         public void SetAllColorValues(string paletteColors)
         {
             string[] colorValues = paletteColors.Split('|');
 
-            for (int i = 0; i < MaximumCellAmount; i++)
+            for (int i = 0; i < colorValues.Length; i++)
             {
-                if (int.TryParse(colorValues[i], out int colorARGB))
+                // Checks if the ARGB values are in a valid format, and if the amount of values doesn't exceed the table's cells.
+                if (int.TryParse(colorValues[i], out int colorARGB) && i < MaximumCellAmount)
                 {
-                    CellList[i].BackColor = Color.FromArgb(colorARGB);
+                    CellList[i].BackColor = Color.FromArgb(colorARGB); 
                 }
             }
         }
