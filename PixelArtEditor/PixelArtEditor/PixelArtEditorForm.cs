@@ -486,18 +486,19 @@ namespace PixelArtEditor
         private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
         {
             (int width, int height, int zoom) = GetImageSizeValues();
-            IGridGenerator generator = DefineGridType();
-            Color gridColor = GridColorTable.GetCurrentColor();
-            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
-
+            
             Bitmap zoomedImage = new Bitmap(width * zoom, height * zoom);
             Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
             zoomGraphics.SmoothingMode = SmoothingMode.HighQuality;
             zoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             zoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
             zoomGraphics.DrawImage(originalImage, 0, 0, zoomedImage.Width, zoomedImage.Height);
-
+            
             originalImage = new(zoomedImage);
+
+            IGridGenerator generator = DefineGridType();
+            Color gridColor = GridColorTable.GetCurrentColor();
+            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
 
             ViewingAreaDrawingBox.SetNewSize(zoomedImage.Width, zoomedImage.Height);
             ViewingAreaDrawingBox.SetNewImage(generator, zoomedImage, zoom, gridColor, backgroundColor);
