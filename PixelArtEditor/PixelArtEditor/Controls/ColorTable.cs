@@ -235,7 +235,9 @@
                 // Checks if the ARGB values are in a valid format, and if the amount of values doesn't exceed the table's cells.
                 if (int.TryParse(colorValues[i], out int colorARGB) && i < MaximumCellAmount)
                 {
-                    CellList[i].BackColor = Color.FromArgb(colorARGB); 
+                    Color colorToInsert = Color.FromArgb(colorARGB);
+                    colorToInsert = Color.FromArgb(255, colorToInsert); // Makes sure the color is fully opaque.
+                    CellList[i].BackColor = colorToInsert; 
                 }
             }
         }
