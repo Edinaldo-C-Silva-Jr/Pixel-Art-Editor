@@ -42,10 +42,12 @@
 
             // Generates the single pixel grid pieces.
             CheckerGridWhitePixel = new Bitmap(cellSize, cellSize);
+            using Graphics gridPixelBuilderWhite = Graphics.FromImage(CheckerGridWhitePixel);
+            gridPixelBuilderWhite.Clear(Color.White);
 
             CheckerGridColorPixel = new Bitmap(cellSize, cellSize);
-            using Graphics gridPixelBuilder = Graphics.FromImage(CheckerGridColorPixel);
-            gridPixelBuilder.Clear(gridColor);
+            using Graphics gridPixelBuilderColor = Graphics.FromImage(CheckerGridColorPixel);
+            gridPixelBuilderColor.Clear(gridColor);
         }
 
         /// <summary>
@@ -94,16 +96,17 @@
                 return;
             }
 
+            // TODO: Don't apply the grid when drawing.
             using Graphics gridPixelMerger = Graphics.FromImage(imageWithGrid);
 
-            int positionParity = (xPosition % 2 + yPosition % 2) % 2; // Gets the parity to know whether this is a colored or white pixel on the grid.
+            int positionParity = (xPosition / CheckerGridWhitePixel.Width % 2 + yPosition / CheckerGridWhitePixel.Height % 2) % 2; // Gets the parity to know whether this is a colored or white pixel on the grid.
             if (Convert.ToBoolean(positionParity))
             {
-                gridPixelMerger.DrawImage(CheckerGridColorPixel, xPosition, yPosition);
+                gridPixelMerger.DrawImage(CheckerGridWhitePixel, xPosition, yPosition);
             }
             else
             {
-                gridPixelMerger.DrawImage(CheckerGridWhitePixel, xPosition, yPosition);
+                gridPixelMerger.DrawImage(CheckerGridColorPixel, xPosition, yPosition);
             }
         }
     }
