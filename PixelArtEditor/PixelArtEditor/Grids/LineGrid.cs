@@ -5,6 +5,8 @@
     /// </summary>
     internal class LineGrid : IGridGenerator
     {
+        public bool BackgroundGrid { get; } = false;
+
         /// <summary>
         /// A piece of a line based grid. It is used to fill the entire image with the grid.
         /// </summary>

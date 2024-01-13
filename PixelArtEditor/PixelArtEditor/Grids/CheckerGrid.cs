@@ -5,6 +5,8 @@
     /// </summary>
     internal class CheckerGrid : IGridGenerator
     {
+        public bool BackgroundGrid { get; } = true;
+
         /// <summary>
         /// A piece of a checkered grid. It is used to fill the entire image with the grid.
         /// </summary>
@@ -96,7 +98,6 @@
                 return;
             }
 
-            // TODO: Don't apply the grid when drawing.
             using Graphics gridPixelMerger = Graphics.FromImage(imageWithGrid);
 
             int positionParity = (xPosition / CheckerGridWhitePixel.Width % 2 + yPosition / CheckerGridWhitePixel.Height % 2) % 2; // Gets the parity to know whether this is a colored or white pixel on the grid.

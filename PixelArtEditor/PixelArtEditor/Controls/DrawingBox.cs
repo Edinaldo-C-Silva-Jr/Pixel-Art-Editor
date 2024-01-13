@@ -66,7 +66,10 @@ namespace PixelArtEditor.Controls
             pixelDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
             gridDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
 
-            gridGenerator.ApplyGridSinglePixel(imageWithGrid, xPos, yPos);
+            if (!gridGenerator.BackgroundGrid)
+            {
+                gridGenerator.ApplyGridSinglePixel(imageWithGrid, xPos, yPos);
+            }
 
             this.Image = imageWithGrid;
         }

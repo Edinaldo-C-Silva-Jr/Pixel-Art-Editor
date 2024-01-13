@@ -5,6 +5,8 @@
     /// </summary>
     internal class NoGrid : IGridGenerator
     {
+        public bool BackgroundGrid { get; } = false;
+
         /// <summary>
         /// Does nothing, since the Grid type is set to None.
         /// </summary>

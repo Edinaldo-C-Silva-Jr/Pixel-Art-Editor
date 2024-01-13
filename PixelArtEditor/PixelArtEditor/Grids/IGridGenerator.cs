@@ -6,6 +6,11 @@
     public interface IGridGenerator
     {
         /// <summary>
+        /// A property that identifies if the grid is a background type grid (A grid that is applied behind the image, rather than in front of it).
+        /// </summary>
+        public bool BackgroundGrid { get; }
+
+        /// <summary>
         /// Generates a grid, saving it into a property, so it can be applied to an image with the ApplyGridFullImage method.
         /// Also generates a single pixel of the grid, which can be applied with ApplyGridSinglePixel method.
         /// </summary>
