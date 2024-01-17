@@ -91,7 +91,7 @@
             int columns = DefineColumns(colorAmount);
 
             // Checkes if the currently selected cell will be outside the bounds of the new color table.
-            if (colorAmount < CurrentCellRow * 16 + CurrentCellColumn)
+            if (colorAmount <= CurrentCellRow * 16 + CurrentCellColumn)
             {
                 RectangleCell? oldCell = GetControlFromPosition(CurrentCellColumn, CurrentCellRow) as RectangleCell;
                 oldCell!.DeselectCell();
