@@ -523,9 +523,19 @@ namespace PixelArtEditor
                 Directory.CreateDirectory(directory);
             }
 
-            string filename = directory + "Palette_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".txt";
-            string paletteValues = PaletteColorTable.GetAllColorValues();
-            File.WriteAllText(filename, paletteValues);
+            DialogForSavingFiles.InitialDirectory = directory;
+            DialogForSavingFiles.FileName = "Palette_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".txt";
+            DialogForSavingFiles.Filter = "Text file|*.txt";
+            DialogForSavingFiles.DefaultExt = "txt";
+            DialogForSavingFiles.AddExtension = true;
+            DialogResult result = DialogForSavingFiles.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                string nameOfFile = DialogForSavingFiles.FileName;
+                string paletteValues = PaletteColorTable.GetAllColorValues();
+                File.WriteAllText(nameOfFile, paletteValues);
+            }
         }
 
         private void LoadPaletteButton_Click(object sender, EventArgs e)
