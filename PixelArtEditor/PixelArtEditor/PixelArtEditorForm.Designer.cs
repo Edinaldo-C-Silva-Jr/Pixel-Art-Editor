@@ -52,12 +52,13 @@
             TransparencyCheckBox = new CheckBox();
             ColorChangeCheckBox = new CheckBox();
             LoadImageButton = new Button();
-            FileLoadDialog = new OpenFileDialog();
+            DialogForLoadingFiles = new OpenFileDialog();
             ResizeOnLoadCheckBox = new CheckBox();
             CopyButton = new Button();
             PasteButton = new Button();
             LoadPaletteButton = new Button();
             SavePaletteButton = new Button();
+            DialogForSavingFiles = new SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
@@ -444,11 +445,12 @@
         private CheckBox TransparencyCheckBox;
         private CheckBox ColorChangeCheckBox;
         private Button LoadImageButton;
-        private OpenFileDialog FileLoadDialog;
+        private OpenFileDialog DialogForLoadingFiles;
         private CheckBox ResizeOnLoadCheckBox;
         private Button CopyButton;
         private Button PasteButton;
         private Button LoadPaletteButton;
         private Button SavePaletteButton;
+        private SaveFileDialog DialogForSavingFiles;
     }
 }

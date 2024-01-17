@@ -283,9 +283,18 @@ namespace PixelArtEditor
                 Directory.CreateDirectory(directory);
             }
 
-            string filename = directory + "PixelImage_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".png";
+            DialogForSavingFiles.InitialDirectory = directory;
+            DialogForSavingFiles.FileName = "PixelImage_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".png";
+            DialogForSavingFiles.Filter = "PNG Image|*.png";
+            DialogForSavingFiles.DefaultExt = "png";
+            DialogForSavingFiles.AddExtension = true;
+            DialogResult result = DialogForSavingFiles.ShowDialog();
 
-            originalImage.Save(filename, ImageFormat.Png);
+            if (result == DialogResult.OK)
+            {
+                string nameOfFile = DialogForSavingFiles.FileName;
+                originalImage.Save(nameOfFile, ImageFormat.Png);
+            }
         }
 
         private void TransparencyCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -355,13 +364,12 @@ namespace PixelArtEditor
                 Directory.CreateDirectory(directory);
             }
 
-            FileLoadDialog.InitialDirectory = directory;
-
-            DialogResult result = FileLoadDialog.ShowDialog();
+            DialogForLoadingFiles.InitialDirectory = directory;
+            DialogResult result = DialogForLoadingFiles.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                originalImage = new(FileLoadDialog.FileName);
+                originalImage = new(DialogForLoadingFiles.FileName);
                 int zoom = (int)ViewingZoomNumberBox.Value;
 
                 if (ResizeOnLoadCheckBox.Checked)
@@ -486,14 +494,14 @@ namespace PixelArtEditor
         private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
         {
             (int width, int height, int zoom) = GetImageSizeValues();
-            
+
             Bitmap zoomedImage = new Bitmap(width * zoom, height * zoom);
             Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
             zoomGraphics.SmoothingMode = SmoothingMode.HighQuality;
             zoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             zoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
             zoomGraphics.DrawImage(originalImage, 0, 0, zoomedImage.Width, zoomedImage.Height);
-            
+
             originalImage = new(zoomedImage);
 
             IGridGenerator generator = DefineGridType();
@@ -529,12 +537,12 @@ namespace PixelArtEditor
                 Directory.CreateDirectory(directory);
             }
 
-            FileLoadDialog.InitialDirectory = directory;
-            DialogResult result = FileLoadDialog.ShowDialog();
+            DialogForLoadingFiles.InitialDirectory = directory;
+            DialogResult result = DialogForLoadingFiles.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                string paletteValues = File.ReadAllText(FileLoadDialog.FileName);
+                string paletteValues = File.ReadAllText(DialogForLoadingFiles.FileName);
                 PaletteColorTable.SetAllColorValues(paletteValues);
             }
         }
