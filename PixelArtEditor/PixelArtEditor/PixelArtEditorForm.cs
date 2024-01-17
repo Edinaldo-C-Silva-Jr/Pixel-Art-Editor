@@ -274,20 +274,26 @@ namespace PixelArtEditor
             }
         }
 
-        private void SaveImageButton_Click(object sender, EventArgs e)
+        private string DefineFileDirectory(string directoryName)
         {
-            string directory = "C:\\Users\\" + Environment.UserName + "\\Documents\\PixelEditor\\SavedImages\\";
-
+            string directory = "C:\\Users\\" + Environment.UserName + "\\Documents\\PixelEditor\\" + directoryName + "\\";
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
+            return directory;
+        }
+
+        private void SaveImageButton_Click(object sender, EventArgs e)
+        {
+            string directory = DefineFileDirectory("SavedImages");
 
             DialogForSavingFiles.InitialDirectory = directory;
             DialogForSavingFiles.FileName = "PixelImage_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".png";
             DialogForSavingFiles.Filter = "PNG Image|*.png";
             DialogForSavingFiles.DefaultExt = "png";
             DialogForSavingFiles.AddExtension = true;
+            DialogForSavingFiles.Title = "Save the current image";
             DialogResult result = DialogForSavingFiles.ShowDialog();
 
             if (result == DialogResult.OK)
@@ -357,14 +363,10 @@ namespace PixelArtEditor
 
         private void LoadImageButton_Click(object sender, EventArgs e)
         {
-            string directory = "C:\\Users\\" + Environment.UserName + "\\Documents\\PixelEditor\\SavedImages\\";
-
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
+            string directory = DefineFileDirectory("SavedImages");
 
             DialogForLoadingFiles.InitialDirectory = directory;
+            DialogForLoadingFiles.Title = "Load an image into the editor";
             DialogResult result = DialogForLoadingFiles.ShowDialog();
 
             if (result == DialogResult.OK)
@@ -516,18 +518,14 @@ namespace PixelArtEditor
 
         private void SavePaletteButton_Click(object sender, EventArgs e)
         {
-            string directory = "C:\\Users\\" + Environment.UserName + "\\Documents\\PixelEditor\\SavedPalettes\\";
-
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
+            string directory = DefineFileDirectory("SavedPalettes");
 
             DialogForSavingFiles.InitialDirectory = directory;
             DialogForSavingFiles.FileName = "Palette_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".txt";
             DialogForSavingFiles.Filter = "Text file|*.txt";
             DialogForSavingFiles.DefaultExt = "txt";
             DialogForSavingFiles.AddExtension = true;
+            DialogForSavingFiles.Title = "Save the current color palette";
             DialogResult result = DialogForSavingFiles.ShowDialog();
 
             if (result == DialogResult.OK)
@@ -540,14 +538,10 @@ namespace PixelArtEditor
 
         private void LoadPaletteButton_Click(object sender, EventArgs e)
         {
-            string directory = "C:\\Users\\" + Environment.UserName + "\\Documents\\PixelEditor\\SavedPalettes\\";
-
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
+            string directory = DefineFileDirectory("SavedPalettes");
 
             DialogForLoadingFiles.InitialDirectory = directory;
+            DialogForLoadingFiles.Title = "Load a color palette";
             DialogResult result = DialogForLoadingFiles.ShowDialog();
 
             if (result == DialogResult.OK)
