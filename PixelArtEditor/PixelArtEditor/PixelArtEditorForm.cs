@@ -11,7 +11,7 @@ namespace PixelArtEditor
         // The original image that is being drawn on in the editor
         private Bitmap originalImage = new(1, 1);
 
-        private FileSaveLoadHandler FileSaverLoader = new(); 
+        private FileSaveLoadHandler FileSaverLoader = new();
 
         private Bitmap clipboardImage = new(1, 1);
         private Point selectionStart = new();
@@ -277,16 +277,6 @@ namespace PixelArtEditor
             }
         }
 
-        private string DefineFileDirectory(string directoryName)
-        {
-            string directory = "C:\\Users\\" + Environment.UserName + "\\Documents\\PixelEditor\\" + directoryName + "\\";
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-            return directory;
-        }
-
         private void SaveImageButton_Click(object sender, EventArgs e)
         {
             FileSaverLoader.SaveImage(originalImage);
@@ -352,16 +342,14 @@ namespace PixelArtEditor
 
         private void LoadImageButton_Click(object sender, EventArgs e)
         {
-            string directory = DefineFileDirectory("SavedImages");
-
-            DialogForLoadingFiles.InitialDirectory = directory;
-            DialogForLoadingFiles.Title = "Load an image into the editor";
-            DialogResult result = DialogForLoadingFiles.ShowDialog();
-
-            if (result == DialogResult.OK)
             {
-                originalImage = new(DialogForLoadingFiles.FileName);
-                int zoom = (int)ViewingZoomNumberBox.Value;
+                using Bitmap imageLoaded = FileSaverLoader.LoadImage();
+                if (imageLoaded != null)
+                {
+                    originalImage = new(imageLoaded);
+                }
+
+                (_, _, int zoom) = GetImageSizeValues();
 
                 if (ResizeOnLoadCheckBox.Checked)
                 {
@@ -513,15 +501,10 @@ namespace PixelArtEditor
 
         private void LoadPaletteButton_Click(object sender, EventArgs e)
         {
-            string directory = DefineFileDirectory("SavedPalettes");
+            string paletteValues = FileSaverLoader.LoadPalette();
 
-            DialogForLoadingFiles.InitialDirectory = directory;
-            DialogForLoadingFiles.Title = "Load a color palette";
-            DialogResult result = DialogForLoadingFiles.ShowDialog();
-
-            if (result == DialogResult.OK)
+            if (!String.IsNullOrEmpty(paletteValues))
             {
-                string paletteValues = File.ReadAllText(DialogForLoadingFiles.FileName);
                 PaletteColorTable.SetAllColorValues(paletteValues);
             }
         }
