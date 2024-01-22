@@ -1,4 +1,5 @@
 using PixelArtEditor.Controls;
+using PixelArtEditor.Files;
 using PixelArtEditor.Grids;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -9,6 +10,8 @@ namespace PixelArtEditor
     {
         // The original image that is being drawn on in the editor
         private Bitmap originalImage = new(1, 1);
+
+        private FileSaveLoadHandler FileSaverLoader = new(); 
 
         private Bitmap clipboardImage = new(1, 1);
         private Point selectionStart = new();
@@ -286,21 +289,7 @@ namespace PixelArtEditor
 
         private void SaveImageButton_Click(object sender, EventArgs e)
         {
-            string directory = DefineFileDirectory("SavedImages");
-
-            DialogForSavingFiles.InitialDirectory = directory;
-            DialogForSavingFiles.FileName = "PixelImage_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".png";
-            DialogForSavingFiles.Filter = "PNG Image|*.png";
-            DialogForSavingFiles.DefaultExt = "png";
-            DialogForSavingFiles.AddExtension = true;
-            DialogForSavingFiles.Title = "Save the current image";
-            DialogResult result = DialogForSavingFiles.ShowDialog();
-
-            if (result == DialogResult.OK)
-            {
-                string nameOfFile = DialogForSavingFiles.FileName;
-                originalImage.Save(nameOfFile, ImageFormat.Png);
-            }
+            FileSaverLoader.SaveImage(originalImage);
         }
 
         private void TransparencyCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -518,22 +507,8 @@ namespace PixelArtEditor
 
         private void SavePaletteButton_Click(object sender, EventArgs e)
         {
-            string directory = DefineFileDirectory("SavedPalettes");
-
-            DialogForSavingFiles.InitialDirectory = directory;
-            DialogForSavingFiles.FileName = "Palette_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".txt";
-            DialogForSavingFiles.Filter = "Text file|*.txt";
-            DialogForSavingFiles.DefaultExt = "txt";
-            DialogForSavingFiles.AddExtension = true;
-            DialogForSavingFiles.Title = "Save the current color palette";
-            DialogResult result = DialogForSavingFiles.ShowDialog();
-
-            if (result == DialogResult.OK)
-            {
-                string nameOfFile = DialogForSavingFiles.FileName;
-                string paletteValues = PaletteColorTable.GetAllColorValues();
-                File.WriteAllText(nameOfFile, paletteValues);
-            }
+            string paletteValues = PaletteColorTable.GetAllColorValues();
+            FileSaverLoader.SavePalette(paletteValues);
         }
 
         private void LoadPaletteButton_Click(object sender, EventArgs e)
