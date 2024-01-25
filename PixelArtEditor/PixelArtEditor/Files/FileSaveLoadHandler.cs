@@ -1,19 +1,39 @@
-﻿using PixelArtEditor.Grids;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Files
 {
+    /// <summary>
+    /// A class that handles the saving and loading of files in the application, by using a SaveFileDialog and an OpenFileDialog.
+    /// </summary>
     internal class FileSaveLoadHandler
     {
-        private SaveFileDialog _saveFileDialog { get; set; }
-        private OpenFileDialog _openFileDialog { get; set; }
+        /// <summary>
+        /// The dialog used for saving the files, which can have its parameters set for the location, filename and extension of files that will be saved.
+        /// </summary>
+        private SaveFileDialog DialogForSavingFiles { get; set; }
 
+        /// <summary>
+        /// The dialog used for loading files, which can have its parameters set for the location and filename of the files that will be loaded.
+        /// </summary>
+        private OpenFileDialog DialogForOpeningFiles { get; set; }
+
+        /// <summary>
+        /// A constructor that instances the dialogs used in this class.
+        /// </summary>
         public FileSaveLoadHandler()
         {
-            _saveFileDialog = new SaveFileDialog();
-            _openFileDialog = new OpenFileDialog();
+            DialogForSavingFiles = new SaveFileDialog();
+            DialogForSavingFiles.AddExtension = true;
+
+            DialogForOpeningFiles = new OpenFileDialog();
         }
 
+        /// <summary>
+        /// A method to define the directory that will be used as the default location for each file type.
+        /// It receives a directory name, and either creates or selects it to be used as the default directory for this operation.
+        /// </summary>
+        /// <param name="directoryName">The name of the directory that will be created or used.</param>
+        /// <returns>The full name of the path to the directory chosen.</returns>
         private static string DefineFileDirectory(string directoryName)
         {
             string directory = "C:\\Users\\" + Environment.UserName + "\\Documents\\PixelEditor\\" + directoryName + "\\";
@@ -24,77 +44,91 @@ namespace PixelArtEditor.Files
             return directory;
         }
 
+        /// <summary>
+        /// A method to save an image file.
+        /// It sets the default directory for images saved by the program and the default filename and extension for the image.
+        /// </summary>
+        /// <param name="originalImage">The image to be saved as a file.</param>
         public void SaveImage(Bitmap originalImage)
         {
             string directory = DefineFileDirectory("SavedImages");
 
-            _saveFileDialog.InitialDirectory = directory;
-            _saveFileDialog.FileName = "PixelImage_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".png";
-            _saveFileDialog.Filter = "PNG Image|*.png";
-            _saveFileDialog.DefaultExt = "png";
-            _saveFileDialog.AddExtension = true;
-            _saveFileDialog.Title = "Save the current image";
-            DialogResult result = _saveFileDialog.ShowDialog();
+            DialogForSavingFiles.InitialDirectory = directory;
+            DialogForSavingFiles.FileName = "PixelImage_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".png";
+            DialogForSavingFiles.Filter = "PNG Image|*.png";
+            DialogForSavingFiles.DefaultExt = "png";
+            DialogForSavingFiles.Title = "Save the current image";
+            DialogResult result = DialogForSavingFiles.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                string nameOfFile = _saveFileDialog.FileName;
+                string nameOfFile = DialogForSavingFiles.FileName;
                 originalImage.Save(nameOfFile, ImageFormat.Png);
             }
         }
 
+        /// <summary>
+        /// A method to save a palette file, which is a file containing all the color values for a color palette on the application.
+        /// It sets the default directory for palettes saved by the program and the default filename and extension for the file.
+        /// </summary>
+        /// <param name="paletteValues">The string containing all color values for the palette to be saved.</param>
         public void SavePalette(string paletteValues)
         {
             string directory = DefineFileDirectory("SavedPalettes");
 
-            _saveFileDialog.InitialDirectory = directory;
-            _saveFileDialog.FileName = "Palette_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".txt";
-            _saveFileDialog.Filter = "Text file|*.txt";
-            _saveFileDialog.DefaultExt = "txt";
-            _saveFileDialog.AddExtension = true;
-            _saveFileDialog.Title = "Save the current color palette";
-            DialogResult result = _saveFileDialog.ShowDialog();
+            DialogForSavingFiles.InitialDirectory = directory;
+            DialogForSavingFiles.FileName = "Palette_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".txt";
+            DialogForSavingFiles.Filter = "Text file|*.txt";
+            DialogForSavingFiles.DefaultExt = "txt";
+            DialogForSavingFiles.Title = "Save the current color palette";
+            DialogResult result = DialogForSavingFiles.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                string nameOfFile = _saveFileDialog.FileName;
+                string nameOfFile = DialogForSavingFiles.FileName;
                 File.WriteAllText(nameOfFile, paletteValues);
             }
         }
 
-        public Bitmap LoadImage()
+        /// <summary>
+        /// A method to load an image file into the application. It requires a reference to a variable that will hold the loaded image.
+        /// It sets the default directory for images saved by the program in the OpenFileDialog.
+        /// </summary>
+        /// <param name="image">The image variable to assign the newly loaded image in case one is found.</param>
+        public void LoadImage(ref Bitmap image)
         {
             {
                 string directory = DefineFileDirectory("SavedImages");
 
-                _openFileDialog.InitialDirectory = directory;
-                _openFileDialog.Title = "Load an image into the editor";
-                DialogResult result = _openFileDialog.ShowDialog();
+                DialogForOpeningFiles.InitialDirectory = directory;
+                DialogForOpeningFiles.Title = "Load an image into the editor";
+                DialogResult result = DialogForOpeningFiles.ShowDialog();
 
-                Bitmap imageToOpen = null;
                 if (result == DialogResult.OK)
                 {
-                    imageToOpen = new(_openFileDialog.FileName);
+                    image = new(DialogForOpeningFiles.FileName);
                 }
-                return imageToOpen;
             }
         }
 
+        /// <summary>
+        /// A method to load a palette file into the application.
+        /// It sets the default directory for images saved by the program in the OpenFileDialog. 
+        /// </summary>
+        /// <returns>The string containing all colors values for the palette loaded, or an empty string, in case nothing was loaded.</returns>
         public string LoadPalette()
         {
             string directory = DefineFileDirectory("SavedPalettes");
-            string paletteValues = string.Empty;
 
-            _openFileDialog.InitialDirectory = directory;
-            _openFileDialog.Title = "Load a color palette";
-            DialogResult result = _openFileDialog.ShowDialog();
+            DialogForOpeningFiles.InitialDirectory = directory;
+            DialogForOpeningFiles.Title = "Load a color palette";
+            DialogResult result = DialogForOpeningFiles.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                paletteValues = File.ReadAllText(_openFileDialog.FileName);
+                return File.ReadAllText(DialogForOpeningFiles.FileName);
             }
-
-            return paletteValues;
+            return String.Empty;
         }
     }
 }

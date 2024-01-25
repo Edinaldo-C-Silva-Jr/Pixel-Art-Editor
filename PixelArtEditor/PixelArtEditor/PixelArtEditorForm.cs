@@ -343,11 +343,7 @@ namespace PixelArtEditor
         private void LoadImageButton_Click(object sender, EventArgs e)
         {
             {
-                using Bitmap imageLoaded = FileSaverLoader.LoadImage();
-                if (imageLoaded != null)
-                {
-                    originalImage = new(imageLoaded);
-                }
+                FileSaverLoader.LoadImage(ref originalImage);
 
                 (_, _, int zoom) = GetImageSizeValues();
 
@@ -502,11 +498,7 @@ namespace PixelArtEditor
         private void LoadPaletteButton_Click(object sender, EventArgs e)
         {
             string paletteValues = FileSaverLoader.LoadPalette();
-
-            if (!String.IsNullOrEmpty(paletteValues))
-            {
-                PaletteColorTable.SetAllColorValues(paletteValues);
-            }
+            PaletteColorTable.SetAllColorValues(paletteValues);
         }
     }
 }
