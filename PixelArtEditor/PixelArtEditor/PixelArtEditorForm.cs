@@ -11,7 +11,7 @@ namespace PixelArtEditor
         // The original image that is being drawn on in the editor
         private Bitmap originalImage = new(1, 1);
 
-        private FileSaveLoadHandler FileSaverLoader = new();
+        private FileSaveLoadHandler FileSaverLoader { get; } = new();
 
         private Bitmap clipboardImage = new(1, 1);
         private Point selectionStart = new();
