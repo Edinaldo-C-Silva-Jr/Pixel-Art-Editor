@@ -182,7 +182,9 @@ namespace PixelArtEditor
             if (mouseClick.Button == MouseButtons.Left)
             {
                 selectedArea = Rectangle.Empty;
-                ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, mouseClick.X, mouseClick.Y, (int)ViewingZoomNumberBox.Value, PaletteColorTable.GetCurrentColor(), (GridType)GridTypeComboBox.SelectedItem);
+                int zoom = (int)ViewingZoomNumberBox.Value;
+                Color paletteColor = PaletteColorTable.GetCurrentColor();
+                ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, mouseClick.X, mouseClick.Y, zoom, paletteColor);
                 ViewingAreaDrawingBox.Refresh();
             }
         }
@@ -227,7 +229,7 @@ namespace PixelArtEditor
                 {
                     if (oldColor.ToArgb() == image.GetPixel(x * zoom, y * zoom).ToArgb())
                     {
-                        ViewingAreaDrawingBox.DrawPixelByPosition(DefineGridType(), originalImage, x, y, zoom, newColor, gridType);
+                        ViewingAreaDrawingBox.DrawPixelByPosition(DefineGridType(), originalImage, x, y, zoom, newColor);
                     }
                 }
             }
@@ -276,7 +278,7 @@ namespace PixelArtEditor
                 selectedArea = Rectangle.Empty;
                 int zoom = (int)ViewingZoomNumberBox.Value;
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
-                ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, e.X, e.Y, zoom, paletteColor, (GridType)GridTypeComboBox.SelectedItem);
+                ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, e.X, e.Y, zoom, paletteColor);
                 ViewingAreaDrawingBox.Refresh();
             }
 
@@ -402,8 +404,9 @@ namespace PixelArtEditor
                 pasteGraphics.DrawImage(clipboardImage, new Point(selectedArea.X, selectedArea.Y));
 
                 IGridGenerator generator = DefineGridType();
+                int zoom = (int)ViewingZoomNumberBox.Value;
                 (Color gridColor, Color backgroundColor) = GetGridAndBackgroundColors();
-                ViewingAreaDrawingBox.SetNewImage(generator, originalImage, (int)ViewingZoomNumberBox.Value, gridColor, backgroundColor);
+                ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor, backgroundColor);
             }
         }
 
