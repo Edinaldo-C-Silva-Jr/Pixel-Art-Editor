@@ -91,11 +91,11 @@ namespace PixelArtEditor.Files
         }
 
         /// <summary>
-        /// A method to load an image file into the application. It requires a reference to a variable that will hold the loaded image.
+        /// A method to load an image file into the application.
         /// It sets the default directory for images saved by the program in the OpenFileDialog.
         /// </summary>
-        /// <param name="image">The image variable to assign the newly loaded image in case one is found.</param>
-        public void LoadImage(ref Bitmap image)
+        /// <returns>The Bitmap loaded from the file, or null, in case no image was loaded.</returns>
+        public Bitmap LoadImage()
         {
             {
                 string directory = DefineFileDirectory("SavedImages");
@@ -104,10 +104,12 @@ namespace PixelArtEditor.Files
                 DialogForOpeningFiles.Title = "Load an image into the editor";
                 DialogResult result = DialogForOpeningFiles.ShowDialog();
 
+                Bitmap? imageLoaded = null;
                 if (result == DialogResult.OK)
                 {
-                    image = new(DialogForOpeningFiles.FileName);
+                    imageLoaded = new(DialogForOpeningFiles.FileName);
                 }
+                return imageLoaded!;
             }
         }
 

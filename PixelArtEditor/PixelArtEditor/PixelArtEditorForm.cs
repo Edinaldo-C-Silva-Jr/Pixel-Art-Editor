@@ -334,30 +334,28 @@ namespace PixelArtEditor
 
         private void LoadImageButton_Click(object sender, EventArgs e)
         {
-            /*{
-                FileSaverLoader.LoadImage(ref originalImage);
+            {
+                using Bitmap imageLoaded = FileSaverLoader.LoadImage();
+                if (imageLoaded != null)
+                {
+                    bool resizeOnLoad = ResizeOnLoadCheckBox.Checked;
+                    int width = ViewingAreaDrawingBox.Width;
+                    int height = ViewingAreaDrawingBox.Height;
+                    ImageManager.DefineNewImage(imageLoaded, resizeOnLoad, width, height);
+
+                    if (resizeOnLoad)
+                    {
+                        ViewingAreaDrawingBox.SetNewSize(ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height);
+                    }
+                }
 
                 int zoom = (int)ViewingZoomNumberBox.Value;
-
-                if (ResizeOnLoadCheckBox.Checked)
-                {
-                    ViewingAreaDrawingBox.SetNewSize(originalImage.Width, originalImage.Height);
-                }
-                else
-                {
-                    using Bitmap newOriginalImage = new(ViewingAreaDrawingBox.Width, ViewingAreaDrawingBox.Height);
-                    using Graphics newImageGraphics = Graphics.FromImage(newOriginalImage);
-                    newImageGraphics.DrawImage(originalImage, 0, 0);
-
-                    originalImage = new(newOriginalImage);
-                }
-
                 IGridGenerator generator = DefineGridType();
                 (Color gridColor, Color backgroundColor) = GetGridAndBackgroundColors();
-                ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor, backgroundColor);
+                ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, zoom, gridColor, backgroundColor);
 
                 ReorganizeControls();
-            }*/
+            }
         }
 
         private void ViewingAreaDrawingBox_MouseDown(object sender, MouseEventArgs e)

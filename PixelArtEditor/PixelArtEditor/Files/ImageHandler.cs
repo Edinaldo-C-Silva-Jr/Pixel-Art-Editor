@@ -45,6 +45,22 @@ namespace PixelArtEditor.Files
             }
         }
 
+        public void DefineNewImage(Bitmap newOriginalImage, bool resizeOnLoad, int drawingBoxWidth, int drawingBoxHeight)
+        {
+            if (resizeOnLoad)
+            {
+                OriginalImage = new(newOriginalImage);
+            }
+            else
+            { 
+                using Bitmap nonResizedImage = new(drawingBoxWidth, drawingBoxHeight);
+                using Graphics newImageGraphics = Graphics.FromImage(nonResizedImage);
+                newImageGraphics.DrawImage(newOriginalImage, 0, 0);
+
+                OriginalImage = new(nonResizedImage);
+            }
+        }
+
         // TODO: maybe try to make this more efficient (and have less parameters)
         public void ChangeImageTransparency(Color oldColor, Color newColor, bool transparent, int width, int height, int zoom, Color gridColor, Color backgroundColor)
         {
