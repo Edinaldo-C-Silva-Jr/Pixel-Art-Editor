@@ -8,18 +8,19 @@ namespace PixelArtEditor
 {
     public partial class PixelArtEditorForm : Form
     {
-        // The original image that is being drawn on in the editor
-        private Bitmap originalImage = new(1, 1);
+        /// <summary>
+        /// The class responsible for storing and handling the image used in the program.
+        /// </summary>
+        private ImageHandler ImageManager { get; set; }
 
+        /// <summary>
+        /// The class responsible for handling the saving and loading of files in the program.
+        /// </summary>
         private FileSaveLoadHandler FileSaverLoader { get; } = new();
-
-        private Bitmap clipboardImage = new(1, 1);
-        private Point selectionStart = new();
-        private Rectangle selectedArea = new();
-        private readonly SolidBrush selectionBrush = new(Color.FromArgb(128, 32, 196, 255));
 
         public PixelArtEditorForm()
         {
+            ImageManager = new();
             InitializeComponent();
         }
 
@@ -135,7 +136,7 @@ namespace PixelArtEditor
                 _ => new NoGrid()
             };
 
-            gridGenerator.GenerateGrid(originalImage, zoom, gridColor);
+            gridGenerator.GenerateGrid(ImageManager.OriginalImage, zoom, gridColor);
             return gridGenerator;
         }
 
@@ -150,19 +151,11 @@ namespace PixelArtEditor
             (Color gridColor, Color backgroundColor) = GetGridAndBackgroundColors();
             IGridGenerator gridGenerator = DefineGridType();
 
-            // Creates the image
-            originalImage = new Bitmap(width * zoom, height * zoom);
-            using Graphics imageFiller = Graphics.FromImage(originalImage);
-            imageFiller.Clear(backgroundColor);
-
-            // Changes transparency
-            if (TransparencyCheckBox.Checked)
-            {
-                originalImage.MakeTransparent(backgroundColor);
-            }
+            bool transparent = TransparencyCheckBox.Checked;
+            ImageManager.CreateNewImage(width, height, zoom, backgroundColor, transparent);
 
             ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
-            ViewingAreaDrawingBox.SetNewImage(gridGenerator, originalImage, zoom, gridColor, backgroundColor);
+            ViewingAreaDrawingBox.SetNewImage(gridGenerator, ImageManager.OriginalImage, zoom, gridColor, backgroundColor);
         }
 
         private void ReorganizeControls()
@@ -181,10 +174,10 @@ namespace PixelArtEditor
 
             if (mouseClick.Button == MouseButtons.Left)
             {
-                selectedArea = Rectangle.Empty;
+                ImageManager.ClearImageSelection();
                 int zoom = (int)ViewingZoomNumberBox.Value;
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
-                ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, mouseClick.X, mouseClick.Y, zoom, paletteColor);
+                ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), ImageManager.OriginalImage, mouseClick.X, mouseClick.Y, zoom, paletteColor);
                 ViewingAreaDrawingBox.Refresh();
             }
         }
@@ -221,7 +214,7 @@ namespace PixelArtEditor
         private void SwapColorInImage(Color oldColor, Color newColor)
         {
             (int width, int height, int zoom) = GetImageSizeValues();
-            Bitmap image = new(originalImage);
+            Bitmap image = new(ImageManager.OriginalImage);
 
             for (int y = 0; y < height; y++)
             {
@@ -229,7 +222,7 @@ namespace PixelArtEditor
                 {
                     if (oldColor.ToArgb() == image.GetPixel(x * zoom, y * zoom).ToArgb())
                     {
-                        ViewingAreaDrawingBox.DrawPixelByPosition(DefineGridType(), originalImage, x, y, zoom, newColor);
+                        ViewingAreaDrawingBox.DrawPixelByPosition(DefineGridType(), ImageManager.OriginalImage, x, y, zoom, newColor);
                     }
                 }
             }
@@ -275,22 +268,22 @@ namespace PixelArtEditor
         {
             if (e.Button == MouseButtons.Left)
             {
-                selectedArea = Rectangle.Empty;
+                ImageManager.ClearImageSelection();
                 int zoom = (int)ViewingZoomNumberBox.Value;
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
-                ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), originalImage, e.X, e.Y, zoom, paletteColor);
+                ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), ImageManager.OriginalImage, e.X, e.Y, zoom, paletteColor);
                 ViewingAreaDrawingBox.Refresh();
             }
 
             if (e.Button == MouseButtons.Right)
             {
-                ChangeRectangleSelection(e.Location);
+                ChangeSelectionOnImage(e.Location);
             }
         }
 
         private void SaveImageButton_Click(object sender, EventArgs e)
         {
-            FileSaverLoader.SaveImage(originalImage);
+            FileSaverLoader.SaveImage(ImageManager.OriginalImage);
         }
 
         private void TransparencyCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -310,23 +303,13 @@ namespace PixelArtEditor
 
         private void ChangeImageTransparency(bool transparent, Color oldColor, Color newColor)
         {
-            originalImage.MakeTransparent(oldColor);
+            (int width, int height, int zoom) = GetImageSizeValues();
+            (Color gridColor, Color backgroundColor) = GetGridAndBackgroundColors();
+            IGridGenerator generator = DefineGridType();
 
-            if (!transparent)
-            {
-                (int width, int height, int zoom) = GetImageSizeValues();
-                (Color gridColor, Color backgroundColor) = GetGridAndBackgroundColors();
-                Bitmap temporaryImage = new Bitmap(width * zoom, height * zoom);
-                IGridGenerator generator = DefineGridType();
+            ImageManager.ChangeImageTransparency(oldColor, newColor, transparent, width, height, zoom, gridColor, backgroundColor);
 
-                Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
-
-                temporaryGraphics.Clear(newColor);
-                temporaryGraphics.DrawImage(originalImage, 0, 0);
-                originalImage = temporaryImage;
-
-                ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor, backgroundColor);
-            }
+            ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, zoom, gridColor, backgroundColor);
         }
 
         /// <summary>
@@ -337,7 +320,7 @@ namespace PixelArtEditor
         {
             IGridGenerator gridApply = DefineGridType();
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
-            ViewingAreaDrawingBox.ApplyNewGrid(gridApply, originalImage, backgroundColor);
+            ViewingAreaDrawingBox.ApplyNewGrid(gridApply, ImageManager.OriginalImage, backgroundColor);
         }
 
         private void SizeNumberBoxes_KeyDown(object sender, KeyEventArgs e)
@@ -351,7 +334,7 @@ namespace PixelArtEditor
 
         private void LoadImageButton_Click(object sender, EventArgs e)
         {
-            {
+            /*{
                 FileSaverLoader.LoadImage(ref originalImage);
 
                 int zoom = (int)ViewingZoomNumberBox.Value;
@@ -374,103 +357,44 @@ namespace PixelArtEditor
                 ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor, backgroundColor);
 
                 ReorganizeControls();
-            }
+            }*/
         }
 
         private void ViewingAreaDrawingBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                selectionStart.X = e.Location.X;
-                selectionStart.Y = e.Location.Y;
-
-                ChangeRectangleSelection(e.Location);
+                ImageManager.DefineSelectionStart(e.Location);
+                ChangeSelectionOnImage(e.Location);
             }
         }
 
         private void CopyButton_Click(object sender, EventArgs e)
         {
-            if (selectedArea != Rectangle.Empty)
-            {
-                clipboardImage = originalImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
-            }
+            ImageManager.CopySelectionFromImage();
         }
 
         private void PasteButton_Click(object sender, EventArgs e)
         {
-            if (selectedArea != Rectangle.Empty)
-            {
-                using Graphics pasteGraphics = Graphics.FromImage(originalImage);
-                pasteGraphics.DrawImage(clipboardImage, new Point(selectedArea.X, selectedArea.Y));
+            ImageManager.PasteSelectionInImage();
 
-                IGridGenerator generator = DefineGridType();
-                int zoom = (int)ViewingZoomNumberBox.Value;
-                (Color gridColor, Color backgroundColor) = GetGridAndBackgroundColors();
-                ViewingAreaDrawingBox.SetNewImage(generator, originalImage, zoom, gridColor, backgroundColor);
-            }
+            IGridGenerator generator = DefineGridType();
+            int zoom = (int)ViewingZoomNumberBox.Value;
+            (Color gridColor, Color backgroundColor) = GetGridAndBackgroundColors();
+            ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, zoom, gridColor, backgroundColor);
         }
 
         private void ViewingAreaDrawingBox_Paint(object sender, PaintEventArgs e)
         {
-            if (selectedArea != Rectangle.Empty)
-            {
-                e.Graphics.FillRectangle(selectionBrush, selectedArea);
-            }
+            ImageManager.DrawSelectionOntoDrawingBox(e.Graphics);
         }
 
-        private void ChangeRectangleSelection(Point location)
+        private void ChangeSelectionOnImage(Point location)
         {
+            int width = ViewingAreaDrawingBox.Width;
+            int height = ViewingAreaDrawingBox.Height;
             int zoom = (int)ViewingZoomNumberBox.Value;
-            Point selectionEnd = new()
-            {
-                X = location.X,
-                Y = location.Y
-            };
-
-            if (selectionEnd.X >= ViewingAreaDrawingBox.Width)
-            {
-                selectionEnd.X = ViewingAreaDrawingBox.Width - 1;
-            }
-            if (selectionEnd.Y >= ViewingAreaDrawingBox.Height)
-            {
-                selectionEnd.Y = ViewingAreaDrawingBox.Height - 1;
-            }
-
-            if (selectionEnd.X < 0)
-            {
-                selectionEnd.X = 0;
-            }
-            if (selectionEnd.Y < 0)
-            {
-                selectionEnd.Y = 0;
-            }
-
-            if (selectionEnd.X < selectionStart.X)
-            {
-                selectedArea.X = selectionEnd.X - selectionEnd.X % zoom;
-                selectionEnd.X = selectionStart.X - selectionStart.X % zoom + zoom;
-            }
-            else
-            {
-                selectedArea.X = selectionStart.X - selectionStart.X % zoom;
-                selectionEnd.X = selectionEnd.X - selectionEnd.X % zoom + zoom;
-            }
-
-            selectedArea.Y = selectionStart.Y;
-            if (selectionEnd.Y < selectionStart.Y)
-            {
-                selectedArea.Y = selectionEnd.Y - selectionEnd.Y % zoom;
-                selectionEnd.Y = selectionStart.Y - selectionStart.Y % zoom + zoom;
-            }
-            else
-            {
-                selectedArea.Y = selectionStart.Y - selectionStart.Y % zoom;
-                selectionEnd.Y = selectionEnd.Y - selectionEnd.Y % zoom + zoom;
-            }
-
-            selectedArea.Width = selectionEnd.X - selectedArea.X;
-            selectedArea.Height = selectionEnd.Y - selectedArea.Y;
-
+            ImageManager.ChangeImageSelection(location, width, height, zoom);
             ViewingAreaDrawingBox.Invalidate();
         }
 
@@ -478,20 +402,13 @@ namespace PixelArtEditor
         {
             (int width, int height, int zoom) = GetImageSizeValues();
 
-            Bitmap zoomedImage = new Bitmap(width * zoom, height * zoom);
-            Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
-            zoomGraphics.SmoothingMode = SmoothingMode.HighQuality;
-            zoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-            zoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            zoomGraphics.DrawImage(originalImage, 0, 0, zoomedImage.Width, zoomedImage.Height);
-
-            originalImage = new(zoomedImage);
+            ImageManager.ChangeImageZoom(width, height, zoom);
 
             IGridGenerator generator = DefineGridType();
             (Color gridColor, Color backgroundColor) = GetGridAndBackgroundColors();
 
-            ViewingAreaDrawingBox.SetNewSize(zoomedImage.Width, zoomedImage.Height);
-            ViewingAreaDrawingBox.SetNewImage(generator, zoomedImage, zoom, gridColor, backgroundColor);
+            ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
+            ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, zoom, gridColor, backgroundColor);
 
             ReorganizeControls();
         }
