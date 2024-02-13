@@ -1,8 +1,6 @@
 using PixelArtEditor.Controls;
 using PixelArtEditor.Files;
 using PixelArtEditor.Grids;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 
 namespace PixelArtEditor
 {
@@ -182,15 +180,28 @@ namespace PixelArtEditor
 
                 if (colorpicked == DialogResult.OK)
                 {
-                    if (!cell.DefaultColor && ColorChangeCheckBox.Checked)
+                    bool colorWasChanged = false;
+
+                    // The color will always be swaped for the image's background, otherwise only if the color is not in its default color.
+                    if (cellParent.Name == "BackgroundColorTable" || (!cell.DefaultColor && ColorChangeCheckBox.Checked))
                     {
                         SwapColorInImage(cell.BackColor, ColorPickerDialog.Color);
+                        colorWasChanged = true;
                     }
-                    /*if (cellParent.Name == "tbl_BackgroundColor")
+
+                    // If the change was done to the background, check if the background should be shown as transparent
+                    if (cellParent.Name == "BackgroundColorTable" && TransparencyCheckBox.Checked)
                     {
-                        Color backgroundColor = BackgroundColorTable.GetCurrentColor();
-                        ChangeImageTransparency(TransparencyCheckBox.Checked, backgroundColor, ColorPickerDialog.Color);
-                    }*/
+                        ImageManager.MakeImageTransparent(ColorPickerDialog.Color);
+                        colorWasChanged = true;
+                    }
+
+                    // Only reload the image if there was a change.
+                    if (colorWasChanged)
+                    {
+                        Color background = BackgroundColorTable.GetCurrentColor();
+                        ViewingAreaDrawingBox.SetNewImage(DefineGridType(), ImageManager.OriginalImage, background);
+                    }
 
                     cell.ChangeCellColor(ColorPickerDialog.Color);
                 }
@@ -201,21 +212,21 @@ namespace PixelArtEditor
 
         private void SwapColorInImage(Color oldColor, Color newColor)
         {
-            (int width, int height, int zoom) = GetImageSizeValues();
-            Bitmap image = new(ImageManager.OriginalImage);
-
-            for (int y = 0; y < height; y++)
+            if (TransparencyCheckBox.Checked)
             {
-                for (int x = 0; x < width; x++)
-                {
-                    if (oldColor.ToArgb() == image.GetPixel(x * zoom, y * zoom).ToArgb())
-                    {
-                        ViewingAreaDrawingBox.DrawPixelByPosition(DefineGridType(), ImageManager.OriginalImage, x, y, zoom, newColor);
-                    }
-                }
+                Color backgroundColor = BackgroundColorTable.GetCurrentColor();
+                (int width, int height, int zoom) = GetImageSizeValues();
+                ImageManager.MakeImageNotTransparent(backgroundColor, width, height, zoom);
             }
 
-            ViewingAreaDrawingBox.Refresh();
+            ImageManager.MakeImageTransparent(oldColor);
+
+            using Bitmap auxiliaryImage = new(ImageManager.OriginalImage);
+            using Graphics auxiliaryGraphics = Graphics.FromImage(auxiliaryImage);
+            auxiliaryGraphics.Clear(newColor);
+            auxiliaryGraphics.DrawImage(ImageManager.OriginalImage, 0, 0);
+            
+            ImageManager.DefineNewImage(auxiliaryImage, true, 0, 0);
         }
 
         private void SetNewImageButton_Click(object sender, EventArgs e)
