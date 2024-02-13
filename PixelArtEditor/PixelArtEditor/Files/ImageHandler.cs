@@ -61,19 +61,18 @@ namespace PixelArtEditor.Files
             }
         }
 
-        // TODO: maybe try to make this more efficient (and have less parameters)
-        public void ChangeImageTransparency(Color oldColor, Color newColor, bool transparent, int width, int height, int zoom, Color gridColor, Color backgroundColor)
+        public void MakeImageTransparent(Color transparencyColor)
         {
-            OriginalImage.MakeTransparent(oldColor);
+            OriginalImage.MakeTransparent(transparencyColor);
+        }
 
-            if (!transparent)
-            {
-                Bitmap temporaryImage = new(width * zoom, height * zoom);
-                Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
-                temporaryGraphics.Clear(newColor);
-                temporaryGraphics.DrawImage(OriginalImage, 0, 0);
-                OriginalImage = temporaryImage;
-            }
+        public void MakeImageNotTransparent(Color backgroundColor, int width, int height, int zoom)
+        {
+            Bitmap temporaryImage = new(width * zoom, height * zoom);
+            Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
+            temporaryGraphics.Clear(backgroundColor);
+            temporaryGraphics.DrawImage(OriginalImage, 0, 0);
+            OriginalImage = temporaryImage;
         }
 
         public void ChangeImageZoom(int width, int height, int zoom)

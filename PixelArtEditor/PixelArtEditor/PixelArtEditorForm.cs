@@ -173,8 +173,8 @@ namespace PixelArtEditor
         private void ColorCellClicked(object sender, EventArgs e)
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
-            RectangleCell? cell = sender as RectangleCell;
-            ColorTable? cellParent = cell!.Parent as ColorTable;
+            RectangleCell cell = (sender as RectangleCell)!;
+            ColorTable cellParent = (cell.Parent as ColorTable)!;
 
             if (mouseClick.Button == MouseButtons.Right)
             {
@@ -186,17 +186,17 @@ namespace PixelArtEditor
                     {
                         SwapColorInImage(cell.BackColor, ColorPickerDialog.Color);
                     }
-                    if (cellParent!.Name == "tbl_BackgroundColor")
+                    /*if (cellParent.Name == "tbl_BackgroundColor")
                     {
                         Color backgroundColor = BackgroundColorTable.GetCurrentColor();
                         ChangeImageTransparency(TransparencyCheckBox.Checked, backgroundColor, ColorPickerDialog.Color);
-                    }
+                    }*/
 
                     cell.ChangeCellColor(ColorPickerDialog.Color);
                 }
             }
 
-            cellParent!.ChangeCurrentCell(cell);
+            cellParent.ChangeCurrentCell(cell);
         }
 
         private void SwapColorInImage(Color oldColor, Color newColor)
@@ -277,27 +277,21 @@ namespace PixelArtEditor
         private void TransparencyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
-            ChangeImageTransparency(TransparencyCheckBox.Checked, backgroundColor, backgroundColor);
 
             if (TransparencyCheckBox.Checked)
             {
+                ImageManager.MakeImageTransparent(backgroundColor);
                 BackgroundColorLabel.Text = "Transparency Color";
             }
             else
             {
+                (int width, int height, int zoom) = GetImageSizeValues();
+                ImageManager.MakeImageNotTransparent(backgroundColor, width, height, zoom);
                 BackgroundColorLabel.Text = "Background Color";
             }
-        }
 
-        private void ChangeImageTransparency(bool transparent, Color oldColor, Color newColor)
-        {
-            (int width, int height, int zoom) = GetImageSizeValues();
-            (Color gridColor, Color backgroundColor) = GetGridAndBackgroundColors();
             IGridGenerator generator = DefineGridType();
-
-            ImageManager.ChangeImageTransparency(oldColor, newColor, transparent, width, height, zoom, gridColor, backgroundColor);
-
-            ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, zoom, gridColor, backgroundColor);
+            ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, backgroundColor);
         }
 
         /// <summary>
