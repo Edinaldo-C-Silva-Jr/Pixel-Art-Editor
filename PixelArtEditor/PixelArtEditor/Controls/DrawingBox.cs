@@ -18,7 +18,7 @@ namespace PixelArtEditor.Controls
             this.Height = height;
         }
 
-        public void SetNewImage(IGridGenerator gridGenerator, Bitmap originalImage, int cellSize, Color gridColor, Color backgroundColor)
+        public void SetNewImage(IGridGenerator gridGenerator, Bitmap originalImage, Color backgroundColor)
         {
             imageWithGrid = new(originalImage);
             gridGenerator.ApplyGridFullImage(imageWithGrid, backgroundColor);

@@ -103,18 +103,6 @@ namespace PixelArtEditor
             return (width, height, zoom);
         }
 
-        /// <summary>
-        /// Gets the color value for the grid color and the background color from their respective ColorTables, and returns them as a tuple.
-        /// </summary>
-        /// <returns>A tuple containing the grid color and the background color, in this order.</returns>
-        private (Color grid, Color background) GetGridAndBackgroundColors()
-        {
-            Color grid = GridColorTable.GetCurrentColor();
-            Color background = BackgroundColorTable.GetCurrentColor();
-
-            return (grid, background);
-        }
-
         // TODO: Don't generate Grid everytime the Grid type has to be called, only when the grid type changes
         /// <summary>
         /// Method that defines which Grid implementation to use based on the currently selected Grid Type.
@@ -148,14 +136,14 @@ namespace PixelArtEditor
         {
             // Gets current image and color values
             (int width, int height, int zoom) = GetImageSizeValues();
-            (Color gridColor, Color backgroundColor) = GetGridAndBackgroundColors();
+            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
             IGridGenerator gridGenerator = DefineGridType();
 
             bool transparent = TransparencyCheckBox.Checked;
             ImageManager.CreateNewImage(width, height, zoom, backgroundColor, transparent);
 
             ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
-            ViewingAreaDrawingBox.SetNewImage(gridGenerator, ImageManager.OriginalImage, zoom, gridColor, backgroundColor);
+            ViewingAreaDrawingBox.SetNewImage(gridGenerator, ImageManager.OriginalImage, backgroundColor);
         }
 
         private void ReorganizeControls()
@@ -349,10 +337,9 @@ namespace PixelArtEditor
                     }
                 }
 
-                int zoom = (int)ViewingZoomNumberBox.Value;
                 IGridGenerator generator = DefineGridType();
-                (Color gridColor, Color backgroundColor) = GetGridAndBackgroundColors();
-                ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, zoom, gridColor, backgroundColor);
+                Color backgroundColor = BackgroundColorTable.GetCurrentColor();
+                ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, backgroundColor);
 
                 ReorganizeControls();
             }
@@ -377,9 +364,8 @@ namespace PixelArtEditor
             ImageManager.PasteSelectionInImage();
 
             IGridGenerator generator = DefineGridType();
-            int zoom = (int)ViewingZoomNumberBox.Value;
-            (Color gridColor, Color backgroundColor) = GetGridAndBackgroundColors();
-            ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, zoom, gridColor, backgroundColor);
+            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
+            ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, backgroundColor);
         }
 
         private void ViewingAreaDrawingBox_Paint(object sender, PaintEventArgs e)
@@ -403,10 +389,10 @@ namespace PixelArtEditor
             ImageManager.ChangeImageZoom(width, height, zoom);
 
             IGridGenerator generator = DefineGridType();
-            (Color gridColor, Color backgroundColor) = GetGridAndBackgroundColors();
+            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
 
             ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
-            ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, zoom, gridColor, backgroundColor);
+            ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, backgroundColor);
 
             ReorganizeControls();
         }
