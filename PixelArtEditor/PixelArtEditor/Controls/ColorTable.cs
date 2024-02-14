@@ -93,15 +93,19 @@
             // Checkes if the currently selected cell will be outside the bounds of the new color table.
             if (colorAmount <= CurrentCellRow * 16 + CurrentCellColumn)
             {
-                RectangleCell? oldCell = GetControlFromPosition(CurrentCellColumn, CurrentCellRow) as RectangleCell;
-                oldCell!.DeselectCell();
+                if (GetControlFromPosition(CurrentCellColumn, CurrentCellRow) is RectangleCell oldCell)
+                {
+                    oldCell.DeselectCell();
+                }
 
                 // Changes the currently selected cell to the last cell of the newly generated color table.
                 CurrentCellRow = rows - 1;
                 CurrentCellColumn = columns - 1;
 
-                RectangleCell? newCell = GetControlFromPosition(CurrentCellColumn, CurrentCellRow) as RectangleCell;
-                newCell!.SelectCell();
+                if (GetControlFromPosition(CurrentCellColumn, CurrentCellRow) is RectangleCell newCell)
+                {
+                    newCell.SelectCell();
+                }
             }
 
             // The size of the table is equal to:
@@ -185,8 +189,10 @@
             SuspendLayout();
 
             // Gets the cell that is currently selected to deselect it,
-            RectangleCell? oldCell = GetControlFromPosition(CurrentCellColumn, CurrentCellRow) as RectangleCell;
-            oldCell!.DeselectCell();
+            if (GetControlFromPosition(CurrentCellColumn, CurrentCellRow) is RectangleCell oldCell)
+            {
+                oldCell.DeselectCell();
+            }
 
             // Then changes the selected values to those of the new cell.
             CurrentCellRow = GetRow(newCell);

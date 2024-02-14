@@ -65,8 +65,8 @@ namespace PixelArtEditor
         private void InitializeControlValues()
         {
             // Generates the ColorTables for Grid Color and Background Color.
-            GridColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked!), Color.Gray);
-            BackgroundColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked!), Color.FromArgb(254, 254, 254));
+            GridColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked), Color.Gray);
+            BackgroundColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked), Color.FromArgb(254, 254, 254));
 
             // Defines the values for the GridType ComboBox based on the GridType Enum values.
             GridTypeComboBox.DataSource = Enum.GetValues(typeof(GridType));
@@ -84,8 +84,8 @@ namespace PixelArtEditor
         /// </summary>
         private void SetPaletteColorAmount()
         {
-            int colorAmount = int.Parse(ColorAmountComboBox.SelectedItem.ToString()!);
-            PaletteColorTable.GenerateColorGrid(colorAmount, new EventHandler(ColorCellClicked!));
+            int colorAmount = int.Parse(ColorAmountComboBox.SelectedItem.ToString() ?? "0");
+            PaletteColorTable.GenerateColorGrid(colorAmount, new EventHandler(ColorCellClicked));
         }
 
         /// <summary>
@@ -168,11 +168,19 @@ namespace PixelArtEditor
             }
         }
 
-        private void ColorCellClicked(object sender, EventArgs e)
+        private void ColorCellClicked(object? sender, EventArgs e)
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
-            RectangleCell cell = (sender as RectangleCell)!;
-            ColorTable cellParent = (cell.Parent as ColorTable)!;
+
+            if (sender is not RectangleCell cell)
+            {
+                return;
+            }
+
+            if (cell.Parent is not ColorTable cellParent)
+            {
+                return;
+            }
 
             if (mouseClick.Button == MouseButtons.Right)
             {
