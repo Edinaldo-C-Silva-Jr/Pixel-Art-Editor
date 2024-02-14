@@ -132,12 +132,12 @@ namespace PixelArtEditor
         /// </summary>
         private void SetNewImageAndViewingAreaSize()
         {
-            // Gets current image and color values
+            // Gets all relevant image parameters: size, background color, grid type and transparency.
             (int width, int height, int zoom) = GetImageSizeValues();
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
             IGridGenerator gridGenerator = DefineGridType();
-
             bool transparent = TransparencyCheckBox.Checked;
+            
             ImageManager.CreateNewImage(width, height, zoom, backgroundColor, transparent);
 
             ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
@@ -224,7 +224,7 @@ namespace PixelArtEditor
             {
                 Color backgroundColor = BackgroundColorTable.GetCurrentColor();
                 (int width, int height, int zoom) = GetImageSizeValues();
-                ImageManager.MakeImageNotTransparent(backgroundColor, width, height, zoom);
+                ImageManager.MakeImageNotTransparent(backgroundColor);
             }
 
             ImageManager.MakeImageTransparent(oldColor);
@@ -305,7 +305,7 @@ namespace PixelArtEditor
             else
             {
                 (int width, int height, int zoom) = GetImageSizeValues();
-                ImageManager.MakeImageNotTransparent(backgroundColor, width, height, zoom);
+                ImageManager.MakeImageNotTransparent(backgroundColor);
                 BackgroundColorLabel.Text = "Background Color";
             }
 

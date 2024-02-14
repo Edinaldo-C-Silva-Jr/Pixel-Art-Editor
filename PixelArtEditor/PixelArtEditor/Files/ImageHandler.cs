@@ -1,9 +1,12 @@
-﻿using PixelArtEditor.Grids;
-using System.Drawing.Drawing2D;
+﻿using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Files
 {
+    /// <summary>
+    /// A class responsible for handling the main image used by the application.
+    /// It has methods for handling the image creation, image-wide changes, as well as image selection.
+    /// </summary>
     internal class ImageHandler : IDisposable
     {
         /// <summary>
@@ -16,14 +19,24 @@ namespace PixelArtEditor.Files
         /// </summary>
         public Bitmap ClipboardImage { get; private set; }
 
+        /// <summary>
+        /// The brush used to draw the selection box in the image when making a selection.
+        /// </summary>
         private SolidBrush SelectionBrush { get; }
 
+        /// <summary>
+        /// A point that holds the position where the current selection started.
+        /// </summary>
         public Point SelectionStart { get; private set; }
 
-
-
+        /// <summary>
+        /// A field that stores the rectangle currently used as the selection area in the image.
+        /// </summary>
         private Rectangle SelectedArea;
 
+        /// <summary>
+        /// Defines the color of the selection brush and initializes both the original image and the clipboard image.
+        /// </summary>
         public ImageHandler()
         {
             SelectionBrush = new(Color.FromArgb(128, 32, 196, 255));
@@ -31,14 +44,22 @@ namespace PixelArtEditor.Files
             ClipboardImage = new(1, 1);
         }
 
+        /// <summary>
+        /// Creates a blank new image with the defined parameters.
+        /// </summary>
+        /// <param name="width">The width of the image, in pixels. This is the width used for the pixel art itself.</param>
+        /// <param name="height">The height of the image, in pixels. This is the height used for the pixel art itself.</param>
+        /// <param name="zoom">The zoom factor applied to the image. This is the size of each pixel.</param>
+        /// <param name="backgroundColor">The color used for the image's background.</param>
+        /// <param name="transparent">Defines whether the image will have a transparent background or not.</param>
         public void CreateNewImage(int width, int height, int zoom, Color backgroundColor, bool transparent)
         {
-            // Creates the image
+            // Creates the image and fills its background with the desired color
             OriginalImage = new(width * zoom, height * zoom);
             using Graphics imageFiller = Graphics.FromImage(OriginalImage);
             imageFiller.Clear(backgroundColor);
 
-            // Changes transparency
+            // Changes transparency, if applicable.
             if (transparent)
             {
                 OriginalImage.MakeTransparent(backgroundColor);
@@ -61,26 +82,39 @@ namespace PixelArtEditor.Files
             }
         }
 
+        /// <summary>
+        /// Makes the image transparent based on a specific color, which is considered the background.
+        /// </summary>
+        /// <param name="transparencyColor">The color to be made transparent in the image.</param>
         public void MakeImageTransparent(Color transparencyColor)
         {
             OriginalImage.MakeTransparent(transparencyColor);
         }
 
-        public void MakeImageNotTransparent(Color backgroundColor, int width, int height, int zoom)
+        /// <summary>
+        /// Removes the transparency of the image, applying a solid color to its background.
+        /// </summary>
+        /// <param name="backgroundColor">The color to be applied as the image's background.</param>
+        public void MakeImageNotTransparent(Color backgroundColor)
         {
-            Bitmap temporaryImage = new(width * zoom, height * zoom);
+            Bitmap temporaryImage = new(OriginalImage.Width, OriginalImage.Height);
             Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
             temporaryGraphics.Clear(backgroundColor);
             temporaryGraphics.DrawImage(OriginalImage, 0, 0);
             OriginalImage = temporaryImage;
         }
 
+        /// <summary>
+        /// Changes the zoom of the image, based on the image's pixel width, pixel height and the zoom factor.
+        /// </summary>
+        /// <param name="width">The width of the image, in pixels. This is the width used for the pixel art itself.</param>
+        /// <param name="height">The height of the image, in pixels. This is the height used for the pixel art itself.</param>
+        /// <param name="zoom">The zoom factor applied to the image. This is the size of each pixel.</param>
         public void ChangeImageZoom(int width, int height, int zoom)
         {
             Bitmap zoomedImage = new(width * zoom, height * zoom);
 
             Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
-            zoomGraphics.SmoothingMode = SmoothingMode.HighQuality;
             zoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             zoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
             zoomGraphics.DrawImage(OriginalImage, 0, 0, zoomedImage.Width, zoomedImage.Height);
