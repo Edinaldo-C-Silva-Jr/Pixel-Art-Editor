@@ -168,44 +168,50 @@ namespace PixelArtEditor
             }
         }
 
+        /// <summary>
+        /// The event of when any cell in the Color Tables is clicked.
+        /// For a right click, it opens a Color Pick Dialog to allow picking the color, and changes the color in the image if needed.
+        /// For a left click, it simply selects the color to be used for drawing.
+        /// </summary>
         private void ColorCellClicked(object? sender, EventArgs e)
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
 
+            // Only continues if the event was called from a cell within a Color Table.
             if (sender is not RectangleCell cell)
             {
                 return;
             }
-
             if (cell.Parent is not ColorTable cellParent)
             {
                 return;
             }
 
+            // For right click, allow picking a color for the cell.
             if (mouseClick.Button == MouseButtons.Right)
             {
                 DialogResult colorpicked = ColorPickerDialog.ShowDialog();
 
                 if (colorpicked == DialogResult.OK)
                 {
-                    bool colorWasChanged = false;
+                    bool colorWasSwaped = false;
 
                     // The color will always be swaped for the image's background, otherwise only if the color is not in its default color.
                     if (cellParent.Name == "BackgroundColorTable" || (!cell.DefaultColor && ColorChangeCheckBox.Checked))
                     {
                         SwapColorInImage(cell.BackColor, ColorPickerDialog.Color);
-                        colorWasChanged = true;
+                        colorWasSwaped = true;
                     }
 
-                    // If the change was done to the background, check if the background should be shown as transparent
+                    // If the swap was done to the background, check if the background should be shown as transparent
                     if (cellParent.Name == "BackgroundColorTable" && TransparencyCheckBox.Checked)
                     {
                         ImageManager.MakeImageTransparent(ColorPickerDialog.Color);
-                        colorWasChanged = true;
+                        colorWasSwaped = true;
                     }
 
-                    // Only reload the image if there was a change.
-                    if (colorWasChanged)
+                    // Only reload the image if there was a color swap.
+                    if (colorWasSwaped)
                     {
                         Color background = BackgroundColorTable.GetCurrentColor();
                         ViewingAreaDrawingBox.SetNewImage(DefineGridType(), ImageManager.OriginalImage, background);
@@ -218,22 +224,36 @@ namespace PixelArtEditor
             cellParent.ChangeCurrentCell(cell);
         }
 
+        /// <summary>
+        /// Changes all pixels in the current image that are from a certain color to a new desired color.
+        /// </summary>
+        /// <param name="oldColor">The color to be replaced in the image.</param>
+        /// <param name="newColor">The new color to apply to the image in place of the old one.</param>
         private void SwapColorInImage(Color oldColor, Color newColor)
         {
+            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
+
+            // If the image has a transparent background, temportarily remove the transparency.
             if (TransparencyCheckBox.Checked)
             {
-                Color backgroundColor = BackgroundColorTable.GetCurrentColor();
-                (int width, int height, int zoom) = GetImageSizeValues();
                 ImageManager.MakeImageNotTransparent(backgroundColor);
             }
 
+            // Makes all pixels of the color to be replaced transparent...
             ImageManager.MakeImageTransparent(oldColor);
 
+            // Then applies the new color to all transparent pixels.
             using Bitmap auxiliaryImage = new(ImageManager.OriginalImage);
             using Graphics auxiliaryGraphics = Graphics.FromImage(auxiliaryImage);
             auxiliaryGraphics.Clear(newColor);
             auxiliaryGraphics.DrawImage(ImageManager.OriginalImage, 0, 0);
-            
+
+            // Restored transparency to image if needed.
+            if (TransparencyCheckBox.Checked)
+            {
+                ImageManager.MakeImageTransparent(backgroundColor);
+            }
+
             ImageManager.DefineNewImage(auxiliaryImage, true, 0, 0);
         }
 
