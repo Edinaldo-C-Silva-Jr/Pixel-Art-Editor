@@ -62,7 +62,7 @@
         /// </summary>
         /// <param name="sidePixelLength">The length of the image side, in pixel cells (not counting the zoom)</param>
         /// <returns>The optimized grid piece length for the image passed.</returns>
-        private int DefineGridPieceSize(int sidePixelLength)
+        private static int DefineGridPieceSize(int sidePixelLength)
         {
             int leastAmountOActions = 10000, gridPieceSize, sizeWithLeastActions = 0, amountOfGridPieces;
 

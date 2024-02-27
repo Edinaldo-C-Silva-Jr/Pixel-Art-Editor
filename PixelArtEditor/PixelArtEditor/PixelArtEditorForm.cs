@@ -35,6 +35,7 @@ namespace PixelArtEditor
             ReorganizeControls();
         }
 
+        #region Control Initialization
         /// <summary>
         /// Sets all the location and text values to the controls in the ColorAreaBackgroundPanel.
         /// Builds the panel programatically as to prevent Designer clutter.
@@ -78,6 +79,7 @@ namespace PixelArtEditor
             ColorChangeCheckBox.Checked = true;
             ResizeOnLoadCheckBox.Checked = true;
         }
+        #endregion
 
         /// <summary>
         /// Sets the amount of colors shown in the Palette ColorTable based on the amount of colors selected in the ComboBox. 
@@ -196,7 +198,8 @@ namespace PixelArtEditor
                 {
                     bool colorWasSwaped = false;
 
-                    // The color will always be swaped for the image's background, otherwise only if the color is not in its default color.
+                    // The color will always be swaped for the image's background.
+                    // Otherwise only if the Change Color is enabled and the cell is not in its default color.
                     if (cellParent.Name == "BackgroundColorTable" || (!cell.DefaultColor && ColorChangeCheckBox.Checked))
                     {
                         SwapColorInImage(cell.BackColor, ColorPickerDialog.Color);
@@ -308,11 +311,6 @@ namespace PixelArtEditor
             }
         }
 
-        private void SaveImageButton_Click(object sender, EventArgs e)
-        {
-            FileSaverLoader.SaveImage(ImageManager.OriginalImage);
-        }
-
         private void TransparencyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
@@ -349,31 +347,6 @@ namespace PixelArtEditor
             if (e.KeyCode == Keys.Enter)
             {
                 SetNewImageAndViewingAreaSize();
-                ReorganizeControls();
-            }
-        }
-
-        private void LoadImageButton_Click(object sender, EventArgs e)
-        {
-            {
-                using Bitmap imageLoaded = FileSaverLoader.LoadImage();
-                if (imageLoaded != null)
-                {
-                    bool resizeOnLoad = ResizeOnLoadCheckBox.Checked;
-                    int width = ViewingAreaDrawingBox.Width;
-                    int height = ViewingAreaDrawingBox.Height;
-                    ImageManager.DefineNewImage(imageLoaded, resizeOnLoad, width, height);
-
-                    if (resizeOnLoad)
-                    {
-                        ViewingAreaDrawingBox.SetNewSize(ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height);
-                    }
-                }
-
-                IGridGenerator generator = DefineGridType();
-                Color backgroundColor = BackgroundColorTable.GetCurrentColor();
-                ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, backgroundColor);
-
                 ReorganizeControls();
             }
         }
@@ -430,16 +403,60 @@ namespace PixelArtEditor
             ReorganizeControls();
         }
 
+        #region Saving and Loading Files
+        /// <summary>
+        /// The method that saves the image to a file.
+        /// </summary>
+        private void SaveImageButton_Click(object sender, EventArgs e)
+        {
+            FileSaverLoader.SaveImage(ImageManager.OriginalImage);
+        }
+
+        /// <summary>
+        /// The methods that loads an image from a file into the program.
+        /// </summary>
+        private void LoadImageButton_Click(object sender, EventArgs e)
+        {
+            {
+                using Bitmap imageLoaded = FileSaverLoader.LoadImage();
+                if (imageLoaded != null) // Null check in case no image is loaded.
+                {
+                    bool resizeOnLoad = ResizeOnLoadCheckBox.Checked;
+                    int width = ViewingAreaDrawingBox.Width;
+                    int height = ViewingAreaDrawingBox.Height;
+                    ImageManager.DefineNewImage(imageLoaded, resizeOnLoad, width, height);
+
+                    if (resizeOnLoad)
+                    {
+                        ViewingAreaDrawingBox.SetNewSize(ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height);
+                    }
+                }
+
+                IGridGenerator generator = DefineGridType();
+                Color backgroundColor = BackgroundColorTable.GetCurrentColor();
+                ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, backgroundColor);
+
+                ReorganizeControls();
+            }
+        }
+
+        /// <summary>
+        /// The method that saves the current palette into a file.
+        /// </summary>
         private void SavePaletteButton_Click(object sender, EventArgs e)
         {
             string paletteValues = PaletteColorTable.GetAllColorValues();
             FileSaverLoader.SavePalette(paletteValues);
         }
 
+        /// <summary>
+        /// The method that loads the palette from a file into the program.
+        /// </summary>
         private void LoadPaletteButton_Click(object sender, EventArgs e)
         {
             string paletteValues = FileSaverLoader.LoadPalette();
             PaletteColorTable.SetAllColorValues(paletteValues);
         }
+        #endregion
     }
 }

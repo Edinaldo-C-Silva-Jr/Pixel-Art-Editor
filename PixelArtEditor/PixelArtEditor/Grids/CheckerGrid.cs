@@ -59,7 +59,7 @@
         /// </summary>
         /// <param name="sidePixelLength">The length of the image side, in pixel cells (not counting the zoom).</param>
         /// <returns>The optimized grid piece length for the image passed.</returns>
-        private int DefineGridPieceSize(int sidePixelLength)
+        private static int DefineGridPieceSize(int sidePixelLength)
         {
             // The best grid piece size is the square root of the side length, as that evenly divides the grid generating and image filling actions.
             int gridPieceSize = (int)Math.Sqrt(sidePixelLength);
