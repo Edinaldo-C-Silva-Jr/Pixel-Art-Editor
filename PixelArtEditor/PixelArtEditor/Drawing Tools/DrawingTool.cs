@@ -1,7 +1,7 @@
 ﻿
 namespace PixelArtEditor.Drawing_Tools
 {
-    internal class DrawingTool : IDrawingTool
+    abstract internal class DrawingTool : IDrawingTool
     {
         protected static void DrawPixel(Graphics drawGraphics, Brush drawBrush, int xPosition, int yPosition, int pixelSize)
         {
@@ -12,9 +12,6 @@ namespace PixelArtEditor.Drawing_Tools
         {
             drawGraphics.FillRectangle(drawBrush, xPosition, yPosition, pixelSize * xLength, pixelSize * yLength);
         }
-        public void UseTool(Bitmap imageToDraw, Color colorToUse, int xPosition, int yPosition, int pixelSize)
-        {
-            return;
-        }
+        abstract public void UseTool(Graphics imageGraphics, Brush colorBrush, int xPosition, int yPosition, int pixelSize);
     }
 }
