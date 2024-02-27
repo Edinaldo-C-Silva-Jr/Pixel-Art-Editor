@@ -1,4 +1,4 @@
-﻿namespace PixelArtEditor.Grids
+﻿namespace PixelArtEditor.Grids.Implementations
 {
     /// <summary>
     /// Implements a checkered grid, where the pixels are painted with alternating colors. The colors used are the specified grid color and white.
@@ -34,7 +34,7 @@
             using Graphics gridBuilder = Graphics.FromImage(CheckerGridPiece);
 
             gridBuilder.Clear(Color.White); // Makes the grid piece completely white, so only the colored part needs to be drawn.
-            for (int y = 0; y < CheckerGridPiece.Height; y++) 
+            for (int y = 0; y < CheckerGridPiece.Height; y++)
             {
                 for (int x = y % 2; x < CheckerGridPiece.Width; x += 2) // Iterates on alternating pixels to draw the colored part of the checkered grid.
                 {

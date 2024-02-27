@@ -1,4 +1,4 @@
-﻿namespace PixelArtEditor.Grids
+﻿namespace PixelArtEditor.Grids.Implementations
 {
     /// <summary>
     /// A class that represents the Grid type "None". Utilized for the Dependency Injection.

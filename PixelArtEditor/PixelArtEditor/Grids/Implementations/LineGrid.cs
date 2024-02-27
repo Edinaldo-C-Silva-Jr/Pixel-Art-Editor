@@ -1,4 +1,4 @@
-﻿namespace PixelArtEditor.Grids
+﻿namespace PixelArtEditor.Grids.Implementations
 {
     /// <summary>
     /// Implements a line based grid, where every cell is separated by a single pixel thick line of a specified color.
@@ -50,7 +50,7 @@
             LineGridSinglePixel.MakeTransparent();
 
             using Graphics gridPixelBuilder = Graphics.FromImage(LineGridSinglePixel);
-            
+
             gridPixelBuilder.DrawLine(gridPen, 0, cellSize - 1, cellSize - 1, cellSize - 1);
             gridPixelBuilder.DrawLine(gridPen, cellSize - 1, 0, cellSize - 1, cellSize - 1);
         }
