@@ -1,4 +1,5 @@
-﻿using PixelArtEditor.Grids;
+﻿using PixelArtEditor.Drawing_Tools;
+using PixelArtEditor.Grids;
 
 namespace PixelArtEditor.Controls
 {
@@ -40,31 +41,30 @@ namespace PixelArtEditor.Controls
             this.Refresh();
         }
 
-        public void DrawPixelByPosition(IGridGenerator gridGenerator, Bitmap image, int xPosPixel, int yPosPixel, int pixelSize, Color pixelColor)
+        public void DrawPixelByPosition(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int xPosPixel, int yPosPixel, int pixelSize, Color pixelColor)
         {
             int xPos = pixelSize * xPosPixel;
             int yPos = pixelSize * yPosPixel;
 
-            DrawPixel(gridGenerator, image, xPos, yPos, pixelSize, pixelColor);
+            DrawPixel(tool, gridGenerator, image, xPos, yPos, pixelSize, pixelColor);
         }
 
-        public void DrawPixelByClick(IGridGenerator gridGenerator, Bitmap image, int xPosMouse, int yPosMouse, int pixelSize, Color pixelColor)
+        public void DrawPixelByClick(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int xPosMouse, int yPosMouse, int pixelSize, Color pixelColor)
         {
             int xPos = xPosMouse - xPosMouse % pixelSize;
             int yPos = yPosMouse - yPosMouse % pixelSize;
 
-            DrawPixel(gridGenerator, image, xPos, yPos, pixelSize, pixelColor);
+            DrawPixel(tool, gridGenerator, image, xPos, yPos, pixelSize, pixelColor);
         }
 
-        private void DrawPixel(IGridGenerator gridGenerator, Bitmap image, int xPos, int yPos, int pixelSize, Color pixelColor)
+        private void DrawPixel(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int xPos, int yPos, int pixelSize, Color pixelColor)
         {
             using Graphics pixelDraw = Graphics.FromImage(image);
             using Graphics gridDraw = Graphics.FromImage(imageWithGrid);
             using Brush pixelBrush = new SolidBrush(pixelColor);
 
-            // Gets the correct position of the rectangle from the mouse position
-            pixelDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
-            gridDraw.FillRectangle(pixelBrush, xPos, yPos, pixelSize, pixelSize);
+            tool.UseTool(pixelDraw, pixelBrush, xPos, yPos, pixelSize);
+            tool.UseTool(gridDraw, pixelBrush, xPos, yPos, pixelSize);
 
             if (!gridGenerator.BackgroundGrid)
             {

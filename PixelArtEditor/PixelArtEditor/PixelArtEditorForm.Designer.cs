@@ -59,6 +59,7 @@
             LoadPaletteButton = new Button();
             SavePaletteButton = new Button();
             DialogForSavingFiles = new SaveFileDialog();
+            PixelPenToolButton = new Controls.ToolButton();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
@@ -379,6 +380,16 @@
             SavePaletteButton.UseVisualStyleBackColor = true;
             SavePaletteButton.Click += SavePaletteButton_Click;
             // 
+            // PixelPenToolButton
+            // 
+            PixelPenToolButton.Location = new Point(600, 10);
+            PixelPenToolButton.Name = "PixelPenToolButton";
+            PixelPenToolButton.Size = new Size(40, 40);
+            PixelPenToolButton.TabIndex = 20;
+            PixelPenToolButton.Text = "Pen";
+            PixelPenToolButton.ToolValue = 0;
+            PixelPenToolButton.Click += ChangeTool_ToolButtonsClick;
+            // 
             // PixelArtEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -386,6 +397,7 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(800, 450);
+            Controls.Add(PixelPenToolButton);
             Controls.Add(LoadPaletteButton);
             Controls.Add(SavePaletteButton);
             Controls.Add(PasteButton);
@@ -452,5 +464,6 @@
         private Button LoadPaletteButton;
         private Button SavePaletteButton;
         private SaveFileDialog DialogForSavingFiles;
+        private Controls.ToolButton PixelPenToolButton;
     }
 }

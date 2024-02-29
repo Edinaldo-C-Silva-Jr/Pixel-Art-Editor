@@ -1,6 +1,9 @@
 using PixelArtEditor.Controls;
+using PixelArtEditor.Drawing_Tools;
+using PixelArtEditor.Drawing_Tools.Tools;
 using PixelArtEditor.Files;
 using PixelArtEditor.Grids;
+using System.Linq.Expressions;
 
 namespace PixelArtEditor
 {
@@ -15,6 +18,8 @@ namespace PixelArtEditor
         /// The class responsible for handling the saving and loading of files in the program.
         /// </summary>
         private FileSaveLoadHandler FileSaverLoader { get; } = new();
+
+        private byte ToolValue;
 
         public PixelArtEditorForm()
         {
@@ -165,7 +170,7 @@ namespace PixelArtEditor
                 ImageManager.ClearImageSelection();
                 int zoom = (int)ViewingZoomNumberBox.Value;
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
-                ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), ImageManager.OriginalImage, mouseClick.X, mouseClick.Y, zoom, paletteColor);
+                ViewingAreaDrawingBox.DrawPixelByClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, mouseClick.X, mouseClick.Y, zoom, paletteColor);
                 ViewingAreaDrawingBox.Refresh();
             }
         }
@@ -299,9 +304,11 @@ namespace PixelArtEditor
             if (e.Button == MouseButtons.Left)
             {
                 ImageManager.ClearImageSelection();
+
                 int zoom = (int)ViewingZoomNumberBox.Value;
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
-                ViewingAreaDrawingBox.DrawPixelByClick(DefineGridType(), ImageManager.OriginalImage, e.X, e.Y, zoom, paletteColor);
+                IDrawingTool tool = DefineTool();
+                ViewingAreaDrawingBox.DrawPixelByClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, e.X, e.Y, zoom, paletteColor);
                 ViewingAreaDrawingBox.Refresh();
             }
 
@@ -458,5 +465,23 @@ namespace PixelArtEditor
             PaletteColorTable.SetAllColorValues(paletteValues);
         }
         #endregion
+
+        private void ChangeTool_ToolButtonsClick(object sender, EventArgs e)
+        {
+            if (sender is not ToolButton toolButton)
+            {
+                return;
+            }
+
+            ToolValue = toolButton.ToolValue;
+        }
+
+        private IDrawingTool DefineTool()
+        {
+            return ToolValue switch
+            {
+                _ => new PixelPenTool()
+            };
+        }
     }
 }

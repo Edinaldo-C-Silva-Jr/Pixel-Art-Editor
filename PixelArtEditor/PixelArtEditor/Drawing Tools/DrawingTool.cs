@@ -1,7 +1,7 @@
 ﻿
 namespace PixelArtEditor.Drawing_Tools
 {
-    abstract internal class DrawingTool : IDrawingTool
+    abstract public class DrawingTool : IDrawingTool
     {
         protected static void DrawPixel(Graphics drawGraphics, Brush drawBrush, int xPosition, int yPosition, int pixelSize)
         {
