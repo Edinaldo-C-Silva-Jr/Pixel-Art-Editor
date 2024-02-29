@@ -1,4 +1,5 @@
 ﻿
+
 namespace PixelArtEditor.Drawing_Tools
 {
     abstract public class DrawingTool : IDrawingTool
@@ -12,6 +13,6 @@ namespace PixelArtEditor.Drawing_Tools
         {
             drawGraphics.FillRectangle(drawBrush, xPosition, yPosition, pixelSize * xLength, pixelSize * yLength);
         }
-        abstract public void UseTool(Graphics imageGraphics, Brush colorBrush, int xPosition, int yPosition, int pixelSize);
+        abstract public void UseTool(Graphics imageGraphics, Brush colorBrush, int pixelSize, Point? startingPosition = null, Point? endPosition = null, Size? pictureSize = null);
     }
 }

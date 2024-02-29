@@ -45,30 +45,32 @@ namespace PixelArtEditor.Controls
         {
             int xPos = pixelSize * xPosPixel;
             int yPos = pixelSize * yPosPixel;
+            Point startingPoint = new(xPos, yPos);
 
-            DrawPixel(tool, gridGenerator, image, xPos, yPos, pixelSize, pixelColor);
+            Draw(tool, gridGenerator, image, pixelSize, pixelColor, startingPoint);
         }
 
         public void DrawPixelByClick(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int xPosMouse, int yPosMouse, int pixelSize, Color pixelColor)
         {
             int xPos = xPosMouse - xPosMouse % pixelSize;
             int yPos = yPosMouse - yPosMouse % pixelSize;
+            Point startingPoint = new(xPos, yPos);
 
-            DrawPixel(tool, gridGenerator, image, xPos, yPos, pixelSize, pixelColor);
+            Draw(tool, gridGenerator, image, pixelSize, pixelColor, startingPoint);
         }
 
-        private void DrawPixel(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int xPos, int yPos, int pixelSize, Color pixelColor)
+        private void Draw(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int pixelSize, Color pixelColor, Point? startingPosition = null, Point? endPoint = null, Size? pictureSize = null)
         {
             using Graphics pixelDraw = Graphics.FromImage(image);
             using Graphics gridDraw = Graphics.FromImage(imageWithGrid);
             using Brush pixelBrush = new SolidBrush(pixelColor);
 
-            tool.UseTool(pixelDraw, pixelBrush, xPos, yPos, pixelSize);
-            tool.UseTool(gridDraw, pixelBrush, xPos, yPos, pixelSize);
+            tool.UseTool(pixelDraw, pixelBrush, pixelSize, startingPosition);
+            tool.UseTool(gridDraw, pixelBrush, pixelSize, startingPosition);
 
             if (!gridGenerator.BackgroundGrid)
             {
-                gridGenerator.ApplyGridSinglePixel(imageWithGrid, xPos, yPos);
+                gridGenerator.ApplyGridSinglePixel(imageWithGrid, startingPosition.Value.X, startingPosition.Value.Y);
             }
 
             this.Image = imageWithGrid;
