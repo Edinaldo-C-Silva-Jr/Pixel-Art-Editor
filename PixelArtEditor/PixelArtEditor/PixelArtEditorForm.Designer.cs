@@ -61,9 +61,9 @@
             DialogForSavingFiles = new SaveFileDialog();
             FullMirrorPenButton = new Controls.ToolButton();
             DrawingToolButtonPanel = new Controls.ToolButtonPanel();
-            PixelPenButton = new Controls.ToolButton();
-            HorizontalMirrorPenButton = new Controls.ToolButton();
             VerticalMirrorPenButton = new Controls.ToolButton();
+            HorizontalMirrorPenButton = new Controls.ToolButton();
+            PixelPenButton = new Controls.ToolButton();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
@@ -411,19 +411,19 @@
             DrawingToolButtonPanel.Size = new Size(237, 135);
             DrawingToolButtonPanel.TabIndex = 22;
             // 
-            // PixelPenButton
+            // VerticalMirrorPenButton
             // 
-            PixelPenButton.Location = new Point(5, 5);
-            PixelPenButton.Name = "PixelPenButton";
-            PixelPenButton.Size = new Size(40, 40);
-            PixelPenButton.TabIndex = 22;
-            PixelPenButton.Text = "Pen";
-            PixelPenButton.ToolValue = 0;
-            PixelPenButton.UseBeginPoint = true;
-            PixelPenButton.UseEndPoint = false;
-            PixelPenButton.UseImageSize = false;
-            PixelPenButton.UseVisualStyleBackColor = true;
-            PixelPenButton.Click += ChangeTool_ToolButtonsClick;
+            VerticalMirrorPenButton.Location = new Point(95, 5);
+            VerticalMirrorPenButton.Name = "VerticalMirrorPenButton";
+            VerticalMirrorPenButton.Size = new Size(40, 40);
+            VerticalMirrorPenButton.TabIndex = 24;
+            VerticalMirrorPenButton.Text = "U D Pen";
+            VerticalMirrorPenButton.ToolValue = 2;
+            VerticalMirrorPenButton.UseBeginPoint = true;
+            VerticalMirrorPenButton.UseEndPoint = false;
+            VerticalMirrorPenButton.UseImageSize = true;
+            VerticalMirrorPenButton.UseVisualStyleBackColor = true;
+            VerticalMirrorPenButton.Click += ChangeTool_ToolButtonsClick;
             // 
             // HorizontalMirrorPenButton
             // 
@@ -439,19 +439,19 @@
             HorizontalMirrorPenButton.UseVisualStyleBackColor = true;
             HorizontalMirrorPenButton.Click += ChangeTool_ToolButtonsClick;
             // 
-            // VerticalMirrorPenButton
+            // PixelPenButton
             // 
-            VerticalMirrorPenButton.Location = new Point(95, 5);
-            VerticalMirrorPenButton.Name = "VerticalMirrorPenButton";
-            VerticalMirrorPenButton.Size = new Size(40, 40);
-            VerticalMirrorPenButton.TabIndex = 24;
-            VerticalMirrorPenButton.Text = "U D Pen";
-            VerticalMirrorPenButton.ToolValue = 2;
-            VerticalMirrorPenButton.UseBeginPoint = true;
-            VerticalMirrorPenButton.UseEndPoint = false;
-            VerticalMirrorPenButton.UseImageSize = true;
-            VerticalMirrorPenButton.UseVisualStyleBackColor = true;
-            VerticalMirrorPenButton.Click += ChangeTool_ToolButtonsClick;
+            PixelPenButton.Location = new Point(5, 5);
+            PixelPenButton.Name = "PixelPenButton";
+            PixelPenButton.Size = new Size(40, 40);
+            PixelPenButton.TabIndex = 22;
+            PixelPenButton.Text = "Pen";
+            PixelPenButton.ToolValue = 0;
+            PixelPenButton.UseBeginPoint = true;
+            PixelPenButton.UseEndPoint = false;
+            PixelPenButton.UseImageSize = false;
+            PixelPenButton.UseVisualStyleBackColor = true;
+            PixelPenButton.Click += ChangeTool_ToolButtonsClick;
             // 
             // PixelArtEditorForm
             // 

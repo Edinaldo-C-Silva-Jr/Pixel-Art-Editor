@@ -303,6 +303,11 @@ namespace PixelArtEditor
 
         private void ViewingAreaDrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
+            if (e.X < 0 || e.Y < 0 || e.X >= ImageManager.OriginalImage.Width || e.Y >= ImageManager.OriginalImage.Height)
+            {
+                return;
+            }
+
             if (e.Button == MouseButtons.Left)
             {
                 ImageManager.ClearImageSelection();
