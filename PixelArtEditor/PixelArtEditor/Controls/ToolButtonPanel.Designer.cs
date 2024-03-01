@@ -1,6 +1,6 @@
 ﻿namespace PixelArtEditor.Controls
 {
-    partial class ToolButton
+    partial class ToolButtonPanel
     {
         /// <summary> 
         /// Variável de designer necessária.
@@ -28,11 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            SuspendLayout();
-            // 
-            // ToolButton
-            // 
-            Name = "ToolButton";
+            components = new System.ComponentModel.Container();
         }
 
         #endregion

@@ -59,6 +59,8 @@
             LoadPaletteButton = new Button();
             SavePaletteButton = new Button();
             DialogForSavingFiles = new SaveFileDialog();
+            MirrorPenToolButton = new Controls.ToolButton();
+            DrawingToolButtonPanel = new Controls.ToolButtonPanel();
             PixelPenToolButton = new Controls.ToolButton();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
@@ -66,6 +68,7 @@
             ViewingAreaBackgroundPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ViewingAreaDrawingBox).BeginInit();
             ColorAreaBackgroundPanel.SuspendLayout();
+            DrawingToolButtonPanel.SuspendLayout();
             SuspendLayout();
             // 
             // PixelWidthLabel
@@ -380,14 +383,42 @@
             SavePaletteButton.UseVisualStyleBackColor = true;
             SavePaletteButton.Click += SavePaletteButton_Click;
             // 
+            // MirrorPenToolButton
+            // 
+            MirrorPenToolButton.Location = new Point(50, 5);
+            MirrorPenToolButton.Name = "MirrorPenToolButton";
+            MirrorPenToolButton.Size = new Size(40, 40);
+            MirrorPenToolButton.TabIndex = 21;
+            MirrorPenToolButton.Text = "Mir. Pen";
+            MirrorPenToolButton.ToolValue = 1;
+            MirrorPenToolButton.UseEndPoint = false;
+            MirrorPenToolButton.UseImageSize = true;
+            MirrorPenToolButton.UseStartingPoint = true;
+            MirrorPenToolButton.UseVisualStyleBackColor = true;
+            MirrorPenToolButton.Click += ChangeTool_ToolButtonsClick;
+            // 
+            // DrawingToolButtonPanel
+            // 
+            DrawingToolButtonPanel.BackColor = SystemColors.Control;
+            DrawingToolButtonPanel.Controls.Add(PixelPenToolButton);
+            DrawingToolButtonPanel.Controls.Add(MirrorPenToolButton);
+            DrawingToolButtonPanel.Location = new Point(592, 12);
+            DrawingToolButtonPanel.Name = "DrawingToolButtonPanel";
+            DrawingToolButtonPanel.Size = new Size(237, 135);
+            DrawingToolButtonPanel.TabIndex = 22;
+            // 
             // PixelPenToolButton
             // 
-            PixelPenToolButton.Location = new Point(600, 10);
+            PixelPenToolButton.Location = new Point(5, 5);
             PixelPenToolButton.Name = "PixelPenToolButton";
             PixelPenToolButton.Size = new Size(40, 40);
-            PixelPenToolButton.TabIndex = 20;
+            PixelPenToolButton.TabIndex = 22;
             PixelPenToolButton.Text = "Pen";
             PixelPenToolButton.ToolValue = 0;
+            PixelPenToolButton.UseEndPoint = false;
+            PixelPenToolButton.UseImageSize = false;
+            PixelPenToolButton.UseStartingPoint = true;
+            PixelPenToolButton.UseVisualStyleBackColor = true;
             PixelPenToolButton.Click += ChangeTool_ToolButtonsClick;
             // 
             // PixelArtEditorForm
@@ -396,8 +427,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(800, 450);
-            Controls.Add(PixelPenToolButton);
+            ClientSize = new Size(884, 461);
+            Controls.Add(DrawingToolButtonPanel);
             Controls.Add(LoadPaletteButton);
             Controls.Add(SavePaletteButton);
             Controls.Add(PasteButton);
@@ -427,6 +458,7 @@
             ViewingAreaBackgroundPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)ViewingAreaDrawingBox).EndInit();
             ColorAreaBackgroundPanel.ResumeLayout(false);
+            DrawingToolButtonPanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -464,6 +496,8 @@
         private Button LoadPaletteButton;
         private Button SavePaletteButton;
         private SaveFileDialog DialogForSavingFiles;
+        private Controls.ToolButton MirrorPenToolButton;
+        private Controls.ToolButtonPanel DrawingToolButtonPanel;
         private Controls.ToolButton PixelPenToolButton;
     }
 }

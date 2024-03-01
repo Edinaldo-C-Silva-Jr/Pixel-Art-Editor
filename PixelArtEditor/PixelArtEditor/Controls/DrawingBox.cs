@@ -50,13 +50,9 @@ namespace PixelArtEditor.Controls
             Draw(tool, gridGenerator, image, pixelSize, pixelColor, startingPoint);
         }
 
-        public void DrawPixelByClick(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int xPosMouse, int yPosMouse, int pixelSize, Color pixelColor)
+        public void DrawPixelByClick(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int pixelSize, Color pixelColor, Point? startingPosition = null, Point? endPoint = null, Size? imageSize = null)
         {
-            int xPos = xPosMouse - xPosMouse % pixelSize;
-            int yPos = yPosMouse - yPosMouse % pixelSize;
-            Point startingPoint = new(xPos, yPos);
-
-            Draw(tool, gridGenerator, image, pixelSize, pixelColor, startingPoint);
+            Draw(tool, gridGenerator, image, pixelSize, pixelColor, startingPosition, pictureSize: imageSize);
         }
 
         private void Draw(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int pixelSize, Color pixelColor, Point? startingPosition = null, Point? endPoint = null, Size? pictureSize = null)
@@ -65,8 +61,8 @@ namespace PixelArtEditor.Controls
             using Graphics gridDraw = Graphics.FromImage(imageWithGrid);
             using Brush pixelBrush = new SolidBrush(pixelColor);
 
-            tool.UseTool(pixelDraw, pixelBrush, pixelSize, startingPosition);
-            tool.UseTool(gridDraw, pixelBrush, pixelSize, startingPosition);
+            tool.UseTool(pixelDraw, pixelBrush, pixelSize, startingPosition, endPoint, pictureSize);
+            tool.UseTool(gridDraw, pixelBrush, pixelSize, startingPosition, endPoint, pictureSize);
 
             if (!gridGenerator.BackgroundGrid)
             {

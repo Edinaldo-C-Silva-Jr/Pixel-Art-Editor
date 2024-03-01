@@ -3,7 +3,6 @@ using PixelArtEditor.Drawing_Tools;
 using PixelArtEditor.Drawing_Tools.Tools;
 using PixelArtEditor.Files;
 using PixelArtEditor.Grids;
-using System.Linq.Expressions;
 
 namespace PixelArtEditor
 {
@@ -83,6 +82,8 @@ namespace PixelArtEditor
             TransparencyCheckBox.Checked = false;
             ColorChangeCheckBox.Checked = true;
             ResizeOnLoadCheckBox.Checked = true;
+
+            ToolValue = 0;
         }
         #endregion
 
@@ -165,14 +166,14 @@ namespace PixelArtEditor
         {
             MouseEventArgs mouseClick = (MouseEventArgs)e;
 
-            if (mouseClick.Button == MouseButtons.Left)
+            /*if (mouseClick.Button == MouseButtons.Left)
             {
                 ImageManager.ClearImageSelection();
                 int zoom = (int)ViewingZoomNumberBox.Value;
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
                 ViewingAreaDrawingBox.DrawPixelByClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, mouseClick.X, mouseClick.Y, zoom, paletteColor);
                 ViewingAreaDrawingBox.Refresh();
-            }
+            }*/
         }
 
         /// <summary>
@@ -308,7 +309,25 @@ namespace PixelArtEditor
                 int zoom = (int)ViewingZoomNumberBox.Value;
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
                 IDrawingTool tool = DefineTool();
-                ViewingAreaDrawingBox.DrawPixelByClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, e.X, e.Y, zoom, paletteColor);
+
+                Point? startingPoint = null;
+                Point? endPoint = null;
+                Size? imageSize = null;
+                (bool start, bool end, bool size) = DrawingToolButtonPanel.CheckToolButtonProperties();
+
+                if (start)
+                {
+                    int xPos = e.X - e.X % zoom;
+                    int yPos = e.Y - e.Y % zoom;
+                    startingPoint = new(xPos, yPos);
+                }
+
+                if (size)
+                {
+                    imageSize = ImageManager.OriginalImage.Size;
+                }
+
+                ViewingAreaDrawingBox.DrawPixelByClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, zoom, paletteColor, startingPoint, endPoint, imageSize);
                 ViewingAreaDrawingBox.Refresh();
             }
 
@@ -473,6 +492,12 @@ namespace PixelArtEditor
                 return;
             }
 
+            if (toolButton.Parent is not ToolButtonPanel buttonPanel)
+            {
+                return;
+            }
+
+            buttonPanel.ChangeCurrentButton(toolButton);
             ToolValue = toolButton.ToolValue;
         }
 
@@ -480,7 +505,8 @@ namespace PixelArtEditor
         {
             return ToolValue switch
             {
-                _ => new PixelPenTool()
+                0 => new PixelPenTool(),
+                1 => new MirrorPenTool()
             };
         }
     }
