@@ -317,9 +317,7 @@ namespace PixelArtEditor
 
                 if (start)
                 {
-                    int xPos = e.X - e.X % zoom;
-                    int yPos = e.Y - e.Y % zoom;
-                    startingPoint = new(xPos, yPos);
+                    startingPoint = new(e.X, e.Y);
                 }
 
                 if (size)

@@ -393,7 +393,7 @@
             MirrorPenToolButton.ToolValue = 1;
             MirrorPenToolButton.UseEndPoint = false;
             MirrorPenToolButton.UseImageSize = true;
-            MirrorPenToolButton.UseStartingPoint = true;
+            MirrorPenToolButton.UseBeginPoint = true;
             MirrorPenToolButton.UseVisualStyleBackColor = true;
             MirrorPenToolButton.Click += ChangeTool_ToolButtonsClick;
             // 
@@ -417,7 +417,7 @@
             PixelPenToolButton.ToolValue = 0;
             PixelPenToolButton.UseEndPoint = false;
             PixelPenToolButton.UseImageSize = false;
-            PixelPenToolButton.UseStartingPoint = true;
+            PixelPenToolButton.UseBeginPoint = true;
             PixelPenToolButton.UseVisualStyleBackColor = true;
             PixelPenToolButton.Click += ChangeTool_ToolButtonsClick;
             // 

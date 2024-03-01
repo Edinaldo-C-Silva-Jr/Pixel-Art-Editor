@@ -2,12 +2,16 @@
 {
     internal class MirrorPenTool : DrawingTool
     {
-        public override void UseTool(Graphics imageGraphics, Brush colorBrush, int pixelSize, Point? startingPosition = null, Point? endPosition = null, Size? pictureSize = null)
+        public override void UseTool(Graphics imageGraphics, Brush colorBrush, int pixelSize, Point? beginPoint, Point? endPoint, Size? pictureSize)
         {
-            if (startingPosition.HasValue && pictureSize.HasValue)
+            if (beginPoint.HasValue && pictureSize.HasValue)
             {
-                DrawPixel(imageGraphics, colorBrush, startingPosition.Value.X, startingPosition.Value.Y, pixelSize);
-                DrawPixel(imageGraphics, colorBrush, pictureSize.Value.Width - startingPosition.Value.X, pictureSize.Value.Height - startingPosition.Value.Y, pixelSize);
+                Point pixelPoint = SnapPixelTopLeft(beginPoint.Value, pixelSize);
+                DrawPixel(imageGraphics, colorBrush, pixelPoint.X, pixelPoint.Y, pixelSize);
+
+                beginPoint = new(pictureSize.Value.Width - beginPoint.Value.X - 1, pictureSize.Value.Height - beginPoint.Value.Y - 1);
+                pixelPoint = SnapPixelTopLeft(beginPoint.Value, pixelSize);
+                DrawPixel(imageGraphics, colorBrush, pixelPoint.X, pixelPoint.Y, pixelSize);
             }
         }
     }

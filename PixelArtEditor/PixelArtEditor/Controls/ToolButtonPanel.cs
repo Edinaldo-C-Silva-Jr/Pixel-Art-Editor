@@ -19,7 +19,7 @@
         {
             if (Controls[CurrentButton] is ToolButton button)
             {
-                bool start = button.UseStartingPoint;
+                bool start = button.UseBeginPoint;
                 bool end = button.UseEndPoint;
                 bool size = button.UseImageSize;
                 return (start, end, size);

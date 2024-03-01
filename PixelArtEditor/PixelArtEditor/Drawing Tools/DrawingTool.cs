@@ -13,6 +13,14 @@ namespace PixelArtEditor.Drawing_Tools
         {
             drawGraphics.FillRectangle(drawBrush, xPosition, yPosition, pixelSize * xLength, pixelSize * yLength);
         }
-        abstract public void UseTool(Graphics imageGraphics, Brush colorBrush, int pixelSize, Point? startingPosition = null, Point? endPosition = null, Size? pictureSize = null);
+
+        protected static Point SnapPixelTopLeft(Point absoluteLocation, int pixelSize)
+        {
+            int xPos = absoluteLocation.X - absoluteLocation.X % pixelSize;
+            int yPos = absoluteLocation.Y - absoluteLocation.Y % pixelSize;
+            return new(xPos, yPos);
+        }
+
+        abstract public void UseTool(Graphics imageGraphics, Brush colorBrush, int pixelSize, Point? beginPoint, Point? endPoint, Size? imageSize);
     }
 }
