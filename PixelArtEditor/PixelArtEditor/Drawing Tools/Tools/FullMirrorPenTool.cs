@@ -1,6 +1,6 @@
 ﻿namespace PixelArtEditor.Drawing_Tools.Tools
 {
-    internal class MirrorPenTool : DrawingTool
+    internal class FullMirrorPenTool : DrawingTool
     {
         public override void UseTool(Graphics imageGraphics, Brush colorBrush, int pixelSize, Point? beginPoint, Point? endPoint, Size? pictureSize)
         {

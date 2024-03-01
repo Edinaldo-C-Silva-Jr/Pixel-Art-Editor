@@ -59,9 +59,11 @@
             LoadPaletteButton = new Button();
             SavePaletteButton = new Button();
             DialogForSavingFiles = new SaveFileDialog();
-            MirrorPenToolButton = new Controls.ToolButton();
+            FullMirrorPenButton = new Controls.ToolButton();
             DrawingToolButtonPanel = new Controls.ToolButtonPanel();
-            PixelPenToolButton = new Controls.ToolButton();
+            PixelPenButton = new Controls.ToolButton();
+            HorizontalMirrorPenButton = new Controls.ToolButton();
+            VerticalMirrorPenButton = new Controls.ToolButton();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
@@ -383,43 +385,73 @@
             SavePaletteButton.UseVisualStyleBackColor = true;
             SavePaletteButton.Click += SavePaletteButton_Click;
             // 
-            // MirrorPenToolButton
+            // FullMirrorPenButton
             // 
-            MirrorPenToolButton.Location = new Point(50, 5);
-            MirrorPenToolButton.Name = "MirrorPenToolButton";
-            MirrorPenToolButton.Size = new Size(40, 40);
-            MirrorPenToolButton.TabIndex = 21;
-            MirrorPenToolButton.Text = "Mir. Pen";
-            MirrorPenToolButton.ToolValue = 1;
-            MirrorPenToolButton.UseEndPoint = false;
-            MirrorPenToolButton.UseImageSize = true;
-            MirrorPenToolButton.UseBeginPoint = true;
-            MirrorPenToolButton.UseVisualStyleBackColor = true;
-            MirrorPenToolButton.Click += ChangeTool_ToolButtonsClick;
+            FullMirrorPenButton.Location = new Point(140, 5);
+            FullMirrorPenButton.Name = "FullMirrorPenButton";
+            FullMirrorPenButton.Size = new Size(40, 40);
+            FullMirrorPenButton.TabIndex = 21;
+            FullMirrorPenButton.Text = "Mir. Pen";
+            FullMirrorPenButton.ToolValue = 3;
+            FullMirrorPenButton.UseBeginPoint = true;
+            FullMirrorPenButton.UseEndPoint = false;
+            FullMirrorPenButton.UseImageSize = true;
+            FullMirrorPenButton.UseVisualStyleBackColor = true;
+            FullMirrorPenButton.Click += ChangeTool_ToolButtonsClick;
             // 
             // DrawingToolButtonPanel
             // 
             DrawingToolButtonPanel.BackColor = SystemColors.Control;
-            DrawingToolButtonPanel.Controls.Add(PixelPenToolButton);
-            DrawingToolButtonPanel.Controls.Add(MirrorPenToolButton);
+            DrawingToolButtonPanel.Controls.Add(VerticalMirrorPenButton);
+            DrawingToolButtonPanel.Controls.Add(HorizontalMirrorPenButton);
+            DrawingToolButtonPanel.Controls.Add(PixelPenButton);
+            DrawingToolButtonPanel.Controls.Add(FullMirrorPenButton);
             DrawingToolButtonPanel.Location = new Point(592, 12);
             DrawingToolButtonPanel.Name = "DrawingToolButtonPanel";
             DrawingToolButtonPanel.Size = new Size(237, 135);
             DrawingToolButtonPanel.TabIndex = 22;
             // 
-            // PixelPenToolButton
+            // PixelPenButton
             // 
-            PixelPenToolButton.Location = new Point(5, 5);
-            PixelPenToolButton.Name = "PixelPenToolButton";
-            PixelPenToolButton.Size = new Size(40, 40);
-            PixelPenToolButton.TabIndex = 22;
-            PixelPenToolButton.Text = "Pen";
-            PixelPenToolButton.ToolValue = 0;
-            PixelPenToolButton.UseEndPoint = false;
-            PixelPenToolButton.UseImageSize = false;
-            PixelPenToolButton.UseBeginPoint = true;
-            PixelPenToolButton.UseVisualStyleBackColor = true;
-            PixelPenToolButton.Click += ChangeTool_ToolButtonsClick;
+            PixelPenButton.Location = new Point(5, 5);
+            PixelPenButton.Name = "PixelPenButton";
+            PixelPenButton.Size = new Size(40, 40);
+            PixelPenButton.TabIndex = 22;
+            PixelPenButton.Text = "Pen";
+            PixelPenButton.ToolValue = 0;
+            PixelPenButton.UseBeginPoint = true;
+            PixelPenButton.UseEndPoint = false;
+            PixelPenButton.UseImageSize = false;
+            PixelPenButton.UseVisualStyleBackColor = true;
+            PixelPenButton.Click += ChangeTool_ToolButtonsClick;
+            // 
+            // HorizontalMirrorPenButton
+            // 
+            HorizontalMirrorPenButton.Location = new Point(50, 5);
+            HorizontalMirrorPenButton.Name = "HorizontalMirrorPenButton";
+            HorizontalMirrorPenButton.Size = new Size(40, 40);
+            HorizontalMirrorPenButton.TabIndex = 23;
+            HorizontalMirrorPenButton.Text = "L R Pen";
+            HorizontalMirrorPenButton.ToolValue = 1;
+            HorizontalMirrorPenButton.UseBeginPoint = true;
+            HorizontalMirrorPenButton.UseEndPoint = false;
+            HorizontalMirrorPenButton.UseImageSize = true;
+            HorizontalMirrorPenButton.UseVisualStyleBackColor = true;
+            HorizontalMirrorPenButton.Click += ChangeTool_ToolButtonsClick;
+            // 
+            // VerticalMirrorPenButton
+            // 
+            VerticalMirrorPenButton.Location = new Point(95, 5);
+            VerticalMirrorPenButton.Name = "VerticalMirrorPenButton";
+            VerticalMirrorPenButton.Size = new Size(40, 40);
+            VerticalMirrorPenButton.TabIndex = 24;
+            VerticalMirrorPenButton.Text = "U D Pen";
+            VerticalMirrorPenButton.ToolValue = 2;
+            VerticalMirrorPenButton.UseBeginPoint = true;
+            VerticalMirrorPenButton.UseEndPoint = false;
+            VerticalMirrorPenButton.UseImageSize = true;
+            VerticalMirrorPenButton.UseVisualStyleBackColor = true;
+            VerticalMirrorPenButton.Click += ChangeTool_ToolButtonsClick;
             // 
             // PixelArtEditorForm
             // 
@@ -496,8 +528,10 @@
         private Button LoadPaletteButton;
         private Button SavePaletteButton;
         private SaveFileDialog DialogForSavingFiles;
-        private Controls.ToolButton MirrorPenToolButton;
+        private Controls.ToolButton FullMirrorPenButton;
         private Controls.ToolButtonPanel DrawingToolButtonPanel;
-        private Controls.ToolButton PixelPenToolButton;
+        private Controls.ToolButton PixelPenButton;
+        private Controls.ToolButton VerticalMirrorPenButton;
+        private Controls.ToolButton HorizontalMirrorPenButton;
     }
 }

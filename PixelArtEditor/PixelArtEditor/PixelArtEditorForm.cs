@@ -84,6 +84,7 @@ namespace PixelArtEditor
             ResizeOnLoadCheckBox.Checked = true;
 
             ToolValue = 0;
+            DrawingToolButtonPanel.ReorganizeButtons();
         }
         #endregion
 
@@ -308,7 +309,6 @@ namespace PixelArtEditor
 
                 int zoom = (int)ViewingZoomNumberBox.Value;
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
-                IDrawingTool tool = DefineTool();
 
                 Point? startingPoint = null;
                 Point? endPoint = null;
@@ -504,7 +504,9 @@ namespace PixelArtEditor
             return ToolValue switch
             {
                 0 => new PixelPenTool(),
-                1 => new MirrorPenTool()
+                1 => new HorizontalMirrorPenTool(),
+                2 => new VerticalMirrorPenTool(),
+                3 => new FullMirrorPenTool()
             };
         }
     }
