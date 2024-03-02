@@ -316,16 +316,26 @@ namespace PixelArtEditor
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
 
                 OptionalToolParameters toolParameters = new OptionalToolParameters();
-                (bool start, bool end, bool size) = DrawingToolButtonPanel.CheckToolButtonProperties();
+                Dictionary<string, bool> properties = DrawingToolButtonPanel.CheckToolButtonProperties();
 
-                if (start)
+                if (properties["BeginPoint"])
                 {
                     toolParameters.BeginPoint = new(e.X, e.Y);
                 }
 
-                if (size)
+                if (properties["ImageSize"])
                 {
                     toolParameters.ImageSize = ImageManager.OriginalImage.Size;
+                }
+
+                if (properties["Transparency"])
+                {
+                    toolParameters.Transparency = TransparencyCheckBox.Checked;
+                }
+
+                if (properties["BackgroundColor"])
+                {
+                    toolParameters.BackgroundColor = BackgroundColorTable.GetCurrentColor();
                 }
 
                 ViewingAreaDrawingBox.DrawPixelByClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, zoom, paletteColor, toolParameters);
@@ -509,7 +519,9 @@ namespace PixelArtEditor
                 0 => new PixelPenTool(),
                 1 => new HorizontalMirrorPenTool(),
                 2 => new VerticalMirrorPenTool(),
-                3 => new FullMirrorPenTool()
+                3 => new FullMirrorPenTool(),
+                4 => new FourMirrorPenTool(),
+                5 => new EraserTool()
             };
         }
     }

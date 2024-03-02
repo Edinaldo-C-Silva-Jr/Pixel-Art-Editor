@@ -6,6 +6,8 @@
         public bool UseBeginPoint { get; set; }
         public bool UseEndPoint { get; set; }
         public bool UseImageSize { get; set; }
+        public bool UseTransparency { get; set; }
+        public bool UseBackgroundColor { get; set; }
 
         public ToolButton()
         {

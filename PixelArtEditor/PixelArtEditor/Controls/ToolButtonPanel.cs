@@ -23,17 +23,20 @@
             CurrentButton = button.ToolValue;
         }
 
-        public (bool start, bool end, bool size) CheckToolButtonProperties()
+        public Dictionary<string, bool> CheckToolButtonProperties()
         {
+            Dictionary<string, bool> properties = new();
+
             if (Controls[CurrentButton] is ToolButton button)
             {
-                bool start = button.UseBeginPoint;
-                bool end = button.UseEndPoint;
-                bool size = button.UseImageSize;
-                return (start, end, size);
+                properties.Add("BeginPoint", button.UseBeginPoint);
+                properties.Add("EndPoint", button.UseEndPoint);
+                properties.Add("ImageSize", button.UseImageSize);
+                properties.Add("Transparency", button.UseTransparency);
+                properties.Add("BackgroundColor", button.UseBackgroundColor);
             }
 
-            return (false, false, false);
+            return properties;
         }
     }
 }
