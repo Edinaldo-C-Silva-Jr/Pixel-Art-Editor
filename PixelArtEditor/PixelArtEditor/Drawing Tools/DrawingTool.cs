@@ -1,5 +1,7 @@
 ﻿
 
+using PixelArtEditor.Drawing_Tools.Tools;
+
 namespace PixelArtEditor.Drawing_Tools
 {
     abstract public class DrawingTool : IDrawingTool
@@ -21,6 +23,6 @@ namespace PixelArtEditor.Drawing_Tools
             return new(xPos, yPos);
         }
 
-        abstract public void UseTool(Graphics imageGraphics, Brush colorBrush, int pixelSize, Point? beginPoint, Point? endPoint, Size? imageSize);
+        abstract public void UseTool(Graphics imageGraphics, Brush colorBrush, int pixelSize, OptionalToolParameters toolParameters);
     }
 }

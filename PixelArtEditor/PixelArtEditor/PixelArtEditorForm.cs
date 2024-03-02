@@ -315,22 +315,20 @@ namespace PixelArtEditor
                 int zoom = (int)ViewingZoomNumberBox.Value;
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
 
-                Point? startingPoint = null;
-                Point? endPoint = null;
-                Size? imageSize = null;
+                OptionalToolParameters toolParameters = new OptionalToolParameters();
                 (bool start, bool end, bool size) = DrawingToolButtonPanel.CheckToolButtonProperties();
 
                 if (start)
                 {
-                    startingPoint = new(e.X, e.Y);
+                    toolParameters.BeginPoint = new(e.X, e.Y);
                 }
 
                 if (size)
                 {
-                    imageSize = ImageManager.OriginalImage.Size;
+                    toolParameters.ImageSize = ImageManager.OriginalImage.Size;
                 }
 
-                ViewingAreaDrawingBox.DrawPixelByClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, zoom, paletteColor, startingPoint, endPoint, imageSize);
+                ViewingAreaDrawingBox.DrawPixelByClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, zoom, paletteColor, toolParameters);
                 ViewingAreaDrawingBox.Refresh();
             }
 

@@ -41,34 +41,28 @@ namespace PixelArtEditor.Controls
             this.Refresh();
         }
 
-        public void DrawPixelByPosition(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int xPosPixel, int yPosPixel, int pixelSize, Color pixelColor)
+        public void DrawPixelByClick(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int pixelSize, Color pixelColor, OptionalToolParameters toolParameters)
         {
-            int xPos = pixelSize * xPosPixel;
-            int yPos = pixelSize * yPosPixel;
-            Point startingPoint = new(xPos, yPos);
-
-            Draw(tool, gridGenerator, image, pixelSize, pixelColor, startingPoint);
+            Draw(tool, gridGenerator, image, pixelSize, pixelColor, toolParameters);
         }
 
-        public void DrawPixelByClick(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int pixelSize, Color pixelColor, Point? beginPoint = null, Point? endPoint = null, Size? imageSize = null)
-        {
-            Draw(tool, gridGenerator, image, pixelSize, pixelColor, beginPoint, imageSize: imageSize);
-        }
-
-        private void Draw(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int pixelSize, Color pixelColor, Point? beginPoint = null, Point? endPoint = null, Size? imageSize = null)
+        private void Draw(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int pixelSize, Color pixelColor, OptionalToolParameters toolParameters)
         {
             using Graphics pixelDraw = Graphics.FromImage(image);
             using Graphics gridDraw = Graphics.FromImage(imageWithGrid);
             using Brush pixelBrush = new SolidBrush(pixelColor);
 
-            tool.UseTool(pixelDraw, pixelBrush, pixelSize, beginPoint, endPoint, imageSize);
-            tool.UseTool(gridDraw, pixelBrush, pixelSize, beginPoint, endPoint, imageSize);
+            tool.UseTool(pixelDraw, pixelBrush, pixelSize, toolParameters);
+            tool.UseTool(gridDraw, pixelBrush, pixelSize, toolParameters);
 
             if (!gridGenerator.BackgroundGrid)
             {
-                int xPos = beginPoint.Value.X - beginPoint.Value.X % pixelSize;
-                int yPos = beginPoint.Value.Y - beginPoint.Value.Y % pixelSize;
-                gridGenerator.ApplyGridSinglePixel(imageWithGrid, xPos, yPos);
+                if(toolParameters.BeginPoint.HasValue)
+                {
+                    int xPos = toolParameters.BeginPoint.Value.X - toolParameters.BeginPoint.Value.X % pixelSize;
+                    int yPos = toolParameters.BeginPoint.Value.Y - toolParameters.BeginPoint.Value.Y % pixelSize;
+                    gridGenerator.ApplyGridSinglePixel(imageWithGrid, xPos, yPos);
+                }
             }
 
             this.Image = imageWithGrid;

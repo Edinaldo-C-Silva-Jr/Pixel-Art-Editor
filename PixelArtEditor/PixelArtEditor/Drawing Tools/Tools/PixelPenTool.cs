@@ -3,12 +3,12 @@ namespace PixelArtEditor.Drawing_Tools.Tools
 {
     internal class PixelPenTool : DrawingTool
     {
-        public override void UseTool(Graphics imageGraphics, Brush colorBrush, int pixelSize, Point? beginPoint, Point? endPoint, Size? imageSize)
+        public override void UseTool(Graphics imageGraphics, Brush colorBrush, int pixelSize, OptionalToolParameters toolParameters)
         {
-            if (beginPoint.HasValue)
+            if (toolParameters.BeginPoint.HasValue)
             {
-                beginPoint = SnapPixelTopLeft(beginPoint.Value, pixelSize);
-                DrawPixel(imageGraphics, colorBrush, beginPoint.Value.X, beginPoint.Value.Y, pixelSize);
+                Point pixelPoint = SnapPixelTopLeft(toolParameters.BeginPoint.Value, pixelSize);
+                DrawPixel(imageGraphics, colorBrush, pixelPoint.X, pixelPoint.Y, pixelSize);
             }
         }
     }

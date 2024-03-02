@@ -2,15 +2,15 @@
 {
     internal class VerticalMirrorPenTool : DrawingTool
     {
-        public override void UseTool(Graphics imageGraphics, Brush colorBrush, int pixelSize, Point? beginPoint, Point? endPoint, Size? pictureSize)
+        public override void UseTool(Graphics imageGraphics, Brush colorBrush, int pixelSize, OptionalToolParameters toolParameters)
         {
-            if (beginPoint.HasValue && pictureSize.HasValue)
+            if (toolParameters.BeginPoint.HasValue && toolParameters.ImageSize.HasValue)
             {
-                Point pixelPoint = SnapPixelTopLeft(beginPoint.Value, pixelSize);
+                Point pixelPoint = SnapPixelTopLeft(toolParameters.BeginPoint.Value, pixelSize);
                 DrawPixel(imageGraphics, colorBrush, pixelPoint.X, pixelPoint.Y, pixelSize);
 
-                beginPoint = new(beginPoint.Value.X, pictureSize.Value.Height - beginPoint.Value.Y - 1);
-                pixelPoint = SnapPixelTopLeft(beginPoint.Value, pixelSize);
+                toolParameters.BeginPoint = new(toolParameters.BeginPoint.Value.X, toolParameters.ImageSize.Value.Height - toolParameters.BeginPoint.Value.Y - 1);
+                pixelPoint = SnapPixelTopLeft(toolParameters.BeginPoint.Value, pixelSize);
                 DrawPixel(imageGraphics, colorBrush, pixelPoint.X, pixelPoint.Y, pixelSize);
             }
         }
