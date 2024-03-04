@@ -146,7 +146,7 @@ namespace PixelArtEditor
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
             IGridGenerator gridGenerator = DefineGridType();
             bool transparent = TransparencyCheckBox.Checked;
-            
+
             ImageManager.CreateNewImage(width, height, zoom, backgroundColor, transparent);
 
             ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
@@ -161,20 +161,6 @@ namespace PixelArtEditor
 
             ColorAreaBackgroundPanel.Location = new Point(ColorAreaBackgroundPanel.Location.X, ViewingAreaBackgroundPanel.Location.Y + ViewingAreaBackgroundPanel.Height + 10);
             this.ResumeLayout();
-        }
-
-        private void ViewingAreaDrawingBox_Click(object sender, EventArgs e)
-        {
-            MouseEventArgs mouseClick = (MouseEventArgs)e;
-
-            /*if (mouseClick.Button == MouseButtons.Left)
-            {
-                ImageManager.ClearImageSelection();
-                int zoom = (int)ViewingZoomNumberBox.Value;
-                Color paletteColor = PaletteColorTable.GetCurrentColor();
-                ViewingAreaDrawingBox.DrawPixelByClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, mouseClick.X, mouseClick.Y, zoom, paletteColor);
-                ViewingAreaDrawingBox.Refresh();
-            }*/
         }
 
         /// <summary>
@@ -301,53 +287,6 @@ namespace PixelArtEditor
             ReorganizeControls();
         }
 
-        private void ViewingAreaDrawingBox_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.X < 0 || e.Y < 0 || e.X >= ImageManager.OriginalImage.Width || e.Y >= ImageManager.OriginalImage.Height)
-            {
-                return;
-            }
-
-            if (e.Button == MouseButtons.Left)
-            {
-                ImageManager.ClearImageSelection();
-
-                int zoom = (int)ViewingZoomNumberBox.Value;
-                Color paletteColor = PaletteColorTable.GetCurrentColor();
-
-                OptionalToolParameters toolParameters = new OptionalToolParameters();
-                Dictionary<string, bool> properties = DrawingToolButtonPanel.CheckToolButtonProperties();
-
-                if (properties["BeginPoint"])
-                {
-                    toolParameters.BeginPoint = new(e.X, e.Y);
-                }
-
-                if (properties["ImageSize"])
-                {
-                    toolParameters.ImageSize = ImageManager.OriginalImage.Size;
-                }
-
-                if (properties["Transparency"])
-                {
-                    toolParameters.Transparency = TransparencyCheckBox.Checked;
-                }
-
-                if (properties["BackgroundColor"])
-                {
-                    toolParameters.BackgroundColor = BackgroundColorTable.GetCurrentColor();
-                }
-
-                ViewingAreaDrawingBox.DrawPixelByClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, zoom, paletteColor, toolParameters);
-                ViewingAreaDrawingBox.Refresh();
-            }
-
-            if (e.Button == MouseButtons.Right)
-            {
-                ChangeSelectionOnImage(e.Location);
-            }
-        }
-
         private void TransparencyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
@@ -385,15 +324,6 @@ namespace PixelArtEditor
             {
                 SetNewImageAndViewingAreaSize();
                 ReorganizeControls();
-            }
-        }
-
-        private void ViewingAreaDrawingBox_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                ImageManager.DefineSelectionStart(e.Location);
-                ChangeSelectionOnImage(e.Location);
             }
         }
 
@@ -523,6 +453,107 @@ namespace PixelArtEditor
                 4 => new FourMirrorPenTool(),
                 5 => new EraserTool()
             };
+        }
+
+        private void ViewingAreaDrawingBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ImageManager.ClearImageSelection();
+
+                Color paletteColor = PaletteColorTable.GetCurrentColor();
+
+                OptionalToolParameters toolParameters = new();
+                Dictionary<string, bool> properties = DrawingToolButtonPanel.CheckToolButtonProperties();
+
+                if (properties["BeginPoint"])
+                {
+                    toolParameters.BeginPoint = new(e.X, e.Y);
+                }
+
+                if (properties["ImageSize"])
+                {
+                    toolParameters.ImageSize = ImageManager.OriginalImage.Size;
+                }
+
+                if (properties["Transparency"])
+                {
+                    toolParameters.Transparency = TransparencyCheckBox.Checked;
+                }
+
+                if (properties["BackgroundColor"])
+                {
+                    toolParameters.BackgroundColor = BackgroundColorTable.GetCurrentColor();
+                }
+
+                if (properties["PixelSize"])
+                {
+                    toolParameters.PixelSize = (int)ViewingZoomNumberBox.Value;
+                }
+
+                ViewingAreaDrawingBox.DrawClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, paletteColor, toolParameters);
+                ViewingAreaDrawingBox.Refresh();
+            }
+
+            if (e.Button == MouseButtons.Right)
+            {
+                ImageManager.DefineSelectionStart(e.Location);
+                ChangeSelectionOnImage(e.Location);
+            }
+        }
+
+        private void ViewingAreaDrawingBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.X < 0 || e.Y < 0 || e.X >= ImageManager.OriginalImage.Width || e.Y >= ImageManager.OriginalImage.Height)
+            {
+                return;
+            }
+
+            if (e.Button == MouseButtons.Left)
+            {
+                ImageManager.ClearImageSelection();
+
+                OptionalToolParameters toolParameters = new();
+                Dictionary<string, bool> properties = DrawingToolButtonPanel.CheckToolButtonProperties();
+
+                if (properties["BeginPoint"])
+                {
+                    toolParameters.BeginPoint = new(e.X, e.Y);
+                }
+
+                if (properties["ImageSize"])
+                {
+                    toolParameters.ImageSize = ImageManager.OriginalImage.Size;
+                }
+
+                if (properties["Transparency"])
+                {
+                    toolParameters.Transparency = TransparencyCheckBox.Checked;
+                }
+
+                if (properties["BackgroundColor"])
+                {
+                    toolParameters.BackgroundColor = BackgroundColorTable.GetCurrentColor();
+                }
+
+                if (properties["PixelSize"])
+                {
+                    toolParameters.PixelSize = (int)ViewingZoomNumberBox.Value;
+                }
+
+                ViewingAreaDrawingBox.DrawHold(DefineTool(), DefineGridType(), toolParameters);
+                ViewingAreaDrawingBox.Refresh();
+            }
+
+            if (e.Button == MouseButtons.Right)
+            {
+                ChangeSelectionOnImage(e.Location);
+            }
+        }
+
+        private void ViewingAreaDrawingBox_MouseUp(object sender, MouseEventArgs e)
+        {
+
         }
     }
 }

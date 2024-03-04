@@ -3,9 +3,16 @@ using PixelArtEditor.Grids;
 
 namespace PixelArtEditor.Controls
 {
-    public partial class DrawingBox : PictureBox
+    public partial class DrawingBox : PictureBox, IDisposable
     {
         private Bitmap imageWithGrid = new Bitmap(1, 1);
+        
+        // Disposed in the Designer file
+        private Graphics? ImageGraphics;
+        private SolidBrush? ColorBrush;
+
+        // Grid stuff
+        private Graphics? GridGraphics;
 
         public DrawingBox()
         {
@@ -41,31 +48,74 @@ namespace PixelArtEditor.Controls
             this.Refresh();
         }
 
-        public void DrawPixelByClick(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int pixelSize, Color pixelColor, OptionalToolParameters toolParameters)
+        public void ApplySingleGrid(IGridGenerator gridGenerator, OptionalToolParameters toolParameters)
         {
-            Draw(tool, gridGenerator, image, pixelSize, pixelColor, toolParameters);
-        }
-
-        private void Draw(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, int pixelSize, Color pixelColor, OptionalToolParameters toolParameters)
-        {
-            using Graphics pixelDraw = Graphics.FromImage(image);
-            using Graphics gridDraw = Graphics.FromImage(imageWithGrid);
-            using Brush pixelBrush = new SolidBrush(pixelColor);
-
-            tool.UseTool(pixelDraw, pixelBrush, pixelSize, toolParameters);
-            tool.UseTool(gridDraw, pixelBrush, pixelSize, toolParameters);
-
             if (!gridGenerator.BackgroundGrid)
             {
-                if(toolParameters.BeginPoint.HasValue)
+                if (toolParameters.BeginPoint.HasValue && toolParameters.PixelSize.HasValue)
                 {
-                    int xPos = toolParameters.BeginPoint.Value.X - toolParameters.BeginPoint.Value.X % pixelSize;
-                    int yPos = toolParameters.BeginPoint.Value.Y - toolParameters.BeginPoint.Value.Y % pixelSize;
+                    int xPos = toolParameters.BeginPoint.Value.X - toolParameters.BeginPoint.Value.X % toolParameters.PixelSize.Value;
+                    int yPos = toolParameters.BeginPoint.Value.Y - toolParameters.BeginPoint.Value.Y % toolParameters.PixelSize.Value;
                     gridGenerator.ApplyGridSinglePixel(imageWithGrid, xPos, yPos);
                 }
             }
+        }
 
-            this.Image = imageWithGrid;
+        public void DrawClick(IDrawingTool tool, IGridGenerator gridGenerator, Bitmap image, Color pixelColor, OptionalToolParameters toolParameters)
+        {
+            ImageGraphics = Graphics.FromImage(image);
+            ColorBrush = new(pixelColor);
+
+            GridGraphics = Graphics.FromImage(imageWithGrid);
+
+            tool.UseToolClick(ImageGraphics, ColorBrush, toolParameters);
+
+            // Grid stuff
+            tool.UseToolClick(GridGraphics, ColorBrush, toolParameters);
+            ApplySingleGrid(gridGenerator, toolParameters);
+        }
+
+        public void DrawHold(IDrawingTool tool, IGridGenerator gridGenerator, OptionalToolParameters toolParameters)
+        {
+            if (ImageGraphics == null || ColorBrush == null)
+            {
+                return;
+            }
+
+            tool.UseToolHold(ImageGraphics, ColorBrush, toolParameters);
+
+            // Grid stuff
+            if (GridGraphics == null)
+            {
+                return;
+            }
+
+            tool.UseToolHold(GridGraphics, ColorBrush, toolParameters);
+            ApplySingleGrid(gridGenerator, toolParameters);
+        }
+
+        public void DrawRelease(IDrawingTool tool, IGridGenerator gridGenerator, OptionalToolParameters toolParameters)
+        {
+            if (ImageGraphics == null || ColorBrush == null)
+            {
+                return;
+            }
+
+            tool.UseToolRelease(ImageGraphics, ColorBrush, toolParameters);
+
+            ImageGraphics.Dispose();
+            ColorBrush.Dispose();
+
+            // Grid stuff
+            if (GridGraphics == null)
+            {
+                return;
+            }
+
+            tool.UseToolRelease(GridGraphics, ColorBrush, toolParameters);
+            ApplySingleGrid(gridGenerator, toolParameters);
+
+            GridGraphics.Dispose();
         }
     }
 }

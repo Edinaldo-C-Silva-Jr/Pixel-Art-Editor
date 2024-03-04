@@ -8,6 +8,7 @@
         public bool UseImageSize { get; set; }
         public bool UseTransparency { get; set; }
         public bool UseBackgroundColor { get; set; }
+        public bool UsePixelSize { get; set; }
 
         public ToolButton()
         {

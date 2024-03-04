@@ -34,6 +34,7 @@
                 properties.Add("ImageSize", button.UseImageSize);
                 properties.Add("Transparency", button.UseTransparency);
                 properties.Add("BackgroundColor", button.UseBackgroundColor);
+                properties.Add("PixelSize", button.UsePixelSize);
             }
 
             return properties;

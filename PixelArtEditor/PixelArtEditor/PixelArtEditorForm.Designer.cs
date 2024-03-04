@@ -197,10 +197,10 @@
             ViewingAreaDrawingBox.Size = new Size(20, 20);
             ViewingAreaDrawingBox.TabIndex = 0;
             ViewingAreaDrawingBox.TabStop = false;
-            ViewingAreaDrawingBox.Click += ViewingAreaDrawingBox_Click;
             ViewingAreaDrawingBox.Paint += ViewingAreaDrawingBox_Paint;
             ViewingAreaDrawingBox.MouseDown += ViewingAreaDrawingBox_MouseDown;
             ViewingAreaDrawingBox.MouseMove += ViewingAreaDrawingBox_MouseMove;
+            ViewingAreaDrawingBox.MouseUp += ViewingAreaDrawingBox_MouseUp;
             // 
             // ColorAreaBackgroundPanel
             // 
@@ -399,6 +399,7 @@
             FullMirrorPenButton.UseBeginPoint = true;
             FullMirrorPenButton.UseEndPoint = false;
             FullMirrorPenButton.UseImageSize = true;
+            FullMirrorPenButton.UsePixelSize = true;
             FullMirrorPenButton.UseTransparency = false;
             FullMirrorPenButton.UseVisualStyleBackColor = true;
             FullMirrorPenButton.Click += ChangeTool_ToolButtonsClick;
@@ -429,6 +430,7 @@
             EraserButton.UseBeginPoint = true;
             EraserButton.UseEndPoint = false;
             EraserButton.UseImageSize = false;
+            EraserButton.UsePixelSize = true;
             EraserButton.UseTransparency = true;
             EraserButton.UseVisualStyleBackColor = true;
             EraserButton.Click += ChangeTool_ToolButtonsClick;
@@ -445,6 +447,7 @@
             FourMirrorPenButton.UseBeginPoint = true;
             FourMirrorPenButton.UseEndPoint = false;
             FourMirrorPenButton.UseImageSize = true;
+            FourMirrorPenButton.UsePixelSize = true;
             FourMirrorPenButton.UseTransparency = false;
             FourMirrorPenButton.UseVisualStyleBackColor = true;
             FourMirrorPenButton.Click += ChangeTool_ToolButtonsClick;
@@ -461,6 +464,7 @@
             VerticalMirrorPenButton.UseBeginPoint = true;
             VerticalMirrorPenButton.UseEndPoint = false;
             VerticalMirrorPenButton.UseImageSize = true;
+            VerticalMirrorPenButton.UsePixelSize = true;
             VerticalMirrorPenButton.UseTransparency = false;
             VerticalMirrorPenButton.UseVisualStyleBackColor = true;
             VerticalMirrorPenButton.Click += ChangeTool_ToolButtonsClick;
@@ -477,6 +481,7 @@
             HorizontalMirrorPenButton.UseBeginPoint = true;
             HorizontalMirrorPenButton.UseEndPoint = false;
             HorizontalMirrorPenButton.UseImageSize = true;
+            HorizontalMirrorPenButton.UsePixelSize = true;
             HorizontalMirrorPenButton.UseTransparency = false;
             HorizontalMirrorPenButton.UseVisualStyleBackColor = true;
             HorizontalMirrorPenButton.Click += ChangeTool_ToolButtonsClick;
@@ -493,6 +498,7 @@
             PixelPenButton.UseBeginPoint = true;
             PixelPenButton.UseEndPoint = false;
             PixelPenButton.UseImageSize = false;
+            PixelPenButton.UsePixelSize = true;
             PixelPenButton.UseTransparency = false;
             PixelPenButton.UseVisualStyleBackColor = true;
             PixelPenButton.Click += ChangeTool_ToolButtonsClick;
