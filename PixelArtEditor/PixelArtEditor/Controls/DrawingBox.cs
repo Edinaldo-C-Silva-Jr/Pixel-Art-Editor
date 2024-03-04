@@ -117,5 +117,12 @@ namespace PixelArtEditor.Controls
 
             GridGraphics.Dispose();
         }
+
+        public void PreviewTool(IDrawingTool tool, Graphics paintGraphics, Color pixelColor, OptionalToolParameters toolParameters)
+        {
+            ColorBrush = new(pixelColor);
+
+            tool.PreviewTool(paintGraphics, ColorBrush, toolParameters);
+        }
     }
 }

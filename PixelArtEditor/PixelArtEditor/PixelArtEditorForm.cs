@@ -20,6 +20,8 @@ namespace PixelArtEditor
 
         private byte ToolValue;
 
+        Point? MouseOnControl;
+
         public PixelArtEditorForm()
         {
             ImageManager = new();
@@ -341,11 +343,6 @@ namespace PixelArtEditor
             ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, backgroundColor);
         }
 
-        private void ViewingAreaDrawingBox_Paint(object sender, PaintEventArgs e)
-        {
-            ImageManager.DrawSelectionOntoDrawingBox(e.Graphics);
-        }
-
         private void ChangeSelectionOnImage(Point location)
         {
             int width = ViewingAreaDrawingBox.Width;
@@ -549,11 +546,49 @@ namespace PixelArtEditor
             {
                 ChangeSelectionOnImage(e.Location);
             }
+
+            MouseOnControl = e.Location;
+            ViewingAreaDrawingBox.Invalidate();
         }
 
         private void ViewingAreaDrawingBox_MouseUp(object sender, MouseEventArgs e)
         {
 
+        }
+
+        private void ViewingAreaDrawingBox_Paint(object sender, PaintEventArgs e)
+        {
+            ImageManager.DrawSelectionOntoDrawingBox(e.Graphics);
+
+            OptionalToolParameters toolParameters = new();
+            Dictionary<string, bool> properties = DrawingToolButtonPanel.CheckToolButtonProperties();
+
+            if (properties["BeginPoint"])
+            {
+                toolParameters.BeginPoint = MouseOnControl;
+            }
+
+            if (properties["ImageSize"])
+            {
+                toolParameters.ImageSize = ImageManager.OriginalImage.Size;
+            }
+
+            if (properties["Transparency"])
+            {
+                toolParameters.Transparency = TransparencyCheckBox.Checked;
+            }
+
+            if (properties["BackgroundColor"])
+            {
+                toolParameters.BackgroundColor = BackgroundColorTable.GetCurrentColor();
+            }
+
+            if (properties["PixelSize"])
+            {
+                toolParameters.PixelSize = (int)ViewingZoomNumberBox.Value;
+            }
+
+            ViewingAreaDrawingBox.PreviewTool(DefineTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
         }
     }
 }
