@@ -3,13 +3,18 @@ namespace PixelArtEditor.Drawing_Tools.Tools
 {
     internal class PixelPenTool : DrawingTool
     {
+        private static void DrawPenPixel(Graphics graphics, SolidBrush brush, OptionalToolParameters parameters)
+        {
+            Point pixelPoint = SnapPixelTopLeft(parameters.BeginPoint.Value, parameters.PixelSize.Value);
+            DrawPixel(graphics, brush, pixelPoint.X, pixelPoint.Y, parameters.PixelSize.Value);
+        }
+
         public override void PreviewTool(Graphics paintGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters)
         {
             if (toolParameters.BeginPoint.HasValue && toolParameters.PixelSize.HasValue)
             {
                 colorBrush = MakePreviewBrush(colorBrush);
-                Point pixelPoint = SnapPixelTopLeft(toolParameters.BeginPoint.Value, toolParameters.PixelSize.Value);
-                DrawPixel(paintGraphics, colorBrush, pixelPoint.X, pixelPoint.Y, toolParameters.PixelSize.Value);
+                DrawPenPixel(paintGraphics, colorBrush, toolParameters);
             }
         }
 
@@ -17,8 +22,7 @@ namespace PixelArtEditor.Drawing_Tools.Tools
         {
             if (toolParameters.BeginPoint.HasValue && toolParameters.PixelSize.HasValue)
             {
-                Point pixelPoint = SnapPixelTopLeft(toolParameters.BeginPoint.Value, toolParameters.PixelSize.Value);
-                DrawPixel(imageGraphics, colorBrush, pixelPoint.X, pixelPoint.Y, toolParameters.PixelSize.Value);
+                DrawPenPixel(imageGraphics, colorBrush, toolParameters);
             }
         }
 
@@ -26,8 +30,7 @@ namespace PixelArtEditor.Drawing_Tools.Tools
         {
             if (toolParameters.BeginPoint.HasValue && toolParameters.PixelSize.HasValue)
             {
-                Point pixelPoint = SnapPixelTopLeft(toolParameters.BeginPoint.Value, toolParameters.PixelSize.Value);
-                DrawPixel(imageGraphics, colorBrush, pixelPoint.X, pixelPoint.Y, toolParameters.PixelSize.Value);
+                DrawPenPixel(imageGraphics, colorBrush, toolParameters);
             }
         }
 

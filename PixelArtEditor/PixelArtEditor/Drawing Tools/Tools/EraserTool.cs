@@ -2,22 +2,53 @@
 {
     internal class EraserTool : DrawingTool
     {
-        public override void UseTool(Graphics imageGraphics, Brush colorBrush, int pixelSize, OptionalToolParameters toolParameters)
+        private static void ErasePixel(Graphics graphics, OptionalToolParameters parameters)
         {
-            if (toolParameters.BeginPoint.HasValue && toolParameters.BackgroundColor.HasValue && toolParameters.Transparency.HasValue)
+            Point pixelPoint = SnapPixelTopLeft(parameters.BeginPoint.Value, parameters.PixelSize.Value);
+            Rectangle eraseArea = new(pixelPoint, new Size(parameters.PixelSize.Value, parameters.PixelSize.Value));
+            graphics.SetClip(eraseArea);
+            if (parameters.Transparency.Value)
             {
-                Point pixelPoint = SnapPixelTopLeft(toolParameters.BeginPoint.Value, pixelSize);
-                Rectangle eraseArea = new(pixelPoint, new(pixelSize, pixelSize));
-                imageGraphics.SetClip(eraseArea);
-                if (toolParameters.Transparency.Value)
-                {
-                    imageGraphics.Clear(Color.Transparent);
-                }
-                else
-                {
-                    imageGraphics.Clear(toolParameters.BackgroundColor.Value);
-                }
+                graphics.Clear(Color.Transparent);
             }
+            else
+            {
+                graphics.Clear(parameters.BackgroundColor.Value);
+            }
+        }
+
+        public override void PreviewTool(Graphics paintGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters)
+        {
+            if (toolParameters.BeginPoint.HasValue && toolParameters.PixelSize.HasValue)
+            {
+                using SolidBrush outerBrush = new(Color.Black);
+                using SolidBrush innerBrush = new(Color.White);
+
+                Point pixelPoint = SnapPixelTopLeft(toolParameters.BeginPoint.Value, toolParameters.PixelSize.Value);
+                DrawPixel(paintGraphics, outerBrush, pixelPoint.X, pixelPoint.Y, toolParameters.PixelSize.Value);
+                DrawPixel(paintGraphics, innerBrush, pixelPoint.X + 1, pixelPoint.Y + 1, toolParameters.PixelSize.Value - 2);
+            }
+        }
+
+        public override void UseToolClick(Graphics imageGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters)
+        {
+            if (toolParameters.BeginPoint.HasValue && toolParameters.BackgroundColor.HasValue && toolParameters.Transparency.HasValue && toolParameters.PixelSize.HasValue)
+            {
+                ErasePixel(imageGraphics, toolParameters);
+            }
+        }
+
+        public override void UseToolHold(Graphics imageGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters)
+        {
+            if (toolParameters.BeginPoint.HasValue && toolParameters.BackgroundColor.HasValue && toolParameters.Transparency.HasValue && toolParameters.PixelSize.HasValue)
+            {
+                ErasePixel(imageGraphics, toolParameters);
+            }
+        }
+
+        public override void UseToolRelease(Graphics imageGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters)
+        {
+            return;
         }
     }
 }
