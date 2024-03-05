@@ -3,6 +3,9 @@
     public partial class ToolButton : Button
     {
         public byte ToolValue { get; set; }
+
+        public bool PreviewOnMove { get; set; }
+        public bool PreviewOnHold { get; set; }
         public bool UseBeginPoint { get; set; }
         public bool UseEndPoint { get; set; }
         public bool UseImageSize { get; set; }

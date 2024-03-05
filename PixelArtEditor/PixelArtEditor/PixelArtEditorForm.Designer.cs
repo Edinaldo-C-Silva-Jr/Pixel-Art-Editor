@@ -391,6 +391,8 @@
             // 
             FullMirrorPenButton.Location = new Point(150, 0);
             FullMirrorPenButton.Name = "FullMirrorPenButton";
+            FullMirrorPenButton.PreviewOnHold = false;
+            FullMirrorPenButton.PreviewOnMove = true;
             FullMirrorPenButton.Size = new Size(40, 40);
             FullMirrorPenButton.TabIndex = 21;
             FullMirrorPenButton.Text = "Mir. Pen";
@@ -422,6 +424,8 @@
             // 
             EraserButton.Location = new Point(0, 50);
             EraserButton.Name = "EraserButton";
+            EraserButton.PreviewOnHold = false;
+            EraserButton.PreviewOnMove = true;
             EraserButton.Size = new Size(40, 40);
             EraserButton.TabIndex = 26;
             EraserButton.Text = "Eraser";
@@ -439,6 +443,8 @@
             // 
             FourMirrorPenButton.Location = new Point(200, 0);
             FourMirrorPenButton.Name = "FourMirrorPenButton";
+            FourMirrorPenButton.PreviewOnHold = false;
+            FourMirrorPenButton.PreviewOnMove = true;
             FourMirrorPenButton.Size = new Size(40, 40);
             FourMirrorPenButton.TabIndex = 25;
             FourMirrorPenButton.Text = "4x Pen";
@@ -456,6 +462,8 @@
             // 
             VerticalMirrorPenButton.Location = new Point(100, 0);
             VerticalMirrorPenButton.Name = "VerticalMirrorPenButton";
+            VerticalMirrorPenButton.PreviewOnHold = false;
+            VerticalMirrorPenButton.PreviewOnMove = true;
             VerticalMirrorPenButton.Size = new Size(40, 40);
             VerticalMirrorPenButton.TabIndex = 24;
             VerticalMirrorPenButton.Text = "U D Pen";
@@ -473,6 +481,8 @@
             // 
             HorizontalMirrorPenButton.Location = new Point(50, 0);
             HorizontalMirrorPenButton.Name = "HorizontalMirrorPenButton";
+            HorizontalMirrorPenButton.PreviewOnHold = false;
+            HorizontalMirrorPenButton.PreviewOnMove = true;
             HorizontalMirrorPenButton.Size = new Size(40, 40);
             HorizontalMirrorPenButton.TabIndex = 23;
             HorizontalMirrorPenButton.Text = "L R Pen";
@@ -490,6 +500,8 @@
             // 
             PixelPenButton.Location = new Point(0, 0);
             PixelPenButton.Name = "PixelPenButton";
+            PixelPenButton.PreviewOnHold = false;
+            PixelPenButton.PreviewOnMove = true;
             PixelPenButton.Size = new Size(40, 40);
             PixelPenButton.TabIndex = 22;
             PixelPenButton.Text = "Pen";

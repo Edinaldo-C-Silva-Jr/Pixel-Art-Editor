@@ -18,8 +18,6 @@ namespace PixelArtEditor
         /// </summary>
         private FileSaveLoadHandler FileSaverLoader { get; } = new();
 
-        private byte ToolValue;
-
         Point? MouseOnControl;
 
         public PixelArtEditorForm()
@@ -85,7 +83,6 @@ namespace PixelArtEditor
             ColorChangeCheckBox.Checked = true;
             ResizeOnLoadCheckBox.Checked = true;
 
-            ToolValue = 0;
             DrawingToolButtonPanel.ReorganizeButtons();
         }
         #endregion
@@ -436,12 +433,11 @@ namespace PixelArtEditor
             }
 
             buttonPanel.ChangeCurrentButton(toolButton);
-            ToolValue = toolButton.ToolValue;
         }
 
         private IDrawingTool DefineTool()
         {
-            return ToolValue switch
+            return DrawingToolButtonPanel.CurrentButton switch
             {
                 0 => new PixelPenTool(),
                 1 => new HorizontalMirrorPenTool(),
@@ -452,6 +448,40 @@ namespace PixelArtEditor
             };
         }
 
+        private OptionalToolParameters GetToolParameters(Point mouseLocation)
+        {
+            OptionalToolParameters toolParameters = new();
+
+            Dictionary<string, bool> properties = DrawingToolButtonPanel.CheckToolDrawProperties();
+
+            if (properties["BeginPoint"])
+            {
+                toolParameters.BeginPoint = mouseLocation;
+            }
+
+            if (properties["ImageSize"])
+            {
+                toolParameters.ImageSize = ImageManager.OriginalImage.Size;
+            }
+
+            if (properties["Transparency"])
+            {
+                toolParameters.Transparency = TransparencyCheckBox.Checked;
+            }
+
+            if (properties["BackgroundColor"])
+            {
+                toolParameters.BackgroundColor = BackgroundColorTable.GetCurrentColor();
+            }
+
+            if (properties["PixelSize"])
+            {
+                toolParameters.PixelSize = (int)ViewingZoomNumberBox.Value;
+            }
+
+            return toolParameters;
+        }
+
         private void ViewingAreaDrawingBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -460,33 +490,7 @@ namespace PixelArtEditor
 
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
 
-                OptionalToolParameters toolParameters = new();
-                Dictionary<string, bool> properties = DrawingToolButtonPanel.CheckToolButtonProperties();
-
-                if (properties["BeginPoint"])
-                {
-                    toolParameters.BeginPoint = new(e.X, e.Y);
-                }
-
-                if (properties["ImageSize"])
-                {
-                    toolParameters.ImageSize = ImageManager.OriginalImage.Size;
-                }
-
-                if (properties["Transparency"])
-                {
-                    toolParameters.Transparency = TransparencyCheckBox.Checked;
-                }
-
-                if (properties["BackgroundColor"])
-                {
-                    toolParameters.BackgroundColor = BackgroundColorTable.GetCurrentColor();
-                }
-
-                if (properties["PixelSize"])
-                {
-                    toolParameters.PixelSize = (int)ViewingZoomNumberBox.Value;
-                }
+                OptionalToolParameters toolParameters = GetToolParameters(e.Location); 
 
                 ViewingAreaDrawingBox.DrawClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, paletteColor, toolParameters);
                 ViewingAreaDrawingBox.Refresh();
@@ -510,33 +514,7 @@ namespace PixelArtEditor
             {
                 ImageManager.ClearImageSelection();
 
-                OptionalToolParameters toolParameters = new();
-                Dictionary<string, bool> properties = DrawingToolButtonPanel.CheckToolButtonProperties();
-
-                if (properties["BeginPoint"])
-                {
-                    toolParameters.BeginPoint = new(e.X, e.Y);
-                }
-
-                if (properties["ImageSize"])
-                {
-                    toolParameters.ImageSize = ImageManager.OriginalImage.Size;
-                }
-
-                if (properties["Transparency"])
-                {
-                    toolParameters.Transparency = TransparencyCheckBox.Checked;
-                }
-
-                if (properties["BackgroundColor"])
-                {
-                    toolParameters.BackgroundColor = BackgroundColorTable.GetCurrentColor();
-                }
-
-                if (properties["PixelSize"])
-                {
-                    toolParameters.PixelSize = (int)ViewingZoomNumberBox.Value;
-                }
+                OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 ViewingAreaDrawingBox.DrawHold(DefineTool(), DefineGridType(), toolParameters);
                 ViewingAreaDrawingBox.Refresh();
@@ -547,8 +525,13 @@ namespace PixelArtEditor
                 ChangeSelectionOnImage(e.Location);
             }
 
-            MouseOnControl = e.Location;
-            ViewingAreaDrawingBox.Invalidate();
+            Dictionary<string, bool> previewProperties = DrawingToolButtonPanel.CheckToolPreviewProperties();
+
+            if (previewProperties["PreviewMove"] || (previewProperties["PreviewHold"] && e.Button == MouseButtons.Left))
+            {
+                MouseOnControl = e.Location;
+                ViewingAreaDrawingBox.Invalidate();
+            }
         }
 
         private void ViewingAreaDrawingBox_MouseUp(object sender, MouseEventArgs e)
@@ -560,35 +543,12 @@ namespace PixelArtEditor
         {
             ImageManager.DrawSelectionOntoDrawingBox(e.Graphics);
 
-            OptionalToolParameters toolParameters = new();
-            Dictionary<string, bool> properties = DrawingToolButtonPanel.CheckToolButtonProperties();
-
-            if (properties["BeginPoint"])
+            if (MouseOnControl.HasValue)
             {
-                toolParameters.BeginPoint = MouseOnControl;
-            }
+                OptionalToolParameters toolParameters = GetToolParameters(MouseOnControl.Value);
 
-            if (properties["ImageSize"])
-            {
-                toolParameters.ImageSize = ImageManager.OriginalImage.Size;
+                ViewingAreaDrawingBox.PreviewTool(DefineTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
             }
-
-            if (properties["Transparency"])
-            {
-                toolParameters.Transparency = TransparencyCheckBox.Checked;
-            }
-
-            if (properties["BackgroundColor"])
-            {
-                toolParameters.BackgroundColor = BackgroundColorTable.GetCurrentColor();
-            }
-
-            if (properties["PixelSize"])
-            {
-                toolParameters.PixelSize = (int)ViewingZoomNumberBox.Value;
-            }
-
-            ViewingAreaDrawingBox.PreviewTool(DefineTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
         }
     }
 }

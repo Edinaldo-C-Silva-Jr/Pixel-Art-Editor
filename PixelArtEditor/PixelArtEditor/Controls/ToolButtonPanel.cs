@@ -2,7 +2,7 @@
 {
     public partial class ToolButtonPanel : Panel
     {
-        private int CurrentButton;
+        public int CurrentButton { get; private set; }
 
         public ToolButtonPanel()
         {
@@ -23,7 +23,20 @@
             CurrentButton = button.ToolValue;
         }
 
-        public Dictionary<string, bool> CheckToolButtonProperties()
+        public Dictionary<string, bool> CheckToolPreviewProperties()
+        {
+            Dictionary<string, bool> properties = new();
+
+            if (Controls[CurrentButton] is ToolButton button)
+            {
+                properties.Add("PreviewMove", button.PreviewOnMove);
+                properties.Add("PreviewHold", button.PreviewOnHold);
+            }
+
+            return properties;
+        }
+
+        public Dictionary<string, bool> CheckToolDrawProperties()
         {
             Dictionary<string, bool> properties = new();
 
