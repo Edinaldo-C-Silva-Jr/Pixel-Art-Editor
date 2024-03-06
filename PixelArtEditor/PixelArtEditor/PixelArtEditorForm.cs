@@ -1,6 +1,5 @@
 using PixelArtEditor.Controls;
 using PixelArtEditor.Drawing_Tools;
-using PixelArtEditor.Drawing_Tools.Tools;
 using PixelArtEditor.Files;
 using PixelArtEditor.Grids;
 
@@ -16,13 +15,18 @@ namespace PixelArtEditor
         /// <summary>
         /// The class responsible for handling the saving and loading of files in the program.
         /// </summary>
-        private FileSaveLoadHandler FileSaverLoader { get; } = new();
+        private FileSaveLoadHandler FileSaverLoader { get; }
+
+        private DrawingToolFactory ToolFactory { get; set; }
+
 
         Point? MouseOnControl;
 
         public PixelArtEditorForm()
         {
             ImageManager = new();
+            FileSaverLoader = new();
+            ToolFactory = new();
             InitializeComponent();
         }
 
@@ -431,20 +435,7 @@ namespace PixelArtEditor
             }
 
             buttonPanel.ChangeCurrentButton(toolButton);
-        }
-
-        private IDrawingTool DefineTool()
-        {
-            return DrawingToolButtonPanel.CurrentButton switch
-            {
-                0 => new PixelPenTool(),
-                1 => new HorizontalMirrorPenTool(),
-                2 => new VerticalMirrorPenTool(),
-                3 => new FullMirrorPenTool(),
-                4 => new FourMirrorPenTool(),
-                5 => new EraserTool(),
-                6 => new CardinalLineTool()
-            };
+            ToolFactory.ChangeCurrentTool(toolButton.ToolValue);
         }
 
         private OptionalToolParameters GetToolParameters(Point mouseLocation)
@@ -491,7 +482,7 @@ namespace PixelArtEditor
 
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                ViewingAreaDrawingBox.DrawClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, paletteColor, toolParameters);
+                ViewingAreaDrawingBox.DrawClick(ToolFactory.GetTool(), DefineGridType(), ImageManager.OriginalImage, paletteColor, toolParameters);
                 ViewingAreaDrawingBox.Refresh();
             }
 
@@ -513,7 +504,7 @@ namespace PixelArtEditor
             {
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                ViewingAreaDrawingBox.DrawHold(DefineTool(), DefineGridType(), toolParameters);
+                ViewingAreaDrawingBox.DrawHold(ToolFactory.GetTool(), DefineGridType(), toolParameters);
                 ViewingAreaDrawingBox.Refresh();
             }
 
@@ -537,7 +528,7 @@ namespace PixelArtEditor
             {
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                ViewingAreaDrawingBox.DrawRelease(DefineTool(), DefineGridType(), toolParameters);
+                ViewingAreaDrawingBox.DrawRelease(ToolFactory.GetTool(), DefineGridType(), toolParameters);
                 ViewingAreaDrawingBox.Refresh();
             }
         }
@@ -550,7 +541,7 @@ namespace PixelArtEditor
             {
                 OptionalToolParameters toolParameters = GetToolParameters(MouseOnControl.Value);
 
-                ViewingAreaDrawingBox.PreviewTool(DefineTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
+                ViewingAreaDrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
             }
         }
     }

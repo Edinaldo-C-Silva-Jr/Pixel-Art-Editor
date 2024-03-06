@@ -3,7 +3,10 @@ namespace PixelArtEditor.Drawing_Tools.Tools
 {
     internal class CardinalLineTool : DrawingTool
     {
-        public Point? StartingPoint { get; set; }
+        private Point? StartingPoint { get; set; }
+        
+        // Amount of times the drawing has been done, due to grid.
+        private int repeats;
 
         public override void PreviewTool(Graphics paintGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters)
         {
@@ -15,6 +18,7 @@ namespace PixelArtEditor.Drawing_Tools.Tools
             if (toolParameters.ClickLocation.HasValue)
             {
                 StartingPoint = toolParameters.ClickLocation.Value;
+                repeats = 0;
             }
         }
 
@@ -44,7 +48,12 @@ namespace PixelArtEditor.Drawing_Tools.Tools
                 }
             }
 
-            StartingPoint = null;
+            // Draw twice. Once on the image and once on the grid image
+            repeats++;
+            if (repeats == 2)
+            {
+                StartingPoint = null;
+            }
         }
     }
 }

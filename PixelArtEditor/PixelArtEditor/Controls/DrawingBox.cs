@@ -104,7 +104,6 @@ namespace PixelArtEditor.Controls
             tool.UseToolRelease(ImageGraphics, ColorBrush, toolParameters);
 
             ImageGraphics.Dispose();
-            ColorBrush.Dispose();
 
             // Grid stuff
             if (GridGraphics == null)
@@ -116,6 +115,9 @@ namespace PixelArtEditor.Controls
             ApplySingleGrid(gridGenerator, toolParameters);
 
             GridGraphics.Dispose();
+            // End Grid Stuff
+
+            ColorBrush.Dispose();
         }
 
         public void PreviewTool(IDrawingTool tool, Graphics paintGraphics, Color pixelColor, OptionalToolParameters toolParameters)
