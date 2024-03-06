@@ -394,7 +394,7 @@
             FullMirrorPenButton.PreviewOnHold = false;
             FullMirrorPenButton.PreviewOnMove = true;
             FullMirrorPenButton.Size = new Size(40, 40);
-            FullMirrorPenButton.TabIndex = 21;
+            FullMirrorPenButton.TabIndex = 25;
             FullMirrorPenButton.Text = "Mir. Pen";
             FullMirrorPenButton.ToolValue = 3;
             FullMirrorPenButton.UseBackgroundColor = false;
@@ -427,7 +427,7 @@
             EraserButton.PreviewOnHold = false;
             EraserButton.PreviewOnMove = true;
             EraserButton.Size = new Size(40, 40);
-            EraserButton.TabIndex = 26;
+            EraserButton.TabIndex = 27;
             EraserButton.Text = "Eraser";
             EraserButton.ToolValue = 5;
             EraserButton.UseBackgroundColor = true;
@@ -446,7 +446,7 @@
             FourMirrorPenButton.PreviewOnHold = false;
             FourMirrorPenButton.PreviewOnMove = true;
             FourMirrorPenButton.Size = new Size(40, 40);
-            FourMirrorPenButton.TabIndex = 25;
+            FourMirrorPenButton.TabIndex = 26;
             FourMirrorPenButton.Text = "4x Pen";
             FourMirrorPenButton.ToolValue = 4;
             FourMirrorPenButton.UseBackgroundColor = false;

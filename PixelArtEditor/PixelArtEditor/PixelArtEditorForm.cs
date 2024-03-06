@@ -297,7 +297,6 @@ namespace PixelArtEditor
             }
             else
             {
-                (int width, int height, int zoom) = GetImageSizeValues();
                 ImageManager.MakeImageNotTransparent(backgroundColor);
                 BackgroundColorLabel.Text = "Background Color";
             }
@@ -490,7 +489,7 @@ namespace PixelArtEditor
 
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
 
-                OptionalToolParameters toolParameters = GetToolParameters(e.Location); 
+                OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 ViewingAreaDrawingBox.DrawClick(DefineTool(), DefineGridType(), ImageManager.OriginalImage, paletteColor, toolParameters);
                 ViewingAreaDrawingBox.Refresh();
