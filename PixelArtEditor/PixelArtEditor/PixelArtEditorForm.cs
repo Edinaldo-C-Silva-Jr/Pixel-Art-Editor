@@ -192,7 +192,7 @@ namespace PixelArtEditor
 
                     // The color will always be swaped for the image's background.
                     // Otherwise only if the Change Color is enabled and the cell is not in its default color.
-                    if (cellParent.Name == "BackgroundColorTable" || (!cell.DefaultColor && ColorChangeCheckBox.Checked))
+                    if (cellParent.Name == "BackgroundColorTable" || (!cell.DefaultColor && ColorChangeCheckBox.Checked && cell.BackColor != BackgroundColorTable.GetCurrentColor()))
                     {
                         SwapColorInImage(cell.BackColor, ColorPickerDialog.Color);
                         colorWasSwaped = true;
@@ -242,14 +242,13 @@ namespace PixelArtEditor
             using Graphics auxiliaryGraphics = Graphics.FromImage(auxiliaryImage);
             auxiliaryGraphics.Clear(newColor);
             auxiliaryGraphics.DrawImage(ImageManager.OriginalImage, 0, 0);
+            ImageManager.DefineNewImage(auxiliaryImage, true, 0, 0);
 
             // Restored transparency to image if needed.
             if (TransparencyCheckBox.Checked)
             {
                 ImageManager.MakeImageTransparent(backgroundColor);
             }
-
-            ImageManager.DefineNewImage(auxiliaryImage, true, 0, 0);
         }
 
         private void SetNewImageButton_Click(object sender, EventArgs e)
