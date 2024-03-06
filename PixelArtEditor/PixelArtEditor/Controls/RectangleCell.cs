@@ -3,7 +3,7 @@
     /// <summary>
     /// A control to represent a rectangular cell in the ColorTable controls.
     /// </summary>
-    public partial class RectangleCell : UserControl
+    public partial class RectangleCell : Control
     {
         /// <summary>
         /// The current size of the cell.
