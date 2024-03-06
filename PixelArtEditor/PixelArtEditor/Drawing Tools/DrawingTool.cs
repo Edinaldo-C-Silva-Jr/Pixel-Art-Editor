@@ -19,6 +19,14 @@
             return new(xPos, yPos);
         }
 
+        protected static int GetDifferenceInPixels(int startingPoint, int endPoint, int pixelSize)
+        {
+            startingPoint -= startingPoint % pixelSize;
+            endPoint -= endPoint % pixelSize;
+
+            return Math.Abs((endPoint - startingPoint) / pixelSize); 
+        }
+
         protected static SolidBrush MakePreviewBrush(SolidBrush colorBrush)
         {
             Color transluscentColor = Color.FromArgb(128, colorBrush.Color);

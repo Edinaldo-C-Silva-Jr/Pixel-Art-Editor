@@ -52,10 +52,10 @@ namespace PixelArtEditor.Controls
         {
             if (!gridGenerator.BackgroundGrid)
             {
-                if (toolParameters.BeginPoint.HasValue && toolParameters.PixelSize.HasValue)
+                if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
                 {
-                    int xPos = toolParameters.BeginPoint.Value.X - toolParameters.BeginPoint.Value.X % toolParameters.PixelSize.Value;
-                    int yPos = toolParameters.BeginPoint.Value.Y - toolParameters.BeginPoint.Value.Y % toolParameters.PixelSize.Value;
+                    int xPos = toolParameters.ClickLocation.Value.X - toolParameters.ClickLocation.Value.X % toolParameters.PixelSize.Value;
+                    int yPos = toolParameters.ClickLocation.Value.Y - toolParameters.ClickLocation.Value.Y % toolParameters.PixelSize.Value;
                     gridGenerator.ApplyGridSinglePixel(imageWithGrid, xPos, yPos);
                 }
             }

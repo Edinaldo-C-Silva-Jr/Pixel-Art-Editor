@@ -61,6 +61,7 @@
             DialogForSavingFiles = new SaveFileDialog();
             FullMirrorPenButton = new Controls.ToolButton();
             DrawingToolButtonPanel = new Controls.ToolButtonPanel();
+            CardinalLineButton = new Controls.ToolButton();
             EraserButton = new Controls.ToolButton();
             FourMirrorPenButton = new Controls.ToolButton();
             VerticalMirrorPenButton = new Controls.ToolButton();
@@ -398,8 +399,7 @@
             FullMirrorPenButton.Text = "Mir. Pen";
             FullMirrorPenButton.ToolValue = 3;
             FullMirrorPenButton.UseBackgroundColor = false;
-            FullMirrorPenButton.UseBeginPoint = true;
-            FullMirrorPenButton.UseEndPoint = false;
+            FullMirrorPenButton.UseClickLocation = true;
             FullMirrorPenButton.UseImageSize = true;
             FullMirrorPenButton.UsePixelSize = true;
             FullMirrorPenButton.UseTransparency = false;
@@ -409,6 +409,7 @@
             // DrawingToolButtonPanel
             // 
             DrawingToolButtonPanel.BackColor = SystemColors.Control;
+            DrawingToolButtonPanel.Controls.Add(CardinalLineButton);
             DrawingToolButtonPanel.Controls.Add(EraserButton);
             DrawingToolButtonPanel.Controls.Add(FourMirrorPenButton);
             DrawingToolButtonPanel.Controls.Add(VerticalMirrorPenButton);
@@ -419,6 +420,24 @@
             DrawingToolButtonPanel.Name = "DrawingToolButtonPanel";
             DrawingToolButtonPanel.Size = new Size(240, 190);
             DrawingToolButtonPanel.TabIndex = 22;
+            // 
+            // CardinalLineButton
+            // 
+            CardinalLineButton.Location = new Point(50, 50);
+            CardinalLineButton.Name = "CardinalLineButton";
+            CardinalLineButton.PreviewOnHold = true;
+            CardinalLineButton.PreviewOnMove = false;
+            CardinalLineButton.Size = new Size(40, 40);
+            CardinalLineButton.TabIndex = 28;
+            CardinalLineButton.Text = "L R Line";
+            CardinalLineButton.ToolValue = 6;
+            CardinalLineButton.UseBackgroundColor = false;
+            CardinalLineButton.UseClickLocation = true;
+            CardinalLineButton.UseImageSize = false;
+            CardinalLineButton.UsePixelSize = true;
+            CardinalLineButton.UseTransparency = false;
+            CardinalLineButton.UseVisualStyleBackColor = true;
+            CardinalLineButton.Click += ChangeTool_ToolButtonsClick;
             // 
             // EraserButton
             // 
@@ -431,8 +450,7 @@
             EraserButton.Text = "Eraser";
             EraserButton.ToolValue = 5;
             EraserButton.UseBackgroundColor = true;
-            EraserButton.UseBeginPoint = true;
-            EraserButton.UseEndPoint = false;
+            EraserButton.UseClickLocation = true;
             EraserButton.UseImageSize = false;
             EraserButton.UsePixelSize = true;
             EraserButton.UseTransparency = true;
@@ -450,8 +468,7 @@
             FourMirrorPenButton.Text = "4x Pen";
             FourMirrorPenButton.ToolValue = 4;
             FourMirrorPenButton.UseBackgroundColor = false;
-            FourMirrorPenButton.UseBeginPoint = true;
-            FourMirrorPenButton.UseEndPoint = false;
+            FourMirrorPenButton.UseClickLocation = true;
             FourMirrorPenButton.UseImageSize = true;
             FourMirrorPenButton.UsePixelSize = true;
             FourMirrorPenButton.UseTransparency = false;
@@ -469,8 +486,7 @@
             VerticalMirrorPenButton.Text = "U D Pen";
             VerticalMirrorPenButton.ToolValue = 2;
             VerticalMirrorPenButton.UseBackgroundColor = false;
-            VerticalMirrorPenButton.UseBeginPoint = true;
-            VerticalMirrorPenButton.UseEndPoint = false;
+            VerticalMirrorPenButton.UseClickLocation = true;
             VerticalMirrorPenButton.UseImageSize = true;
             VerticalMirrorPenButton.UsePixelSize = true;
             VerticalMirrorPenButton.UseTransparency = false;
@@ -488,8 +504,7 @@
             HorizontalMirrorPenButton.Text = "L R Pen";
             HorizontalMirrorPenButton.ToolValue = 1;
             HorizontalMirrorPenButton.UseBackgroundColor = false;
-            HorizontalMirrorPenButton.UseBeginPoint = true;
-            HorizontalMirrorPenButton.UseEndPoint = false;
+            HorizontalMirrorPenButton.UseClickLocation = true;
             HorizontalMirrorPenButton.UseImageSize = true;
             HorizontalMirrorPenButton.UsePixelSize = true;
             HorizontalMirrorPenButton.UseTransparency = false;
@@ -507,8 +522,7 @@
             PixelPenButton.Text = "Pen";
             PixelPenButton.ToolValue = 0;
             PixelPenButton.UseBackgroundColor = false;
-            PixelPenButton.UseBeginPoint = true;
-            PixelPenButton.UseEndPoint = false;
+            PixelPenButton.UseClickLocation = true;
             PixelPenButton.UseImageSize = false;
             PixelPenButton.UsePixelSize = true;
             PixelPenButton.UseTransparency = false;
@@ -597,5 +611,6 @@
         private Controls.ToolButton HorizontalMirrorPenButton;
         private Controls.ToolButton FourMirrorPenButton;
         private Controls.ToolButton EraserButton;
+        private Controls.ToolButton CardinalLineButton;
     }
 }

@@ -23,11 +23,7 @@
         /// <summary>
         /// Defines if the tool will require the BeginPoint parameter to be used.
         /// </summary>
-        public bool UseBeginPoint { get; set; }
-        /// <summary>
-        /// Defines if the tool will require the EndPoint parameter to be used.
-        /// </summary>
-        public bool UseEndPoint { get; set; }
+        public bool UseClickLocation { get; set; }
         /// <summary>
         /// Defines if the tool will require the ImageSize parameter to be used.
         /// </summary>

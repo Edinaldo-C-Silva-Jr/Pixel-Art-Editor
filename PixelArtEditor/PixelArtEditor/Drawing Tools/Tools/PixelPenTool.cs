@@ -5,13 +5,13 @@ namespace PixelArtEditor.Drawing_Tools.Tools
     {
         private static void DrawPenPixel(Graphics graphics, SolidBrush brush, OptionalToolParameters parameters)
         {
-            Point pixelPoint = SnapPixelTopLeft(parameters.BeginPoint.Value, parameters.PixelSize.Value);
+            Point pixelPoint = SnapPixelTopLeft(parameters.ClickLocation.Value, parameters.PixelSize.Value);
             DrawPixel(graphics, brush, pixelPoint.X, pixelPoint.Y, parameters.PixelSize.Value);
         }
 
         public override void PreviewTool(Graphics paintGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters)
         {
-            if (toolParameters.BeginPoint.HasValue && toolParameters.PixelSize.HasValue)
+            if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
             {
                 colorBrush = MakePreviewBrush(colorBrush);
                 DrawPenPixel(paintGraphics, colorBrush, toolParameters);
@@ -20,7 +20,7 @@ namespace PixelArtEditor.Drawing_Tools.Tools
 
         public override void UseToolClick(Graphics imageGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters)
         {
-            if (toolParameters.BeginPoint.HasValue && toolParameters.PixelSize.HasValue)
+            if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
             {
                 DrawPenPixel(imageGraphics, colorBrush, toolParameters);
             }
@@ -28,7 +28,7 @@ namespace PixelArtEditor.Drawing_Tools.Tools
 
         public override void UseToolHold(Graphics imageGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters)
         {
-            if (toolParameters.BeginPoint.HasValue && toolParameters.PixelSize.HasValue)
+            if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
             {
                 DrawPenPixel(imageGraphics, colorBrush, toolParameters);
             }

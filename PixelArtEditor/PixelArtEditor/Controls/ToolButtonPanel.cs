@@ -73,8 +73,7 @@
 
             if (Controls[CurrentButton] is ToolButton button)
             {
-                properties.Add("BeginPoint", button.UseBeginPoint);
-                properties.Add("EndPoint", button.UseEndPoint);
+                properties.Add("ClickLocation", button.UseClickLocation);
                 properties.Add("ImageSize", button.UseImageSize);
                 properties.Add("Transparency", button.UseTransparency);
                 properties.Add("BackgroundColor", button.UseBackgroundColor);

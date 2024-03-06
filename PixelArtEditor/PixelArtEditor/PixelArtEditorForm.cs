@@ -442,7 +442,8 @@ namespace PixelArtEditor
                 2 => new VerticalMirrorPenTool(),
                 3 => new FullMirrorPenTool(),
                 4 => new FourMirrorPenTool(),
-                5 => new EraserTool()
+                5 => new EraserTool(),
+                6 => new CardinalLineTool()
             };
         }
 
@@ -452,9 +453,9 @@ namespace PixelArtEditor
 
             Dictionary<string, bool> properties = DrawingToolButtonPanel.CheckToolDrawProperties();
 
-            if (properties["BeginPoint"])
+            if (properties["ClickLocation"])
             {
-                toolParameters.BeginPoint = mouseLocation;
+                toolParameters.ClickLocation = mouseLocation;
             }
 
             if (properties["ImageSize"])
@@ -510,8 +511,6 @@ namespace PixelArtEditor
 
             if (e.Button == MouseButtons.Left)
             {
-                ImageManager.ClearImageSelection();
-
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 ViewingAreaDrawingBox.DrawHold(DefineTool(), DefineGridType(), toolParameters);
@@ -534,7 +533,13 @@ namespace PixelArtEditor
 
         private void ViewingAreaDrawingBox_MouseUp(object sender, MouseEventArgs e)
         {
+            if (e.Button == MouseButtons.Left)
+            {
+                OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
+                ViewingAreaDrawingBox.DrawRelease(DefineTool(), DefineGridType(), toolParameters);
+                ViewingAreaDrawingBox.Refresh();
+            }
         }
 
         private void ViewingAreaDrawingBox_Paint(object sender, PaintEventArgs e)
