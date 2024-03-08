@@ -61,6 +61,7 @@
             DialogForSavingFiles = new SaveFileDialog();
             FullMirrorPenButton = new Controls.ToolButton();
             DrawingToolButtonPanel = new Controls.ToolButtonPanel();
+            OrdinalLineButton = new Controls.ToolButton();
             CardinalLineButton = new Controls.ToolButton();
             EraserButton = new Controls.ToolButton();
             FourMirrorPenButton = new Controls.ToolButton();
@@ -409,6 +410,7 @@
             // DrawingToolButtonPanel
             // 
             DrawingToolButtonPanel.BackColor = SystemColors.Control;
+            DrawingToolButtonPanel.Controls.Add(OrdinalLineButton);
             DrawingToolButtonPanel.Controls.Add(CardinalLineButton);
             DrawingToolButtonPanel.Controls.Add(EraserButton);
             DrawingToolButtonPanel.Controls.Add(FourMirrorPenButton);
@@ -420,6 +422,24 @@
             DrawingToolButtonPanel.Name = "DrawingToolButtonPanel";
             DrawingToolButtonPanel.Size = new Size(240, 190);
             DrawingToolButtonPanel.TabIndex = 22;
+            // 
+            // OrdinalLineButton
+            // 
+            OrdinalLineButton.Location = new Point(100, 50);
+            OrdinalLineButton.Name = "OrdinalLineButton";
+            OrdinalLineButton.PreviewOnHold = true;
+            OrdinalLineButton.PreviewOnMove = false;
+            OrdinalLineButton.Size = new Size(40, 40);
+            OrdinalLineButton.TabIndex = 29;
+            OrdinalLineButton.Text = "8 Dir Line";
+            OrdinalLineButton.ToolValue = 7;
+            OrdinalLineButton.UseBackgroundColor = false;
+            OrdinalLineButton.UseClickLocation = true;
+            OrdinalLineButton.UseImageSize = false;
+            OrdinalLineButton.UsePixelSize = true;
+            OrdinalLineButton.UseTransparency = false;
+            OrdinalLineButton.UseVisualStyleBackColor = true;
+            OrdinalLineButton.Click += ChangeTool_ToolButtonsClick;
             // 
             // CardinalLineButton
             // 
@@ -612,5 +632,6 @@
         private Controls.ToolButton FourMirrorPenButton;
         private Controls.ToolButton EraserButton;
         private Controls.ToolButton CardinalLineButton;
+        private Controls.ToolButton OrdinalLineButton;
     }
 }

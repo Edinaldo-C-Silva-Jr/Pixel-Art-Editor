@@ -1,14 +1,45 @@
 ﻿
 namespace PixelArtEditor.Drawing_Tools.Tools
 {
-    internal class CardinalLineTool : DrawingTool
+    internal class OrdinalLineTool : DrawingTool
     {
         private Point? StartingPoint { get; set; }
-        
+
         // Amount of times the drawing has been done, due to grid.
         private int repeats;
 
-        private void DrawCardinalLine(Graphics graphics, SolidBrush brush, OptionalToolParameters parameters)
+        private void DrawDiagonalLine(Graphics graphics, SolidBrush brush, Point beginPoint, int pixelSize, int lineLength, int lineDirection)
+        {
+            switch (lineDirection)
+            {
+                case 0: // Up Right
+                    for (int i = 0; i < lineLength; i++)
+                    {
+                        DrawPixel(graphics, brush, beginPoint.X + i * pixelSize, beginPoint.Y - i * pixelSize, pixelSize);
+                    }
+                    break;
+                case 1: // Down Right
+                    for (int i = 0; i < lineLength; i++)
+                    {
+                        DrawPixel(graphics, brush, beginPoint.X + i * pixelSize, beginPoint.Y + i * pixelSize, pixelSize);
+                    }
+                    break;
+                case 2: // Down Left
+                    for (int i = 0; i < lineLength; i++)
+                    {
+                        DrawPixel(graphics, brush, beginPoint.X - i * pixelSize, beginPoint.Y + i * pixelSize, pixelSize);
+                    }
+                    break;
+                case 3: // Up Left
+                    for (int i = 0; i < lineLength; i++)
+                    {
+                        DrawPixel(graphics, brush, beginPoint.X - i * pixelSize, beginPoint.Y - i * pixelSize, pixelSize);
+                    }
+                    break;
+            }
+        }
+
+        private void DrawOrdinalLine(Graphics graphics, SolidBrush brush, OptionalToolParameters parameters)
         {
             Point beginPoint = StartingPoint.Value;
             Point endPoint = parameters.ClickLocation.Value;
@@ -45,7 +76,7 @@ namespace PixelArtEditor.Drawing_Tools.Tools
             if (StartingPoint.HasValue && toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
             {
                 colorBrush = MakePreviewBrush(colorBrush);
-                DrawCardinalLine(paintGraphics, colorBrush, toolParameters);
+                DrawOrdinalLine(paintGraphics, colorBrush, toolParameters);
             }
         }
 
@@ -67,7 +98,7 @@ namespace PixelArtEditor.Drawing_Tools.Tools
         {
             if (StartingPoint.HasValue && toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
             {
-                DrawCardinalLine(imageGraphics, colorBrush, toolParameters);
+                DrawOrdinalLine(imageGraphics, colorBrush, toolParameters);
             }
 
             // Draw twice. Once on the image and once on the grid image
