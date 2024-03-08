@@ -19,10 +19,10 @@
             return new(xPos, yPos);
         }
 
-        protected static int GetDifferenceInPixels(int startingPoint, int endPoint, int pixelSize)
+        protected static int GetLineLengthInPixels(int startingPoint, int endPoint, int pixelSize)
         {
-            startingPoint -= startingPoint % pixelSize;
-            endPoint -= endPoint % pixelSize;
+            startingPoint -= startingPoint % pixelSize; // The starting point is the first point of the pixel
+            endPoint = endPoint - (endPoint % pixelSize) + pixelSize; // The end point is the first point of the next pixel
 
             return Math.Abs((endPoint - startingPoint) / pixelSize); 
         }

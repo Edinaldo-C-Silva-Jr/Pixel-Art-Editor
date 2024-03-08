@@ -436,6 +436,8 @@ namespace PixelArtEditor
 
             buttonPanel.ChangeCurrentButton(toolButton);
             ToolFactory.ChangeCurrentTool(toolButton.ToolValue);
+
+            MouseOnControl = null;
         }
 
         private OptionalToolParameters GetToolParameters(Point mouseLocation)
@@ -491,6 +493,14 @@ namespace PixelArtEditor
                 ImageManager.DefineSelectionStart(e.Location);
                 ChangeSelectionOnImage(e.Location);
             }
+
+            Dictionary<string, bool> previewProperties = DrawingToolButtonPanel.CheckToolPreviewProperties();
+
+            if (previewProperties["PreviewHold"] && e.Button == MouseButtons.Left)
+            {
+                MouseOnControl = e.Location;
+                ViewingAreaDrawingBox.Invalidate();
+            }
         }
 
         private void ViewingAreaDrawingBox_MouseMove(object sender, MouseEventArgs e)
@@ -531,6 +541,8 @@ namespace PixelArtEditor
                 ViewingAreaDrawingBox.DrawRelease(ToolFactory.GetTool(), DefineGridType(), toolParameters);
                 ViewingAreaDrawingBox.Refresh();
             }
+
+            MouseOnControl = null;
         }
 
         private void ViewingAreaDrawingBox_Paint(object sender, PaintEventArgs e)

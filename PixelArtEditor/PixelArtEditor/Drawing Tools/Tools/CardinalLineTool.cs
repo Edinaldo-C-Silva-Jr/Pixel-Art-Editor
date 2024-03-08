@@ -10,20 +10,33 @@ namespace PixelArtEditor.Drawing_Tools.Tools
 
         private void DrawCardinalLine(Graphics graphics, SolidBrush brush, OptionalToolParameters parameters)
         {
-            int horizontalDifference = parameters.ClickLocation.Value.X - StartingPoint.Value.X;
-            int verticalDifference = parameters.ClickLocation.Value.Y - StartingPoint.Value.Y;
+            int horizontalDifference = Math.Abs(parameters.ClickLocation.Value.X - StartingPoint.Value.X);
+            int verticalDifference = Math.Abs(parameters.ClickLocation.Value.Y - StartingPoint.Value.Y);
+
+            Point beginPoint = StartingPoint.Value;
+            Point endPoint = parameters.ClickLocation.Value;
 
             if (horizontalDifference > verticalDifference)
             {
-                int lineLength = GetDifferenceInPixels(parameters.ClickLocation.Value.X, StartingPoint.Value.X, parameters.PixelSize.Value);
-                StartingPoint = SnapPixelTopLeft(StartingPoint.Value, parameters.PixelSize.Value);
-                DrawRectangle(graphics, brush, StartingPoint.Value.X, StartingPoint.Value.Y, parameters.PixelSize.Value, lineLength, 1);
+                if (beginPoint.X > endPoint.X)
+                {
+                    (endPoint.X, beginPoint.X) = (beginPoint.X, endPoint.X);
+                }
+
+                int lineLength = GetLineLengthInPixels(beginPoint.X, endPoint.X, parameters.PixelSize.Value);
+                beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
+                DrawRectangle(graphics, brush, beginPoint.X, beginPoint.Y, parameters.PixelSize.Value, lineLength, 1);
             }
             else
             {
-                int lineLength = GetDifferenceInPixels(parameters.ClickLocation.Value.Y, StartingPoint.Value.Y, parameters.PixelSize.Value);
-                StartingPoint = SnapPixelTopLeft(StartingPoint.Value, parameters.PixelSize.Value);
-                DrawRectangle(graphics, brush, StartingPoint.Value.X, StartingPoint.Value.Y, parameters.PixelSize.Value, 1, lineLength);
+                if (beginPoint.Y > endPoint.Y)
+                {
+                    (endPoint.Y, beginPoint.Y) = (beginPoint.Y, endPoint.Y);
+                }
+
+                int lineLength = GetLineLengthInPixels(beginPoint.Y, endPoint.Y, parameters.PixelSize.Value);
+                beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
+                DrawRectangle(graphics, brush, beginPoint.X, beginPoint.Y, parameters.PixelSize.Value, 1, lineLength);
             }
         }
 
