@@ -49,25 +49,83 @@ namespace PixelArtEditor.Drawing_Tools.Tools
 
             if (horizontalDifference > verticalDifference)
             {
-                if (beginPoint.X > endPoint.X)
-                {
-                    (endPoint.X, beginPoint.X) = (beginPoint.X, endPoint.X);
-                }
-
                 int lineLength = GetLineLengthInPixels(beginPoint.X, endPoint.X, parameters.PixelSize.Value);
                 beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
-                DrawRectangle(graphics, brush, beginPoint.X, beginPoint.Y, parameters.PixelSize.Value, lineLength, 1);
+
+                if (horizontalDifference - verticalDifference < verticalDifference)
+                {
+                    if (endPoint.X > beginPoint.X)
+                    {
+                        if (endPoint.Y > beginPoint.Y)
+                        {
+                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 1);
+                        }
+                        else
+                        {
+                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 0);
+                        }
+                    }
+                    else
+                    {
+                        if (endPoint.Y > beginPoint.Y)
+                        {
+                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 2);
+                        }
+                        else
+                        {
+                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 3);
+                        }
+                    }
+                }
+                else
+                {
+                    if (beginPoint.X > endPoint.X)
+                    {
+                        (endPoint.X, beginPoint.X) = (beginPoint.X, endPoint.X);
+                        beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
+                    }
+                    DrawRectangle(graphics, brush, beginPoint.X, beginPoint.Y, parameters.PixelSize.Value, lineLength, 1);
+                }
             }
             else
             {
-                if (beginPoint.Y > endPoint.Y)
-                {
-                    (endPoint.Y, beginPoint.Y) = (beginPoint.Y, endPoint.Y);
-                }
-
                 int lineLength = GetLineLengthInPixels(beginPoint.Y, endPoint.Y, parameters.PixelSize.Value);
                 beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
-                DrawRectangle(graphics, brush, beginPoint.X, beginPoint.Y, parameters.PixelSize.Value, 1, lineLength);
+
+                if (verticalDifference - horizontalDifference < horizontalDifference)
+                {
+                    if (endPoint.X > beginPoint.X)
+                    {
+                        if (endPoint.Y > beginPoint.Y)
+                        {
+                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 1);
+                        }
+                        else
+                        {
+                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 0);
+                        }
+                    }
+                    else
+                    {
+                        if (endPoint.Y > beginPoint.Y)
+                        {
+                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 2);
+                        }
+                        else
+                        {
+                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 3);
+                        }
+                    }
+                }
+                else
+                {
+                    if (beginPoint.Y > endPoint.Y)
+                    {
+                        (endPoint.Y, beginPoint.Y) = (beginPoint.Y, endPoint.Y);
+                        beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
+                    }
+                    DrawRectangle(graphics, brush, beginPoint.X, beginPoint.Y, parameters.PixelSize.Value, 1, lineLength);
+                }
             }
         }
 
