@@ -4,7 +4,7 @@ namespace PixelArtEditor.Drawing_Tools.Tools
     internal class CardinalLineTool : DrawingTool
     {
         private Point? StartingPoint { get; set; }
-        
+
         // Amount of times the drawing has been done, due to grid.
         private int repeats;
 

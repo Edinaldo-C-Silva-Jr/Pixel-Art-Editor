@@ -1,5 +1,4 @@
-﻿
-namespace PixelArtEditor.Drawing_Tools.Tools
+﻿namespace PixelArtEditor.Drawing_Tools.Tools
 {
     internal class OrdinalLineTool : DrawingTool
     {
@@ -12,28 +11,28 @@ namespace PixelArtEditor.Drawing_Tools.Tools
         {
             switch (lineDirection)
             {
-                case 0: // Up Right
+                case 0: // Left Up (LinePointRight is 0 and LinePointDown is 0)
                     for (int i = 0; i < lineLength; i++)
                     {
-                        DrawPixel(graphics, brush, beginPoint.X + i * pixelSize, beginPoint.Y - i * pixelSize, pixelSize);
+                        DrawPixel(graphics, brush, beginPoint.X - i * pixelSize, beginPoint.Y - i * pixelSize, pixelSize);
                     }
                     break;
-                case 1: // Down Right
-                    for (int i = 0; i < lineLength; i++)
-                    {
-                        DrawPixel(graphics, brush, beginPoint.X + i * pixelSize, beginPoint.Y + i * pixelSize, pixelSize);
-                    }
-                    break;
-                case 2: // Down Left
+                case 1: // Left Down (LinePointRight is 0 and LinePointDown is 1)
                     for (int i = 0; i < lineLength; i++)
                     {
                         DrawPixel(graphics, brush, beginPoint.X - i * pixelSize, beginPoint.Y + i * pixelSize, pixelSize);
                     }
                     break;
-                case 3: // Up Left
+                case 2: // Right Up (LinePointRight is 1 and LinePointDown is 0)
                     for (int i = 0; i < lineLength; i++)
                     {
-                        DrawPixel(graphics, brush, beginPoint.X - i * pixelSize, beginPoint.Y - i * pixelSize, pixelSize);
+                        DrawPixel(graphics, brush, beginPoint.X + i * pixelSize, beginPoint.Y - i * pixelSize, pixelSize);
+                    }
+                    break;
+                case 3: // Right Down (LinePointRight is 1 and LinePointDown is 1)
+                    for (int i = 0; i < lineLength; i++)
+                    {
+                        DrawPixel(graphics, brush, beginPoint.X + i * pixelSize, beginPoint.Y + i * pixelSize, pixelSize);
                     }
                     break;
             }
@@ -47,83 +46,39 @@ namespace PixelArtEditor.Drawing_Tools.Tools
             int horizontalDifference = Math.Abs(endPoint.X - beginPoint.X);
             int verticalDifference = Math.Abs(endPoint.Y - beginPoint.Y);
 
-            if (horizontalDifference > verticalDifference)
+            bool lineDirectionHorizontal = horizontalDifference > verticalDifference;
+            bool linePointRight = endPoint.X > beginPoint.X;
+            bool linePointDown = endPoint.Y > beginPoint.Y;
+            bool diagonalLine = (lineDirectionHorizontal && horizontalDifference < 2 * verticalDifference) 
+                || (!lineDirectionHorizontal && verticalDifference < 2 * horizontalDifference);
+
+            if (diagonalLine)
             {
                 int lineLength = GetLineLengthInPixels(beginPoint.X, endPoint.X, parameters.PixelSize.Value);
                 beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
-
-                if (horizontalDifference - verticalDifference < verticalDifference)
-                {
-                    if (endPoint.X > beginPoint.X)
-                    {
-                        if (endPoint.Y > beginPoint.Y)
-                        {
-                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 1);
-                        }
-                        else
-                        {
-                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 0);
-                        }
-                    }
-                    else
-                    {
-                        if (endPoint.Y > beginPoint.Y)
-                        {
-                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 2);
-                        }
-                        else
-                        {
-                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 3);
-                        }
-                    }
-                }
-                else
-                {
-                    if (beginPoint.X > endPoint.X)
-                    {
-                        (endPoint.X, beginPoint.X) = (beginPoint.X, endPoint.X);
-                        beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
-                    }
-                    DrawRectangle(graphics, brush, beginPoint.X, beginPoint.Y, parameters.PixelSize.Value, lineLength, 1);
-                }
+                int lineDirection = Convert.ToInt32(linePointRight) * 2 + Convert.ToInt32(linePointDown);
+                DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, lineDirection);
             }
             else
             {
-                int lineLength = GetLineLengthInPixels(beginPoint.Y, endPoint.Y, parameters.PixelSize.Value);
-                beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
-
-                if (verticalDifference - horizontalDifference < horizontalDifference)
+                if (lineDirectionHorizontal)
                 {
-                    if (endPoint.X > beginPoint.X)
+                    if (!linePointRight)
                     {
-                        if (endPoint.Y > beginPoint.Y)
-                        {
-                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 1);
-                        }
-                        else
-                        {
-                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 0);
-                        }
+                        (endPoint.X, beginPoint.X) = (beginPoint.X, endPoint.X);
                     }
-                    else
-                    {
-                        if (endPoint.Y > beginPoint.Y)
-                        {
-                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 2);
-                        }
-                        else
-                        {
-                            DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 3);
-                        }
-                    }
+                    int lineLength = GetLineLengthInPixels(beginPoint.X, endPoint.X, parameters.PixelSize.Value);
+                    beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
+                    DrawRectangle(graphics, brush, beginPoint.X, beginPoint.Y, parameters.PixelSize.Value, lineLength, 1);
                 }
                 else
                 {
-                    if (beginPoint.Y > endPoint.Y)
+                    if (!linePointDown)
                     {
                         (endPoint.Y, beginPoint.Y) = (beginPoint.Y, endPoint.Y);
-                        beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
                     }
+                    int lineLength = GetLineLengthInPixels(beginPoint.Y, endPoint.Y, parameters.PixelSize.Value);
+                    beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
                     DrawRectangle(graphics, brush, beginPoint.X, beginPoint.Y, parameters.PixelSize.Value, 1, lineLength);
                 }
             }
