@@ -49,12 +49,32 @@
             bool lineDirectionHorizontal = horizontalDifference > verticalDifference;
             bool linePointRight = endPoint.X > beginPoint.X;
             bool linePointDown = endPoint.Y > beginPoint.Y;
-            bool diagonalLine = (lineDirectionHorizontal && horizontalDifference < 2 * verticalDifference) 
+            bool diagonalLine = (lineDirectionHorizontal && horizontalDifference < 2 * verticalDifference)
                 || (!lineDirectionHorizontal && verticalDifference < 2 * horizontalDifference);
 
             if (diagonalLine)
             {
-                int lineLength = GetLineLengthInPixels(beginPoint.X, endPoint.X, parameters.PixelSize.Value);
+                int beginCoordinate, endCoordinate; // These coordinates will either be the X or Y coordinate of the begin and end point, depending on which of them is bigger
+                if (lineDirectionHorizontal)
+                {
+                    beginCoordinate = beginPoint.X;
+                    endCoordinate = endPoint.X;
+                    if (!linePointRight) // Swaps the begin and end if the line is being drawn backwards.
+                    {
+                        (beginCoordinate, endCoordinate) = (endCoordinate, beginCoordinate);
+                    }
+                }
+                else
+                {
+                    beginCoordinate = beginPoint.Y;
+                    endCoordinate = endPoint.Y;
+                    if (!linePointDown) // Swaps the begin and end if the line is being drawn backwards.
+                    {
+                        (beginCoordinate, endCoordinate) = (endCoordinate, beginCoordinate);
+                    }
+                }
+
+                int lineLength = GetLineLengthInPixels(beginCoordinate, endCoordinate, parameters.PixelSize.Value);
                 beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
                 int lineDirection = Convert.ToInt32(linePointRight) * 2 + Convert.ToInt32(linePointDown);
                 DrawDiagonalLine(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, lineDirection);
