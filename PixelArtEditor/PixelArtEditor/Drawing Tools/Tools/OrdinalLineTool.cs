@@ -14,25 +14,29 @@
                 case 0: // Left Up (LinePointRight is 0 and LinePointDown is 0)
                     for (int i = 0; i < lineLength; i++)
                     {
-                        DrawPixel(graphics, brush, beginPoint.X - i * pixelSize, beginPoint.Y - i * pixelSize, pixelSize);
+                        Point pixelPoint = new(beginPoint.X - i * pixelSize, beginPoint.Y - i * pixelSize);
+                        DrawPixel(graphics, brush, pixelPoint, pixelSize);
                     }
                     break;
                 case 1: // Left Down (LinePointRight is 0 and LinePointDown is 1)
                     for (int i = 0; i < lineLength; i++)
                     {
-                        DrawPixel(graphics, brush, beginPoint.X - i * pixelSize, beginPoint.Y + i * pixelSize, pixelSize);
+                        Point pixelPoint = new(beginPoint.X - i * pixelSize, beginPoint.Y + i * pixelSize);
+                        DrawPixel(graphics, brush, pixelPoint, pixelSize);
                     }
                     break;
                 case 2: // Right Up (LinePointRight is 1 and LinePointDown is 0)
                     for (int i = 0; i < lineLength; i++)
                     {
-                        DrawPixel(graphics, brush, beginPoint.X + i * pixelSize, beginPoint.Y - i * pixelSize, pixelSize);
+                        Point pixelPoint = new(beginPoint.X + i * pixelSize, beginPoint.Y - i * pixelSize);
+                        DrawPixel(graphics, brush, pixelPoint, pixelSize);
                     }
                     break;
                 case 3: // Right Down (LinePointRight is 1 and LinePointDown is 1)
                     for (int i = 0; i < lineLength; i++)
                     {
-                        DrawPixel(graphics, brush, beginPoint.X + i * pixelSize, beginPoint.Y + i * pixelSize, pixelSize);
+                        Point pixelPoint = new(beginPoint.X + i * pixelSize, beginPoint.Y + i * pixelSize);
+                        DrawPixel(graphics, brush, pixelPoint, pixelSize);
                     }
                     break;
             }
@@ -89,7 +93,7 @@
                     }
                     int lineLength = GetLineLengthInPixels(beginPoint.X, endPoint.X, parameters.PixelSize.Value);
                     beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
-                    DrawRectangle(graphics, brush, beginPoint.X, beginPoint.Y, parameters.PixelSize.Value, lineLength, 1);
+                    DrawRectangle(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 1);
                 }
                 else
                 {
@@ -99,7 +103,7 @@
                     }
                     int lineLength = GetLineLengthInPixels(beginPoint.Y, endPoint.Y, parameters.PixelSize.Value);
                     beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
-                    DrawRectangle(graphics, brush, beginPoint.X, beginPoint.Y, parameters.PixelSize.Value, 1, lineLength);
+                    DrawRectangle(graphics, brush, beginPoint, parameters.PixelSize.Value, 1, lineLength);
                 }
             }
         }

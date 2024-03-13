@@ -1,23 +1,38 @@
 ﻿namespace PixelArtEditor.Drawing_Tools.Tools
 {
+    /// <summary>
+    /// a Pen tool that draws four pixels, one in the location clicked, and 3 others on the opposite sides horizontally, vertically and diagonally.
+    /// </summary>
     internal class FourMirrorPenTool : DrawingTool
     {
-        private static void DrawMirrorPixel(Graphics graphics, SolidBrush brush, OptionalToolParameters parameters)
+        /// <summary>
+        /// Draws two pixels, mirrored diagonally in the image.
+        /// </summary>
+        /// <param name="graphics">The graphics to draw the pixel on.</param>
+        /// <param name="brush">The brush to use when drawing the pixel.</param>
+        /// <param name="location">The location clicked on the image.</param>
+        /// <param name="imageSize">The size of the image that is being drawn on.</param>
+        /// <param name="pixelSize">The size of each pixel in the image.</param>
+        private static void DrawMirrorPixel(Graphics graphics, SolidBrush brush, Point location, Size imageSize, int pixelSize)
         {
-            Point pixelPoint = SnapPixelTopLeft(parameters.ClickLocation.Value, parameters.PixelSize.Value);
-            DrawPixel(graphics, brush, pixelPoint.X, pixelPoint.Y, parameters.PixelSize.Value);
+            // Draws the first pixel, in the click location.
+            Point pixelPoint = SnapPixelTopLeft(location, pixelSize);
+            DrawPixel(graphics, brush, pixelPoint, pixelSize);
 
-            pixelPoint = new(parameters.ImageSize.Value.Width - parameters.ClickLocation.Value.X - 1, parameters.ImageSize.Value.Height - parameters.ClickLocation.Value.Y - 1);
-            pixelPoint = SnapPixelTopLeft(pixelPoint, parameters.PixelSize.Value);
-            DrawPixel(graphics, brush, pixelPoint.X, pixelPoint.Y, parameters.PixelSize.Value);
+            // Inverts the click location horizontally and draws another pixel.
+            pixelPoint = new(imageSize.Width - location.X - 1, location.Y);
+            pixelPoint = SnapPixelTopLeft(pixelPoint, pixelSize);
+            DrawPixel(graphics, brush, pixelPoint, pixelSize);
 
-            pixelPoint = new(parameters.ImageSize.Value.Width - parameters.ClickLocation.Value.X - 1, parameters.ClickLocation.Value.Y);
-            pixelPoint = SnapPixelTopLeft(pixelPoint, parameters.PixelSize.Value);
-            DrawPixel(graphics, brush, pixelPoint.X, pixelPoint.Y, parameters.PixelSize.Value);
+            // Inverts the click location vertically and draws another pixel.
+            pixelPoint = new(location.X, imageSize.Height - location.Y - 1);
+            pixelPoint = SnapPixelTopLeft(pixelPoint, pixelSize);
+            DrawPixel(graphics, brush, pixelPoint, pixelSize);
 
-            pixelPoint = new(parameters.ClickLocation.Value.X, parameters.ImageSize.Value.Height - parameters.ClickLocation.Value.Y - 1);
-            pixelPoint = SnapPixelTopLeft(pixelPoint, parameters.PixelSize.Value);
-            DrawPixel(graphics, brush, pixelPoint.X, pixelPoint.Y, parameters.PixelSize.Value);
+            // Inverts the click location diagonally and draws another pixel.
+            pixelPoint = new(imageSize.Width - location.X - 1, imageSize.Height - location.Y - 1);
+            pixelPoint = SnapPixelTopLeft(pixelPoint, pixelSize);
+            DrawPixel(graphics, brush, pixelPoint, pixelSize);
         }
 
         public override void PreviewTool(Graphics paintGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters)
@@ -25,7 +40,7 @@
             if (toolParameters.ClickLocation.HasValue && toolParameters.ImageSize.HasValue && toolParameters.PixelSize.HasValue)
             {
                 colorBrush = MakePreviewBrush(colorBrush);
-                DrawMirrorPixel(paintGraphics, colorBrush, toolParameters);
+                DrawMirrorPixel(paintGraphics, colorBrush, toolParameters.ClickLocation.Value, toolParameters.ImageSize.Value, toolParameters.PixelSize.Value);
             }
         }
 
@@ -33,7 +48,7 @@
         {
             if (toolParameters.ClickLocation.HasValue && toolParameters.ImageSize.HasValue && toolParameters.PixelSize.HasValue)
             {
-                DrawMirrorPixel(imageGraphics, colorBrush, toolParameters);
+                DrawMirrorPixel(imageGraphics, colorBrush, toolParameters.ClickLocation.Value, toolParameters.ImageSize.Value, toolParameters.PixelSize.Value);
             }
         }
 
@@ -41,7 +56,7 @@
         {
             if (toolParameters.ClickLocation.HasValue && toolParameters.ImageSize.HasValue && toolParameters.PixelSize.HasValue)
             {
-                DrawMirrorPixel(imageGraphics, colorBrush, toolParameters);
+                DrawMirrorPixel(imageGraphics, colorBrush, toolParameters.ClickLocation.Value, toolParameters.ImageSize.Value, toolParameters.PixelSize.Value);
             }
         }
 

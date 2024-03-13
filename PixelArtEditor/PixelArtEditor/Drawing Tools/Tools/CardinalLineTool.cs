@@ -25,7 +25,7 @@ namespace PixelArtEditor.Drawing_Tools.Tools
 
                 int lineLength = GetLineLengthInPixels(beginPoint.X, endPoint.X, parameters.PixelSize.Value);
                 beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
-                DrawRectangle(graphics, brush, beginPoint.X, beginPoint.Y, parameters.PixelSize.Value, lineLength, 1);
+                DrawRectangle(graphics, brush, beginPoint, parameters.PixelSize.Value, lineLength, 1);
             }
             else
             {
@@ -36,7 +36,7 @@ namespace PixelArtEditor.Drawing_Tools.Tools
 
                 int lineLength = GetLineLengthInPixels(beginPoint.Y, endPoint.Y, parameters.PixelSize.Value);
                 beginPoint = SnapPixelTopLeft(beginPoint, parameters.PixelSize.Value);
-                DrawRectangle(graphics, brush, beginPoint.X, beginPoint.Y, parameters.PixelSize.Value, 1, lineLength);
+                DrawRectangle(graphics, brush, beginPoint, parameters.PixelSize.Value, 1, lineLength);
             }
         }
 
