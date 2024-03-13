@@ -2,23 +2,41 @@
 
 namespace PixelArtEditor.Drawing_Tools
 {
+    /// <summary>
+    /// A Factory that generates Drawing Tools.
+    /// </summary>
     internal class DrawingToolFactory
     {
+        /// <summary>
+        /// The currently generated tool. It is stored to be reused throughout the application for as long as no new tool is selected.
+        /// </summary>
         private IDrawingTool Tool { get; set; }
 
+        /// <summary>
+        /// Default constructor. The default tool chosen is a Pixel Pen.
+        /// </summary>
         public DrawingToolFactory()
         {
             Tool = new PixelPenTool();
         }
 
+        /// <summary>
+        /// Returns the current tool available, which is the last one generated.
+        /// </summary>
+        /// <returns>The last generated Drawing Tool.</returns>
         public IDrawingTool GetTool()
         {
             return Tool;
         }
 
-        public IDrawingTool ChangeCurrentTool(int currentButton)
+        /// <summary>
+        /// Generates a new Drawing Tool based on the value of the Tool Button selected.
+        /// </summary>
+        /// <param name="toolValue">The value of the tool button, which defines the tool to be used.</param>
+        /// <returns>A new instance of the tool that corresponds to the tool value.</returns>
+        public IDrawingTool ChangeCurrentTool(int toolValue)
         {
-            Tool = currentButton switch
+            Tool = toolValue switch
             {
                 1 => new HorizontalMirrorPenTool(),
                 2 => new VerticalMirrorPenTool(),

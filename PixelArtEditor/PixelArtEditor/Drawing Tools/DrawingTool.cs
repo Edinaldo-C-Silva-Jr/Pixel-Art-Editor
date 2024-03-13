@@ -1,17 +1,42 @@
 ﻿namespace PixelArtEditor.Drawing_Tools
 {
+    /// <summary>
+    /// A base implementation of a Drawing Tool, that has some of the common methods used by most other tools.
+    /// </summary>
     abstract public class DrawingTool : IDrawingTool
     {
-        protected static void DrawPixel(Graphics drawGraphics, SolidBrush drawBrush, int xPosition, int yPosition, int pixelSize)
+        /// <summary>
+        /// Draws a single pixel with the current pixel size, in the location clicked by the mouse.
+        /// </summary>
+        /// <param name="drawGraphics">The graphics for the image being drawn.</param>
+        /// <param name="drawBrush">The brush with the currently selected color.</param>
+        /// <param name="location">The location of the mouse click inside the Drawing Box.</param>
+        /// <param name="pixelSize">The size of each pixel in the image.</param>
+        protected static void DrawPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, int pixelSize)
         {
-            drawGraphics.FillRectangle(drawBrush, xPosition, yPosition, pixelSize, pixelSize);
+            drawGraphics.FillRectangle(drawBrush, location.X, location.Y, pixelSize, pixelSize);
         }
 
-        protected static void DrawRectangle(Graphics drawGraphics, SolidBrush drawBrush, int xPosition, int yPosition, int pixelSize, int xLength, int yLength)
+        /// <summary>
+        /// Draws a rectangle based on the current pixel size and location clicked by the mouse. The size of the rectangle can be chosen with the length parameters.
+        /// </summary>
+        /// <param name="drawGraphics">The graphics for the image being drawn.</param>
+        /// <param name="drawBrush">The brush with the currently selected color.</param>
+        /// <param name="location">The location of the mouse click inside the Drawing Box.</param>
+        /// <param name="pixelSize">The size of each pixel in the image.</param>
+        /// <param name="rectangleWidth">The width of the rectangle, in pixel sizes.</param>
+        /// <param name="rectangleHeight">The height of the rectangle, in pixel sizes.</param>
+        protected static void DrawRectangle(Graphics drawGraphics, SolidBrush drawBrush, Point location, int pixelSize, int rectangleWidth, int rectangleHeight)
         {
-            drawGraphics.FillRectangle(drawBrush, xPosition, yPosition, pixelSize * xLength, pixelSize * yLength);
+            drawGraphics.FillRectangle(drawBrush, location.X, location.Y, pixelSize * rectangleWidth, pixelSize * rectangleHeight);
         }
 
+        /// <summary>
+        /// Receives a location and snaps it to the top left of a pixel. This makes sure the changes are always applied to the entire pixel.
+        /// </summary>
+        /// <param name="absoluteLocation">The actual location of the mouse click.</param>
+        /// <param name="pixelSize">The size of each pixel in the image.</param>
+        /// <returns>The new location that indicates the top left corner of the current pixel.</returns>
         protected static Point SnapPixelTopLeft(Point absoluteLocation, int pixelSize)
         {
             int xPos = absoluteLocation.X - absoluteLocation.X % pixelSize;
@@ -27,6 +52,11 @@
             return Math.Abs((endPoint - startingPoint) / pixelSize); 
         }
 
+        /// <summary>
+        /// Creates a transluscent brush to use in the preview tool methods.
+        /// </summary>
+        /// <param name="colorBrush">The brush with the current color.</param>
+        /// <returns>A new brush with the same color but transluscent.</returns>
         protected static SolidBrush MakePreviewBrush(SolidBrush colorBrush)
         {
             Color transluscentColor = Color.FromArgb(128, colorBrush.Color);
