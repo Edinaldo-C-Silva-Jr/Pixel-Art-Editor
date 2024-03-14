@@ -16,12 +16,11 @@
         private static void DrawMirrorPixel(Graphics graphics, SolidBrush brush, Point location, Size imageSize, int pixelSize)
         {
             // Draws the first pixel, in the click location.
-            Point pixelPoint = SnapPixelTopLeft(location, pixelSize);
+            Point pixelPoint = location;
             DrawPixel(graphics, brush, pixelPoint, pixelSize);
 
             // Inverts the click location horizontally and draws another pixel.
             pixelPoint = new(imageSize.Width - location.X - 1, location.Y);
-            pixelPoint = SnapPixelTopLeft(pixelPoint, pixelSize);
             DrawPixel(graphics, brush, pixelPoint, pixelSize);
         }
 

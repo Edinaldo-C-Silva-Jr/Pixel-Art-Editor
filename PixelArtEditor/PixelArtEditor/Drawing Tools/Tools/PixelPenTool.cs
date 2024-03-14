@@ -15,8 +15,7 @@ namespace PixelArtEditor.Drawing_Tools.Tools
         /// <param name="pixelSize">The size of each pixel in the image.</param>
         private static void DrawPenPixel(Graphics graphics, SolidBrush brush, Point location, int pixelSize)
         {
-            Point pixelPoint = SnapPixelTopLeft(location, pixelSize);
-            DrawPixel(graphics, brush, pixelPoint, pixelSize);
+            DrawPixel(graphics, brush, location, pixelSize);
         }
 
         public override void PreviewTool(Graphics paintGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters)

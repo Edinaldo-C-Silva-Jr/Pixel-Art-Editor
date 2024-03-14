@@ -6,7 +6,7 @@
     abstract public class DrawingTool : IDrawingTool
     {
         /// <summary>
-        /// Draws a single pixel with the current pixel size, in the location clicked by the mouse.
+        /// Draws a single pixel with the current pixel size, filling the pixel where the mouse clicked.
         /// </summary>
         /// <param name="drawGraphics">The graphics for the image being drawn.</param>
         /// <param name="drawBrush">The brush with the currently selected color.</param>
@@ -14,11 +14,26 @@
         /// <param name="pixelSize">The size of each pixel in the image.</param>
         protected static void DrawPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, int pixelSize)
         {
+            Point pixelLocation = SnapPixelTopLeft(location, pixelSize);
+            drawGraphics.FillRectangle(drawBrush, pixelLocation.X, pixelLocation.Y, pixelSize, pixelSize);
+        }
+
+
+        /// <summary>
+        /// Draws a single pixel with the current pixel size, at the exact location of the mouse click.
+        /// </summary>
+        /// <param name="drawGraphics">The graphics for the image being drawn.</param>
+        /// <param name="drawBrush">The brush with the currently selected color.</param>
+        /// <param name="location">The location of the mouse click inside the Drawing Box.</param>
+        /// <param name="pixelSize">The size of each pixel in the image.</param>
+        protected static void DrawPixelAbsolute(Graphics drawGraphics, SolidBrush drawBrush, Point location, int pixelSize)
+        {
             drawGraphics.FillRectangle(drawBrush, location.X, location.Y, pixelSize, pixelSize);
         }
 
         /// <summary>
-        /// Draws a rectangle based on the current pixel size and location clicked by the mouse. The size of the rectangle can be chosen with the length parameters.
+        /// Draws a rectangle based on the current pixel size and starting at the pixel where the mouse clicked. 
+        /// The size of the rectangle can be chosen with the length parameters.
         /// </summary>
         /// <param name="drawGraphics">The graphics for the image being drawn.</param>
         /// <param name="drawBrush">The brush with the currently selected color.</param>
@@ -28,7 +43,8 @@
         /// <param name="rectangleHeight">The height of the rectangle, in pixel sizes.</param>
         protected static void DrawRectangle(Graphics drawGraphics, SolidBrush drawBrush, Point location, int pixelSize, int rectangleWidth, int rectangleHeight)
         {
-            drawGraphics.FillRectangle(drawBrush, location.X, location.Y, pixelSize * rectangleWidth, pixelSize * rectangleHeight);
+            Point pixelLocation = SnapPixelTopLeft(location, pixelSize);
+            drawGraphics.FillRectangle(drawBrush, pixelLocation.X, pixelLocation.Y, pixelSize * rectangleWidth, pixelSize * rectangleHeight);
         }
 
         /// <summary>

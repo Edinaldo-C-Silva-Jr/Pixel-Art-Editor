@@ -38,8 +38,8 @@
 
                 // Draws a white square with a black border as the preview for the eraser.
                 Point pixelPoint = SnapPixelTopLeft(toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);
-                DrawPixel(paintGraphics, outerBrush, pixelPoint, toolParameters.PixelSize.Value);
-                DrawPixel(paintGraphics, innerBrush, new Point (pixelPoint.X + 1, pixelPoint.Y + 1), toolParameters.PixelSize.Value - 2);
+                DrawPixelAbsolute(paintGraphics, outerBrush, pixelPoint, toolParameters.PixelSize.Value);
+                DrawPixelAbsolute(paintGraphics, innerBrush, new Point (pixelPoint.X + 1, pixelPoint.Y + 1), toolParameters.PixelSize.Value - 2);
             }
         }
 
