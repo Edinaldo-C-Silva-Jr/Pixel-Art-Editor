@@ -36,16 +36,16 @@
         /// <summary>
         /// Calculates and returns the length of the line to be drawn, in pixel sizes.
         /// </summary>
-        /// <param name="startingPoint">The point where the line begins, which is the first mouse click.</param>
-        /// <param name="finalPoint">The point where the line ends, which is the current mouse position.</param>
+        /// <param name="beginCoordinate">The coordinate where the line begins, which is on the first mouse click.</param>
+        /// <param name="finalCoordinate">The coordinate where the line ends, which is on the current mouse position.</param>
         /// <param name="pixelSize">The size of each pixel in the image.</param>
         /// <returns>The length of the line, expressed in pixel sizes.</returns>
-        private static int GetLineLengthInPixels(int startingPoint, int finalPoint, int pixelSize)
+        private static int GetLineLengthInPixels(int beginCoordinate, int finalCoordinate, int pixelSize)
         {
-            startingPoint -= startingPoint % pixelSize; // The starting point is the top left of the pixel.
-            finalPoint = finalPoint - (finalPoint % pixelSize) + pixelSize; // The end point is the top left of the next pixel.
+            beginCoordinate -= beginCoordinate % pixelSize; // The starting coordinate is the left or up edge of the pixel.
+            finalCoordinate = finalCoordinate - (finalCoordinate % pixelSize) + pixelSize; // The ending coordinate is the left or up edge of the next pixel.
 
-            return Math.Abs((finalPoint - startingPoint) / pixelSize);
+            return Math.Abs((finalCoordinate - beginCoordinate) / pixelSize);
         }
 
         /// <summary>
@@ -123,20 +123,20 @@
             if (diagonalLine)
             {
                 // These will either be the X or Y coordinate of the line start and line end, depending on whether the line goes further horizontally or vertically. 
-                int beginCoordinate, endCoordinate;
+                int beginCoordinate, finalCoordinate;
 
                 if (lineDirectionHorizontal)
                 {
-                    (beginCoordinate, endCoordinate) = SwapCoordinatesOnBackwardsLine(beginPoint.X, finalPoint.X);
+                    (beginCoordinate, finalCoordinate) = SwapCoordinatesOnBackwardsLine(beginPoint.X, finalPoint.X);
                 }
                 else
                 {
-                    (beginCoordinate, endCoordinate) = SwapCoordinatesOnBackwardsLine(beginPoint.Y, finalPoint.Y);
+                    (beginCoordinate, finalCoordinate) = SwapCoordinatesOnBackwardsLine(beginPoint.Y, finalPoint.Y);
                 }
 
                 // Defines the value of the diagonal line direction by using 2 bits, one for right/left and one for up/down.
                 int lineDirection = Convert.ToInt32(linePointRight) * 2 + Convert.ToInt32(linePointDown);
-                int lineLength = GetLineLengthInPixels(beginCoordinate, endCoordinate, pixelSize);
+                int lineLength = GetLineLengthInPixels(beginCoordinate, finalCoordinate, pixelSize);
                 DrawDiagonalLine(graphics, brush, beginPoint, pixelSize, lineLength, lineDirection);
             }
             else

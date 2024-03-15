@@ -45,6 +45,7 @@ namespace PixelArtEditor.Drawing_Tools
                 5 => new EraserTool(),
                 6 => new CardinalLineTool(),
                 7 => new OrdinalLineTool(),
+                8 => new FreeLineTool(),
                 _ => new PixelPenTool()
             };
 

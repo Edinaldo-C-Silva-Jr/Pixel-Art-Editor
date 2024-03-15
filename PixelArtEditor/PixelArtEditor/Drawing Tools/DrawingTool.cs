@@ -18,7 +18,6 @@
             drawGraphics.FillRectangle(drawBrush, pixelLocation.X, pixelLocation.Y, pixelSize, pixelSize);
         }
 
-
         /// <summary>
         /// Draws a single pixel with the current pixel size, at the exact location of the mouse click.
         /// </summary>

@@ -1,10 +1,6 @@
 ﻿namespace PixelArtEditor.Drawing_Tools.Tools
 {
-    /// <summary>
-    /// A tool that draws a straight line by clicking and dragging.
-    /// This tool only draws vertical or horizontal lines, snapping to the closest side to the mouse cursor.
-    /// </summary>
-    internal class CardinalLineTool : DrawingTool
+    internal class FreeLineTool : DrawingTool
     {
         /// <summary>
         /// The point where the line begins, which is where the mouse is first clicked.
@@ -48,14 +44,58 @@
             return Math.Abs((finalCoordinate - beginCoordinate) / pixelSize);
         }
 
-        /// <summary>
-        /// Draws a line that can be either horizontal or vertical, depending on which point is closer to the mouse cursor.
-        /// </summary>
-        /// <param name="graphics">The graphics to draw the pixel on.</param>
-        /// <param name="brush">The brush to use when drawing the pixel.</param>
-        /// <param name="location">The location clicked on the image.</param>
-        /// <param name="pixelSize">The size of each pixel in the image.</param>
-        private void DrawCardinalLine(Graphics graphics, SolidBrush brush, Point location, int pixelSize)
+        private static void CalculateAndDrawLine(Graphics graphics, SolidBrush brush, Point location, int pixelSize, int lineLength, decimal lineRatio, bool horizontalLine, int lineDirection)
+        {
+            decimal xProgress = 0, yProgress = 0;
+            decimal xStep, yStep;
+
+            if (horizontalLine)
+            {
+                xStep = pixelSize;
+                yStep = pixelSize * lineRatio;
+            }
+            else
+            {
+                xStep = pixelSize * lineRatio;
+                yStep = pixelSize;
+            }
+
+            for (int i = 0; i < lineLength; i++)
+            {
+                DrawPixel(graphics, brush, location, pixelSize);
+
+                xProgress += xStep;
+                yProgress += yStep;
+
+                if (xProgress >= pixelSize)
+                {
+                    xProgress -= pixelSize;
+                    if (lineDirection == 0 || lineDirection == 1)
+                    {
+                        location.X -= pixelSize;
+                    }
+                    else
+                    {
+                        location.X += pixelSize;
+                    }
+                }
+
+                if (yProgress >= pixelSize)
+                {
+                    yProgress -= pixelSize;
+                    if (lineDirection == 0 || lineDirection == 2)
+                    {
+                        location.Y -= pixelSize;
+                    }
+                    else
+                    {
+                        location.Y += pixelSize;
+                    }
+                }
+            }
+        }
+
+        private void DrawFreeLine(Graphics graphics, SolidBrush brush, Point location, int pixelSize)
         {
             // The line starts at the position the mouse first clicked, and ends where the mouse currently is.
             Point beginPoint = StartingPoint!.Value;
@@ -64,17 +104,28 @@
             int horizontalDifference = Math.Abs(finalPoint.X - beginPoint.X);
             int verticalDifference = Math.Abs(finalPoint.Y - beginPoint.Y);
 
-            if (horizontalDifference > verticalDifference) // If the mouse moved further horizontally, draw a horizontal line...
+            int beginCoordinate, finalCoordinate;
+            (beginCoordinate, finalCoordinate) = SwapCoordinatesOnBackwardsLine(beginPoint.X, finalPoint.X);
+            int lineLengthX = GetLineLengthInPixels(beginCoordinate, finalCoordinate, pixelSize);
+            (beginCoordinate, finalCoordinate) = SwapCoordinatesOnBackwardsLine(beginPoint.Y, finalPoint.Y);
+            int lineLengthY = GetLineLengthInPixels(beginCoordinate, finalCoordinate, pixelSize);
+
+            bool linePointRight = finalPoint.X > beginPoint.X;
+            bool linePointDown = finalPoint.Y > beginPoint.Y;
+            int lineDirection = Convert.ToInt32(linePointRight) * 2 + Convert.ToInt32(linePointDown);
+
+            beginPoint = SnapPixelTopLeft(beginPoint, pixelSize);
+            decimal lineRatio;
+
+            if (horizontalDifference > verticalDifference)
             {
-                (beginPoint.X, finalPoint.X) = SwapCoordinatesOnBackwardsLine(beginPoint.X, finalPoint.X);
-                int lineLength = GetLineLengthInPixels(beginPoint.X, finalPoint.X, pixelSize);
-                DrawRectangle(graphics, brush, beginPoint, pixelSize, lineLength, 1);
+                lineRatio = Decimal.Divide(lineLengthY, lineLengthX);
+                CalculateAndDrawLine(graphics, brush, beginPoint, pixelSize, lineLengthX, lineRatio, true, lineDirection);
             }
-            else // Otherwise, draw a vertical line.
+            else
             {
-                (beginPoint.Y, finalPoint.Y) = SwapCoordinatesOnBackwardsLine(beginPoint.Y, finalPoint.Y);
-                int lineLength = GetLineLengthInPixels(beginPoint.Y, finalPoint.Y, pixelSize);
-                DrawRectangle(graphics, brush, beginPoint, pixelSize, 1, lineLength);
+                lineRatio = Decimal.Divide(lineLengthX, lineLengthY);
+                CalculateAndDrawLine(graphics, brush, beginPoint, pixelSize, lineLengthY, lineRatio, false, lineDirection);
             }
         }
 
@@ -83,7 +134,7 @@
             if (StartingPoint.HasValue && toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
             {
                 colorBrush = MakePreviewBrush(colorBrush);
-                DrawCardinalLine(paintGraphics, colorBrush, toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);
+                DrawFreeLine(paintGraphics, colorBrush, toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);
             }
         }
 
@@ -105,7 +156,7 @@
         {
             if (StartingPoint.HasValue && toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
             {
-                DrawCardinalLine(imageGraphics, colorBrush, toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);
+                DrawFreeLine(imageGraphics, colorBrush, toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);
             }
 
             // Draw twice. Once on the image and once on the grid image

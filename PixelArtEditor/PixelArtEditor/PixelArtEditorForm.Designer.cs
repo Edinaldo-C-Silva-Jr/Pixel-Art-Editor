@@ -68,6 +68,7 @@
             VerticalMirrorPenButton = new Controls.ToolButton();
             HorizontalMirrorPenButton = new Controls.ToolButton();
             PixelPenButton = new Controls.ToolButton();
+            FreeLineButton = new Controls.ToolButton();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
@@ -410,6 +411,7 @@
             // DrawingToolButtonPanel
             // 
             DrawingToolButtonPanel.BackColor = SystemColors.Control;
+            DrawingToolButtonPanel.Controls.Add(FreeLineButton);
             DrawingToolButtonPanel.Controls.Add(OrdinalLineButton);
             DrawingToolButtonPanel.Controls.Add(CardinalLineButton);
             DrawingToolButtonPanel.Controls.Add(EraserButton);
@@ -549,6 +551,24 @@
             PixelPenButton.UseVisualStyleBackColor = true;
             PixelPenButton.Click += ChangeTool_ToolButtonsClick;
             // 
+            // FreeLineButton
+            // 
+            FreeLineButton.Location = new Point(150, 50);
+            FreeLineButton.Name = "FreeLineButton";
+            FreeLineButton.PreviewOnHold = true;
+            FreeLineButton.PreviewOnMove = false;
+            FreeLineButton.Size = new Size(40, 40);
+            FreeLineButton.TabIndex = 30;
+            FreeLineButton.Text = "Free Line";
+            FreeLineButton.ToolValue = 8;
+            FreeLineButton.UseBackgroundColor = false;
+            FreeLineButton.UseClickLocation = true;
+            FreeLineButton.UseImageSize = false;
+            FreeLineButton.UsePixelSize = true;
+            FreeLineButton.UseTransparency = false;
+            FreeLineButton.UseVisualStyleBackColor = true;
+            FreeLineButton.Click += ChangeTool_ToolButtonsClick;
+            // 
             // PixelArtEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -633,5 +653,6 @@
         private Controls.ToolButton EraserButton;
         private Controls.ToolButton CardinalLineButton;
         private Controls.ToolButton OrdinalLineButton;
+        private Controls.ToolButton FreeLineButton;
     }
 }
