@@ -60,14 +60,6 @@
             return new(xPos, yPos);
         }
 
-        protected static int GetLineLengthInPixels(int startingPoint, int endPoint, int pixelSize)
-        {
-            startingPoint -= startingPoint % pixelSize; // The starting point is the first point of the pixel
-            endPoint = endPoint - (endPoint % pixelSize) + pixelSize; // The end point is the first point of the next pixel
-
-            return Math.Abs((endPoint - startingPoint) / pixelSize); 
-        }
-
         /// <summary>
         /// Creates a transluscent brush to use in the preview tool methods.
         /// </summary>

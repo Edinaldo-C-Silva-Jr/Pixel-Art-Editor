@@ -34,6 +34,21 @@
         }
 
         /// <summary>
+        /// Calculates and returns the length of the line to be drawn, in pixel sizes.
+        /// </summary>
+        /// <param name="startingPoint">The point where the line begins, which is the first mouse click.</param>
+        /// <param name="finalPoint">The point where the line ends, which is the current mouse position.</param>
+        /// <param name="pixelSize">The size of each pixel in the image.</param>
+        /// <returns>The length of the line, expressed in pixel sizes.</returns>
+        private static int GetLineLengthInPixels(int startingPoint, int finalPoint, int pixelSize)
+        {
+            startingPoint -= startingPoint % pixelSize; // The starting point is the top left of the pixel.
+            finalPoint = finalPoint - (finalPoint % pixelSize) + pixelSize; // The end point is the top left of the next pixel.
+
+            return Math.Abs((finalPoint - startingPoint) / pixelSize);
+        }
+
+        /// <summary>
         /// Draws a line that can be either horizontal or vertical, depending on which point is closer to the mouse cursor.
         /// </summary>
         /// <param name="graphics">The graphics to draw the pixel on.</param>
