@@ -61,6 +61,7 @@
             DialogForSavingFiles = new SaveFileDialog();
             FullMirrorPenButton = new Controls.ToolButton();
             DrawingToolButtonPanel = new Controls.ToolButtonPanel();
+            FreeLineButton = new Controls.ToolButton();
             OrdinalLineButton = new Controls.ToolButton();
             CardinalLineButton = new Controls.ToolButton();
             EraserButton = new Controls.ToolButton();
@@ -68,7 +69,7 @@
             VerticalMirrorPenButton = new Controls.ToolButton();
             HorizontalMirrorPenButton = new Controls.ToolButton();
             PixelPenButton = new Controls.ToolButton();
-            FreeLineButton = new Controls.ToolButton();
+            SolidRectangleButton = new Controls.ToolButton();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
@@ -411,6 +412,7 @@
             // DrawingToolButtonPanel
             // 
             DrawingToolButtonPanel.BackColor = SystemColors.Control;
+            DrawingToolButtonPanel.Controls.Add(SolidRectangleButton);
             DrawingToolButtonPanel.Controls.Add(FreeLineButton);
             DrawingToolButtonPanel.Controls.Add(OrdinalLineButton);
             DrawingToolButtonPanel.Controls.Add(CardinalLineButton);
@@ -424,6 +426,24 @@
             DrawingToolButtonPanel.Name = "DrawingToolButtonPanel";
             DrawingToolButtonPanel.Size = new Size(240, 190);
             DrawingToolButtonPanel.TabIndex = 22;
+            // 
+            // FreeLineButton
+            // 
+            FreeLineButton.Location = new Point(150, 50);
+            FreeLineButton.Name = "FreeLineButton";
+            FreeLineButton.PreviewOnHold = true;
+            FreeLineButton.PreviewOnMove = false;
+            FreeLineButton.Size = new Size(40, 40);
+            FreeLineButton.TabIndex = 30;
+            FreeLineButton.Text = "Free Line";
+            FreeLineButton.ToolValue = 8;
+            FreeLineButton.UseBackgroundColor = false;
+            FreeLineButton.UseClickLocation = true;
+            FreeLineButton.UseImageSize = false;
+            FreeLineButton.UsePixelSize = true;
+            FreeLineButton.UseTransparency = false;
+            FreeLineButton.UseVisualStyleBackColor = true;
+            FreeLineButton.Click += ChangeTool_ToolButtonsClick;
             // 
             // OrdinalLineButton
             // 
@@ -551,23 +571,23 @@
             PixelPenButton.UseVisualStyleBackColor = true;
             PixelPenButton.Click += ChangeTool_ToolButtonsClick;
             // 
-            // FreeLineButton
+            // SolidRectangleButton
             // 
-            FreeLineButton.Location = new Point(150, 50);
-            FreeLineButton.Name = "FreeLineButton";
-            FreeLineButton.PreviewOnHold = true;
-            FreeLineButton.PreviewOnMove = false;
-            FreeLineButton.Size = new Size(40, 40);
-            FreeLineButton.TabIndex = 30;
-            FreeLineButton.Text = "Free Line";
-            FreeLineButton.ToolValue = 8;
-            FreeLineButton.UseBackgroundColor = false;
-            FreeLineButton.UseClickLocation = true;
-            FreeLineButton.UseImageSize = false;
-            FreeLineButton.UsePixelSize = true;
-            FreeLineButton.UseTransparency = false;
-            FreeLineButton.UseVisualStyleBackColor = true;
-            FreeLineButton.Click += ChangeTool_ToolButtonsClick;
+            SolidRectangleButton.Location = new Point(0, 100);
+            SolidRectangleButton.Name = "SolidRectangleButton";
+            SolidRectangleButton.PreviewOnHold = true;
+            SolidRectangleButton.PreviewOnMove = false;
+            SolidRectangleButton.Size = new Size(40, 40);
+            SolidRectangleButton.TabIndex = 31;
+            SolidRectangleButton.Text = "Rectangle";
+            SolidRectangleButton.ToolValue = 9;
+            SolidRectangleButton.UseBackgroundColor = false;
+            SolidRectangleButton.UseClickLocation = true;
+            SolidRectangleButton.UseImageSize = false;
+            SolidRectangleButton.UsePixelSize = true;
+            SolidRectangleButton.UseTransparency = false;
+            SolidRectangleButton.UseVisualStyleBackColor = true;
+            SolidRectangleButton.Click += ChangeTool_ToolButtonsClick;
             // 
             // PixelArtEditorForm
             // 
@@ -654,5 +674,6 @@
         private Controls.ToolButton CardinalLineButton;
         private Controls.ToolButton OrdinalLineButton;
         private Controls.ToolButton FreeLineButton;
+        private Controls.ToolButton SolidRectangleButton;
     }
 }

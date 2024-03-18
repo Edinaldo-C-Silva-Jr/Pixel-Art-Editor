@@ -1,5 +1,9 @@
 ﻿namespace PixelArtEditor.Drawing_Tools.Tools
 {
+    /// <summary>
+    /// A tool that freely draws a straight line by clicking and dragging.
+    /// This tool can draw lines of any size, direction or inclination. 
+    /// </summary>
     internal class FreeLineTool : DrawingTool
     {
         /// <summary>
