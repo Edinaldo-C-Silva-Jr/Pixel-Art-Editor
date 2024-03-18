@@ -15,40 +15,6 @@
         private int repeats;
 
         /// <summary>
-        /// Swaps the coordinates if the endpoint has a lower value than the starting point.
-        /// This method accepts a single coordinate, which can be the points' X coordinate or Y coordinate.
-        /// </summary>
-        /// <param name="beginCoodinate">The coordinate from the starting point.</param>
-        /// <param name="endCoordinate">The coordinate from the end point.</param>
-        /// <returns>A tuple containing both coordinates in the correct order.</returns>
-        private static (int, int) SwapCoordinatesOnBackwardsLine(int beginCoodinate, int endCoordinate)
-        {
-            if (beginCoodinate > endCoordinate)
-            {
-                return (endCoordinate, beginCoodinate);
-            }
-            else
-            {
-                return (beginCoodinate, endCoordinate);
-            }
-        }
-
-        /// <summary>
-        /// Calculates and returns the length of the line to be drawn, in pixel sizes.
-        /// </summary>
-        /// <param name="beginCoordinate">The coordinate where the line begins, which is on the first mouse click.</param>
-        /// <param name="finalCoordinate">The coordinate where the line ends, which is on the current mouse position.</param>
-        /// <param name="pixelSize">The size of each pixel in the image.</param>
-        /// <returns>The length of the line, expressed in pixel sizes.</returns>
-        private static int GetLineLengthInPixels(int beginCoordinate, int finalCoordinate, int pixelSize)
-        {
-            beginCoordinate -= beginCoordinate % pixelSize; // The starting coordinate is the left or up edge of the pixel.
-            finalCoordinate = finalCoordinate - (finalCoordinate % pixelSize) + pixelSize; // The ending coordinate is the left or up edge of the next pixel.
-
-            return Math.Abs((finalCoordinate - beginCoordinate) / pixelSize);
-        }
-
-        /// <summary>
         /// Draws the line pixel by pixel.
         /// This is done by calculating when to shift the pixel position horizontally or vertically to draw the next pixel.
         /// </summary>
@@ -133,10 +99,10 @@
 
             // Uses the specific coordinate (X for horizontal and Y for vertical) to find the both the horizontal and vertical line lengths.
             int beginCoordinate, finalCoordinate;
-            (beginCoordinate, finalCoordinate) = SwapCoordinatesOnBackwardsLine(beginPoint.X, finalPoint.X);
-            int lineLengthX = GetLineLengthInPixels(beginCoordinate, finalCoordinate, pixelSize);
-            (beginCoordinate, finalCoordinate) = SwapCoordinatesOnBackwardsLine(beginPoint.Y, finalPoint.Y);
-            int lineLengthY = GetLineLengthInPixels(beginCoordinate, finalCoordinate, pixelSize);
+            (beginCoordinate, finalCoordinate) = SwapCoordinatesWhenStartIsBigger(beginPoint.X, finalPoint.X);
+            int lineLengthX = GetDistanceInPixelSizes(beginCoordinate, finalCoordinate, pixelSize);
+            (beginCoordinate, finalCoordinate) = SwapCoordinatesWhenStartIsBigger(beginPoint.Y, finalPoint.Y);
+            int lineLengthY = GetDistanceInPixelSizes(beginCoordinate, finalCoordinate, pixelSize);
 
             // Finds the direction the line is pointing based on the positions.
             bool linePointRight = finalPoint.X > beginPoint.X;

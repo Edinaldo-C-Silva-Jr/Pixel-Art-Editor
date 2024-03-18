@@ -15,40 +15,6 @@
         private int repeats;
 
         /// <summary>
-        /// Swaps the coordinates if the endpoint has a lower value than the starting point.
-        /// This method accepts a single coordinate, which can be the points' X coordinate or Y coordinate.
-        /// </summary>
-        /// <param name="beginCoodinate">The coordinate from the starting point.</param>
-        /// <param name="endCoordinate">The coordinate from the end point.</param>
-        /// <returns>A tuple containing both coordinates in the correct order.</returns>
-        private static (int, int) SwapCoordinatesOnBackwardsLine(int beginCoodinate, int endCoordinate)
-        {
-            if (beginCoodinate > endCoordinate)
-            {
-                return (endCoordinate, beginCoodinate);
-            }
-            else
-            {
-                return (beginCoodinate, endCoordinate);
-            }
-        }
-
-        /// <summary>
-        /// Calculates and returns the length of the line to be drawn, in pixel sizes.
-        /// </summary>
-        /// <param name="beginCoordinate">The coordinate where the line begins, which is on the first mouse click.</param>
-        /// <param name="finalCoordinate">The coordinate where the line ends, which is on the current mouse position.</param>
-        /// <param name="pixelSize">The size of each pixel in the image.</param>
-        /// <returns>The length of the line, expressed in pixel sizes.</returns>
-        private static int GetLineLengthInPixels(int beginCoordinate, int finalCoordinate, int pixelSize)
-        {
-            beginCoordinate -= beginCoordinate % pixelSize; // The starting coordinate is the left or up edge of the pixel.
-            finalCoordinate = finalCoordinate - (finalCoordinate % pixelSize) + pixelSize; // The ending coordinate is the left or up edge of the next pixel.
-
-            return Math.Abs((finalCoordinate - beginCoordinate) / pixelSize);
-        }
-
-        /// <summary>
         /// Draws a diagonal line. The direction and size of the line are defined by the parameters.
         /// </summary>
         /// <param name="graphics">The graphics to draw the pixel on.</param>
@@ -127,30 +93,30 @@
 
                 if (lineDirectionHorizontal)
                 {
-                    (beginCoordinate, finalCoordinate) = SwapCoordinatesOnBackwardsLine(beginPoint.X, finalPoint.X);
+                    (beginCoordinate, finalCoordinate) = SwapCoordinatesWhenStartIsBigger(beginPoint.X, finalPoint.X);
                 }
                 else
                 {
-                    (beginCoordinate, finalCoordinate) = SwapCoordinatesOnBackwardsLine(beginPoint.Y, finalPoint.Y);
+                    (beginCoordinate, finalCoordinate) = SwapCoordinatesWhenStartIsBigger(beginPoint.Y, finalPoint.Y);
                 }
 
                 // Defines the value of the diagonal line direction by using 2 bits, one for right/left and one for up/down.
                 int lineDirection = Convert.ToInt32(linePointRight) * 2 + Convert.ToInt32(linePointDown);
-                int lineLength = GetLineLengthInPixels(beginCoordinate, finalCoordinate, pixelSize);
+                int lineLength = GetDistanceInPixelSizes(beginCoordinate, finalCoordinate, pixelSize);
                 DrawDiagonalLine(graphics, brush, beginPoint, pixelSize, lineLength, lineDirection);
             }
             else
             {
                 if (lineDirectionHorizontal)
                 {
-                    (beginPoint.X, finalPoint.X) = SwapCoordinatesOnBackwardsLine(beginPoint.X, finalPoint.X);
-                    int lineLength = GetLineLengthInPixels(beginPoint.X, finalPoint.X, pixelSize);
+                    (beginPoint.X, finalPoint.X) = SwapCoordinatesWhenStartIsBigger(beginPoint.X, finalPoint.X);
+                    int lineLength = GetDistanceInPixelSizes(beginPoint.X, finalPoint.X, pixelSize);
                     DrawRectangle(graphics, brush, beginPoint, pixelSize, lineLength, 1);
                 }
                 else
                 {
-                    (beginPoint.Y, finalPoint.Y) = SwapCoordinatesOnBackwardsLine(beginPoint.Y, finalPoint.Y);
-                    int lineLength = GetLineLengthInPixels(beginPoint.Y, finalPoint.Y, pixelSize);
+                    (beginPoint.Y, finalPoint.Y) = SwapCoordinatesWhenStartIsBigger(beginPoint.Y, finalPoint.Y);
+                    int lineLength = GetDistanceInPixelSizes(beginPoint.Y, finalPoint.Y, pixelSize);
                     DrawRectangle(graphics, brush, beginPoint, pixelSize, 1, lineLength);
                 }
             }

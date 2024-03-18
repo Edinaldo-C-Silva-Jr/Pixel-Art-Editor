@@ -1,5 +1,4 @@
-﻿
-namespace PixelArtEditor.Drawing_Tools.Tools
+﻿namespace PixelArtEditor.Drawing_Tools.Tools
 {
     /// <summary>
     /// A tool that draws a completely solid rectangle using a single color by clicking and dragging.
@@ -13,40 +12,6 @@ namespace PixelArtEditor.Drawing_Tools.Tools
 
         // Amount of times the drawing has been done, due to grid.
         private int repeats;
-
-        /// <summary>
-        /// Swaps the coordinates if the endpoint has a lower value than the starting point.
-        /// This method accepts a single coordinate, which can be the points' X coordinate or Y coordinate.
-        /// </summary>
-        /// <param name="beginCoodinate">The coordinate from the starting point.</param>
-        /// <param name="endCoordinate">The coordinate from the end point.</param>
-        /// <returns>A tuple containing both coordinates in the correct order.</returns>
-        private static (int, int) SwapCoordinatesOnBackwardsLine(int beginCoodinate, int endCoordinate)
-        {
-            if (beginCoodinate > endCoordinate)
-            {
-                return (endCoordinate, beginCoodinate);
-            }
-            else
-            {
-                return (beginCoodinate, endCoordinate);
-            }
-        }
-
-        /// <summary>
-        /// Calculates and returns the distance between two points in pixel sizes.
-        /// </summary>
-        /// <param name="beginCoordinate">The coordinate of the first mouse click.</param>
-        /// <param name="finalCoordinate">The coordinate of the current mouse position.</param>
-        /// <param name="pixelSize">The size of each pixel in the image.</param>
-        /// <returns>The distance between the two coordinates, expressed in pixel sizes.</returns>
-        private static int GetDistanceInPixelSizes(int beginCoordinate, int finalCoordinate, int pixelSize)
-        {
-            beginCoordinate -= beginCoordinate % pixelSize; // The starting coordinate is the left or up edge of the pixel.
-            finalCoordinate = finalCoordinate - (finalCoordinate % pixelSize) + pixelSize; // The ending coordinate is the left or up edge of the next pixel.
-
-            return Math.Abs((finalCoordinate - beginCoordinate) / pixelSize);
-        }
 
         /// <summary>
         /// Draws a solid rectangle, using a single color.
@@ -63,9 +28,9 @@ namespace PixelArtEditor.Drawing_Tools.Tools
             Point beginPoint = StartingPoint!.Value;
             Point finalPoint = location;
 
-            (beginPoint.X, finalPoint.X) = SwapCoordinatesOnBackwardsLine(beginPoint.X, finalPoint.X);
+            (beginPoint.X, finalPoint.X) = SwapCoordinatesWhenStartIsBigger(beginPoint.X, finalPoint.X);
             int rectangleWidth = GetDistanceInPixelSizes(beginPoint.X, finalPoint.X, pixelSize);
-            (beginPoint.Y, finalPoint.Y) = SwapCoordinatesOnBackwardsLine(beginPoint.Y, finalPoint.Y);
+            (beginPoint.Y, finalPoint.Y) = SwapCoordinatesWhenStartIsBigger(beginPoint.Y, finalPoint.Y);
             int rectangleHeight = GetDistanceInPixelSizes(beginPoint.Y, finalPoint.Y, pixelSize);
             beginPoint = SnapPixelTopLeft(beginPoint, pixelSize);
 

@@ -71,6 +71,42 @@
             return colorBrush;
         }
 
+        /// <summary>
+        /// Receives two coordinates, an initial coordinate and a final one, and compares them.
+        /// If the final coordinate is smaller than the initial, they're swapped.
+        /// This method accepts a single coordinate, which can be the X or Y coordinate of a Point.
+        /// </summary>
+        /// <param name="initialCoordinate">The coordinate from the starting point.</param>
+        /// <param name="finalCoordinate">The coordinate from the end point.</param>
+        /// <returns>A tuple containing both coordinates in the correct order.</returns>
+        protected static (int, int) SwapCoordinatesWhenStartIsBigger(int initialCoordinate, int finalCoordinate)
+        {
+            if (initialCoordinate > finalCoordinate)
+            {
+                return (finalCoordinate, initialCoordinate);
+            }
+            else
+            {
+                return (initialCoordinate, finalCoordinate);
+            }
+        }
+
+        /// <summary>
+        /// Calculates and returns the distance between two points in pixel sizes.
+        /// This method accepts a single coordinate, which can be the X or Y coordinate of a Point.
+        /// </summary>
+        /// <param name="initialCoordinate">The coordinate of the first mouse click.</param>
+        /// <param name="finalCoordinate">The coordinate of the current mouse position.</param>
+        /// <param name="pixelSize">The size of each pixel in the image.</param>
+        /// <returns>The distance between the two coordinates, expressed in pixel sizes.</returns>
+        protected static int GetDistanceInPixelSizes(int initialCoordinate, int finalCoordinate, int pixelSize)
+        {
+            initialCoordinate -= initialCoordinate % pixelSize; // The starting coordinate is the left or up edge of the pixel.
+            finalCoordinate = finalCoordinate - (finalCoordinate % pixelSize) + pixelSize; // The ending coordinate is the left or up edge of the next pixel.
+
+            return Math.Abs((finalCoordinate - initialCoordinate) / pixelSize);
+        }
+
         abstract public void UseToolClick(Graphics imageGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters);
 
         abstract public void UseToolHold(Graphics imageGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters);

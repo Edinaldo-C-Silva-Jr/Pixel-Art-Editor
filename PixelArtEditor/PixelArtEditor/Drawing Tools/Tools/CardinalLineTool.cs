@@ -15,40 +15,6 @@
         private int repeats;
 
         /// <summary>
-        /// Swaps the coordinates if the endpoint has a lower value than the starting point.
-        /// This method accepts a single coordinate, which can be the points' X coordinate or Y coordinate.
-        /// </summary>
-        /// <param name="beginCoodinate">The coordinate from the starting point.</param>
-        /// <param name="endCoordinate">The coordinate from the end point.</param>
-        /// <returns>A tuple containing both coordinates in the correct order.</returns>
-        private static (int, int) SwapCoordinatesOnBackwardsLine(int beginCoodinate, int endCoordinate)
-        {
-            if (beginCoodinate > endCoordinate)
-            {
-                return (endCoordinate, beginCoodinate);
-            }
-            else
-            {
-                return (beginCoodinate, endCoordinate);
-            }
-        }
-
-        /// <summary>
-        /// Calculates and returns the length of the line to be drawn, in pixel sizes.
-        /// </summary>
-        /// <param name="beginCoordinate">The coordinate where the line begins, which is on the first mouse click.</param>
-        /// <param name="finalCoordinate">The coordinate where the line ends, which is on the current mouse position.</param>
-        /// <param name="pixelSize">The size of each pixel in the image.</param>
-        /// <returns>The length of the line, expressed in pixel sizes.</returns>
-        private static int GetLineLengthInPixels(int beginCoordinate, int finalCoordinate, int pixelSize)
-        {
-            beginCoordinate -= beginCoordinate % pixelSize; // The starting coordinate is the left or up edge of the pixel.
-            finalCoordinate = finalCoordinate - (finalCoordinate % pixelSize) + pixelSize; // The ending coordinate is the left or up edge of the next pixel.
-
-            return Math.Abs((finalCoordinate - beginCoordinate) / pixelSize);
-        }
-
-        /// <summary>
         /// Draws a line that can be either horizontal or vertical, depending on which point is closer to the mouse cursor.
         /// </summary>
         /// <param name="graphics">The graphics to draw the pixel on.</param>
@@ -66,14 +32,14 @@
 
             if (horizontalDifference > verticalDifference) // If the mouse moved further horizontally, draw a horizontal line...
             {
-                (beginPoint.X, finalPoint.X) = SwapCoordinatesOnBackwardsLine(beginPoint.X, finalPoint.X);
-                int lineLength = GetLineLengthInPixels(beginPoint.X, finalPoint.X, pixelSize);
+                (beginPoint.X, finalPoint.X) = SwapCoordinatesWhenStartIsBigger(beginPoint.X, finalPoint.X);
+                int lineLength = GetDistanceInPixelSizes(beginPoint.X, finalPoint.X, pixelSize);
                 DrawRectangle(graphics, brush, beginPoint, pixelSize, lineLength, 1);
             }
             else // Otherwise, draw a vertical line.
             {
-                (beginPoint.Y, finalPoint.Y) = SwapCoordinatesOnBackwardsLine(beginPoint.Y, finalPoint.Y);
-                int lineLength = GetLineLengthInPixels(beginPoint.Y, finalPoint.Y, pixelSize);
+                (beginPoint.Y, finalPoint.Y) = SwapCoordinatesWhenStartIsBigger(beginPoint.Y, finalPoint.Y);
+                int lineLength = GetDistanceInPixelSizes(beginPoint.Y, finalPoint.Y, pixelSize);
                 DrawRectangle(graphics, brush, beginPoint, pixelSize, 1, lineLength);
             }
         }
