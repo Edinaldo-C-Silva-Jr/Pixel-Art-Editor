@@ -54,8 +54,8 @@
         /// <returns>The new location that indicates the top left corner of the current pixel.</returns>
         protected static Point SnapPixelTopLeft(Point absoluteLocation, int pixelSize)
         {
-            int xPos = absoluteLocation.X - absoluteLocation.X % pixelSize;
-            int yPos = absoluteLocation.Y - absoluteLocation.Y % pixelSize;
+            int xPos = absoluteLocation.X - Modulo(absoluteLocation.X, pixelSize);
+            int yPos = absoluteLocation.Y - Modulo(absoluteLocation.Y, pixelSize);
             return new(xPos, yPos);
         }
 
@@ -92,6 +92,17 @@
         }
 
         /// <summary>
+        /// Custom modulo function that correctly handles negative values, returning a positive remainder.
+        /// </summary>
+        /// <param name="value">The value that will have its remainder returned.</param>
+        /// <param name="modulo">The number to divide the value and get the remainder.</param>
+        /// <returns>The remainder of the division between a value and a number.</returns>
+        protected static int Modulo(int value, int modulo)
+        {
+            return (value % modulo + modulo) % modulo;
+        }
+
+        /// <summary>
         /// Calculates and returns the distance between two points in pixel sizes.
         /// This method accepts a single coordinate, which can be the X or Y coordinate of a Point.
         /// </summary>
@@ -101,8 +112,8 @@
         /// <returns>The distance between the two coordinates, expressed in pixel sizes.</returns>
         protected static int GetDistanceInPixelSizes(int initialCoordinate, int finalCoordinate, int pixelSize)
         {
-            initialCoordinate -= initialCoordinate % pixelSize; // The starting coordinate is the left or up edge of the pixel.
-            finalCoordinate = finalCoordinate - (finalCoordinate % pixelSize) + pixelSize; // The ending coordinate is the left or up edge of the next pixel.
+            initialCoordinate -= Modulo(initialCoordinate, pixelSize); // The starting coordinate is the left or up edge of the pixel.
+            finalCoordinate = finalCoordinate - (Modulo(finalCoordinate, pixelSize)) + pixelSize; // The ending coordinate is the left or up edge of the next pixel.
 
             return Math.Abs((finalCoordinate - initialCoordinate) / pixelSize);
         }
