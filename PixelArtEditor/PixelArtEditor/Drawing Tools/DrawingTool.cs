@@ -60,14 +60,36 @@
         }
 
         /// <summary>
-        /// Creates a transluscent brush to use in the preview tool methods.
+        /// Creates a brush to use in the preview tool methods. This brush will have a darker or lighter version of the color.
         /// </summary>
         /// <param name="colorBrush">The brush with the current color.</param>
-        /// <returns>A new brush with the same color but transluscent.</returns>
+        /// <returns>A new brush with a lighter or darker version of the original color.</returns>
         protected static SolidBrush MakePreviewBrush(SolidBrush colorBrush)
         {
-            Color transluscentColor = Color.FromArgb(128, colorBrush.Color);
-            colorBrush = new(transluscentColor);
+            // Formula to get the brightness of a color. Values range from 0 to 255.
+            // The green component has the most influence in the color's brightness, and the blue component has the least influence.
+            decimal brightness = 0.2126M * colorBrush.Color.R + 0.7152M * colorBrush.Color.G + 0.0722M * colorBrush.Color.B;
+
+            // Make the color lighter if it's dark, and darker if it's light.
+            Color previewColor;
+            if (brightness < 64)
+            {
+                previewColor = ControlPaint.Light(colorBrush.Color, 1.0f);
+            } 
+            else if (brightness < 128)
+            {
+                previewColor = ControlPaint.Light(colorBrush.Color, 0.4f);
+            } 
+            else if(brightness < 196)
+            {
+                previewColor = ControlPaint.Dark(colorBrush.Color, 0.05f);
+            }
+            else
+            {
+                previewColor = ControlPaint.Dark(colorBrush.Color, 0.1f);
+            }
+            
+            colorBrush = new(previewColor);
             return colorBrush;
         }
 

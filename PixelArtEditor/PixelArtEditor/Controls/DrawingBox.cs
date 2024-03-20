@@ -152,6 +152,7 @@ namespace PixelArtEditor.Controls
         /// <param name="toolParameters">The parameters to be used by the current tool.</param>
         public void PreviewTool(IDrawingTool tool, Graphics paintGraphics, Color pixelColor, OptionalToolParameters toolParameters)
         {
+            paintGraphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
             ColorBrush = new(pixelColor);
 
             tool.PreviewTool(paintGraphics, ColorBrush, toolParameters);
