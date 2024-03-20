@@ -7,6 +7,7 @@ namespace PixelArtEditor
 {
     public partial class PixelArtEditorForm : Form
     {
+        #region Properties
         /// <summary>
         /// The class responsible for storing and handling the image used in the program.
         /// </summary>
@@ -17,10 +18,17 @@ namespace PixelArtEditor
         /// </summary>
         private FileSaveLoadHandler FileSaverLoader { get; }
 
+        /// <summary>
+        /// A factory class that handles the creation and recovery of DrawingTools.
+        /// </summary>
         private DrawingToolFactory ToolFactory { get; set; }
 
-
-        Point? MouseOnControl;
+        /// <summary>
+        /// A point that indicates the mouse position inside the Drawing Box.
+        /// Used in the Paint event to define the tool preview location.
+        /// </summary>
+        private Point? MouseOnDrawingBox { get; set; }
+        #endregion
 
         public PixelArtEditorForm()
         {
@@ -422,6 +430,10 @@ namespace PixelArtEditor
         }
         #endregion
 
+        #region Drawing Tools and Drawing Events
+        /// <summary>
+        /// Changes the currently selected ToolButton to the button clicked, and changes the current tool to the newly selected one.
+        /// </summary>
         private void ChangeTool_ToolButtonsClick(object sender, EventArgs e)
         {
             if (sender is not ToolButton toolButton)
@@ -437,9 +449,14 @@ namespace PixelArtEditor
             buttonPanel.ChangeCurrentButton(toolButton);
             ToolFactory.ChangeCurrentTool(toolButton.ToolValue);
 
-            MouseOnControl = null;
+            MouseOnDrawingBox = null;
         }
 
+        /// <summary>
+        /// Gets the tool parameters from the current tool button and returns them as an OptionalToolParameters object.
+        /// </summary>
+        /// <param name="mouseLocation">The mouse's current location.</param>
+        /// <returns>An OptionalToolParameters object containing the parameters relevant for the current tool.</returns>
         private OptionalToolParameters GetToolParameters(Point mouseLocation)
         {
             OptionalToolParameters toolParameters = new();
@@ -474,6 +491,11 @@ namespace PixelArtEditor
             return toolParameters;
         }
 
+        /// <summary>
+        /// Uses the current tool's Mouse Click method.
+        /// Sets the mouse location and fires the Paint event for the tool's preview.
+        /// Defines the start of the image selection on right click.
+        /// </summary>
         private void ViewingAreaDrawingBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -498,11 +520,16 @@ namespace PixelArtEditor
 
             if (previewProperties["PreviewHold"] && e.Button == MouseButtons.Left)
             {
-                MouseOnControl = e.Location;
+                MouseOnDrawingBox = e.Location;
                 ViewingAreaDrawingBox.Invalidate();
             }
         }
 
+        /// <summary>
+        /// Uses the current tool's Mouse Hold method.
+        /// Sets the mouse location and fires the Paint event for the tool's preview.
+        /// Changes the image selection.
+        /// </summary>
         private void ViewingAreaDrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.X < 0 || e.Y < 0 || e.X >= ImageManager.OriginalImage.Width || e.Y >= ImageManager.OriginalImage.Height)
@@ -527,11 +554,14 @@ namespace PixelArtEditor
 
             if (previewProperties["PreviewMove"] || (previewProperties["PreviewHold"] && e.Button == MouseButtons.Left))
             {
-                MouseOnControl = e.Location;
+                MouseOnDrawingBox = e.Location;
                 ViewingAreaDrawingBox.Invalidate();
             }
         }
 
+        /// <summary>
+        /// Uses the current tool's Mouse Release method.
+        /// </summary>
         private void ViewingAreaDrawingBox_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -542,19 +572,24 @@ namespace PixelArtEditor
                 ViewingAreaDrawingBox.Refresh();
             }
 
-            MouseOnControl = null;
+            MouseOnDrawingBox = null;
         }
 
+        /// <summary>
+        /// Uses the current tool's Preview method.
+        /// Draws the selection onto the image.
+        /// </summary>
         private void ViewingAreaDrawingBox_Paint(object sender, PaintEventArgs e)
         {
             ImageManager.DrawSelectionOntoDrawingBox(e.Graphics);
 
-            if (MouseOnControl.HasValue)
+            if (MouseOnDrawingBox.HasValue)
             {
-                OptionalToolParameters toolParameters = GetToolParameters(MouseOnControl.Value);
+                OptionalToolParameters toolParameters = GetToolParameters(MouseOnDrawingBox.Value);
 
                 ViewingAreaDrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
             }
         }
+        #endregion
     }
 }
