@@ -61,6 +61,7 @@
             DialogForSavingFiles = new SaveFileDialog();
             FullMirrorPenButton = new Controls.ToolButton();
             DrawingToolButtonPanel = new Controls.ToolButtonPanel();
+            OutlineRectangleButton = new Controls.ToolButton();
             SolidRectangleButton = new Controls.ToolButton();
             FreeLineButton = new Controls.ToolButton();
             OrdinalLineButton = new Controls.ToolButton();
@@ -70,7 +71,6 @@
             VerticalMirrorPenButton = new Controls.ToolButton();
             HorizontalMirrorPenButton = new Controls.ToolButton();
             PixelPenButton = new Controls.ToolButton();
-            OutlineRectangleButton = new Controls.ToolButton();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
@@ -204,6 +204,7 @@
             ViewingAreaDrawingBox.TabStop = false;
             ViewingAreaDrawingBox.Paint += ViewingAreaDrawingBox_Paint;
             ViewingAreaDrawingBox.MouseDown += ViewingAreaDrawingBox_MouseDown;
+            ViewingAreaDrawingBox.MouseLeave += ViewingAreaDrawingBox_MouseLeave;
             ViewingAreaDrawingBox.MouseMove += ViewingAreaDrawingBox_MouseMove;
             ViewingAreaDrawingBox.MouseUp += ViewingAreaDrawingBox_MouseUp;
             // 
@@ -429,6 +430,24 @@
             DrawingToolButtonPanel.Size = new Size(240, 190);
             DrawingToolButtonPanel.TabIndex = 22;
             // 
+            // OutlineRectangleButton
+            // 
+            OutlineRectangleButton.Location = new Point(50, 100);
+            OutlineRectangleButton.Name = "OutlineRectangleButton";
+            OutlineRectangleButton.PreviewOnHold = true;
+            OutlineRectangleButton.PreviewOnMove = false;
+            OutlineRectangleButton.Size = new Size(40, 40);
+            OutlineRectangleButton.TabIndex = 32;
+            OutlineRectangleButton.Text = "Out. Rect.";
+            OutlineRectangleButton.ToolValue = 10;
+            OutlineRectangleButton.UseBackgroundColor = false;
+            OutlineRectangleButton.UseClickLocation = true;
+            OutlineRectangleButton.UseImageSize = false;
+            OutlineRectangleButton.UsePixelSize = true;
+            OutlineRectangleButton.UseTransparency = false;
+            OutlineRectangleButton.UseVisualStyleBackColor = true;
+            OutlineRectangleButton.Click += ChangeTool_ToolButtonsClick;
+            // 
             // SolidRectangleButton
             // 
             SolidRectangleButton.Location = new Point(0, 100);
@@ -590,24 +609,6 @@
             PixelPenButton.UseTransparency = false;
             PixelPenButton.UseVisualStyleBackColor = true;
             PixelPenButton.Click += ChangeTool_ToolButtonsClick;
-            // 
-            // OutlineRectangleButton
-            // 
-            OutlineRectangleButton.Location = new Point(50, 100);
-            OutlineRectangleButton.Name = "OutlineRectangleButton";
-            OutlineRectangleButton.PreviewOnHold = true;
-            OutlineRectangleButton.PreviewOnMove = false;
-            OutlineRectangleButton.Size = new Size(40, 40);
-            OutlineRectangleButton.TabIndex = 32;
-            OutlineRectangleButton.Text = "Out. Rect.";
-            OutlineRectangleButton.ToolValue = 10;
-            OutlineRectangleButton.UseBackgroundColor = false;
-            OutlineRectangleButton.UseClickLocation = true;
-            OutlineRectangleButton.UseImageSize = false;
-            OutlineRectangleButton.UsePixelSize = true;
-            OutlineRectangleButton.UseTransparency = false;
-            OutlineRectangleButton.UseVisualStyleBackColor = true;
-            OutlineRectangleButton.Click += ChangeTool_ToolButtonsClick;
             // 
             // PixelArtEditorForm
             // 

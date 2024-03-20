@@ -534,7 +534,7 @@ namespace PixelArtEditor
         {
             if (e.X < 0 || e.Y < 0 || e.X >= ImageManager.OriginalImage.Width || e.Y >= ImageManager.OriginalImage.Height)
             {
-                return;
+                MouseOnDrawingBox = e.Location;
             }
 
             if (e.Button == MouseButtons.Left)
@@ -589,6 +589,12 @@ namespace PixelArtEditor
 
                 ViewingAreaDrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
             }
+        }
+
+        private void ViewingAreaDrawingBox_MouseLeave(object sender, EventArgs e)
+        {
+            MouseOnDrawingBox = null;
+            ViewingAreaDrawingBox.Invalidate();
         }
         #endregion
     }
