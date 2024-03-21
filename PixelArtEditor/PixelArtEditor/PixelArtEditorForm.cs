@@ -82,7 +82,7 @@ namespace PixelArtEditor
         private void InitializeControlValues()
         {
             // Generates the ColorTables for Grid Color and Background Color.
-            GridColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked), Color.Gray);
+            GridColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked), Color.LightGray);
             BackgroundColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked), Color.White);
 
             // Defines the values for the GridType ComboBox based on the GridType Enum values.
@@ -507,7 +507,7 @@ namespace PixelArtEditor
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 ViewingAreaDrawingBox.DrawClick(ToolFactory.GetTool(), DefineGridType(), ImageManager.OriginalImage, paletteColor, toolParameters);
-                ViewingAreaDrawingBox.Refresh();
+                ViewingAreaDrawingBox.Invalidate();
             }
 
             if (e.Button == MouseButtons.Right)
@@ -542,7 +542,7 @@ namespace PixelArtEditor
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 ViewingAreaDrawingBox.DrawHold(ToolFactory.GetTool(), DefineGridType(), toolParameters);
-                ViewingAreaDrawingBox.Refresh();
+                ViewingAreaDrawingBox.Invalidate();
             }
 
             if (e.Button == MouseButtons.Right)
@@ -569,7 +569,7 @@ namespace PixelArtEditor
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 ViewingAreaDrawingBox.DrawRelease(ToolFactory.GetTool(), DefineGridType(), toolParameters);
-                ViewingAreaDrawingBox.Refresh();
+                ViewingAreaDrawingBox.Invalidate();
             }
 
             MouseOnDrawingBox = null;
