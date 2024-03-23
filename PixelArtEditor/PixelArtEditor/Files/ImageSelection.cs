@@ -13,9 +13,9 @@
         private Point SelectionStart { get; set; }
 
         /// <summary>
-        /// A field that stores the rectangle currently used as the selection area in the image.
+        /// The rectangle currently used as the selection area in the image.
         /// </summary>
-        public Rectangle SelectedArea { get; private set; }
+        public Rectangle SelectedArea;
 
         public ImageSelection()
         {
