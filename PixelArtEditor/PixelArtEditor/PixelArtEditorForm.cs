@@ -24,6 +24,8 @@ namespace PixelArtEditor
         /// </summary>
         private DrawingToolFactory ToolFactory { get; set; }
 
+        private GridGeneratorFactory GridFactory { get; set; }
+
         /// <summary>
         /// A point that indicates the mouse position inside the Drawing Box.
         /// Used in the Paint event to define the tool preview location.
@@ -36,6 +38,7 @@ namespace PixelArtEditor
             ImageManager = new();
             FileSaverLoader = new();
             ToolFactory = new();
+            GridFactory = new();
             InitializeComponent();
         }
 
@@ -122,28 +125,17 @@ namespace PixelArtEditor
             return (width, height, zoom);
         }
 
-        // TODO: Don't generate Grid everytime the Grid type has to be called, only when the grid type changes
         /// <summary>
         /// Method that defines which Grid implementation to use based on the currently selected Grid Type.
-        /// It returns a grid implementation set to the current image size.
         /// </summary>
         /// <returns>A grid implementation of the currently defined grid type.</returns>
-        private IGridGenerator DefineGridType()
+        private void ChangeGridGenerator()
         {
             int zoom = (int)ViewingZoomNumberBox.Value;
             Color gridColor = GridColorTable.GetCurrentColor();
-
             GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
-            IGridGenerator gridGenerator;
 
-            gridGenerator = gridType switch
-            {
-                GridType.Line => new LineGrid(),
-                _ => new NoGrid()
-            };
-
-            gridGenerator.GenerateGrid(ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height, zoom, gridColor);
-            return gridGenerator;
+            GridFactory.ChangeCurrentGrid(gridType, ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height, zoom, gridColor);
         }
 
         /// <summary>
@@ -152,10 +144,9 @@ namespace PixelArtEditor
         /// </summary>
         private void SetNewImageAndViewingAreaSize()
         {
-            // Gets all relevant image parameters: size, background color, grid type and transparency.
+            // Gets all relevant image parameters: size, background color and transparency.
             (int width, int height, int zoom) = GetImageSizeValues();
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
-            IGridGenerator gridGenerator = DefineGridType();
             bool transparent = TransparencyCheckBox.Checked;
 
             ImageManager.CreateNewImage(width, height, zoom, backgroundColor, transparent);
@@ -312,7 +303,6 @@ namespace PixelArtEditor
                 BackgroundColorLabel.Text = "Background Color";
             }
 
-            IGridGenerator generator = DefineGridType();
             ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
         }
 
@@ -322,6 +312,7 @@ namespace PixelArtEditor
         /// </summary>
         private void GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage(object sender, EventArgs e)
         {
+            ChangeGridGenerator();
             ViewingAreaDrawingBox.Invalidate();
         }
 
@@ -343,8 +334,6 @@ namespace PixelArtEditor
         {
             ImageManager.PasteSelectionInImage();
 
-            IGridGenerator generator = DefineGridType();
-            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
             ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
         }
 
@@ -363,11 +352,10 @@ namespace PixelArtEditor
 
             ImageManager.ChangeImageZoom(width, height, zoom);
 
-            IGridGenerator generator = DefineGridType();
-            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
-
             ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
             ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
+
+            ChangeGridGenerator();
 
             ReorganizeControls();
         }
@@ -401,8 +389,6 @@ namespace PixelArtEditor
                     }
                 }
 
-                IGridGenerator generator = DefineGridType();
-                Color backgroundColor = BackgroundColorTable.GetCurrentColor();
                 ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
 
                 ReorganizeControls();
@@ -586,8 +572,6 @@ namespace PixelArtEditor
         /// </summary>
         private void ViewingAreaDrawingBox_Paint(object sender, PaintEventArgs e)
         {
-            ImageManager.DrawSelectionOntoDrawingBox(e.Graphics);
-            
             if (MouseOnDrawingBox.HasValue)
             {
                 OptionalToolParameters toolParameters = GetToolParameters(MouseOnDrawingBox.Value);
@@ -595,7 +579,9 @@ namespace PixelArtEditor
                 ViewingAreaDrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
             }
 
-            ViewingAreaDrawingBox.ApplyNewGrid(DefineGridType(), e.Graphics, ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height);
+            ImageManager.DrawSelectionOntoDrawingBox(e.Graphics);
+
+            ViewingAreaDrawingBox.ApplyNewGrid(GridFactory.GetGrid(), e.Graphics, ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height);
         }
     }
 }

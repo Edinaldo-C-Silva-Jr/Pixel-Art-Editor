@@ -19,7 +19,8 @@
         /// If the grid has not been generated, it does nothing.
         /// </summary>
         /// <param name="gridGraphics">The graphics that will be used to draw the grid.</param>
-        /// <param name="backgroundColor">The color used for the image's background.</param>
+        /// <param name="imageWidth">The width of the image that will receive the grid.</param>
+        /// <param name="imageHeight">The height of the image that will receive the grid.</param>
         public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight);
     }
 }
