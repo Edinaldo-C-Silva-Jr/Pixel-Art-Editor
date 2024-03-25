@@ -6,8 +6,9 @@ namespace PixelArtEditor.Controls
     public partial class DrawingBox : PictureBox, IDisposable
     {
         // Disposed in the Designer file
-        private Graphics? ImageGraphics;
-        private SolidBrush? ColorBrush;
+        private Graphics? ImageGraphics { get; set; }
+        private SolidBrush? ColorBrush { get; set; }
+        private bool MouseReleased { get; set; }
 
         public DrawingBox()
         {
@@ -51,6 +52,7 @@ namespace PixelArtEditor.Controls
         {
             ImageGraphics = Graphics.FromImage(image);
             ColorBrush = new(pixelColor);
+            MouseReleased = false;
 
             tool.UseToolClick(ImageGraphics, ColorBrush, toolParameters);
         }
@@ -63,7 +65,7 @@ namespace PixelArtEditor.Controls
         /// <param name="toolParameters">The parameters to be used by the current tool.</param>
         public void DrawHold(IDrawingTool tool, OptionalToolParameters toolParameters)
         {
-            if (ImageGraphics == null || ColorBrush == null)
+            if (ImageGraphics == null || ColorBrush == null || MouseReleased)
             {
                 return;
             }
@@ -79,7 +81,7 @@ namespace PixelArtEditor.Controls
         /// <param name="toolParameters">The parameters to be used by the current tool.</param>
         public void DrawRelease(IDrawingTool tool, OptionalToolParameters toolParameters)
         {
-            if (ImageGraphics == null || ColorBrush == null)
+            if (ImageGraphics == null || ColorBrush == null || MouseReleased)
             {
                 return;
             }
@@ -88,6 +90,7 @@ namespace PixelArtEditor.Controls
 
             ImageGraphics.Dispose();
             ColorBrush.Dispose();
+            MouseReleased = true;
         }
 
         /// <summary>
