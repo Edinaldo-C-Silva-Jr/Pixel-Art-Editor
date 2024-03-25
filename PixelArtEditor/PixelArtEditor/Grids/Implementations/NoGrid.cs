@@ -8,7 +8,7 @@
         /// <summary>
         /// Does nothing, since the Grid type is set to None.
         /// </summary>
-        public void GenerateGrid(Bitmap originalImage, int cellSize, Color gridColor)
+        public void GenerateGrid(int imageWidth, int imageHeight, int cellSize, Color gridColor)
         {
             return;
         }
@@ -16,7 +16,7 @@
         /// <summary>
         /// Simply returns the original image, since no grid should be applied.
         /// </summary>
-        public void ApplyGrid(Bitmap originalImage, Color backgroundColor)
+        public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight, Color backgroundColor)
         {
             return;
         }

@@ -6,20 +6,20 @@
     public interface IGridGenerator
     {
         /// <summary>
-        /// Generates a grid, saving it into a property, so it can be applied to an image with the ApplyGridFullImage method.
-        /// Also generates a single pixel of the grid, which can be applied with ApplyGridSinglePixel method.
+        /// Generates a grid, saving it into a property, so it can be applied to an image with the ApplyGrid method.
         /// </summary>
-        /// <param name="originalImage">The image used to define the dimensions of the grid.</param>
+        /// <param name="imageWidth">The width of the image that will receive the grid.</param>
+        /// <param name="imageHeight">The height of the image that will receive the grid.</param>
         /// <param name="cellSize">The size of each pixel cell in the grid, defined by the zoom parameter in the editor.</param>
         /// <param name="gridColor">The color currently set for the grid.</param>
-        public void GenerateGrid(Bitmap originalImage, int cellSize, Color gridColor);
+        public void GenerateGrid(int imageWidth, int imageHeight, int cellSize, Color gridColor);
 
         /// <summary>
         /// Applies a previously generated grid to the specified image, filling the entire image with it.
         /// If the grid has not been generated, it does nothing.
         /// </summary>
-        /// <param name="originalImage">The image where the grid will be applied.</param>
+        /// <param name="gridGraphics">The graphics that will be used to draw the grid.</param>
         /// <param name="backgroundColor">The color used for the image's background.</param>
-        public void ApplyGrid(Bitmap originalImage, Color backgroundColor);
+        public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight, Color backgroundColor);
     }
 }

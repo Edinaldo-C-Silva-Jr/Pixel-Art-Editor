@@ -3,7 +3,7 @@
     /// <summary>
     /// Implements a checkered grid, where the pixels are painted with alternating colors. The colors used are the specified grid color and white.
     /// </summary>
-    internal class CheckerGrid : IGridGenerator
+    internal class CheckerGrid : IGridGenerator, IDisposable
     {
         /// <summary>
         /// A piece of a checkered grid. It is used to fill the entire image with the grid.
@@ -27,10 +27,10 @@
             return gridPieceSize;
         }
 
-        public void GenerateGrid(Bitmap originalImage, int cellSize, Color gridColor)
+        public void GenerateGrid(int imageWidth, int imageHeight, int cellSize, Color gridColor)
         {
-            int gridPieceWidth = DefineGridPieceSize(originalImage.Width / cellSize) * cellSize;
-            int gridPieceHeight = DefineGridPieceSize(originalImage.Height / cellSize) * cellSize;
+            int gridPieceWidth = DefineGridPieceSize(imageWidth / cellSize) * cellSize;
+            int gridPieceHeight = DefineGridPieceSize(imageHeight/ cellSize) * cellSize;
             CheckerGridPiece = new Bitmap(gridPieceWidth, gridPieceHeight);
 
             using SolidBrush gridBrush = new(gridColor);
@@ -46,26 +46,25 @@
             }
         }
 
-        public void ApplyGrid(Bitmap imageWithGrid, Color backgroundColor)
+        public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight, Color backgroundColor)
         {
             if (CheckerGridPiece == null) // Does nothing if the grid wasn't previously generated.
             {
                 return;
             }
 
-            using Bitmap temporaryImage = new(imageWithGrid);
-            temporaryImage.MakeTransparent(backgroundColor);
-            using Graphics gridMerger = Graphics.FromImage(imageWithGrid);
-
-            for (int y = 0; y < imageWithGrid.Height / CheckerGridPiece.Height + 1; y++) // Iterates the amount of times needed to cover the full image vertically.
+            for (int y = 0; y < imageHeight / CheckerGridPiece.Height + 1; y++) // Iterates the amount of times needed to cover the full image vertically.
             {
-                for (int x = 0; x < imageWithGrid.Width / CheckerGridPiece.Width + 1; x++) // Iterates the amount of times needed to cover the full image horizontally.
+                for (int x = 0; x < imageWidth / CheckerGridPiece.Width + 1; x++) // Iterates the amount of times needed to cover the full image horizontally.
                 {
-                    gridMerger.DrawImage(CheckerGridPiece, CheckerGridPiece.Width * x, CheckerGridPiece.Height * y);
+                    gridGraphics.DrawImage(CheckerGridPiece, CheckerGridPiece.Width * x, CheckerGridPiece.Height * y);
                 }
             }
+        }
 
-            gridMerger.DrawImage(temporaryImage, 0, 0);
+        public void Dispose()
+        {
+            CheckerGridPiece?.Dispose();
         }
     }
 }

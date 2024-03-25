@@ -142,7 +142,7 @@ namespace PixelArtEditor
                 _ => new NoGrid()
             };
 
-            gridGenerator.GenerateGrid(ImageManager.OriginalImage, zoom, gridColor);
+            gridGenerator.GenerateGrid(ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height, zoom, gridColor);
             return gridGenerator;
         }
 

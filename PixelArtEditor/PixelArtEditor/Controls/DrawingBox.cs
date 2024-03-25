@@ -29,7 +29,8 @@ namespace PixelArtEditor.Controls
         public void SetNewImage(IGridGenerator gridGenerator, Bitmap originalImage, Color backgroundColor)
         {
             imageWithGrid = new(originalImage);
-            gridGenerator.ApplyGrid(imageWithGrid, backgroundColor);
+            using Graphics gridGraphics = Graphics.FromImage(imageWithGrid);
+            gridGenerator.ApplyGrid(gridGraphics, originalImage.Width, originalImage.Height, backgroundColor);
             this.Image = imageWithGrid;
             this.Refresh();
         }
@@ -42,8 +43,8 @@ namespace PixelArtEditor.Controls
         public void ApplyNewGrid(IGridGenerator gridApply, Bitmap originalImage, Color backgroundColor)
         {
             imageWithGrid = new(originalImage);
-
-            gridApply.ApplyGrid(imageWithGrid, backgroundColor);
+            using Graphics gridGraphics = Graphics.FromImage(imageWithGrid);
+            gridApply.ApplyGrid(gridGraphics, originalImage.Width, originalImage.Height, backgroundColor);
             this.Image = imageWithGrid;
             this.Refresh();
         }
