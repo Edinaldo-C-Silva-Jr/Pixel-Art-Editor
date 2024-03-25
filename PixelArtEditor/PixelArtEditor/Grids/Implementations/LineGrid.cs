@@ -5,55 +5,10 @@
     /// </summary>
     internal class LineGrid : IGridGenerator
     {
-        public bool BackgroundGrid { get; } = false;
-
         /// <summary>
         /// A piece of a line based grid. It is used to fill the entire image with the grid.
         /// </summary>
         private Bitmap? LineGridPiece { get; set; }
-
-        /// <summary>
-        /// A single pixel of a line based grid.
-        /// It is used to restore the grid on a single pixel of the image, to avoid having to reapply the entire grid.
-        /// </summary>
-        private Bitmap? LineGridSinglePixel { get; set; }
-
-        public void GenerateGrid(Bitmap originalImage, int cellSize, Color gridColor)
-        {
-            if (cellSize < 4) // Only generates grid if the zoom is at least 4, as to prevent the grid from covering too much of the image
-            {
-                LineGridPiece = null;
-                LineGridSinglePixel = null;
-                return;
-            }
-
-            int gridPieceWidth = DefineGridPieceSize(originalImage.Width / cellSize) * cellSize;
-            int gridPieceHeight = DefineGridPieceSize(originalImage.Height / cellSize) * cellSize;
-
-            LineGridPiece = new Bitmap(gridPieceWidth, gridPieceHeight);
-            LineGridPiece.MakeTransparent(); // Makes the grid piece transparent in order to apply only the grid to an existing image.
-
-            using Pen gridPen = new(gridColor);
-            using Graphics gridBuilder = Graphics.FromImage(LineGridPiece);
-
-            for (int x = 1; x < gridPieceWidth / cellSize + 1; x++) // Draws the vertical lines of the grid.
-            {
-                gridBuilder.DrawLine(gridPen, cellSize * x - 1, 0, cellSize * x - 1, gridPieceHeight);
-            }
-            for (int y = 1; y < gridPieceHeight / cellSize + 1; y++) // Draws the horizontal lines of the grid.
-            {
-                gridBuilder.DrawLine(gridPen, 0, cellSize * y - 1, gridPieceWidth, cellSize * y - 1);
-            }
-
-            // Generates the single pixel grid piece.
-            LineGridSinglePixel = new Bitmap(cellSize, cellSize);
-            LineGridSinglePixel.MakeTransparent();
-
-            using Graphics gridPixelBuilder = Graphics.FromImage(LineGridSinglePixel);
-
-            gridPixelBuilder.DrawLine(gridPen, 0, cellSize - 1, cellSize - 1, cellSize - 1);
-            gridPixelBuilder.DrawLine(gridPen, cellSize - 1, 0, cellSize - 1, cellSize - 1);
-        }
 
         /// <summary>
         /// Calculates the size to use when generating the grid piece, based on the size of the full image.
@@ -100,7 +55,34 @@
             return sizeWithLeastActions;
         }
 
-        public void ApplyGridFullImage(Bitmap imageWithGrid, Color backgroundColor)
+        public void GenerateGrid(Bitmap originalImage, int cellSize, Color gridColor)
+        {
+            if (cellSize < 4) // Only generates grid if the zoom is at least 4, as to prevent the grid from covering too much of the image
+            {
+                LineGridPiece = null;
+                return;
+            }
+
+            int gridPieceWidth = DefineGridPieceSize(originalImage.Width / cellSize) * cellSize;
+            int gridPieceHeight = DefineGridPieceSize(originalImage.Height / cellSize) * cellSize;
+
+            LineGridPiece = new Bitmap(gridPieceWidth, gridPieceHeight);
+            LineGridPiece.MakeTransparent(); // Makes the grid piece transparent in order to apply only the grid to an existing image.
+
+            using Pen gridPen = new(gridColor);
+            using Graphics gridBuilder = Graphics.FromImage(LineGridPiece);
+
+            for (int x = 1; x < gridPieceWidth / cellSize + 1; x++) // Draws the vertical lines of the grid.
+            {
+                gridBuilder.DrawLine(gridPen, cellSize * x - 1, 0, cellSize * x - 1, gridPieceHeight);
+            }
+            for (int y = 1; y < gridPieceHeight / cellSize + 1; y++) // Draws the horizontal lines of the grid.
+            {
+                gridBuilder.DrawLine(gridPen, 0, cellSize * y - 1, gridPieceWidth, cellSize * y - 1);
+            }
+        }
+
+        public void ApplyGrid(Bitmap imageWithGrid, Color backgroundColor)
         {
             if (LineGridPiece == null) // Does nothing if the grid wasn't previously generated.
             {
@@ -116,17 +98,6 @@
                     gridMerger.DrawImage(LineGridPiece, LineGridPiece.Width * x, LineGridPiece.Height * y);
                 }
             }
-        }
-
-        public void ApplyGridSinglePixel(Bitmap imageWithGrid, int xPosition, int yPosition)
-        {
-            if (LineGridSinglePixel == null) // Does nothing if the grid wasn't previously generated.
-            {
-                return;
-            }
-
-            using Graphics lineGridPixelMerger = Graphics.FromImage(imageWithGrid);
-            lineGridPixelMerger.DrawImage(LineGridSinglePixel, xPosition, yPosition);
         }
     }
 }

@@ -139,7 +139,6 @@ namespace PixelArtEditor
             gridGenerator = gridType switch
             {
                 GridType.Line => new LineGrid(),
-                GridType.Checker => new CheckerGrid(),
                 _ => new NoGrid()
             };
 
@@ -323,9 +322,7 @@ namespace PixelArtEditor
         /// </summary>
         private void GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage(object sender, EventArgs e)
         {
-            IGridGenerator gridApply = DefineGridType();
-            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
-            ViewingAreaDrawingBox.ApplyNewGrid(gridApply, ImageManager.OriginalImage, backgroundColor);
+            ViewingAreaDrawingBox.ApplyNewGrid(DefineGridType(), ImageManager.OriginalImage, BackgroundColorTable.GetCurrentColor());
         }
 
         private void SizeNumberBoxes_KeyDown(object sender, KeyEventArgs e)

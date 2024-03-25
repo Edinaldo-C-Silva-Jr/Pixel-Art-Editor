@@ -6,7 +6,6 @@
     public enum GridType
     {
         None,
-        Line,
-        Checker
+        Line
     }
 }

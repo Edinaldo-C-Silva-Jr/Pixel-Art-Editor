@@ -6,11 +6,6 @@
     public interface IGridGenerator
     {
         /// <summary>
-        /// A property that identifies if the grid is a background type grid (A grid that is applied behind the image, rather than in front of it).
-        /// </summary>
-        public bool BackgroundGrid { get; }
-
-        /// <summary>
         /// Generates a grid, saving it into a property, so it can be applied to an image with the ApplyGridFullImage method.
         /// Also generates a single pixel of the grid, which can be applied with ApplyGridSinglePixel method.
         /// </summary>
@@ -25,15 +20,6 @@
         /// </summary>
         /// <param name="originalImage">The image where the grid will be applied.</param>
         /// <param name="backgroundColor">The color used for the image's background.</param>
-        public void ApplyGridFullImage(Bitmap originalImage, Color backgroundColor);
-
-        /// <summary>
-        /// Applies a single pixel of the grid to a specific place in the image.
-        /// If the grid has not been generated, it does nothing.
-        /// </summary>
-        /// <param name="originalImage">The image where the grid pixel will be applied.</param>
-        /// <param name="xPosition">The horizontal position where the pixel will be applied.</param>
-        /// <param name="yPosition">The vertical position where the pixel will be applied.</param>
-        public void ApplyGridSinglePixel(Bitmap originalImage, int xPosition, int yPosition);
+        public void ApplyGrid(Bitmap originalImage, Color backgroundColor);
     }
 }

@@ -29,7 +29,7 @@ namespace PixelArtEditor.Controls
         public void SetNewImage(IGridGenerator gridGenerator, Bitmap originalImage, Color backgroundColor)
         {
             imageWithGrid = new(originalImage);
-            gridGenerator.ApplyGridFullImage(imageWithGrid, backgroundColor);
+            gridGenerator.ApplyGrid(imageWithGrid, backgroundColor);
             this.Image = imageWithGrid;
             this.Refresh();
         }
@@ -43,22 +43,9 @@ namespace PixelArtEditor.Controls
         {
             imageWithGrid = new(originalImage);
 
-            gridApply.ApplyGridFullImage(imageWithGrid, backgroundColor);
+            gridApply.ApplyGrid(imageWithGrid, backgroundColor);
             this.Image = imageWithGrid;
             this.Refresh();
-        }
-
-        public void ApplySingleGrid(IGridGenerator gridGenerator, OptionalToolParameters toolParameters)
-        {
-            if (!gridGenerator.BackgroundGrid)
-            {
-                if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
-                {
-                    int xPos = toolParameters.ClickLocation.Value.X - toolParameters.ClickLocation.Value.X % toolParameters.PixelSize.Value;
-                    int yPos = toolParameters.ClickLocation.Value.Y - toolParameters.ClickLocation.Value.Y % toolParameters.PixelSize.Value;
-                    gridGenerator.ApplyGridSinglePixel(imageWithGrid, xPos, yPos);
-                }
-            }
         }
 
         /// <summary>
@@ -81,7 +68,6 @@ namespace PixelArtEditor.Controls
 
             // Grid stuff
             tool.UseToolClick(GridGraphics, ColorBrush, toolParameters);
-            ApplySingleGrid(gridGenerator, toolParameters);
         }
 
         /// <summary>
@@ -107,7 +93,6 @@ namespace PixelArtEditor.Controls
             }
 
             tool.UseToolHold(GridGraphics, ColorBrush, toolParameters);
-            ApplySingleGrid(gridGenerator, toolParameters);
         }
 
         /// <summary>
@@ -135,7 +120,6 @@ namespace PixelArtEditor.Controls
             }
 
             tool.UseToolRelease(GridGraphics, ColorBrush, toolParameters);
-            ApplySingleGrid(gridGenerator, toolParameters);
 
             GridGraphics.Dispose();
             // End Grid Stuff

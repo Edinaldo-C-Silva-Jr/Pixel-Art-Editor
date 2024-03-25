@@ -5,52 +5,10 @@
     /// </summary>
     internal class CheckerGrid : IGridGenerator
     {
-        public bool BackgroundGrid { get; } = true;
-
         /// <summary>
         /// A piece of a checkered grid. It is used to fill the entire image with the grid.
         /// </summary>
         private Bitmap? CheckerGridPiece { get; set; }
-
-        /// <summary>
-        /// A single pixel of a checkered grid, with white color.
-        /// It is used to restore the grid on a single pixel of the image, to avoid having to reapply the entire grid.
-        /// </summary>
-        private Bitmap? CheckerGridWhitePixel { get; set; }
-
-        /// <summary>
-        /// A single pixel of a checkered grid, with the grid color.
-        /// It is used to restore the grid on a single pixel of the image, to avoid having to reapply the entire grid.
-        /// </summary>
-        private Bitmap? CheckerGridColorPixel { get; set; }
-
-        public void GenerateGrid(Bitmap originalImage, int cellSize, Color gridColor)
-        {
-            int gridPieceWidth = DefineGridPieceSize(originalImage.Width / cellSize) * cellSize;
-            int gridPieceHeight = DefineGridPieceSize(originalImage.Height / cellSize) * cellSize;
-            CheckerGridPiece = new Bitmap(gridPieceWidth, gridPieceHeight);
-
-            using SolidBrush gridBrush = new(gridColor);
-            using Graphics gridBuilder = Graphics.FromImage(CheckerGridPiece);
-
-            gridBuilder.Clear(Color.White); // Makes the grid piece completely white, so only the colored part needs to be drawn.
-            for (int y = 0; y < CheckerGridPiece.Height; y++)
-            {
-                for (int x = y % 2; x < CheckerGridPiece.Width; x += 2) // Iterates on alternating pixels to draw the colored part of the checkered grid.
-                {
-                    gridBuilder.FillRectangle(gridBrush, cellSize * x, cellSize * y, cellSize, cellSize);
-                }
-            }
-
-            // Generates the single pixel grid pieces.
-            CheckerGridWhitePixel = new Bitmap(cellSize, cellSize);
-            using Graphics gridPixelBuilderWhite = Graphics.FromImage(CheckerGridWhitePixel);
-            gridPixelBuilderWhite.Clear(Color.White);
-
-            CheckerGridColorPixel = new Bitmap(cellSize, cellSize);
-            using Graphics gridPixelBuilderColor = Graphics.FromImage(CheckerGridColorPixel);
-            gridPixelBuilderColor.Clear(gridColor);
-        }
 
         /// <summary>
         /// Calculates the size to use when generating the grid piece, based on the size of the full image.
@@ -69,7 +27,26 @@
             return gridPieceSize;
         }
 
-        public void ApplyGridFullImage(Bitmap imageWithGrid, Color backgroundColor)
+        public void GenerateGrid(Bitmap originalImage, int cellSize, Color gridColor)
+        {
+            int gridPieceWidth = DefineGridPieceSize(originalImage.Width / cellSize) * cellSize;
+            int gridPieceHeight = DefineGridPieceSize(originalImage.Height / cellSize) * cellSize;
+            CheckerGridPiece = new Bitmap(gridPieceWidth, gridPieceHeight);
+
+            using SolidBrush gridBrush = new(gridColor);
+            using Graphics gridBuilder = Graphics.FromImage(CheckerGridPiece);
+
+            gridBuilder.Clear(Color.White); // Makes the grid piece completely white, so only the colored part needs to be drawn.
+            for (int y = 0; y < CheckerGridPiece.Height; y++)
+            {
+                for (int x = y % 2; x < CheckerGridPiece.Width; x += 2) // Iterates on alternating pixels to draw the colored part of the checkered grid.
+                {
+                    gridBuilder.FillRectangle(gridBrush, cellSize * x, cellSize * y, cellSize, cellSize);
+                }
+            }
+        }
+
+        public void ApplyGrid(Bitmap imageWithGrid, Color backgroundColor)
         {
             if (CheckerGridPiece == null) // Does nothing if the grid wasn't previously generated.
             {
@@ -89,26 +66,6 @@
             }
 
             gridMerger.DrawImage(temporaryImage, 0, 0);
-        }
-
-        public void ApplyGridSinglePixel(Bitmap imageWithGrid, int xPosition, int yPosition)
-        {
-            if (CheckerGridColorPixel == null || CheckerGridWhitePixel == null) // Does nothing if the grid wasn't previously generated.
-            {
-                return;
-            }
-
-            using Graphics gridPixelMerger = Graphics.FromImage(imageWithGrid);
-
-            int positionParity = (xPosition / CheckerGridWhitePixel.Width % 2 + yPosition / CheckerGridWhitePixel.Height % 2) % 2; // Gets the parity to know whether this is a colored or white pixel on the grid.
-            if (Convert.ToBoolean(positionParity))
-            {
-                gridPixelMerger.DrawImage(CheckerGridWhitePixel, xPosition, yPosition);
-            }
-            else
-            {
-                gridPixelMerger.DrawImage(CheckerGridColorPixel, xPosition, yPosition);
-            }
         }
     }
 }
