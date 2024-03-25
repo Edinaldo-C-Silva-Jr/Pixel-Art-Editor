@@ -161,7 +161,7 @@ namespace PixelArtEditor
             ImageManager.CreateNewImage(width, height, zoom, backgroundColor, transparent);
 
             ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
-            ViewingAreaDrawingBox.SetNewImage(gridGenerator, ImageManager.OriginalImage, backgroundColor);
+            ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
         }
 
         private void ReorganizeControls()
@@ -221,7 +221,7 @@ namespace PixelArtEditor
                     if (colorWasSwaped)
                     {
                         Color background = BackgroundColorTable.GetCurrentColor();
-                        ViewingAreaDrawingBox.SetNewImage(DefineGridType(), ImageManager.OriginalImage, background);
+                        ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
                     }
 
                     cell.ChangeCellColor(ColorPickerDialog.Color);
@@ -313,7 +313,7 @@ namespace PixelArtEditor
             }
 
             IGridGenerator generator = DefineGridType();
-            ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, backgroundColor);
+            ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
         }
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace PixelArtEditor
         /// </summary>
         private void GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage(object sender, EventArgs e)
         {
-            ViewingAreaDrawingBox.ApplyNewGrid(DefineGridType(), ImageManager.OriginalImage, BackgroundColorTable.GetCurrentColor());
+            ViewingAreaDrawingBox.Invalidate();
         }
 
         private void SizeNumberBoxes_KeyDown(object sender, KeyEventArgs e)
@@ -345,7 +345,7 @@ namespace PixelArtEditor
 
             IGridGenerator generator = DefineGridType();
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
-            ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, backgroundColor);
+            ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
         }
 
         private void ChangeSelectionOnImage(Point location)
@@ -367,7 +367,7 @@ namespace PixelArtEditor
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
 
             ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
-            ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, backgroundColor);
+            ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
 
             ReorganizeControls();
         }
@@ -403,7 +403,7 @@ namespace PixelArtEditor
 
                 IGridGenerator generator = DefineGridType();
                 Color backgroundColor = BackgroundColorTable.GetCurrentColor();
-                ViewingAreaDrawingBox.SetNewImage(generator, ImageManager.OriginalImage, backgroundColor);
+                ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
 
                 ReorganizeControls();
             }
@@ -504,8 +504,8 @@ namespace PixelArtEditor
 
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                ViewingAreaDrawingBox.DrawClick(ToolFactory.GetTool(), DefineGridType(), ImageManager.OriginalImage, paletteColor, toolParameters);
-                ViewingAreaDrawingBox.Invalidate();
+                ViewingAreaDrawingBox.DrawClick(ToolFactory.GetTool(), ImageManager.OriginalImage, paletteColor, toolParameters);
+                ViewingAreaDrawingBox.Image = ImageManager.OriginalImage;
             }
 
             if (e.Button == MouseButtons.Right)
@@ -539,8 +539,8 @@ namespace PixelArtEditor
             {
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                ViewingAreaDrawingBox.DrawHold(ToolFactory.GetTool(), DefineGridType(), toolParameters);
-                ViewingAreaDrawingBox.Invalidate();
+                ViewingAreaDrawingBox.DrawHold(ToolFactory.GetTool(), toolParameters);
+                ViewingAreaDrawingBox.Image = ImageManager.OriginalImage;
             }
 
             if (e.Button == MouseButtons.Right)
@@ -566,27 +566,11 @@ namespace PixelArtEditor
             {
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                ViewingAreaDrawingBox.DrawRelease(ToolFactory.GetTool(), DefineGridType(), toolParameters);
-                ViewingAreaDrawingBox.Invalidate();
+                ViewingAreaDrawingBox.DrawRelease(ToolFactory.GetTool(), toolParameters);
+                ViewingAreaDrawingBox.Image = ImageManager.OriginalImage;
             }
 
             MouseOnDrawingBox = null;
-        }
-
-        /// <summary>
-        /// Uses the current tool's Preview method.
-        /// Draws the selection onto the image.
-        /// </summary>
-        private void ViewingAreaDrawingBox_Paint(object sender, PaintEventArgs e)
-        {
-            ImageManager.DrawSelectionOntoDrawingBox(e.Graphics);
-
-            if (MouseOnDrawingBox.HasValue)
-            {
-                OptionalToolParameters toolParameters = GetToolParameters(MouseOnDrawingBox.Value);
-
-                ViewingAreaDrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
-            }
         }
 
         private void ViewingAreaDrawingBox_MouseLeave(object sender, EventArgs e)
@@ -595,5 +579,23 @@ namespace PixelArtEditor
             ViewingAreaDrawingBox.Invalidate();
         }
         #endregion
+
+        /// <summary>
+        /// Uses the current tool's Preview method.
+        /// Draws the selection onto the image.
+        /// </summary>
+        private void ViewingAreaDrawingBox_Paint(object sender, PaintEventArgs e)
+        {
+            ImageManager.DrawSelectionOntoDrawingBox(e.Graphics);
+            
+            if (MouseOnDrawingBox.HasValue)
+            {
+                OptionalToolParameters toolParameters = GetToolParameters(MouseOnDrawingBox.Value);
+
+                ViewingAreaDrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
+            }
+
+            ViewingAreaDrawingBox.ApplyNewGrid(DefineGridType(), e.Graphics, ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height);
+        }
     }
 }

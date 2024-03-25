@@ -21,9 +21,6 @@
             ImageGraphics?.Dispose();
             ColorBrush?.Dispose();
 
-            // Grid stuff
-            GridGraphics?.Dispose();
-
             base.Dispose(disposing);
         }
 

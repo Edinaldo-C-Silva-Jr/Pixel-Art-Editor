@@ -46,7 +46,7 @@
             }
         }
 
-        public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight, Color backgroundColor)
+        public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight)
         {
             if (CheckerGridPiece == null) // Does nothing if the grid wasn't previously generated.
             {

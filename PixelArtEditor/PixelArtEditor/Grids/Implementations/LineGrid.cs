@@ -68,7 +68,7 @@
 
             LineGridPiece = new Bitmap(gridPieceWidth, gridPieceHeight);
             LineGridPiece.MakeTransparent(); // Makes the grid piece transparent so the image appears below it.
-
+            
             using Pen gridPen = new(gridColor);
             using Graphics gridBuilder = Graphics.FromImage(LineGridPiece);
 
@@ -82,7 +82,7 @@
             }
         }
 
-        public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight, Color backgroundColor)
+        public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight)
         {
             if (LineGridPiece == null) // Does nothing if the grid wasn't previously generated.
             {

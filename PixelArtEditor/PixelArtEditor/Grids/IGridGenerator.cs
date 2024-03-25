@@ -20,6 +20,6 @@
         /// </summary>
         /// <param name="gridGraphics">The graphics that will be used to draw the grid.</param>
         /// <param name="backgroundColor">The color used for the image's background.</param>
-        public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight, Color backgroundColor);
+        public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight);
     }
 }

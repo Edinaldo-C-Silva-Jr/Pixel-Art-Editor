@@ -16,7 +16,7 @@
         /// <summary>
         /// Simply returns the original image, since no grid should be applied.
         /// </summary>
-        public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight, Color backgroundColor)
+        public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight)
         {
             return;
         }
