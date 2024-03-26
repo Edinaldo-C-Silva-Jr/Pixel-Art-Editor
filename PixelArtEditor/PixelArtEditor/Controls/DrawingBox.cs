@@ -8,10 +8,12 @@ namespace PixelArtEditor.Controls
         // Disposed in the Designer file
         private Graphics? ImageGraphics { get; set; }
         private SolidBrush? ColorBrush { get; set; }
+        private BackgroundGrid GridGenerator { get; set; }
         private bool MouseReleased { get; set; }
 
         public DrawingBox()
         {
+            GridGenerator = new BackgroundGrid();
             DoubleBuffered = true;
             InitializeComponent();
         }
@@ -38,6 +40,19 @@ namespace PixelArtEditor.Controls
         public void ApplyNewGrid(IGridGenerator gridApply, Graphics paintGraphics, int imageWidth, int imageHeight)
         {
             gridApply.ApplyGrid(paintGraphics, imageWidth, imageHeight);
+        }
+
+        public void SetBackgroundGrid(int imageWidth, int imageHeight, int cellSize)
+        {
+            BackgroundImageLayout = ImageLayout.Stretch;
+            BackgroundImage = new Bitmap(imageWidth, imageHeight);
+
+            GridGenerator.GenerateGrid(imageWidth, imageHeight, cellSize, Color.LightGray);
+
+            using Graphics gridGraphics = Graphics.FromImage(BackgroundImage);
+            GridGenerator.ApplyGrid(gridGraphics, imageWidth, imageHeight);
+
+            gridGraphics.DrawRectangle(Pens.Black, 0, 0, imageWidth, imageHeight);
         }
 
         /// <summary>

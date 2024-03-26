@@ -129,13 +129,14 @@ namespace PixelArtEditor
         /// Method that defines which Grid implementation to use based on the currently selected Grid Type.
         /// </summary>
         /// <returns>A grid implementation of the currently defined grid type.</returns>
-        private void ChangeGridGenerator()
+        private void ChangeDrawingBoxGrids()
         {
-            int zoom = (int)ViewingZoomNumberBox.Value;
+            (int width, int height, int zoom) = GetImageSizeValues();
             Color gridColor = GridColorTable.GetCurrentColor();
             GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
 
-            GridFactory.ChangeCurrentGrid(gridType, ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height, zoom, gridColor);
+            GridFactory.ChangeCurrentGrid(gridType, width * zoom, height * zoom, zoom, gridColor);
+            ViewingAreaDrawingBox.SetBackgroundGrid(width * zoom, height * zoom, zoom);
         }
 
         /// <summary>
@@ -153,6 +154,7 @@ namespace PixelArtEditor
 
             ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
             ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
+            ChangeDrawingBoxGrids();
         }
 
         private void ReorganizeControls()
@@ -312,7 +314,7 @@ namespace PixelArtEditor
         /// </summary>
         private void GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage(object sender, EventArgs e)
         {
-            ChangeGridGenerator();
+            ChangeDrawingBoxGrids();
             ViewingAreaDrawingBox.Invalidate();
         }
 
@@ -355,7 +357,7 @@ namespace PixelArtEditor
             ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
             ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
 
-            ChangeGridGenerator();
+            ChangeDrawingBoxGrids();
 
             ReorganizeControls();
         }

@@ -1,4 +1,6 @@
-﻿namespace PixelArtEditor.Controls
+﻿using PixelArtEditor.Grids;
+
+namespace PixelArtEditor.Controls
 {
     partial class DrawingBox
     {
@@ -20,6 +22,7 @@
 
             ImageGraphics?.Dispose();
             ColorBrush?.Dispose();
+            GridGenerator?.Dispose();
 
             base.Dispose(disposing);
         }

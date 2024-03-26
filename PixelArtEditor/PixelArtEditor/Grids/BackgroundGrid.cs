@@ -1,9 +1,9 @@
-﻿namespace PixelArtEditor.Grids.Implementations
+﻿namespace PixelArtEditor.Grids
 {
     /// <summary>
     /// Implements a checkered grid, where the pixels are painted with alternating colors. The colors used are the specified grid color and white.
     /// </summary>
-    internal class CheckerGrid : IGridGenerator, IDisposable
+    internal class BackgroundGrid : IGridGenerator, IDisposable
     {
         /// <summary>
         /// A piece of a checkered grid. It is used to fill the entire image with the grid.
@@ -30,7 +30,7 @@
         public void GenerateGrid(int imageWidth, int imageHeight, int cellSize, Color gridColor)
         {
             int gridPieceWidth = DefineGridPieceSize(imageWidth / cellSize) * cellSize;
-            int gridPieceHeight = DefineGridPieceSize(imageHeight/ cellSize) * cellSize;
+            int gridPieceHeight = DefineGridPieceSize(imageHeight / cellSize) * cellSize;
             CheckerGridPiece = new Bitmap(gridPieceWidth, gridPieceHeight);
 
             using SolidBrush gridBrush = new(gridColor);
