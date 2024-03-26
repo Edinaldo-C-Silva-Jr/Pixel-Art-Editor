@@ -15,12 +15,12 @@
         public void GenerateGrid(int imageWidth, int imageHeight, int cellSize, Color gridColor);
 
         /// <summary>
-        /// Applies a previously generated grid to the specified image, filling the entire image with it.
+        /// Applies a previously generated grid on a Graphics object.
         /// If the grid has not been generated, it does nothing.
         /// </summary>
         /// <param name="gridGraphics">The graphics that will be used to draw the grid.</param>
-        /// <param name="imageWidth">The width of the image that will receive the grid.</param>
-        /// <param name="imageHeight">The height of the image that will receive the grid.</param>
+        /// <param name="imageWidth">The width of the surface that will receive the grid.</param>
+        /// <param name="imageHeight">The height of the surface that will receive the grid.</param>
         public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight);
     }
 }

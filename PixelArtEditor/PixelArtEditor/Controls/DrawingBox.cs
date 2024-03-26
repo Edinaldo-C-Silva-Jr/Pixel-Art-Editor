@@ -31,28 +31,21 @@ namespace PixelArtEditor.Controls
         }
 
         /// <summary>
-        /// Applies a new grid type to the existing image. This method doesn't override the actual image when applying the grid.
+        /// Generates and applies a Background Grid for the Drawing Box, to be shown behind the image.
+        /// This grid will appear when the image has a transparent background.
         /// </summary>
-        /// <param name="gridApply">The IGridGenerator implementation used to apply the grid.</param>
-        /// <param name="paintGraphics">The graphics used to apply the grid.</param>
-        /// <param name="imageWidth">The width of the image that will receive the grid.</param>
-        /// <param name="imageHeight">The height of the image that will receive the grid.</param>
-        public void ApplyNewGrid(IGridGenerator gridApply, Graphics paintGraphics, int imageWidth, int imageHeight)
-        {
-            gridApply.ApplyGrid(paintGraphics, imageWidth, imageHeight);
-        }
-
+        /// <param name="imageWidth">The width of the image, to base the grid size.</param>
+        /// <param name="imageHeight">The height of the image, to base the grid size.</param>
+        /// <param name="cellSize">The size of each cell in the grid.</param>
         public void SetBackgroundGrid(int imageWidth, int imageHeight, int cellSize)
         {
-            BackgroundImageLayout = ImageLayout.Stretch;
+            BackgroundImageLayout = ImageLayout.Stretch; // Changes the layout mode for better performance.
             BackgroundImage = new Bitmap(imageWidth, imageHeight);
 
+            // Generates and applies background grid for the Drawing Box, with the size of the image and the color Light Gray.
             GridGenerator.GenerateGrid(imageWidth, imageHeight, cellSize, Color.LightGray);
-
             using Graphics gridGraphics = Graphics.FromImage(BackgroundImage);
             GridGenerator.ApplyGrid(gridGraphics, imageWidth, imageHeight);
-
-            gridGraphics.DrawRectangle(Pens.Black, 0, 0, imageWidth, imageHeight);
         }
 
         /// <summary>

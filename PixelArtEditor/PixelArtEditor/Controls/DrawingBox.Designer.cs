@@ -1,6 +1,4 @@
-﻿using PixelArtEditor.Grids;
-
-namespace PixelArtEditor.Controls
+﻿namespace PixelArtEditor.Controls
 {
     partial class DrawingBox
     {

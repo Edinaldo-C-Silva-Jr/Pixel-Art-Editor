@@ -6,16 +6,16 @@
     internal class LineGrid : IGridGenerator, IDisposable
     {
         /// <summary>
-        /// A piece of a line based grid. It is used to fill the entire image with the grid.
+        /// A piece of a line based grid. It is used to tile the entire grid.
         /// </summary>
         private Bitmap? LineGridPiece { get; set; }
 
         /// <summary>
         /// Calculates the size to use when generating the grid piece, based on the size of the full image.
-        /// This method returns a size that will make grid generation more efficient, by splitting the full grid into smaller pieces that will be copied to fill the image.
+        /// This method returns a size that will make grid generation more efficient, by splitting the full grid into smaller pieces that will be copied to tile the grid.
         /// The method returns a single dimension, which should match the parameter passed. (If the method was passed a width value, it returns a width value) 
         /// </summary>
-        /// <param name="sidePixelLength">The length of the image side, in pixel cells (not counting the zoom)</param>
+        /// <param name="sidePixelLength">The length of the image side, in pixel cells.</param>
         /// <returns>The optimized grid piece length for the image passed.</returns>
         private static int DefineGridPieceSize(int sidePixelLength)
         {
@@ -25,7 +25,7 @@
             // This is done by testing how many actions are needed to fill the full image when using different grid piece sizes.
             // The tests are based on two values:
             // 1 - The amount of lines needed to build the grid piece, which is the side length divided by a given arbitrary value.
-            // 2 - The amount of times the grid piece with the above size will be applied to cover the full image, which is the side length divided by the grid piece size, squared.
+            // 2 - The amount of times the grid piece with the above required to tile the full grid, which is the side length divided by the grid piece size, squared.
             // These amounts are then added together to see the total amount of actions needed to build the grid and cover the image with it.
             // For the sake of simplicity, the tests assume the image is a square.
             for (int i = 1; i < Math.Sqrt(sidePixelLength) + 1; i++)

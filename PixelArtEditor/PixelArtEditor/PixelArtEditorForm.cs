@@ -2,7 +2,6 @@ using PixelArtEditor.Controls;
 using PixelArtEditor.Drawing_Tools;
 using PixelArtEditor.Files;
 using PixelArtEditor.Grids;
-using PixelArtEditor.Grids.Implementations;
 
 namespace PixelArtEditor
 {
@@ -24,6 +23,9 @@ namespace PixelArtEditor
         /// </summary>
         private DrawingToolFactory ToolFactory { get; set; }
 
+        /// <summary>
+        /// A factory class that handles creation and recovery of Grids.
+        /// </summary>
         private GridGeneratorFactory GridFactory { get; set; }
 
         /// <summary>
@@ -33,6 +35,9 @@ namespace PixelArtEditor
         private Point? MouseOnDrawingBox { get; set; }
         #endregion
 
+        /// <summary>
+        /// Default constructor. Initializes the requirede properties.
+        /// </summary>
         public PixelArtEditorForm()
         {
             ImageManager = new();
@@ -126,20 +131,6 @@ namespace PixelArtEditor
         }
 
         /// <summary>
-        /// Method that defines which Grid implementation to use based on the currently selected Grid Type.
-        /// </summary>
-        /// <returns>A grid implementation of the currently defined grid type.</returns>
-        private void ChangeDrawingBoxGrids()
-        {
-            (int width, int height, int zoom) = GetImageSizeValues();
-            Color gridColor = GridColorTable.GetCurrentColor();
-            GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
-
-            GridFactory.ChangeCurrentGrid(gridType, width * zoom, height * zoom, zoom, gridColor);
-            ViewingAreaDrawingBox.SetBackgroundGrid(width * zoom, height * zoom, zoom);
-        }
-
-        /// <summary>
         /// Creates a new blank image using the current image size, zoom values and transparency settings.
         /// Then sets it in the ViewingArea DrawingBox with the appropriate grid.
         /// </summary>
@@ -195,9 +186,10 @@ namespace PixelArtEditor
                 {
                     bool colorWasSwaped = false;
 
-                    // The color will always be swaped for the image's background.
-                    // Otherwise only if the Change Color is enabled and the cell is not in its default color.
-                    if (cellParent.Name == "BackgroundColorTable" || (!cell.DefaultColor && ColorChangeCheckBox.Checked && cell.BackColor != BackgroundColorTable.GetCurrentColor()))
+                    // The color will always be swaped for the image's background, and never be swapped when changing the grid color.
+                    // Otherwise only if: The Change Color option is enabled, the cell is not in its default color and the color isn't the background color.
+                    if (cellParent.Name == "BackgroundColorTable" || 
+                        (cellParent.Name != "GridColorTable" && !cell.DefaultColor && ColorChangeCheckBox.Checked && cell.BackColor != BackgroundColorTable.GetCurrentColor()))
                     {
                         SwapColorInImage(cell.BackColor, ColorPickerDialog.Color);
                         colorWasSwaped = true;
@@ -213,11 +205,16 @@ namespace PixelArtEditor
                     // Only reload the image if there was a color swap.
                     if (colorWasSwaped)
                     {
-                        Color background = BackgroundColorTable.GetCurrentColor();
                         ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
                     }
 
                     cell.ChangeCellColor(ColorPickerDialog.Color);
+
+                    // Reloads the grid if the grid color was changed.
+                    if (cellParent.Name == "GridColorTable")
+                    {
+                        ChangeDrawingBoxGrids();
+                    }
                 }
             }
 
@@ -306,16 +303,6 @@ namespace PixelArtEditor
             }
 
             ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
-        }
-
-        /// <summary>
-        /// Method called when a change is made to the Gridtype ComboBox.
-        /// It changes the implementation of grids used to the newly selected grid type, then applies the new grid type to the image in the drawing area.
-        /// </summary>
-        private void GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage(object sender, EventArgs e)
-        {
-            ChangeDrawingBoxGrids();
-            ViewingAreaDrawingBox.Invalidate();
         }
 
         private void SizeNumberBoxes_KeyDown(object sender, KeyEventArgs e)
@@ -568,6 +555,35 @@ namespace PixelArtEditor
         }
         #endregion
 
+        #region Grid Definition and Generation
+        /// <summary>
+        /// Method that defines which Grid implementation to use based on the currently selected Grid Type.
+        /// Also initializes the background grid of the Drawing Box.
+        /// </summary>
+        /// <returns>A grid implementation of the currently defined grid type.</returns>
+        private void ChangeDrawingBoxGrids()
+        {
+            // Gets all necessary parameters.
+            (int width, int height, int zoom) = GetImageSizeValues();
+            Color gridColor = GridColorTable.GetCurrentColor();
+            GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
+
+            // Sets the grids.
+            GridFactory.ChangeCurrentGrid(gridType, width * zoom, height * zoom, zoom, gridColor);
+            ViewingAreaDrawingBox.SetBackgroundGrid(width * zoom, height * zoom, zoom);
+        }
+
+        /// <summary>
+        /// Method called when a change is made to the Gridtype ComboBox.
+        /// It changes the implementation of grids used to the newly selected grid type, then applies the new grid to the Drawing Box.
+        /// </summary>
+        private void GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage(object sender, EventArgs e)
+        {
+            ChangeDrawingBoxGrids();
+            ViewingAreaDrawingBox.Invalidate();
+        }
+        #endregion
+
         /// <summary>
         /// Uses the current tool's Preview method.
         /// Draws the selection onto the image.
@@ -583,7 +599,8 @@ namespace PixelArtEditor
 
             ImageManager.DrawSelectionOntoDrawingBox(e.Graphics);
 
-            ViewingAreaDrawingBox.ApplyNewGrid(GridFactory.GetGrid(), e.Graphics, ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height);
+            IGridGenerator gridGenerator = GridFactory.GetGrid();
+            gridGenerator.ApplyGrid(e.Graphics, ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height);
         }
     }
 }

@@ -14,7 +14,7 @@
         }
 
         /// <summary>
-        /// Simply returns the original image, since no grid should be applied.
+        /// Does nothing, since the Grid type is set to None.
         /// </summary>
         public void ApplyGrid(Graphics gridGraphics, int imageWidth, int imageHeight)
         {

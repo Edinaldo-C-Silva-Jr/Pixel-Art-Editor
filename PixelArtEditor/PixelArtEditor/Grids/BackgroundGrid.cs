@@ -1,28 +1,30 @@
 ﻿namespace PixelArtEditor.Grids
 {
     /// <summary>
-    /// Implements a checkered grid, where the pixels are painted with alternating colors. The colors used are the specified grid color and white.
+    /// Implements a checkered grid, where the pixels are painted with alternating colors. 
+    /// This grid will be used as the background for the Drawing Box.
+    /// The colors used are the specified grid color and white.
     /// </summary>
     internal class BackgroundGrid : IGridGenerator, IDisposable
     {
         /// <summary>
-        /// A piece of a checkered grid. It is used to fill the entire image with the grid.
+        /// A piece of the checkered grid. It is used to fill the entire grid in an optimized way.
         /// </summary>
         private Bitmap? CheckerGridPiece { get; set; }
 
         /// <summary>
         /// Calculates the size to use when generating the grid piece, based on the size of the full image.
-        /// This method returns a size that will make grid generation more efficient, by splitting the full grid into smaller pieces that will be copied to fill the image.
-        /// The method returns a single dimension, which should match the parameter passed. (If the method was passed a width value, it returns a width value) 
+        /// This method returns a size that will make grid generation more efficient, by splitting the full grid into smaller pieces that will be copied to tile the grid.
+        /// The method returns a single dimension, which should match the parameter passed. (If the method was passed a width value, it returns a width value.) 
         /// </summary>
-        /// <param name="sidePixelLength">The length of the image side, in pixel cells (not counting the zoom).</param>
+        /// <param name="sidePixelLength">The length of the image side, in pixel cells.</param>
         /// <returns>The optimized grid piece length for the image passed.</returns>
         private static int DefineGridPieceSize(int sidePixelLength)
         {
             // The best grid piece size is the square root of the side length, as that evenly divides the grid generating and image filling actions.
             int gridPieceSize = (int)Math.Sqrt(sidePixelLength);
 
-            gridPieceSize += gridPieceSize % 2; // Ensures the grid piece size is an even number. This is needed to keep the alternating colors when tiling the image.
+            gridPieceSize += gridPieceSize % 2; // Ensures the grid piece size is an even number, to keep the alternating colors when tiling the grid.
 
             return gridPieceSize;
         }
