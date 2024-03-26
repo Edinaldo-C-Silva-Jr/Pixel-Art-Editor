@@ -10,9 +10,6 @@
         /// </summary>
         private Point? StartingPoint { get; set; }
 
-        // Amount of times the drawing has been done, due to grid.
-        private int repeats;
-
         /// <summary>
         /// Draws a rectangle outline, using a single color. The inner part of the rectangle is not affected.
         /// The click coordinates correspond to the top-left and bottom-right points of the rectangle.
@@ -54,7 +51,6 @@
             if (toolParameters.ClickLocation.HasValue)
             {
                 StartingPoint = toolParameters.ClickLocation.Value;
-                repeats = 0;
             }
         }
 
@@ -69,13 +65,7 @@
             {
                 DrawSolidRectangle(imageGraphics, colorBrush, toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);
             }
-
-            // Draw twice. Once on the image and once on the grid image
-            repeats++;
-            if (repeats == 2)
-            {
-                StartingPoint = null;
-            }
+            StartingPoint = null;
         }
     }
 }

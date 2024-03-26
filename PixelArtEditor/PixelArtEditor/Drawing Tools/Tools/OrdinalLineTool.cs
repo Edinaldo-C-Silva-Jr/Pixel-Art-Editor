@@ -11,9 +11,6 @@
         /// </summary>
         private Point? StartingPoint { get; set; }
 
-        // Amount of times the drawing has been done, due to grid.
-        private int repeats;
-
         /// <summary>
         /// Draws a diagonal line. The direction and size of the line are defined by the parameters.
         /// </summary>
@@ -136,7 +133,6 @@
             if (toolParameters.ClickLocation.HasValue)
             {
                 StartingPoint = toolParameters.ClickLocation.Value;
-                repeats = 0;
             }
         }
 
@@ -151,13 +147,7 @@
             {
                 DrawOrdinalLine(imageGraphics, colorBrush, toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);
             }
-
-            // Draw twice. Once on the image and once on the grid image
-            repeats++;
-            if (repeats == 2)
-            {
-                StartingPoint = null;
-            }
+            StartingPoint = null;
         }
     }
 }

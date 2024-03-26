@@ -11,9 +11,6 @@
         /// </summary>
         private Point? StartingPoint { get; set; }
 
-        // Amount of times the drawing has been done, due to grid.
-        private int repeats;
-
         /// <summary>
         /// Draws the line pixel by pixel.
         /// This is done by calculating when to shift the pixel position horizontally or vertically to draw the next pixel.
@@ -138,7 +135,6 @@
             if (toolParameters.ClickLocation.HasValue)
             {
                 StartingPoint = toolParameters.ClickLocation.Value;
-                repeats = 0;
             }
         }
 
@@ -153,13 +149,7 @@
             {
                 DrawFreeLine(imageGraphics, colorBrush, toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);
             }
-
-            // Draw twice. Once on the image and once on the grid image
-            repeats++;
-            if (repeats == 2)
-            {
-                StartingPoint = null;
-            }
+            StartingPoint = null;
         }
     }
 }
