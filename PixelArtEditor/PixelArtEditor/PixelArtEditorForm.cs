@@ -11,7 +11,7 @@ namespace PixelArtEditor
         /// <summary>
         /// The class responsible for storing and handling the image used in the program.
         /// </summary>
-        private ImageHandler ImageManager { get; set; }
+        private ImageHandler Images { get; set; }
 
         /// <summary>
         /// The class responsible for handling the saving and loading of files in the program.
@@ -40,7 +40,7 @@ namespace PixelArtEditor
         /// </summary>
         public PixelArtEditorForm()
         {
-            ImageManager = new();
+            Images = new();
             FileSaverLoader = new();
             ToolFactory = new();
             GridFactory = new();
@@ -55,8 +55,13 @@ namespace PixelArtEditor
         {
             InitializeControlValues();
             InitializeColorsPanel();
+
             SetPaletteColorAmount();
-            SetNewImageAndViewingAreaSize();
+
+            SetViewingBoxSize();
+            SetDrawingBoxSize();
+            SetNewImageOnBoxes();
+
             ReorganizeControls();
         }
 
@@ -118,34 +123,24 @@ namespace PixelArtEditor
         }
 
         /// <summary>
-        /// Gets the values for the image's width, height and zoom amount from the respective ComboBoxes and returns them as a tuple.
-        /// </summary>
-        /// <returns>A tuple of Width, Height and Zoom values, in this order.</returns>
-        private (int width, int height, int zoom) GetImageSizeValues()
-        {
-            int height = (int)PixelHeightNumberBox.Value;
-            int width = (int)PixelWidthNumberBox.Value;
-            int zoom = (int)ViewingZoomNumberBox.Value;
-
-            return (width, height, zoom);
-        }
-
-        /// <summary>
         /// Creates a new blank image using the current image size, zoom values and transparency settings.
-        /// Then sets it in the ViewingArea DrawingBox with the appropriate grid.
+        /// Then sets it in the Viewing and Drawing Box with the appropriate grid.
         /// </summary>
-        private void SetNewImageAndViewingAreaSize()
+        private void SetNewImageOnBoxes()
         {
             // Gets all relevant image parameters: size, background color and transparency.
-            (int width, int height, int zoom) = GetImageSizeValues();
+            (int width, int height, int zoom) = GetViewingSizeValues();
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
             bool transparent = TransparencyCheckBox.Checked;
 
-            ImageManager.CreateNewImage(width, height, zoom, backgroundColor, transparent);
+            Images.CreateNewImage(width, height, zoom, backgroundColor, transparent);
 
-            DrawingBox.SetNewSize(width * zoom, height * zoom);
-            DrawingBox.SetNewImage(ImageManager.OriginalImage);
-            ChangeDrawingBoxGrids();
+            // Remove later.
+            DrawingBox.SetNewImage(Images.OriginalImage);
+            // Remove later.
+
+            ViewingBox.SetNewImage(Images.OriginalImage);
+            ChangeImageBoxesGrids();
         }
 
         /// <summary>
@@ -169,7 +164,7 @@ namespace PixelArtEditor
             {
                 ColorsBackgroundPanel.Location = new Point(ColorsBackgroundPanel.Location.X, ViewingBackgroundPanel.Top + ViewingBackgroundPanel.Height + 10);
             }
-            
+
             ResumeLayout();
         }
 
@@ -203,7 +198,7 @@ namespace PixelArtEditor
 
                     // The color will always be swaped for the image's background, and never be swapped when changing the grid color.
                     // Otherwise only if: The Change Color option is enabled, the cell is not in its default color and the color isn't the background color.
-                    if (cellParent.Name == "BackgroundColorTable" || 
+                    if (cellParent.Name == "BackgroundColorTable" ||
                         (cellParent.Name != "GridColorTable" && !cell.DefaultColor && ColorChangeCheckBox.Checked && cell.BackColor != BackgroundColorTable.GetCurrentColor()))
                     {
                         SwapColorInImage(cell.BackColor, ColorPickerDialog.Color);
@@ -213,14 +208,18 @@ namespace PixelArtEditor
                     // If the swap was done to the background, check if the background should be shown as transparent
                     if (cellParent.Name == "BackgroundColorTable" && TransparencyCheckBox.Checked)
                     {
-                        ImageManager.MakeImageTransparent(ColorPickerDialog.Color);
+                        Images.MakeImageTransparent(ColorPickerDialog.Color);
                         colorWasSwaped = true;
                     }
 
                     // Only reload the image if there was a color swap.
                     if (colorWasSwaped)
                     {
-                        DrawingBox.SetNewImage(ImageManager.OriginalImage);
+                        // Remove later.
+                        DrawingBox.SetNewImage(Images.OriginalImage);
+                        // Remove later.
+
+                        ViewingBox.SetNewImage(Images.OriginalImage);
                     }
 
                     cell.ChangeCellColor(ColorPickerDialog.Color);
@@ -228,7 +227,7 @@ namespace PixelArtEditor
                     // Reloads the grid if the grid color was changed.
                     if (cellParent.Name == "GridColorTable")
                     {
-                        ChangeDrawingBoxGrids();
+                        ChangeImageBoxesGrids();
                     }
                 }
             }
@@ -248,29 +247,29 @@ namespace PixelArtEditor
             // If the image has a transparent background, temportarily remove the transparency.
             if (TransparencyCheckBox.Checked)
             {
-                ImageManager.MakeImageNotTransparent(backgroundColor);
+                Images.MakeImageNotTransparent(backgroundColor);
             }
 
             // Makes all pixels of the color to be replaced transparent...
-            ImageManager.MakeImageTransparent(oldColor);
+            Images.MakeImageTransparent(oldColor);
 
             // Then applies the new color to all transparent pixels.
-            using Bitmap auxiliaryImage = new(ImageManager.OriginalImage);
+            using Bitmap auxiliaryImage = new(Images.OriginalImage);
             using Graphics auxiliaryGraphics = Graphics.FromImage(auxiliaryImage);
             auxiliaryGraphics.Clear(newColor);
-            auxiliaryGraphics.DrawImage(ImageManager.OriginalImage, 0, 0);
-            ImageManager.DefineNewImage(auxiliaryImage, true, 0, 0);
+            auxiliaryGraphics.DrawImage(Images.OriginalImage, 0, 0);
+            Images.DefineNewImage(auxiliaryImage, true, 0, 0);
 
             // Restored transparency to image if needed.
             if (TransparencyCheckBox.Checked)
             {
-                ImageManager.MakeImageTransparent(backgroundColor);
+                Images.MakeImageTransparent(backgroundColor);
             }
         }
 
         private void SetNewImageButton_Click(object sender, EventArgs e)
         {
-            SetNewImageAndViewingAreaSize();
+            SetNewImageOnBoxes();
             ReorganizeControls();
         }
 
@@ -308,37 +307,41 @@ namespace PixelArtEditor
 
             if (TransparencyCheckBox.Checked)
             {
-                ImageManager.MakeImageTransparent(backgroundColor);
+                Images.MakeImageTransparent(backgroundColor);
                 BackgroundColorLabel.Text = "Transparency Color";
             }
             else
             {
-                ImageManager.MakeImageNotTransparent(backgroundColor);
+                Images.MakeImageNotTransparent(backgroundColor);
                 BackgroundColorLabel.Text = "Background Color";
             }
 
-            DrawingBox.SetNewImage(ImageManager.OriginalImage);
+            // Remove later.
+            DrawingBox.SetNewImage(Images.OriginalImage);
+            // Remove later.
+
+            ViewingBox.SetNewImage(Images.OriginalImage);
         }
 
         private void SizeNumberBoxes_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                SetNewImageAndViewingAreaSize();
+                SetNewImageOnBoxes();
                 ReorganizeControls();
             }
         }
 
         private void CopyButton_Click(object sender, EventArgs e)
         {
-            ImageManager.CopySelectionFromImage();
+            Images.CopySelectionFromImage();
         }
 
         private void PasteButton_Click(object sender, EventArgs e)
         {
-            ImageManager.PasteSelectionInImage();
+            Images.PasteSelectionInImage();
 
-            DrawingBox.SetNewImage(ImageManager.OriginalImage);
+            DrawingBox.SetNewImage(Images.OriginalImage);
         }
 
         private void ChangeSelectionOnImage(Point location)
@@ -346,20 +349,20 @@ namespace PixelArtEditor
             int width = DrawingBox.Width;
             int height = DrawingBox.Height;
             int zoom = (int)ViewingZoomNumberBox.Value;
-            ImageManager.ChangeImageSelection(location, width, height, zoom);
+            Images.ChangeImageSelection(location, width, height, zoom);
             DrawingBox.Invalidate();
         }
 
         private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
         {
-            (int width, int height, int zoom) = GetImageSizeValues();
+            (int width, int height, int zoom) = GetViewingSizeValues();
 
-            ImageManager.ChangeImageZoom(width, height, zoom);
+            Images.ChangeImageZoom(width, height, zoom);
 
             DrawingBox.SetNewSize(width * zoom, height * zoom);
-            DrawingBox.SetNewImage(ImageManager.OriginalImage);
+            DrawingBox.SetNewImage(Images.OriginalImage);
 
-            ChangeDrawingBoxGrids();
+            ChangeImageBoxesGrids();
 
             ReorganizeControls();
         }
@@ -370,7 +373,7 @@ namespace PixelArtEditor
         /// </summary>
         private void SaveImageButton_Click(object sender, EventArgs e)
         {
-            FileSaverLoader.SaveImage(ImageManager.OriginalImage);
+            FileSaverLoader.SaveImage(Images.OriginalImage);
         }
 
         /// <summary>
@@ -385,15 +388,15 @@ namespace PixelArtEditor
                     bool resizeOnLoad = ResizeOnLoadCheckBox.Checked;
                     int width = DrawingBox.Width;
                     int height = DrawingBox.Height;
-                    ImageManager.DefineNewImage(imageLoaded, resizeOnLoad, width, height);
+                    Images.DefineNewImage(imageLoaded, resizeOnLoad, width, height);
 
                     if (resizeOnLoad)
                     {
-                        DrawingBox.SetNewSize(ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height);
+                        DrawingBox.SetNewSize(Images.OriginalImage.Width, Images.OriginalImage.Height);
                     }
                 }
 
-                DrawingBox.SetNewImage(ImageManager.OriginalImage);
+                DrawingBox.SetNewImage(Images.OriginalImage);
 
                 ReorganizeControls();
             }
@@ -458,7 +461,7 @@ namespace PixelArtEditor
 
             if (properties["ImageSize"])
             {
-                toolParameters.ImageSize = ImageManager.OriginalImage.Size;
+                toolParameters.ImageSize = Images.OriginalImage.Size;
             }
 
             if (properties["Transparency"])
@@ -488,19 +491,19 @@ namespace PixelArtEditor
         {
             if (e.Button == MouseButtons.Left)
             {
-                ImageManager.ClearImageSelection();
+                Images.ClearImageSelection();
 
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
 
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                DrawingBox.DrawClick(ToolFactory.GetTool(), ImageManager.OriginalImage, paletteColor, toolParameters);
-                DrawingBox.Image = ImageManager.OriginalImage;
+                DrawingBox.DrawClick(ToolFactory.GetTool(), Images.OriginalImage, paletteColor, toolParameters);
+                DrawingBox.Image = Images.OriginalImage;
             }
 
             if (e.Button == MouseButtons.Right)
             {
-                ImageManager.DefineSelectionStart(e.Location);
+                Images.DefineSelectionStart(e.Location);
                 ChangeSelectionOnImage(e.Location);
             }
 
@@ -520,7 +523,7 @@ namespace PixelArtEditor
         /// </summary>
         private void ViewingAreaDrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.X < 0 || e.Y < 0 || e.X >= ImageManager.OriginalImage.Width || e.Y >= ImageManager.OriginalImage.Height)
+            if (e.X < 0 || e.Y < 0 || e.X >= Images.OriginalImage.Width || e.Y >= Images.OriginalImage.Height)
             {
                 MouseOnDrawingBox = e.Location;
             }
@@ -530,7 +533,7 @@ namespace PixelArtEditor
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 DrawingBox.DrawHold(ToolFactory.GetTool(), toolParameters);
-                DrawingBox.Image = ImageManager.OriginalImage;
+                DrawingBox.Image = Images.OriginalImage;
             }
 
             if (e.Button == MouseButtons.Right)
@@ -557,7 +560,7 @@ namespace PixelArtEditor
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 DrawingBox.DrawRelease(ToolFactory.GetTool(), toolParameters);
-                DrawingBox.Image = ImageManager.OriginalImage;
+                DrawingBox.Image = Images.OriginalImage;
             }
 
             MouseOnDrawingBox = null;
@@ -576,16 +579,17 @@ namespace PixelArtEditor
         /// Also initializes the background grid of the Drawing Box.
         /// </summary>
         /// <returns>A grid implementation of the currently defined grid type.</returns>
-        private void ChangeDrawingBoxGrids()
+        private void ChangeImageBoxesGrids()
         {
             // Gets all necessary parameters.
-            (int width, int height, int zoom) = GetImageSizeValues();
+            (int width, int height, int zoom) = GetViewingSizeValues();
             Color gridColor = GridColorTable.GetCurrentColor();
             GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
 
             // Sets the grids.
             GridFactory.ChangeCurrentGrid(gridType, width * zoom, height * zoom, zoom, gridColor);
             DrawingBox.SetBackgroundGrid(width * zoom, height * zoom, zoom);
+            ViewingBox.SetBackgroundGrid(width * zoom, height * zoom, zoom);
         }
 
         /// <summary>
@@ -594,7 +598,7 @@ namespace PixelArtEditor
         /// </summary>
         private void GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage(object sender, EventArgs e)
         {
-            ChangeDrawingBoxGrids();
+            ChangeImageBoxesGrids();
             DrawingBox.Invalidate();
         }
         #endregion
@@ -612,10 +616,58 @@ namespace PixelArtEditor
                 DrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
             }
 
-            ImageManager.DrawSelectionOntoDrawingBox(e.Graphics);
+            Images.DrawSelectionOntoDrawingBox(e.Graphics);
 
             IGridGenerator gridGenerator = GridFactory.GetGrid();
-            gridGenerator.ApplyGrid(e.Graphics, ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height);
+            gridGenerator.ApplyGrid(e.Graphics, Images.OriginalImage.Width, Images.OriginalImage.Height);
+        }
+
+        private (int width, int height, int zoom) GetDrawingSizeValues()
+        {
+            int width = (int)DrawingWidthNumberBox.Value;
+            int height = (int)DrawingHeightNumberBox.Value;
+            int zoom = (int)DrawingZoomNumberBox.Value;
+
+            return (width, height, zoom);
+        }
+
+        private void SetDrawingBoxSize()
+        {
+            (int width, int height, int zoom) = GetDrawingSizeValues();
+
+            DrawingBox.SetNewSize(width * zoom, height * zoom);
+        }
+
+        private void DrawingBoxSizeButton_Click(object sender, EventArgs e)
+        {
+            SetDrawingBoxSize();
+            ReorganizeControls();
+        }
+
+        /// <summary>
+        /// Gets the values for the image's width, height and zoom amount from the respective ComboBoxes and returns them as a tuple.
+        /// </summary>
+        /// <returns>A tuple of Width, Height and Zoom values, in this order.</returns>
+        private (int width, int height, int zoom) GetViewingSizeValues()
+        {
+            int height = (int)PixelHeightNumberBox.Value;
+            int width = (int)PixelWidthNumberBox.Value;
+            int zoom = (int)ViewingZoomNumberBox.Value;
+
+            return (width, height, zoom);
+        }
+
+        private void SetViewingBoxSize()
+        {
+            (int width, int height, int zoom) = GetViewingSizeValues();
+
+            ViewingBox.SetNewSize(width * zoom, height * zoom);
+        }
+
+        private void ViewingBoxSizeButton_Click(object sender, EventArgs e)
+        {
+            SetViewingBoxSize();
+            ReorganizeControls();
         }
     }
 }
