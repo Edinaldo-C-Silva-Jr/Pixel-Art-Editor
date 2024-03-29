@@ -39,9 +39,9 @@
             SetNewImageButton = new Button();
             SaveImageButton = new Button();
             ColorPickerDialog = new ColorDialog();
-            ViewingAreaBackgroundPanel = new Controls.BackgroundPanel();
-            ViewingAreaDrawingBox = new Controls.DrawingBox();
-            ColorAreaBackgroundPanel = new Controls.BackgroundPanel();
+            DrawingBackgroundPanel = new Controls.BackgroundPanel();
+            DrawingBox = new Controls.DrawBox();
+            ColorsBackgroundPanel = new Controls.BackgroundPanel();
             ColorAmountComboBox = new ComboBox();
             PaletteColorTable = new Controls.ColorTable();
             BackgroundColorTable = new Controls.ColorTable();
@@ -71,12 +71,13 @@
             VerticalMirrorPenButton = new Controls.ToolButton();
             HorizontalMirrorPenButton = new Controls.ToolButton();
             PixelPenButton = new Controls.ToolButton();
+            ViewingBackgroundPanel = new Controls.BackgroundPanel();
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
-            ViewingAreaBackgroundPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)ViewingAreaDrawingBox).BeginInit();
-            ColorAreaBackgroundPanel.SuspendLayout();
+            DrawingBackgroundPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)DrawingBox).BeginInit();
+            ColorsBackgroundPanel.SuspendLayout();
             DrawingToolButtonPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -181,49 +182,49 @@
             SaveImageButton.UseVisualStyleBackColor = true;
             SaveImageButton.Click += SaveImageButton_Click;
             // 
-            // ViewingAreaBackgroundPanel
+            // DrawingBackgroundPanel
             // 
-            ViewingAreaBackgroundPanel.AutoScroll = true;
-            ViewingAreaBackgroundPanel.AutoScrollMargin = new Size(1, 1);
-            ViewingAreaBackgroundPanel.BackColor = Color.Black;
-            ViewingAreaBackgroundPanel.Controls.Add(ViewingAreaDrawingBox);
-            ViewingAreaBackgroundPanel.Location = new Point(10, 120);
-            ViewingAreaBackgroundPanel.MaximumHeight = 514;
-            ViewingAreaBackgroundPanel.MaximumWidth = 514;
-            ViewingAreaBackgroundPanel.Name = "ViewingAreaBackgroundPanel";
-            ViewingAreaBackgroundPanel.Size = new Size(40, 40);
-            ViewingAreaBackgroundPanel.TabIndex = 10;
+            DrawingBackgroundPanel.AutoScroll = true;
+            DrawingBackgroundPanel.AutoScrollMargin = new Size(1, 1);
+            DrawingBackgroundPanel.BackColor = Color.Black;
+            DrawingBackgroundPanel.Controls.Add(DrawingBox);
+            DrawingBackgroundPanel.Location = new Point(10, 120);
+            DrawingBackgroundPanel.MaximumHeight = 514;
+            DrawingBackgroundPanel.MaximumWidth = 514;
+            DrawingBackgroundPanel.Name = "DrawingBackgroundPanel";
+            DrawingBackgroundPanel.Size = new Size(40, 40);
+            DrawingBackgroundPanel.TabIndex = 10;
             // 
-            // ViewingAreaDrawingBox
+            // DrawingBox
             // 
-            ViewingAreaDrawingBox.BackColor = SystemColors.Control;
-            ViewingAreaDrawingBox.Location = new Point(1, 1);
-            ViewingAreaDrawingBox.Name = "ViewingAreaDrawingBox";
-            ViewingAreaDrawingBox.Size = new Size(20, 20);
-            ViewingAreaDrawingBox.TabIndex = 0;
-            ViewingAreaDrawingBox.TabStop = false;
-            ViewingAreaDrawingBox.Paint += ViewingAreaDrawingBox_Paint;
-            ViewingAreaDrawingBox.MouseDown += ViewingAreaDrawingBox_MouseDown;
-            ViewingAreaDrawingBox.MouseLeave += ViewingAreaDrawingBox_MouseLeave;
-            ViewingAreaDrawingBox.MouseMove += ViewingAreaDrawingBox_MouseMove;
-            ViewingAreaDrawingBox.MouseUp += ViewingAreaDrawingBox_MouseUp;
+            DrawingBox.BackColor = SystemColors.Control;
+            DrawingBox.Location = new Point(1, 1);
+            DrawingBox.Name = "DrawingBox";
+            DrawingBox.Size = new Size(20, 20);
+            DrawingBox.TabIndex = 0;
+            DrawingBox.TabStop = false;
+            DrawingBox.Paint += ViewingAreaDrawingBox_Paint;
+            DrawingBox.MouseDown += ViewingAreaDrawingBox_MouseDown;
+            DrawingBox.MouseLeave += ViewingAreaDrawingBox_MouseLeave;
+            DrawingBox.MouseMove += ViewingAreaDrawingBox_MouseMove;
+            DrawingBox.MouseUp += ViewingAreaDrawingBox_MouseUp;
             // 
-            // ColorAreaBackgroundPanel
+            // ColorsBackgroundPanel
             // 
-            ColorAreaBackgroundPanel.BackColor = Color.White;
-            ColorAreaBackgroundPanel.Controls.Add(ColorAmountComboBox);
-            ColorAreaBackgroundPanel.Controls.Add(PaletteColorTable);
-            ColorAreaBackgroundPanel.Controls.Add(BackgroundColorTable);
-            ColorAreaBackgroundPanel.Controls.Add(BackgroundColorLabel);
-            ColorAreaBackgroundPanel.Controls.Add(GridColorTable);
-            ColorAreaBackgroundPanel.Controls.Add(GridColorLabel);
-            ColorAreaBackgroundPanel.Controls.Add(ColorAmountLabel);
-            ColorAreaBackgroundPanel.Location = new Point(10, 170);
-            ColorAreaBackgroundPanel.MaximumHeight = 200;
-            ColorAreaBackgroundPanel.MaximumWidth = 300;
-            ColorAreaBackgroundPanel.Name = "ColorAreaBackgroundPanel";
-            ColorAreaBackgroundPanel.Size = new Size(120, 120);
-            ColorAreaBackgroundPanel.TabIndex = 11;
+            ColorsBackgroundPanel.BackColor = Color.White;
+            ColorsBackgroundPanel.Controls.Add(ColorAmountComboBox);
+            ColorsBackgroundPanel.Controls.Add(PaletteColorTable);
+            ColorsBackgroundPanel.Controls.Add(BackgroundColorTable);
+            ColorsBackgroundPanel.Controls.Add(BackgroundColorLabel);
+            ColorsBackgroundPanel.Controls.Add(GridColorTable);
+            ColorsBackgroundPanel.Controls.Add(GridColorLabel);
+            ColorsBackgroundPanel.Controls.Add(ColorAmountLabel);
+            ColorsBackgroundPanel.Location = new Point(10, 170);
+            ColorsBackgroundPanel.MaximumHeight = 200;
+            ColorsBackgroundPanel.MaximumWidth = 300;
+            ColorsBackgroundPanel.Name = "ColorsBackgroundPanel";
+            ColorsBackgroundPanel.Size = new Size(120, 120);
+            ColorsBackgroundPanel.TabIndex = 11;
             // 
             // ColorAmountComboBox
             // 
@@ -610,6 +611,18 @@
             PixelPenButton.UseVisualStyleBackColor = true;
             PixelPenButton.Click += ChangeTool_ToolButtonsClick;
             // 
+            // ViewingBackgroundPanel
+            // 
+            ViewingBackgroundPanel.AutoScroll = true;
+            ViewingBackgroundPanel.AutoScrollMargin = new Size(1, 1);
+            ViewingBackgroundPanel.BackColor = Color.Black;
+            ViewingBackgroundPanel.Location = new Point(60, 120);
+            ViewingBackgroundPanel.MaximumHeight = 514;
+            ViewingBackgroundPanel.MaximumWidth = 514;
+            ViewingBackgroundPanel.Name = "ViewingBackgroundPanel";
+            ViewingBackgroundPanel.Size = new Size(40, 40);
+            ViewingBackgroundPanel.TabIndex = 23;
+            // 
             // PixelArtEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -617,6 +630,7 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(884, 461);
+            Controls.Add(ViewingBackgroundPanel);
             Controls.Add(DrawingToolButtonPanel);
             Controls.Add(LoadPaletteButton);
             Controls.Add(SavePaletteButton);
@@ -626,8 +640,8 @@
             Controls.Add(LoadImageButton);
             Controls.Add(ColorChangeCheckBox);
             Controls.Add(TransparencyCheckBox);
-            Controls.Add(ColorAreaBackgroundPanel);
-            Controls.Add(ViewingAreaBackgroundPanel);
+            Controls.Add(ColorsBackgroundPanel);
+            Controls.Add(DrawingBackgroundPanel);
             Controls.Add(SaveImageButton);
             Controls.Add(SetNewImageButton);
             Controls.Add(GridTypeComboBox);
@@ -644,9 +658,9 @@
             ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).EndInit();
-            ViewingAreaBackgroundPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)ViewingAreaDrawingBox).EndInit();
-            ColorAreaBackgroundPanel.ResumeLayout(false);
+            DrawingBackgroundPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)DrawingBox).EndInit();
+            ColorsBackgroundPanel.ResumeLayout(false);
             DrawingToolButtonPanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
@@ -665,9 +679,9 @@
         private Button SetNewImageButton;
         private Button SaveImageButton;
         private ColorDialog ColorPickerDialog;
-        private Controls.BackgroundPanel ViewingAreaBackgroundPanel;
-        private Controls.DrawingBox ViewingAreaDrawingBox;
-        private Controls.BackgroundPanel ColorAreaBackgroundPanel;
+        private Controls.BackgroundPanel DrawingBackgroundPanel;
+        private Controls.DrawBox DrawingBox;
+        private Controls.BackgroundPanel ColorsBackgroundPanel;
         private Label GridColorLabel;
         private Label ColorAmountLabel;
         private Controls.ColorTable GridColorTable;
@@ -697,5 +711,6 @@
         private Controls.ToolButton FreeLineButton;
         private Controls.ToolButton SolidRectangleButton;
         private Controls.ToolButton OutlineRectangleButton;
+        private Controls.BackgroundPanel ViewingBackgroundPanel;
     }
 }

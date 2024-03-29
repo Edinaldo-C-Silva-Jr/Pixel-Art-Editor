@@ -143,19 +143,34 @@ namespace PixelArtEditor
 
             ImageManager.CreateNewImage(width, height, zoom, backgroundColor, transparent);
 
-            ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
-            ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
+            DrawingBox.SetNewSize(width * zoom, height * zoom);
+            DrawingBox.SetNewImage(ImageManager.OriginalImage);
             ChangeDrawingBoxGrids();
         }
 
+        /// <summary>
+        /// Resizes all Background Panels to fit the current size of their controls and updates their location accordingly to the size of the ones around them.
+        /// </summary>
         private void ReorganizeControls()
         {
-            this.SuspendLayout();
-            ViewingAreaBackgroundPanel.ResizePanelToFitControls();
-            ColorAreaBackgroundPanel.ResizePanelToFitControls();
+            SuspendLayout();
+            DrawingBackgroundPanel.ResizePanelToFitControls();
+            ViewingBackgroundPanel.ResizePanelToFitControls();
+            ColorsBackgroundPanel.ResizePanelToFitControls();
 
-            ColorAreaBackgroundPanel.Location = new Point(ColorAreaBackgroundPanel.Location.X, ViewingAreaBackgroundPanel.Location.Y + ViewingAreaBackgroundPanel.Height + 10);
-            this.ResumeLayout();
+            // Sets a new location to the panels after resizing them to make sure they don't overlap.
+            ViewingBackgroundPanel.Location = new Point(DrawingBackgroundPanel.Left + DrawingBackgroundPanel.Width + 10, DrawingBackgroundPanel.Top);
+
+            if (DrawingBackgroundPanel.Height > ViewingBackgroundPanel.Height)
+            {
+                ColorsBackgroundPanel.Location = new Point(ColorsBackgroundPanel.Location.X, DrawingBackgroundPanel.Top + DrawingBackgroundPanel.Height + 10);
+            }
+            else
+            {
+                ColorsBackgroundPanel.Location = new Point(ColorsBackgroundPanel.Location.X, ViewingBackgroundPanel.Top + ViewingBackgroundPanel.Height + 10);
+            }
+            
+            ResumeLayout();
         }
 
         /// <summary>
@@ -205,7 +220,7 @@ namespace PixelArtEditor
                     // Only reload the image if there was a color swap.
                     if (colorWasSwaped)
                     {
-                        ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
+                        DrawingBox.SetNewImage(ImageManager.OriginalImage);
                     }
 
                     cell.ChangeCellColor(ColorPickerDialog.Color);
@@ -302,7 +317,7 @@ namespace PixelArtEditor
                 BackgroundColorLabel.Text = "Background Color";
             }
 
-            ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
+            DrawingBox.SetNewImage(ImageManager.OriginalImage);
         }
 
         private void SizeNumberBoxes_KeyDown(object sender, KeyEventArgs e)
@@ -323,16 +338,16 @@ namespace PixelArtEditor
         {
             ImageManager.PasteSelectionInImage();
 
-            ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
+            DrawingBox.SetNewImage(ImageManager.OriginalImage);
         }
 
         private void ChangeSelectionOnImage(Point location)
         {
-            int width = ViewingAreaDrawingBox.Width;
-            int height = ViewingAreaDrawingBox.Height;
+            int width = DrawingBox.Width;
+            int height = DrawingBox.Height;
             int zoom = (int)ViewingZoomNumberBox.Value;
             ImageManager.ChangeImageSelection(location, width, height, zoom);
-            ViewingAreaDrawingBox.Invalidate();
+            DrawingBox.Invalidate();
         }
 
         private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
@@ -341,8 +356,8 @@ namespace PixelArtEditor
 
             ImageManager.ChangeImageZoom(width, height, zoom);
 
-            ViewingAreaDrawingBox.SetNewSize(width * zoom, height * zoom);
-            ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
+            DrawingBox.SetNewSize(width * zoom, height * zoom);
+            DrawingBox.SetNewImage(ImageManager.OriginalImage);
 
             ChangeDrawingBoxGrids();
 
@@ -368,17 +383,17 @@ namespace PixelArtEditor
                 if (imageLoaded != null) // Null check in case no image is loaded.
                 {
                     bool resizeOnLoad = ResizeOnLoadCheckBox.Checked;
-                    int width = ViewingAreaDrawingBox.Width;
-                    int height = ViewingAreaDrawingBox.Height;
+                    int width = DrawingBox.Width;
+                    int height = DrawingBox.Height;
                     ImageManager.DefineNewImage(imageLoaded, resizeOnLoad, width, height);
 
                     if (resizeOnLoad)
                     {
-                        ViewingAreaDrawingBox.SetNewSize(ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height);
+                        DrawingBox.SetNewSize(ImageManager.OriginalImage.Width, ImageManager.OriginalImage.Height);
                     }
                 }
 
-                ViewingAreaDrawingBox.SetNewImage(ImageManager.OriginalImage);
+                DrawingBox.SetNewImage(ImageManager.OriginalImage);
 
                 ReorganizeControls();
             }
@@ -479,8 +494,8 @@ namespace PixelArtEditor
 
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                ViewingAreaDrawingBox.DrawClick(ToolFactory.GetTool(), ImageManager.OriginalImage, paletteColor, toolParameters);
-                ViewingAreaDrawingBox.Image = ImageManager.OriginalImage;
+                DrawingBox.DrawClick(ToolFactory.GetTool(), ImageManager.OriginalImage, paletteColor, toolParameters);
+                DrawingBox.Image = ImageManager.OriginalImage;
             }
 
             if (e.Button == MouseButtons.Right)
@@ -494,7 +509,7 @@ namespace PixelArtEditor
             if (previewProperties["PreviewHold"] && e.Button == MouseButtons.Left)
             {
                 MouseOnDrawingBox = e.Location;
-                ViewingAreaDrawingBox.Invalidate();
+                DrawingBox.Invalidate();
             }
         }
 
@@ -514,8 +529,8 @@ namespace PixelArtEditor
             {
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                ViewingAreaDrawingBox.DrawHold(ToolFactory.GetTool(), toolParameters);
-                ViewingAreaDrawingBox.Image = ImageManager.OriginalImage;
+                DrawingBox.DrawHold(ToolFactory.GetTool(), toolParameters);
+                DrawingBox.Image = ImageManager.OriginalImage;
             }
 
             if (e.Button == MouseButtons.Right)
@@ -528,7 +543,7 @@ namespace PixelArtEditor
             if (previewProperties["PreviewMove"] || (previewProperties["PreviewHold"] && e.Button == MouseButtons.Left))
             {
                 MouseOnDrawingBox = e.Location;
-                ViewingAreaDrawingBox.Invalidate();
+                DrawingBox.Invalidate();
             }
         }
 
@@ -541,8 +556,8 @@ namespace PixelArtEditor
             {
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                ViewingAreaDrawingBox.DrawRelease(ToolFactory.GetTool(), toolParameters);
-                ViewingAreaDrawingBox.Image = ImageManager.OriginalImage;
+                DrawingBox.DrawRelease(ToolFactory.GetTool(), toolParameters);
+                DrawingBox.Image = ImageManager.OriginalImage;
             }
 
             MouseOnDrawingBox = null;
@@ -551,7 +566,7 @@ namespace PixelArtEditor
         private void ViewingAreaDrawingBox_MouseLeave(object sender, EventArgs e)
         {
             MouseOnDrawingBox = null;
-            ViewingAreaDrawingBox.Invalidate();
+            DrawingBox.Invalidate();
         }
         #endregion
 
@@ -570,7 +585,7 @@ namespace PixelArtEditor
 
             // Sets the grids.
             GridFactory.ChangeCurrentGrid(gridType, width * zoom, height * zoom, zoom, gridColor);
-            ViewingAreaDrawingBox.SetBackgroundGrid(width * zoom, height * zoom, zoom);
+            DrawingBox.SetBackgroundGrid(width * zoom, height * zoom, zoom);
         }
 
         /// <summary>
@@ -580,7 +595,7 @@ namespace PixelArtEditor
         private void GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage(object sender, EventArgs e)
         {
             ChangeDrawingBoxGrids();
-            ViewingAreaDrawingBox.Invalidate();
+            DrawingBox.Invalidate();
         }
         #endregion
 
@@ -594,7 +609,7 @@ namespace PixelArtEditor
             {
                 OptionalToolParameters toolParameters = GetToolParameters(MouseOnDrawingBox.Value);
 
-                ViewingAreaDrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
+                DrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
             }
 
             ImageManager.DrawSelectionOntoDrawingBox(e.Graphics);

@@ -3,7 +3,7 @@ using PixelArtEditor.Grids;
 
 namespace PixelArtEditor.Controls
 {
-    public partial class DrawingBox : PictureBox, IDisposable
+    public partial class DrawBox : PictureBox, IDisposable
     {
         // Disposed in the Designer file
         private Graphics? ImageGraphics { get; set; }
@@ -11,7 +11,7 @@ namespace PixelArtEditor.Controls
         private BackgroundGrid GridGenerator { get; set; }
         private bool MouseReleased { get; set; }
 
-        public DrawingBox()
+        public DrawBox()
         {
             GridGenerator = new BackgroundGrid();
             DoubleBuffered = true;

@@ -1,6 +1,6 @@
 ﻿namespace PixelArtEditor.Controls
 {
-    partial class DrawingBox
+    partial class ViewBox
     {
         /// <summary> 
         /// Variável de designer necessária.
@@ -17,11 +17,6 @@
             {
                 components.Dispose();
             }
-
-            ImageGraphics?.Dispose();
-            ColorBrush?.Dispose();
-            GridGenerator?.Dispose();
-
             base.Dispose(disposing);
         }
 
@@ -34,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         }
 
         #endregion
