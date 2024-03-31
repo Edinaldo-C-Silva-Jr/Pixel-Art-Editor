@@ -140,7 +140,8 @@ namespace PixelArtEditor
             // Remove later.
 
             ViewingBox.SetNewImage(Images.OriginalImage);
-            ChangeImageBoxesGrids();
+            ChangeDrawingBoxGrid();
+            ChangeViewingBoxGrid();
         }
 
         /// <summary>
@@ -227,7 +228,7 @@ namespace PixelArtEditor
                     // Reloads the grid if the grid color was changed.
                     if (cellParent.Name == "GridColorTable")
                     {
-                        ChangeImageBoxesGrids();
+                        ChangeDrawingBoxGrid();
                     }
                 }
             }
@@ -359,10 +360,10 @@ namespace PixelArtEditor
 
             Images.ChangeImageZoom(width, height, zoom);
 
-            DrawingBox.SetNewSize(width * zoom, height * zoom);
-            DrawingBox.SetNewImage(Images.OriginalImage);
+            ViewingBox.SetNewSize(width * zoom, height * zoom);
+            ViewingBox.SetNewImage(Images.OriginalImage);
 
-            ChangeImageBoxesGrids();
+            ChangeViewingBoxGrid();
 
             ReorganizeControls();
         }
@@ -575,21 +576,26 @@ namespace PixelArtEditor
 
         #region Grid Definition and Generation
         /// <summary>
-        /// Method that defines which Grid implementation to use based on the currently selected Grid Type.
-        /// Also initializes the background grid of the Drawing Box.
+        /// Sets the background grid for the Viewing box.
         /// </summary>
-        /// <returns>A grid implementation of the currently defined grid type.</returns>
-        private void ChangeImageBoxesGrids()
+        private void ChangeViewingBoxGrid()
         {
-            // Gets all necessary parameters.
             (int width, int height, int zoom) = GetViewingSizeValues();
+            ViewingBox.SetBackgroundGrid(width * zoom, height * zoom, zoom);
+        }
+
+        /// <summary>
+        /// Defines which Grid implementation to use based on the currently selected Grid Type.
+        /// Also sets the background grid in the Drawing Box.
+        /// </summary>
+        private void ChangeDrawingBoxGrid()
+        {
             Color gridColor = GridColorTable.GetCurrentColor();
             GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
+            (int width, int height, int zoom) = GetDrawingSizeValues();
 
-            // Sets the grids.
             GridFactory.ChangeCurrentGrid(gridType, width * zoom, height * zoom, zoom, gridColor);
             DrawingBox.SetBackgroundGrid(width * zoom, height * zoom, zoom);
-            ViewingBox.SetBackgroundGrid(width * zoom, height * zoom, zoom);
         }
 
         /// <summary>
@@ -598,7 +604,7 @@ namespace PixelArtEditor
         /// </summary>
         private void GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage(object sender, EventArgs e)
         {
-            ChangeImageBoxesGrids();
+            ChangeDrawingBoxGrid();
             DrawingBox.Invalidate();
         }
         #endregion
@@ -641,6 +647,7 @@ namespace PixelArtEditor
         private void DrawingBoxSizeButton_Click(object sender, EventArgs e)
         {
             SetDrawingBoxSize();
+            ChangeDrawingBoxGrid();
             ReorganizeControls();
         }
 
@@ -667,6 +674,7 @@ namespace PixelArtEditor
         private void ViewingBoxSizeButton_Click(object sender, EventArgs e)
         {
             SetViewingBoxSize();
+            ChangeViewingBoxGrid();
             ReorganizeControls();
         }
     }

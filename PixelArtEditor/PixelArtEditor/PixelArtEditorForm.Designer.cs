@@ -669,7 +669,7 @@
             // DrawingHeightNumberBox
             // 
             DrawingHeightNumberBox.Location = new Point(637, 244);
-            DrawingHeightNumberBox.Maximum = new decimal(new int[] { 32, 0, 0, 0 });
+            DrawingHeightNumberBox.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
             DrawingHeightNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
             DrawingHeightNumberBox.Name = "DrawingHeightNumberBox";
             DrawingHeightNumberBox.Size = new Size(50, 23);
@@ -688,7 +688,7 @@
             // DrawingWidthNumberBox
             // 
             DrawingWidthNumberBox.Location = new Point(637, 214);
-            DrawingWidthNumberBox.Maximum = new decimal(new int[] { 32, 0, 0, 0 });
+            DrawingWidthNumberBox.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
             DrawingWidthNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
             DrawingWidthNumberBox.Name = "DrawingWidthNumberBox";
             DrawingWidthNumberBox.Size = new Size(50, 23);
