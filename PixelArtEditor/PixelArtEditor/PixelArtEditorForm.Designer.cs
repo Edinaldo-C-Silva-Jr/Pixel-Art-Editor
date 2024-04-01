@@ -140,12 +140,12 @@
             // ViewingZoomNumberBox
             // 
             ViewingZoomNumberBox.Location = new Point(165, 9);
-            ViewingZoomNumberBox.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
+            ViewingZoomNumberBox.Maximum = new decimal(new int[] { 8, 0, 0, 0 });
             ViewingZoomNumberBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             ViewingZoomNumberBox.Name = "ViewingZoomNumberBox";
             ViewingZoomNumberBox.Size = new Size(50, 23);
             ViewingZoomNumberBox.TabIndex = 5;
-            ViewingZoomNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
+            ViewingZoomNumberBox.Value = new decimal(new int[] { 4, 0, 0, 0 });
             ViewingZoomNumberBox.ValueChanged += ViewingZoomNumberBox_ValueChanged;
             // 
             // ViewingZoomLabel
@@ -174,7 +174,7 @@
             GridTypeComboBox.Name = "GridTypeComboBox";
             GridTypeComboBox.Size = new Size(70, 23);
             GridTypeComboBox.TabIndex = 7;
-            GridTypeComboBox.SelectedIndexChanged += GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage;
+            GridTypeComboBox.SelectedIndexChanged += ChangeGrid_GridTypeComboBoxIndexChanged;
             // 
             // SetNewImageButton
             // 
@@ -646,6 +646,7 @@
             ViewingBox.Size = new Size(20, 20);
             ViewingBox.TabIndex = 0;
             ViewingBox.TabStop = false;
+            ViewingBox.Click += ViewingBox_Click;
             // 
             // DrawingZoomNumberBox
             // 

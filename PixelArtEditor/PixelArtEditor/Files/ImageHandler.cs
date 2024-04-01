@@ -10,25 +10,37 @@ namespace PixelArtEditor.Files
     internal class ImageHandler : IDisposable
     {
         /// <summary>
-        /// The image the editor should draw in.
+        /// The full image being used in the pixel art editor.
         /// </summary>
         public Bitmap OriginalImage { get; private set; }
+
+        /// <summary>
+        /// The portion of the original image that is being used in the DrawingBox.
+        /// </summary>
+        public Bitmap DrawingImage { get; private set; }
 
         /// <summary>
         /// The image that represents the clipboard, used to copy and paste the selected portion of the original image.
         /// </summary>
         public Bitmap ClipboardImage { get; private set; }
 
+        /// <summary>
+        /// The size of each pixel in the current Original Image.
+        /// </summary>
+        private int ImagePixelSize { get; set; }
+
         private ImageSelection Selector { get; set; }
 
         /// <summary>
-        /// Defines the color of the selection brush and initializes both the original image and the clipboard image.
+        /// Default constructor, initializes all properties.
         /// </summary>
         public ImageHandler()
         {
             Selector = new();
             OriginalImage = new(1, 1);
+            DrawingImage = new(1, 1);
             ClipboardImage = new(1, 1);
+            ImagePixelSize = 1;
         }
 
         /// <summary>
@@ -41,6 +53,8 @@ namespace PixelArtEditor.Files
         /// <param name="transparent">Defines whether the image will have a transparent background or not.</param>
         public void CreateNewImage(int width, int height, int zoom, Color backgroundColor, bool transparent)
         {
+            ImagePixelSize = zoom;
+
             // Creates the image and fills its background with the desired color
             OriginalImage = new(width * zoom, height * zoom);
             using Graphics imageFiller = Graphics.FromImage(OriginalImage);
@@ -51,6 +65,29 @@ namespace PixelArtEditor.Files
             {
                 OriginalImage.MakeTransparent(backgroundColor);
             }
+        }
+
+        public void CreateImageToDraw(int width, int height, int zoom, int startingHorizontal, int startingVertical)
+        {
+            // Cuts a piece of the image.
+            Rectangle pieceToCut = new(startingHorizontal, startingVertical, width * ImagePixelSize, height * ImagePixelSize);
+            Bitmap imagePieceZoomed = OriginalImage.Clone(pieceToCut, PixelFormat.Format32bppArgb);
+
+            // Removes zoom.
+            Bitmap imagePieceNoZoom = new(width, height);
+            Graphics pieceGraphics = Graphics.FromImage(imagePieceNoZoom);
+            pieceGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            pieceGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            pieceGraphics.DrawImage(imagePieceZoomed ,0, 0, width, height);
+
+            // Zooms to draw.
+            Bitmap imagePieceNewZoom = new(width * zoom, height * zoom);
+            Graphics fullGraphics = Graphics.FromImage(imagePieceNewZoom);
+            fullGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            fullGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            fullGraphics.DrawImage(imagePieceNoZoom, 0, 0, width * zoom, height * zoom);
+
+            DrawingImage = new(imagePieceNewZoom);
         }
 
         public void DefineNewImage(Bitmap newOriginalImage, bool resizeOnLoad, int drawingBoxWidth, int drawingBoxHeight)
@@ -99,6 +136,8 @@ namespace PixelArtEditor.Files
         /// <param name="zoom">The zoom factor applied to the image. This is the size of each pixel.</param>
         public void ChangeImageZoom(int width, int height, int zoom)
         {
+            ImagePixelSize = zoom;
+
             Bitmap zoomedImage = new(width * zoom, height * zoom);
 
             Graphics zoomGraphics = Graphics.FromImage(zoomedImage);

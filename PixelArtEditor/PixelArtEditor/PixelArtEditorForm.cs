@@ -123,25 +123,32 @@ namespace PixelArtEditor
         }
 
         /// <summary>
-        /// Creates a new blank image using the current image size, zoom values and transparency settings.
-        /// Then sets it in the Viewing and Drawing Box with the appropriate grid.
+        /// 
         /// </summary>
         private void SetNewImageOnBoxes()
         {
-            // Gets all relevant image parameters: size, background color and transparency.
+            SetViewingBoxImage();
+            SetDrawingBoxImage(0, 0);
+
+            ChangeDrawingBoxGrid();
+            ChangeViewingBoxGrid();
+        }
+
+        private void SetViewingBoxImage()
+        {
             (int width, int height, int zoom) = GetViewingSizeValues();
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
             bool transparent = TransparencyCheckBox.Checked;
 
             Images.CreateNewImage(width, height, zoom, backgroundColor, transparent);
-
-            // Remove later.
-            DrawingBox.SetNewImage(Images.OriginalImage);
-            // Remove later.
-
             ViewingBox.SetNewImage(Images.OriginalImage);
-            ChangeDrawingBoxGrid();
-            ChangeViewingBoxGrid();
+        }
+
+        private void SetDrawingBoxImage(int xPos, int yPos)
+        {
+            (int width, int height, int zoom) = GetDrawingSizeValues();
+            Images.CreateImageToDraw(width, height, zoom, xPos, yPos);
+            DrawingBox.SetNewImage(Images.DrawingImage);
         }
 
         /// <summary>
@@ -277,10 +284,6 @@ namespace PixelArtEditor
         private void CalculateMaximumZoom(int size)
         {
             int zoom = 4096 / size;
-            if (zoom > 64)
-            {
-                zoom = 64;
-            }
             ViewingZoomNumberBox.Maximum = zoom;
         }
 
@@ -397,7 +400,7 @@ namespace PixelArtEditor
                     }
                 }
 
-                DrawingBox.SetNewImage(Images.OriginalImage);
+                ViewingBox.SetNewImage(Images.OriginalImage);
 
                 ReorganizeControls();
             }
@@ -602,7 +605,7 @@ namespace PixelArtEditor
         /// Method called when a change is made to the Gridtype ComboBox.
         /// It changes the implementation of grids used to the newly selected grid type, then applies the new grid to the Drawing Box.
         /// </summary>
-        private void GridTypeComboBox_SelectedIndexChanged_ApplyGridToImage(object sender, EventArgs e)
+        private void ChangeGrid_GridTypeComboBoxIndexChanged(object sender, EventArgs e)
         {
             ChangeDrawingBoxGrid();
             DrawingBox.Invalidate();
@@ -676,6 +679,15 @@ namespace PixelArtEditor
             SetViewingBoxSize();
             ChangeViewingBoxGrid();
             ReorganizeControls();
+        }
+
+        private void ViewingBox_Click(object sender, EventArgs e)
+        {
+            MouseEventArgs mouseArgs = (MouseEventArgs)e;
+
+            int xPos = mouseArgs.X - (mouseArgs.X % (int)(DrawingWidthNumberBox.Value * ViewingZoomNumberBox.Value));
+            int yPos = mouseArgs.Y - (mouseArgs.Y % (int)(DrawingHeightNumberBox.Value * ViewingZoomNumberBox.Value));
+            SetDrawingBoxImage(xPos, yPos);
         }
     }
 }
