@@ -107,24 +107,24 @@
             // PixelWidthNumberBox
             // 
             PixelWidthNumberBox.Location = new Point(55, 9);
-            PixelWidthNumberBox.Maximum = new decimal(new int[] { 4096, 0, 0, 0 });
+            PixelWidthNumberBox.Maximum = new decimal(new int[] { 1024, 0, 0, 0 });
             PixelWidthNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
             PixelWidthNumberBox.Name = "PixelWidthNumberBox";
             PixelWidthNumberBox.Size = new Size(50, 23);
             PixelWidthNumberBox.TabIndex = 1;
-            PixelWidthNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
+            PixelWidthNumberBox.Value = new decimal(new int[] { 64, 0, 0, 0 });
             PixelWidthNumberBox.ValueChanged += SizeValuesChanged;
             PixelWidthNumberBox.KeyDown += SizeNumberBoxes_KeyDown;
             // 
             // PixelHeightNumberBox
             // 
             PixelHeightNumberBox.Location = new Point(55, 39);
-            PixelHeightNumberBox.Maximum = new decimal(new int[] { 4096, 0, 0, 0 });
+            PixelHeightNumberBox.Maximum = new decimal(new int[] { 1024, 0, 0, 0 });
             PixelHeightNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
             PixelHeightNumberBox.Name = "PixelHeightNumberBox";
             PixelHeightNumberBox.Size = new Size(50, 23);
             PixelHeightNumberBox.TabIndex = 3;
-            PixelHeightNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
+            PixelHeightNumberBox.Value = new decimal(new int[] { 64, 0, 0, 0 });
             PixelHeightNumberBox.ValueChanged += SizeValuesChanged;
             PixelHeightNumberBox.KeyDown += SizeNumberBoxes_KeyDown;
             // 
@@ -140,7 +140,7 @@
             // ViewingZoomNumberBox
             // 
             ViewingZoomNumberBox.Location = new Point(165, 9);
-            ViewingZoomNumberBox.Maximum = new decimal(new int[] { 8, 0, 0, 0 });
+            ViewingZoomNumberBox.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
             ViewingZoomNumberBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             ViewingZoomNumberBox.Name = "ViewingZoomNumberBox";
             ViewingZoomNumberBox.Size = new Size(50, 23);
@@ -651,7 +651,7 @@
             // DrawingZoomNumberBox
             // 
             DrawingZoomNumberBox.Location = new Point(747, 214);
-            DrawingZoomNumberBox.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
+            DrawingZoomNumberBox.Maximum = new decimal(new int[] { 32, 0, 0, 0 });
             DrawingZoomNumberBox.Minimum = new decimal(new int[] { 8, 0, 0, 0 });
             DrawingZoomNumberBox.Name = "DrawingZoomNumberBox";
             DrawingZoomNumberBox.Size = new Size(50, 23);
@@ -675,7 +675,7 @@
             DrawingHeightNumberBox.Name = "DrawingHeightNumberBox";
             DrawingHeightNumberBox.Size = new Size(50, 23);
             DrawingHeightNumberBox.TabIndex = 27;
-            DrawingHeightNumberBox.Value = new decimal(new int[] { 8, 0, 0, 0 });
+            DrawingHeightNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
             // 
             // label2
             // 
@@ -694,7 +694,7 @@
             DrawingWidthNumberBox.Name = "DrawingWidthNumberBox";
             DrawingWidthNumberBox.Size = new Size(50, 23);
             DrawingWidthNumberBox.TabIndex = 25;
-            DrawingWidthNumberBox.Value = new decimal(new int[] { 8, 0, 0, 0 });
+            DrawingWidthNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
             // 
             // label3
             // 

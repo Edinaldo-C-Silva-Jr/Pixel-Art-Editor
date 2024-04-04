@@ -462,7 +462,7 @@ namespace PixelArtEditor
 
             if (properties["ImageSize"])
             {
-                toolParameters.ImageSize = Images.OriginalImage.Size;
+                toolParameters.ImageSize = Images.DrawingImage.Size;
             }
 
             if (properties["Transparency"])
@@ -524,7 +524,7 @@ namespace PixelArtEditor
         /// </summary>
         private void ViewingAreaDrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.X < 0 || e.Y < 0 || e.X >= Images.OriginalImage.Width || e.Y >= Images.OriginalImage.Height)
+            if (e.X < 0 || e.Y < 0 || e.X >= Images.DrawingImage.Width || e.Y >= Images.DrawingImage.Height)
             {
                 MouseOnDrawingBox = e.Location;
             }
@@ -628,7 +628,7 @@ namespace PixelArtEditor
             Images.DrawSelectionOntoDrawingBox(e.Graphics);
 
             IGridGenerator gridGenerator = GridFactory.GetGrid();
-            gridGenerator.ApplyGrid(e.Graphics, Images.OriginalImage.Width, Images.OriginalImage.Height);
+            gridGenerator.ApplyGrid(e.Graphics, Images.DrawingImage.Width, Images.DrawingImage.Height);
         }
 
         private (int width, int height, int zoom) GetDrawingSizeValues()
