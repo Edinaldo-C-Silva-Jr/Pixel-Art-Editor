@@ -9,6 +9,7 @@ namespace PixelArtEditor.Files
     /// </summary>
     internal class ImageHandler : IDisposable
     {
+        #region Properties
         /// <summary>
         /// The full image being used in the pixel art editor.
         /// </summary>
@@ -29,7 +30,16 @@ namespace PixelArtEditor.Files
         /// </summary>
         private int ImagePixelSize { get; set; }
 
+
+        private int Width { get; set; }
+        private int Height { get; set; }
+        private int XPos { get; set; }
+        private int YPos { get; set; }
+        private int DrawZoom { get; set; }
+
+
         private ImageSelection Selector { get; set; }
+        #endregion
 
         /// <summary>
         /// Default constructor, initializes all properties.
@@ -67,27 +77,57 @@ namespace PixelArtEditor.Files
             }
         }
 
-        public void CreateImageToDraw(int width, int height, int zoom, int startingHorizontal, int startingVertical)
+        public void ChangeImageToDrawPosition(int width, int height, int zoom, int startingHorizontal, int startingVertical)
+        {
+            Width = width;
+            Height = height;
+            XPos = startingHorizontal;
+            YPos = startingVertical;
+            DrawZoom = zoom;
+        }
+
+        public void CreateImageToDraw()
         {
             // Cuts a piece of the image.
-            Rectangle pieceToCut = new(startingHorizontal, startingVertical, width * ImagePixelSize, height * ImagePixelSize);
+            Rectangle pieceToCut = new(XPos, YPos, Width * ImagePixelSize, Height * ImagePixelSize);
             Bitmap imagePieceZoomed = OriginalImage.Clone(pieceToCut, PixelFormat.Format32bppArgb);
 
             // Removes zoom.
-            Bitmap imagePieceNoZoom = new(width, height);
+            Bitmap imagePieceNoZoom = new(Width, Height);
             Graphics pieceGraphics = Graphics.FromImage(imagePieceNoZoom);
             pieceGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             pieceGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            pieceGraphics.DrawImage(imagePieceZoomed ,0, 0, width, height);
+            pieceGraphics.DrawImage(imagePieceZoomed ,0, 0, Width, Height);
 
             // Zooms to draw.
-            Bitmap imagePieceNewZoom = new(width * zoom, height * zoom);
+            Bitmap imagePieceNewZoom = new(Width * DrawZoom, Height * DrawZoom);
             Graphics fullGraphics = Graphics.FromImage(imagePieceNewZoom);
             fullGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             fullGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            fullGraphics.DrawImage(imagePieceNoZoom, 0, 0, width * zoom, height * zoom);
+            fullGraphics.DrawImage(imagePieceNoZoom, 0, 0, Width * DrawZoom, Height * DrawZoom);
 
             DrawingImage = new(imagePieceNewZoom);
+        }
+
+        public void ApplyDrawnImage()
+        {
+            // Removes Zoom
+            Bitmap drawnImageNoZoom = new(Width, Height);
+            Graphics drawnGraphics = Graphics.FromImage(drawnImageNoZoom);
+            drawnGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            drawnGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            drawnGraphics.DrawImage(DrawingImage, 0, 0, Width, Height);
+
+            // Applies viewing zoom
+            Bitmap drawingImageZoom = new(drawnImageNoZoom.Width * ImagePixelSize, drawnImageNoZoom.Height * ImagePixelSize);
+            Graphics drawnZoomGraphics = Graphics.FromImage(drawingImageZoom);
+            drawnZoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            drawnZoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            drawnZoomGraphics.DrawImage(drawnImageNoZoom, 0, 0, drawnImageNoZoom.Width * ImagePixelSize, drawnImageNoZoom.Height * ImagePixelSize);
+
+            // Draws image onto original
+            Graphics mergeGraphics = Graphics.FromImage(OriginalImage);
+            mergeGraphics.DrawImage(drawingImageZoom, XPos, YPos);
         }
 
         public void DefineNewImage(Bitmap newOriginalImage, bool resizeOnLoad, int drawingBoxWidth, int drawingBoxHeight)
@@ -189,6 +229,7 @@ namespace PixelArtEditor.Files
         {
             OriginalImage?.Dispose();
             ClipboardImage?.Dispose();
+            DrawingImage?.Dispose();
             Selector.Dispose();
         }
     }

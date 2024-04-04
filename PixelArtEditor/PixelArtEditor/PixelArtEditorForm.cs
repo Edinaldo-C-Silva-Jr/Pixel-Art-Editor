@@ -147,7 +147,8 @@ namespace PixelArtEditor
         private void SetDrawingBoxImage(int xPos, int yPos)
         {
             (int width, int height, int zoom) = GetDrawingSizeValues();
-            Images.CreateImageToDraw(width, height, zoom, xPos, yPos);
+            Images.ChangeImageToDrawPosition(width, height, zoom, xPos, yPos);
+            Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DrawingImage);
         }
 
@@ -223,11 +224,9 @@ namespace PixelArtEditor
                     // Only reload the image if there was a color swap.
                     if (colorWasSwaped)
                     {
-                        // Remove later.
-                        DrawingBox.SetNewImage(Images.OriginalImage);
-                        // Remove later.
-
                         ViewingBox.SetNewImage(Images.OriginalImage);
+                        Images.CreateImageToDraw();
+                        DrawingBox.SetNewImage(Images.DrawingImage);
                     }
 
                     cell.ChangeCellColor(ColorPickerDialog.Color);
@@ -320,11 +319,9 @@ namespace PixelArtEditor
                 BackgroundColorLabel.Text = "Background Color";
             }
 
-            // Remove later.
-            DrawingBox.SetNewImage(Images.OriginalImage);
-            // Remove later.
-
             ViewingBox.SetNewImage(Images.OriginalImage);
+            Images.CreateImageToDraw();
+            DrawingBox.SetNewImage(Images.DrawingImage);
         }
 
         private void SizeNumberBoxes_KeyDown(object sender, KeyEventArgs e)
@@ -396,7 +393,7 @@ namespace PixelArtEditor
 
                     if (resizeOnLoad)
                     {
-                        DrawingBox.SetNewSize(Images.OriginalImage.Width, Images.OriginalImage.Height);
+                        ViewingBox.SetNewSize(Images.OriginalImage.Width, Images.OriginalImage.Height);
                     }
                 }
 
@@ -480,7 +477,7 @@ namespace PixelArtEditor
 
             if (properties["PixelSize"])
             {
-                toolParameters.PixelSize = (int)ViewingZoomNumberBox.Value;
+                toolParameters.PixelSize = (int)DrawingZoomNumberBox.Value;
             }
 
             return toolParameters;
@@ -501,8 +498,8 @@ namespace PixelArtEditor
 
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                DrawingBox.DrawClick(ToolFactory.GetTool(), Images.OriginalImage, paletteColor, toolParameters);
-                DrawingBox.Image = Images.OriginalImage;
+                DrawingBox.DrawClick(ToolFactory.GetTool(), Images.DrawingImage, paletteColor, toolParameters);
+                DrawingBox.Image = Images.DrawingImage;
             }
 
             if (e.Button == MouseButtons.Right)
@@ -537,7 +534,7 @@ namespace PixelArtEditor
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 DrawingBox.DrawHold(ToolFactory.GetTool(), toolParameters);
-                DrawingBox.Image = Images.OriginalImage;
+                DrawingBox.Image = Images.DrawingImage;
             }
 
             if (e.Button == MouseButtons.Right)
@@ -564,7 +561,10 @@ namespace PixelArtEditor
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 DrawingBox.DrawRelease(ToolFactory.GetTool(), toolParameters);
-                DrawingBox.Image = Images.OriginalImage;
+                DrawingBox.Image = Images.DrawingImage;
+
+                Images.ApplyDrawnImage();
+                ViewingBox.Image = Images.OriginalImage;
             }
 
             MouseOnDrawingBox = null;
