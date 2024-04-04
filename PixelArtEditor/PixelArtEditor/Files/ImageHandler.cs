@@ -10,6 +10,8 @@ namespace PixelArtEditor.Files
     internal class ImageHandler : IDisposable
     {
         #region Properties
+        private ImageSelection Selector { get; set; }
+
         /// <summary>
         /// The full image being used in the pixel art editor.
         /// </summary>
@@ -26,23 +28,33 @@ namespace PixelArtEditor.Files
         public Bitmap ClipboardImage { get; private set; }
 
         /// <summary>
-        /// The size of each pixel in the current Original Image.
+        /// The pixel dimensions of the Original Image, without the zoom.
         /// </summary>
-        private int ImagePixelSize { get; set; }
+        public Size OriginalDimensions { get; private set; }
 
+        /// <summary>
+        /// The size of each pixel in the Original Image.
+        /// </summary>
+        public int OriginalPixelSize { get; private set; }
 
-        private int Width { get; set; }
-        private int Height { get; set; }
-        private int XPos { get; set; }
-        private int YPos { get; set; }
-        private int DrawZoom { get; set; }
+        /// <summary>
+        /// The pixel dimensions of the Drawing Image, without the zoom.
+        /// </summary>
+        public Size DrawingDimensions{ get; private set; }
 
+        /// <summary>
+        /// The size of each pixel in the Drawing image.
+        /// </summary>
+        public int DrawingPixelSize { get; private set; }
 
-        private ImageSelection Selector { get; set; }
+        /// <summary>
+        /// The location from which the Drawing Image was taken in the Original Image.
+        /// </summary>
+        public Point DrawingLocation { get; private set; }
         #endregion
 
         /// <summary>
-        /// Default constructor, initializes all properties.
+        /// Default constructor, instances all images and the image selector.
         /// </summary>
         public ImageHandler()
         {
@@ -50,23 +62,42 @@ namespace PixelArtEditor.Files
             OriginalImage = new(1, 1);
             DrawingImage = new(1, 1);
             ClipboardImage = new(1, 1);
-            ImagePixelSize = 1;
         }
 
         /// <summary>
-        /// Creates a blank new image with the defined parameters.
+        /// Changes the size of the Original Image to the values passed as parameters.
         /// </summary>
-        /// <param name="width">The width of the image, in pixels. This is the width used for the pixel art itself.</param>
-        /// <param name="height">The height of the image, in pixels. This is the height used for the pixel art itself.</param>
-        /// <param name="zoom">The zoom factor applied to the image. This is the size of each pixel.</param>
+        /// <param name="pixelWidth">The width of the image, in pixel sizes.</param>
+        /// <param name="pixelHeight">The height of the image, in pixel sizes.</param>
+        /// <param name="pixelSize">The size of each pixel in the image.</param>
+        public void ChangeOriginalImageSize(int pixelWidth, int pixelHeight, int pixelSize)
+        {
+            OriginalDimensions = new Size(pixelWidth, pixelHeight);
+            OriginalPixelSize = pixelSize;
+
+            ChangeSizeButPreserveOriginalImage();
+        }
+
+        /// <summary>
+        /// Changes only the pixel size value of the Original Image. Also zooms the image to the new pixel size.
+        /// </summary>
+        /// <param name="PixelSize"></param>
+        public void ChangeOriginalImageZoom(int PixelSize)
+        {
+            OriginalPixelSize = PixelSize;
+
+            ZoomOriginalImage();
+        }
+
+        /// <summary>
+        /// Creates a blank new image with the current size values and the defined color and transparency.
+        /// </summary>s
         /// <param name="backgroundColor">The color used for the image's background.</param>
         /// <param name="transparent">Defines whether the image will have a transparent background or not.</param>
-        public void CreateNewImage(int width, int height, int zoom, Color backgroundColor, bool transparent)
+        public void CreateNewBlankImage(Color backgroundColor, bool transparent)
         {
-            ImagePixelSize = zoom;
-
             // Creates the image and fills its background with the desired color
-            OriginalImage = new(width * zoom, height * zoom);
+            OriginalImage = new(OriginalDimensions.Width * OriginalPixelSize, OriginalDimensions.Height * OriginalPixelSize);
             using Graphics imageFiller = Graphics.FromImage(OriginalImage);
             imageFiller.Clear(backgroundColor);
 
@@ -77,19 +108,104 @@ namespace PixelArtEditor.Files
             }
         }
 
-        public void ChangeImageToDrawPosition(int width, int height, int zoom, int startingHorizontal, int startingVertical)
+        /// <summary>
+        /// Creates a new image to use as the current Original Image, with the currently defined size, while preserving the Original Image.
+        /// </summary>
+        private void ChangeSizeButPreserveOriginalImage()
         {
-            Width = width;
-            Height = height;
-            XPos = startingHorizontal;
-            YPos = startingVertical;
-            DrawZoom = zoom;
+            // Creates a new image with the currently defined sizes.
+            using Bitmap imageWithNewSize = new(OriginalDimensions.Width * OriginalPixelSize, OriginalDimensions.Height * OriginalPixelSize);
+            using Graphics newSizeGraphics = Graphics.FromImage(imageWithNewSize);
+
+            // Draws the Original Image on top of the new image.
+            newSizeGraphics.DrawImage(OriginalImage, 0, 0);
+            OriginalImage = new(imageWithNewSize);
         }
+
+        /// <summary>
+        /// Zooms the Original Image based on the newly defined pixel size value.
+        /// </summary>
+        private void ZoomOriginalImage()
+        {
+            ApplyZoom(OriginalImage, OriginalDimensions.Width * OriginalPixelSize, OriginalDimensions.Height * OriginalPixelSize);
+        }
+
+
+
+
+
+
+
+        /// <summary>
+        /// Changes the size of the Drawing Image to the values passed as parameters.
+        /// </summary>
+        /// <param name="pixelWidth">The width of the image, in pixel sizes.</param>
+        /// <param name="pixelHeight">The height of the image, in pixel sizes.</param>
+        /// <param name="pixelSize">The size of each pixel in the image.</param>
+        public void ChangeDrawingImageSize(int pixelWidth, int pixelHeight, int pixelSize)
+        {
+            DrawingDimensions = new Size(pixelWidth, pixelHeight);
+            DrawingPixelSize = pixelSize;
+        }
+
+        /// <summary>
+        /// Changes only the pixel size value of the Drawing Image.
+        /// </summary>
+        /// <param name="PixelSize"></param>
+        public void ChangeDrawingImageZoom(int pixelSize)
+        {
+            DrawingPixelSize = pixelSize;
+        }
+
+
+
+
+
+
+        /// <summary>
+        /// Makes the image transparent based on the background color.
+        /// </summary>
+        /// <param name="transparencyColor">The color to be made transparent in the image.</param>
+        public void MakeImageTransparent(Color transparencyColor)
+        {
+            OriginalImage.MakeTransparent(transparencyColor);
+        }
+
+        /// <summary>
+        /// Removes the transparency of the image, applying a solid color to its background.
+        /// </summary>
+        /// <param name="backgroundColor">The color to be applied as the image's background.</param>
+        public void MakeImageNotTransparent(Color backgroundColor)
+        {
+            Bitmap temporaryImage = new(OriginalImage.Width, OriginalImage.Height);
+            Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
+            temporaryGraphics.Clear(backgroundColor);
+            temporaryGraphics.DrawImage(OriginalImage, 0, 0);
+            OriginalImage = temporaryImage;
+        }
+
+        private void ApplyZoom(Bitmap originalImage, int zoomWidth, int zoomHeight)
+        {
+            using Bitmap zoomedImage = new(zoomWidth, zoomHeight);
+            using Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
+            zoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            zoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            zoomGraphics.DrawImage(originalImage, 0, 0, zoomWidth, zoomHeight);
+
+            originalImage = new(zoomedImage);
+        }
+
+
+
+
+
+
+
 
         public void CreateImageToDraw()
         {
             // Cuts a piece of the image.
-            Rectangle pieceToCut = new(XPos, YPos, Width * ImagePixelSize, Height * ImagePixelSize);
+            Rectangle pieceToCut = new(XPos, YPos, Width * OriginalPixelSize, Height * OriginalPixelSize);
             Bitmap imagePieceZoomed = OriginalImage.Clone(pieceToCut, PixelFormat.Format32bppArgb);
 
             // Removes zoom.
@@ -119,11 +235,11 @@ namespace PixelArtEditor.Files
             drawnGraphics.DrawImage(DrawingImage, 0, 0, Width, Height);
 
             // Applies viewing zoom
-            Bitmap drawingImageZoom = new(drawnImageNoZoom.Width * ImagePixelSize, drawnImageNoZoom.Height * ImagePixelSize);
+            Bitmap drawingImageZoom = new(drawnImageNoZoom.Width * OriginalPixelSize, drawnImageNoZoom.Height * OriginalPixelSize);
             Graphics drawnZoomGraphics = Graphics.FromImage(drawingImageZoom);
             drawnZoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             drawnZoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            drawnZoomGraphics.DrawImage(drawnImageNoZoom, 0, 0, drawnImageNoZoom.Width * ImagePixelSize, drawnImageNoZoom.Height * ImagePixelSize);
+            drawnZoomGraphics.DrawImage(drawnImageNoZoom, 0, 0, drawnImageNoZoom.Width * OriginalPixelSize, drawnImageNoZoom.Height * OriginalPixelSize);
 
             // Draws image onto original
             Graphics mergeGraphics = Graphics.FromImage(OriginalImage);
@@ -144,48 +260,6 @@ namespace PixelArtEditor.Files
 
                 OriginalImage = new(nonResizedImage);
             }
-        }
-
-        /// <summary>
-        /// Makes the image transparent based on a specific color, which is considered the background.
-        /// </summary>
-        /// <param name="transparencyColor">The color to be made transparent in the image.</param>
-        public void MakeImageTransparent(Color transparencyColor)
-        {
-            OriginalImage.MakeTransparent(transparencyColor);
-        }
-
-        /// <summary>
-        /// Removes the transparency of the image, applying a solid color to its background.
-        /// </summary>
-        /// <param name="backgroundColor">The color to be applied as the image's background.</param>
-        public void MakeImageNotTransparent(Color backgroundColor)
-        {
-            Bitmap temporaryImage = new(OriginalImage.Width, OriginalImage.Height);
-            Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
-            temporaryGraphics.Clear(backgroundColor);
-            temporaryGraphics.DrawImage(OriginalImage, 0, 0);
-            OriginalImage = temporaryImage;
-        }
-
-        /// <summary>
-        /// Changes the zoom of the image, based on the image's pixel width, pixel height and the zoom factor.
-        /// </summary>
-        /// <param name="width">The width of the image, in pixels. This is the width used for the pixel art itself.</param>
-        /// <param name="height">The height of the image, in pixels. This is the height used for the pixel art itself.</param>
-        /// <param name="zoom">The zoom factor applied to the image. This is the size of each pixel.</param>
-        public void ChangeImageZoom(int width, int height, int zoom)
-        {
-            ImagePixelSize = zoom;
-
-            Bitmap zoomedImage = new(width * zoom, height * zoom);
-
-            Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
-            zoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-            zoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            zoomGraphics.DrawImage(OriginalImage, 0, 0, zoomedImage.Width, zoomedImage.Height);
-
-            OriginalImage = new(zoomedImage);
         }
 
         public void DefineSelectionStart(Point location)

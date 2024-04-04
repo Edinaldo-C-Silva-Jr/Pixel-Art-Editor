@@ -358,7 +358,7 @@ namespace PixelArtEditor
         {
             (int width, int height, int zoom) = GetViewingSizeValues();
 
-            Images.ChangeImageZoom(width, height, zoom);
+            Images.ZoomOriginalImage(width, height, zoom);
 
             ViewingBox.SetNewSize(width * zoom, height * zoom);
             ViewingBox.SetNewImage(Images.OriginalImage);
