@@ -64,6 +64,7 @@ namespace PixelArtEditor.Files
             ClipboardImage = new(1, 1);
         }
 
+        #region Original Image Size, Creation and Changing
         /// <summary>
         /// Changes the size of the Original Image to the values passed as parameters.
         /// </summary>
@@ -76,17 +77,6 @@ namespace PixelArtEditor.Files
             OriginalPixelSize = pixelSize;
 
             ChangeSizeButPreserveOriginalImage();
-        }
-
-        /// <summary>
-        /// Changes only the pixel size value of the Original Image. Also zooms the image to the new pixel size.
-        /// </summary>
-        /// <param name="PixelSize"></param>
-        public void ChangeOriginalImageZoom(int PixelSize)
-        {
-            OriginalPixelSize = PixelSize;
-
-            ZoomOriginalImage();
         }
 
         /// <summary>
@@ -121,21 +111,9 @@ namespace PixelArtEditor.Files
             newSizeGraphics.DrawImage(OriginalImage, 0, 0);
             OriginalImage = new(imageWithNewSize);
         }
+        #endregion
 
-        /// <summary>
-        /// Zooms the Original Image based on the newly defined pixel size value.
-        /// </summary>
-        private void ZoomOriginalImage()
-        {
-            ApplyZoom(OriginalImage, OriginalDimensions.Width * OriginalPixelSize, OriginalDimensions.Height * OriginalPixelSize);
-        }
-
-
-
-
-
-
-
+        #region Drawing Image Size, Creation and Application
         /// <summary>
         /// Changes the size of the Drawing Image to the values passed as parameters.
         /// </summary>
@@ -146,6 +124,92 @@ namespace PixelArtEditor.Files
         {
             DrawingDimensions = new Size(pixelWidth, pixelHeight);
             DrawingPixelSize = pixelSize;
+
+            CreateImageToDraw();
+        }
+
+        /// <summary>
+        /// Defines a new location for the Drawing Image to be taken from the Original Image. Also creates the Drawing Image.
+        /// </summary>
+        /// <param name="location">The new location from which the Drawing Image will be copied in the Original Image.</param>
+        public void ChangeDrawingImageLocation(Point location)
+        {
+            DrawingLocation = location;
+
+            CreateImageToDraw();
+        }
+
+        /// <summary>
+        /// Creates a new Drawing Image, by copying a piece of the Original Image.
+        /// Utilizes previous defined values for the Drawing Image size and the location it will copy from the Original Image.
+        /// </summary>
+        public void CreateImageToDraw()
+        {
+            // Defines a rectangle to clone the Drawing Image from the Original Image.
+            // The rectangle will be cloned from the Original Image, so it has to use the Original Image's pixel size.
+            Size drawingImageSize = new(DrawingDimensions.Width * OriginalPixelSize, DrawingDimensions.Height* OriginalPixelSize);
+            Rectangle areaToCopyFromOriginalImage = new(DrawingLocation, drawingImageSize);
+            using Bitmap copiedImagePiece = OriginalImage.Clone(areaToCopyFromOriginalImage, PixelFormat.Format32bppArgb);
+
+            // Applies the Drawing Image pixel size to the image.
+            ApplyZoom(copiedImagePiece, DrawingDimensions.Width * DrawingPixelSize, DrawingDimensions.Height * DrawingPixelSize);
+            DrawingImage = new(copiedImagePiece);
+        }
+
+        /// <summary>
+        /// Applies the Drawing Image to the Original Image, by drawing it onto the Original Image in the same location it was copied from.
+        /// </summary>
+        public void ApplyDrawnImage()
+        {
+            using Bitmap drawingImageToApply = new(DrawingDimensions.Width * OriginalPixelSize, DrawingDimensions.Height * OriginalPixelSize);
+
+            // Applies the Original Image zoom, to ensure the Drawing Image has the same size it had when it was copied.
+            ApplyZoom(drawingImageToApply, drawingImageToApply.Width, drawingImageToApply.Height);
+            
+            // Draws the Drawing Image onto the Original Image, in the currently defined location.
+            using Graphics mergeGraphics = Graphics.FromImage(OriginalImage);
+            mergeGraphics.DrawImage(drawingImageToApply, DrawingLocation);
+        }
+        #endregion
+
+        #region Changing and Applying Zoom
+        /// <summary>
+        /// Receives an image and zooms it to the sizes passed as parameters.
+        /// </summary>
+        /// <param name="originalImage">The image to apply the zoom to.</param>
+        /// <param name="zoomWidth">The new width to be applied to the image.</param>
+        /// <param name="zoomHeight">The new height to be applied to the image.</param>
+        private static void ApplyZoom(Bitmap originalImage, int zoomWidth, int zoomHeight)
+        {
+            // Creates an image with the newly desired size.
+            using Bitmap zoomedImage = new(zoomWidth, zoomHeight);
+            using Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
+
+            // Sets the Interpolation mode and Pixel Offset to use for the editor. Uses Nearest Neighbor to preserve the pixels.
+            zoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            zoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+            // Draws the original image onto the zoomed image, using the new size and interpolation mode defined.
+            zoomGraphics.DrawImage(originalImage, 0, 0, zoomWidth, zoomHeight);
+            originalImage = new(zoomedImage);
+        }
+
+        /// <summary>
+        /// Changes only the pixel size value of the Original Image. Also zooms the image to the new pixel size.
+        /// </summary>
+        /// <param name="PixelSize"></param>
+        public void ChangeOriginalImageZoom(int PixelSize)
+        {
+            OriginalPixelSize = PixelSize;
+            ZoomOriginalImage();
+        }
+
+        /// <summary>
+        /// Zooms the Original Image based on the newly defined pixel size value.
+        /// </summary>
+        private void ZoomOriginalImage()
+        {
+            ApplyZoom(OriginalImage, OriginalDimensions.Width * OriginalPixelSize, OriginalDimensions.Height * OriginalPixelSize);
         }
 
         /// <summary>
@@ -155,13 +219,19 @@ namespace PixelArtEditor.Files
         public void ChangeDrawingImageZoom(int pixelSize)
         {
             DrawingPixelSize = pixelSize;
+            ZoomDrawingImage();
         }
 
+        /// <summary>
+        /// Zooms the Drawing Image based on the newly defined pixel size value.
+        /// </summary>
+        private void ZoomDrawingImage()
+        {
+            ApplyZoom(DrawingImage, DrawingDimensions.Width * DrawingPixelSize, DrawingDimensions.Height * DrawingPixelSize);
+        }
+        #endregion
 
-
-
-
-
+        #region Adding and Removing Transparency
         /// <summary>
         /// Makes the image transparent based on the background color.
         /// </summary>
@@ -177,74 +247,16 @@ namespace PixelArtEditor.Files
         /// <param name="backgroundColor">The color to be applied as the image's background.</param>
         public void MakeImageNotTransparent(Color backgroundColor)
         {
-            Bitmap temporaryImage = new(OriginalImage.Width, OriginalImage.Height);
-            Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
+            // Creates a temporary image and applies the background color to it.
+            using Bitmap temporaryImage = new(OriginalImage.Width, OriginalImage.Height);
+            using Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
             temporaryGraphics.Clear(backgroundColor);
+
+            // Then draws the Original Image on top of the solid color image to remove the transparency.
             temporaryGraphics.DrawImage(OriginalImage, 0, 0);
-            OriginalImage = temporaryImage;
+            OriginalImage = new(temporaryImage);
         }
-
-        private void ApplyZoom(Bitmap originalImage, int zoomWidth, int zoomHeight)
-        {
-            using Bitmap zoomedImage = new(zoomWidth, zoomHeight);
-            using Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
-            zoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-            zoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            zoomGraphics.DrawImage(originalImage, 0, 0, zoomWidth, zoomHeight);
-
-            originalImage = new(zoomedImage);
-        }
-
-
-
-
-
-
-
-
-        public void CreateImageToDraw()
-        {
-            // Cuts a piece of the image.
-            Rectangle pieceToCut = new(XPos, YPos, Width * OriginalPixelSize, Height * OriginalPixelSize);
-            Bitmap imagePieceZoomed = OriginalImage.Clone(pieceToCut, PixelFormat.Format32bppArgb);
-
-            // Removes zoom.
-            Bitmap imagePieceNoZoom = new(Width, Height);
-            Graphics pieceGraphics = Graphics.FromImage(imagePieceNoZoom);
-            pieceGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-            pieceGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            pieceGraphics.DrawImage(imagePieceZoomed ,0, 0, Width, Height);
-
-            // Zooms to draw.
-            Bitmap imagePieceNewZoom = new(Width * DrawZoom, Height * DrawZoom);
-            Graphics fullGraphics = Graphics.FromImage(imagePieceNewZoom);
-            fullGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-            fullGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            fullGraphics.DrawImage(imagePieceNoZoom, 0, 0, Width * DrawZoom, Height * DrawZoom);
-
-            DrawingImage = new(imagePieceNewZoom);
-        }
-
-        public void ApplyDrawnImage()
-        {
-            // Removes Zoom
-            Bitmap drawnImageNoZoom = new(Width, Height);
-            Graphics drawnGraphics = Graphics.FromImage(drawnImageNoZoom);
-            drawnGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-            drawnGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            drawnGraphics.DrawImage(DrawingImage, 0, 0, Width, Height);
-
-            // Applies viewing zoom
-            Bitmap drawingImageZoom = new(drawnImageNoZoom.Width * OriginalPixelSize, drawnImageNoZoom.Height * OriginalPixelSize);
-            Graphics drawnZoomGraphics = Graphics.FromImage(drawingImageZoom);
-            drawnZoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-            drawnZoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            drawnZoomGraphics.DrawImage(drawnImageNoZoom, 0, 0, drawnImageNoZoom.Width * OriginalPixelSize, drawnImageNoZoom.Height * OriginalPixelSize);
-
-            // Draws image onto original
-            Graphics mergeGraphics = Graphics.FromImage(OriginalImage);
-            mergeGraphics.DrawImage(drawingImageZoom, XPos, YPos);
-        }
+        #endregion
 
         public void DefineNewImage(Bitmap newOriginalImage, bool resizeOnLoad, int drawingBoxWidth, int drawingBoxHeight)
         {
