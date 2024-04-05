@@ -47,25 +47,26 @@ namespace PixelArtEditor
             InitializeComponent();
         }
 
+        #region Form and Control Initialization
         /// <summary>
         /// Runs all the initialization methods.
         /// Initializes the control values, default values, position and text values, builds the color tables and creates a default blank image.
         /// </summary>
         private void PixelArtEditorForm_Load(object sender, EventArgs e)
         {
+            // Initializes the panels and the controls.
             InitializeControlValues();
             InitializeColorsPanel();
-
             SetPaletteColorAmount();
 
+            // Initializes the Drawing and Viewing Boxes.
             SetViewingBoxSize();
             SetDrawingBoxSize();
-            SetNewImageOnBoxes();
+            CreateNewImageForBoxes();
 
             ReorganizeControls();
         }
 
-        #region Control Initialization
         /// <summary>
         /// Sets all the location and text values to the controls in the ColorAreaBackgroundPanel.
         /// Builds the panel programatically as to prevent Designer clutter.
@@ -122,35 +123,54 @@ namespace PixelArtEditor
             PaletteColorTable.GenerateColorGrid(colorAmount, new EventHandler(ColorCellClicked));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private void SetNewImageOnBoxes()
-        {
-            SetViewingBoxImage();
-            SetDrawingBoxImage(0, 0);
 
-            ChangeDrawingBoxGrid();
-            ChangeViewingBoxGrid();
+
+        #region Creating a New Image
+        /// <summary>
+        /// Event for the "New Image" button. Creates a new image for both Viewing and Drawing Boxes.
+        /// </summary>
+        private void SetNewImageButton_Click(object sender, EventArgs e)
+        {
+            CreateNewImageForBoxes();
         }
 
-        private void SetViewingBoxImage()
+        /// <summary>
+        /// Creates a new image for both the Viewing Box and the Drawing Box.
+        /// </summary>
+        private void CreateNewImageForBoxes()
         {
-            (int width, int height, int zoom) = GetViewingSizeValues();
+            CreateImageForViewingBox();
+            SetImageOnDrawingBox(new Point(0, 0));
+        }
+
+        /// <summary>
+        /// Creates a new blank image for the Viewing Box, using the current background color and transparency value.
+        /// </summary>
+        private void CreateImageForViewingBox()
+        {
+            // Gets the color and transparency values.
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
             bool transparent = TransparencyCheckBox.Checked;
 
-            Images.CreateNewImage(width, height, zoom, backgroundColor, transparent);
+            Images.CreateNewBlankImage(backgroundColor, transparent);
             ViewingBox.SetNewImage(Images.OriginalImage);
         }
 
-        private void SetDrawingBoxImage(int xPos, int yPos)
+        /// <summary>
+        /// Creates a new Drawing Image and sets it on the Drawing Box. Receives a point to be used as the location for the Drawing Image.
+        /// </summary>
+        /// <param name="drawingImageLocation">The location the Drawing Image will be copied from in the full image.</param>
+        private void SetImageOnDrawingBox(Point drawingImageLocation)
         {
-            (int width, int height, int zoom) = GetDrawingSizeValues();
-            Images.ChangeImageToDrawPosition(width, height, zoom, xPos, yPos);
+            Images.ChangeDrawingImageLocation(drawingImageLocation);
             Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DrawingImage);
         }
+        #endregion
+
+
+
+
 
         /// <summary>
         /// Resizes all Background Panels to fit the current size of their controls and updates their location accordingly to the size of the ones around them.
@@ -274,12 +294,6 @@ namespace PixelArtEditor
             }
         }
 
-        private void SetNewImageButton_Click(object sender, EventArgs e)
-        {
-            SetNewImageOnBoxes();
-            ReorganizeControls();
-        }
-
         private void CalculateMaximumZoom(int size)
         {
             int zoom = 4096 / size;
@@ -328,7 +342,7 @@ namespace PixelArtEditor
         {
             if (e.KeyCode == Keys.Enter)
             {
-                SetNewImageOnBoxes();
+                CreateNewImageForBoxes();
                 ReorganizeControls();
             }
         }
@@ -687,7 +701,7 @@ namespace PixelArtEditor
 
             int xPos = mouseArgs.X - (mouseArgs.X % (int)(DrawingWidthNumberBox.Value * ViewingZoomNumberBox.Value));
             int yPos = mouseArgs.Y - (mouseArgs.Y % (int)(DrawingHeightNumberBox.Value * ViewingZoomNumberBox.Value));
-            SetDrawingBoxImage(xPos, yPos);
+            SetImageOnDrawingBox(xPos, yPos);
         }
     }
 }

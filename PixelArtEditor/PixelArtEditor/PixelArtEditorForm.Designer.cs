@@ -159,7 +159,7 @@
             // 
             // GridTypeLabel
             // 
-            GridTypeLabel.Location = new Point(240, 83);
+            GridTypeLabel.Location = new Point(317, 93);
             GridTypeLabel.Name = "GridTypeLabel";
             GridTypeLabel.Size = new Size(60, 20);
             GridTypeLabel.TabIndex = 6;
@@ -170,7 +170,7 @@
             // 
             GridTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             GridTypeComboBox.FormattingEnabled = true;
-            GridTypeComboBox.Location = new Point(306, 80);
+            GridTypeComboBox.Location = new Point(383, 90);
             GridTypeComboBox.Name = "GridTypeComboBox";
             GridTypeComboBox.Size = new Size(70, 23);
             GridTypeComboBox.TabIndex = 7;
@@ -331,7 +331,7 @@
             // 
             // TransparencyCheckBox
             // 
-            TransparencyCheckBox.Location = new Point(240, 10);
+            TransparencyCheckBox.Location = new Point(303, 11);
             TransparencyCheckBox.Name = "TransparencyCheckBox";
             TransparencyCheckBox.Size = new Size(120, 20);
             TransparencyCheckBox.TabIndex = 12;
@@ -341,7 +341,7 @@
             // 
             // ColorChangeCheckBox
             // 
-            ColorChangeCheckBox.Location = new Point(240, 35);
+            ColorChangeCheckBox.Location = new Point(303, 36);
             ColorChangeCheckBox.Name = "ColorChangeCheckBox";
             ColorChangeCheckBox.Size = new Size(150, 20);
             ColorChangeCheckBox.TabIndex = 13;
@@ -350,7 +350,7 @@
             // 
             // LoadImageButton
             // 
-            LoadImageButton.Location = new Point(456, 48);
+            LoadImageButton.Location = new Point(542, 12);
             LoadImageButton.Name = "LoadImageButton";
             LoadImageButton.Size = new Size(80, 30);
             LoadImageButton.TabIndex = 14;
@@ -361,7 +361,7 @@
             // ResizeOnLoadCheckBox
             // 
             ResizeOnLoadCheckBox.AutoSize = true;
-            ResizeOnLoadCheckBox.Location = new Point(240, 61);
+            ResizeOnLoadCheckBox.Location = new Point(303, 62);
             ResizeOnLoadCheckBox.Name = "ResizeOnLoadCheckBox";
             ResizeOnLoadCheckBox.Size = new Size(104, 19);
             ResizeOnLoadCheckBox.TabIndex = 15;
@@ -370,7 +370,7 @@
             // 
             // CopyButton
             // 
-            CopyButton.Location = new Point(400, 12);
+            CopyButton.Location = new Point(486, 83);
             CopyButton.Name = "CopyButton";
             CopyButton.Size = new Size(50, 30);
             CopyButton.TabIndex = 16;
@@ -380,7 +380,7 @@
             // 
             // PasteButton
             // 
-            PasteButton.Location = new Point(400, 48);
+            PasteButton.Location = new Point(542, 83);
             PasteButton.Name = "PasteButton";
             PasteButton.Size = new Size(50, 30);
             PasteButton.TabIndex = 17;
@@ -400,7 +400,7 @@
             // 
             // SavePaletteButton
             // 
-            SavePaletteButton.Location = new Point(542, 12);
+            SavePaletteButton.Location = new Point(456, 48);
             SavePaletteButton.Name = "SavePaletteButton";
             SavePaletteButton.Size = new Size(80, 30);
             SavePaletteButton.TabIndex = 18;
