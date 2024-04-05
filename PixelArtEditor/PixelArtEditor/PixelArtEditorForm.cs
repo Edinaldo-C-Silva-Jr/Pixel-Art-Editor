@@ -61,6 +61,8 @@ namespace PixelArtEditor
 
             // Initializes the Drawing and Viewing Boxes.
             SetViewingSizeValues();
+            SetViewingBoxSize();
+            SetDrawingSizeValues();
             SetDrawingBoxSize();
             CreateNewImageForBoxes();
 
@@ -129,6 +131,121 @@ namespace PixelArtEditor
             ReorganizeControls();
         }
 
+        #region Viewing Box Size
+        /// <summary>
+        /// Saves the size values in the ImageHandler class.
+        /// Then changes the size of the Viewing Box and generates a new grid for it based on the size values.
+        /// </summary>
+        private void ViewingBoxSizeButton_Click(object sender, EventArgs e)
+        {
+            SetViewingSizeValues();
+
+            SetViewingBoxSize();
+        }
+
+        /// <summary>
+        /// Changes the Original Image Pixel Size in the ImageHandler class, then resizes the image and the Viewing Box.
+        /// </summary>
+        private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            int zoom = (int)ViewingZoomNumberBox.Value;
+            Images.ChangeOriginalImageZoom(zoom);
+
+            SetViewingBoxSize();
+        }
+
+        /// <summary>
+        /// Gets the size values from the Viewing Number Boxes and sets them in the Image Handler, then updates the Viewing Box size.
+        /// </summary>
+        private void SetViewingSizeValues()
+        {
+            int height = (int)PixelHeightNumberBox.Value;
+            int width = (int)PixelWidthNumberBox.Value;
+            int zoom = (int)ViewingZoomNumberBox.Value;
+
+            Images.ChangeOriginalImageSize(height, width, zoom);
+        }
+
+        /// <summary>
+        /// Sets a new size to the Viewing Box based on the size of the Original Image, then updates the image and the grid.
+        /// </summary>
+        private void SetViewingBoxSize()
+        {
+            ViewingBox.SetNewSize(Images.OriginalImage.Width, Images.OriginalImage.Height);
+            ViewingBox.SetNewImage(Images.OriginalImage);
+            ChangeViewingBoxGrid();
+            ReorganizeControls();
+        }
+        #endregion
+
+        #region Drawing Box Size
+        /// <summary>
+        /// Saves the size values in the ImageHandler class.
+        /// Then changes the size of the Drawing Box and generates a new grid for it based on the size values.
+        /// </summary>
+        private void DrawingBoxSizeButton_Click(object sender, EventArgs e)
+        {
+            SetDrawingSizeValues();
+
+            SetDrawingBoxSize();
+        }
+
+        /// <summary>
+        /// Gets the size values from the Drawing Number Boxes and sets them in the Image Handler, then updates the Drawing Box size.
+        /// </summary>
+        private void SetDrawingSizeValues()
+        {
+            int width = (int)DrawingWidthNumberBox.Value;
+            int height = (int)DrawingHeightNumberBox.Value;
+            int zoom = (int)DrawingZoomNumberBox.Value;
+
+            Images.ChangeDrawingImageSize(width, height, zoom);
+        }
+
+        /// <summary>
+        /// Sets a new size to the Drawing Box based on the size of the Drawing Image, then updates the image and the grid.
+        /// </summary>
+        private void SetDrawingBoxSize()
+        {
+            DrawingBox.SetNewSize(Images.DrawingImage.Width, Images.DrawingImage.Height);
+            DrawingBox.SetNewImage(Images.DrawingImage);
+            ChangeDrawingBoxGrid();
+            ReorganizeControls();
+        }
+        #endregion
+
+        #region Grid Definition and Generation
+        /// <summary>
+        /// Method called when a change is made to the Gridtype ComboBox.
+        /// It changes the implementation of grids used to the newly selected grid type, then applies the new grid to the Drawing Box.
+        /// </summary>
+        private void ChangeGrid_GridTypeComboBoxIndexChanged(object sender, EventArgs e)
+        {
+            ChangeDrawingBoxGrid();
+            DrawingBox.Invalidate();
+        }
+
+        /// <summary>
+        /// Sets the background grid for the Viewing box.
+        /// </summary>
+        private void ChangeViewingBoxGrid()
+        {
+            ViewingBox.SetBackgroundGrid(Images.OriginalImage.Width, Images.OriginalImage.Height, Images.OriginalPixelSize);
+        }
+
+        /// <summary>
+        /// Defines which Grid implementation to use based on the currently selected Grid Type.
+        /// Also sets the background grid in the Drawing Box.
+        /// </summary>
+        private void ChangeDrawingBoxGrid()
+        {
+            Color gridColor = GridColorTable.GetCurrentColor();
+            GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
+
+            GridFactory.ChangeCurrentGrid(gridType, Images.DrawingImage.Width, Images.DrawingImage.Height, Images.DrawingPixelSize, gridColor);
+            DrawingBox.SetBackgroundGrid(Images.DrawingImage.Width, Images.DrawingImage.Height, Images.DrawingPixelSize);
+        }
+        #endregion
 
         #region Creating a New Image
         /// <summary>
@@ -566,89 +683,6 @@ namespace PixelArtEditor
         }
         #endregion
 
-        #region Viewing Box Size
-        /// <summary>
-        /// Saves the size values in the ImageHandler class.
-        /// Then changes the size of the Viewing Box and generates a new grid for it based on the size values.
-        /// </summary>
-        private void ViewingBoxSizeButton_Click(object sender, EventArgs e)
-        {
-            SetViewingSizeValues();
-
-            SetViewingBoxSize();
-        }
-
-        /// <summary>
-        /// Changes the Original Image Pixel Size in the ImageHandler class, then resizes the image and the Viewing Box.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
-        {
-            int zoom = (int)ViewingZoomNumberBox.Value;
-            Images.ChangeOriginalImageZoom(zoom);
-
-            SetViewingBoxSize();
-        }
-
-        /// <summary>
-        /// Gets the size values from the Viewing Number Boxes and sets them in the Image Handler, then updates the Viewing Box size.
-        /// </summary>
-        private void SetViewingSizeValues()
-        {
-            int height = (int)PixelHeightNumberBox.Value;
-            int width = (int)PixelWidthNumberBox.Value;
-            int zoom = (int)ViewingZoomNumberBox.Value;
-
-            Images.ChangeOriginalImageSize(height, width, zoom);
-        }
-
-        /// <summary>
-        /// Sets a new size to the Viewing Box based on the size of the Original Image, then updates the image and the grid.
-        /// </summary>
-        private void SetViewingBoxSize()
-        {
-            ViewingBox.SetNewSize(Images.OriginalImage.Width, Images.OriginalImage.Height);
-            ViewingBox.SetNewImage(Images.OriginalImage);
-            ChangeViewingBoxGrid();
-            ReorganizeControls();
-        }
-        #endregion
-
-        #region Grid Definition and Generation
-        /// <summary>
-        /// Sets the background grid for the Viewing box.
-        /// </summary>
-        private void ChangeViewingBoxGrid()
-        {
-            ViewingBox.SetBackgroundGrid(Images.OriginalImage.Width, Images.OriginalImage.Height, Images.OriginalPixelSize);
-        }
-
-        /// <summary>
-        /// Defines which Grid implementation to use based on the currently selected Grid Type.
-        /// Also sets the background grid in the Drawing Box.
-        /// </summary>
-        private void ChangeDrawingBoxGrid()
-        {
-            Color gridColor = GridColorTable.GetCurrentColor();
-            GridType gridType = (GridType)GridTypeComboBox.SelectedItem;
-            (int width, int height, int zoom) = GetDrawingSizeValues();
-
-            GridFactory.ChangeCurrentGrid(gridType, width * zoom, height * zoom, zoom, gridColor);
-            DrawingBox.SetBackgroundGrid(width * zoom, height * zoom, zoom);
-        }
-
-        /// <summary>
-        /// Method called when a change is made to the Gridtype ComboBox.
-        /// It changes the implementation of grids used to the newly selected grid type, then applies the new grid to the Drawing Box.
-        /// </summary>
-        private void ChangeGrid_GridTypeComboBoxIndexChanged(object sender, EventArgs e)
-        {
-            ChangeDrawingBoxGrid();
-            DrawingBox.Invalidate();
-        }
-        #endregion
-
         /// <summary>
         /// Uses the current tool's Preview method.
         /// Draws the selection onto the image.
@@ -668,36 +702,13 @@ namespace PixelArtEditor
             gridGenerator.ApplyGrid(e.Graphics, Images.DrawingImage.Width, Images.DrawingImage.Height);
         }
 
-        private (int width, int height, int zoom) GetDrawingSizeValues()
-        {
-            int width = (int)DrawingWidthNumberBox.Value;
-            int height = (int)DrawingHeightNumberBox.Value;
-            int zoom = (int)DrawingZoomNumberBox.Value;
-
-            return (width, height, zoom);
-        }
-
-        private void SetDrawingBoxSize()
-        {
-            (int width, int height, int zoom) = GetDrawingSizeValues();
-
-            DrawingBox.SetNewSize(width * zoom, height * zoom);
-        }
-
-        private void DrawingBoxSizeButton_Click(object sender, EventArgs e)
-        {
-            SetDrawingBoxSize();
-            ChangeDrawingBoxGrid();
-            ReorganizeControls();
-        }
-
         private void ViewingBox_Click(object sender, EventArgs e)
         {
             MouseEventArgs mouseArgs = (MouseEventArgs)e;
 
             int xPos = mouseArgs.X - (mouseArgs.X % (int)(DrawingWidthNumberBox.Value * ViewingZoomNumberBox.Value));
             int yPos = mouseArgs.Y - (mouseArgs.Y % (int)(DrawingHeightNumberBox.Value * ViewingZoomNumberBox.Value));
-            SetImageOnDrawingBox(xPos, yPos);
+            SetImageOnDrawingBox(new Point(xPos, yPos));
         }
     }
 }

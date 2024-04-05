@@ -62,6 +62,9 @@ namespace PixelArtEditor.Files
             OriginalImage = new(1, 1);
             DrawingImage = new(1, 1);
             ClipboardImage = new(1, 1);
+
+            OriginalPixelSize = 1;
+            DrawingPixelSize = 1;
         }
 
         #region Original Image Size, Creation and Changing
@@ -147,7 +150,7 @@ namespace PixelArtEditor.Files
         {
             // Defines a rectangle to clone the Drawing Image from the Original Image.
             // The rectangle will be cloned from the Original Image, so it has to use the Original Image's pixel size.
-            Size drawingImageSize = new(DrawingDimensions.Width * OriginalPixelSize, DrawingDimensions.Height* OriginalPixelSize);
+            Size drawingImageSize = new(DrawingDimensions.Width * OriginalPixelSize, DrawingDimensions.Height * OriginalPixelSize);
             Rectangle areaToCopyFromOriginalImage = new(DrawingLocation, drawingImageSize);
             using Bitmap copiedImagePiece = OriginalImage.Clone(areaToCopyFromOriginalImage, PixelFormat.Format32bppArgb);
 
