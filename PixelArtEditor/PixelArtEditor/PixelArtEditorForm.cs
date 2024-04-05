@@ -60,7 +60,7 @@ namespace PixelArtEditor
             SetPaletteColorAmount();
 
             // Initializes the Drawing and Viewing Boxes.
-            SetViewingBoxSize();
+            SetViewingSizeValues();
             SetDrawingBoxSize();
             CreateNewImageForBoxes();
 
@@ -123,6 +123,11 @@ namespace PixelArtEditor
             PaletteColorTable.GenerateColorGrid(colorAmount, new EventHandler(ColorCellClicked));
         }
 
+        private void ColorAmountComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetPaletteColorAmount();
+            ReorganizeControls();
+        }
 
 
         #region Creating a New Image
@@ -167,7 +172,6 @@ namespace PixelArtEditor
             DrawingBox.SetNewImage(Images.DrawingImage);
         }
         #endregion
-
 
 
 
@@ -312,12 +316,6 @@ namespace PixelArtEditor
             }
         }
 
-        private void ColorAmountComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SetPaletteColorAmount();
-            ReorganizeControls();
-        }
-
         private void TransparencyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
@@ -336,15 +334,6 @@ namespace PixelArtEditor
             ViewingBox.SetNewImage(Images.OriginalImage);
             Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DrawingImage);
-        }
-
-        private void SizeNumberBoxes_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                CreateNewImageForBoxes();
-                ReorganizeControls();
-            }
         }
 
         private void CopyButton_Click(object sender, EventArgs e)
@@ -366,20 +355,6 @@ namespace PixelArtEditor
             int zoom = (int)ViewingZoomNumberBox.Value;
             Images.ChangeImageSelection(location, width, height, zoom);
             DrawingBox.Invalidate();
-        }
-
-        private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
-        {
-            (int width, int height, int zoom) = GetViewingSizeValues();
-
-            Images.ZoomOriginalImage(width, height, zoom);
-
-            ViewingBox.SetNewSize(width * zoom, height * zoom);
-            ViewingBox.SetNewImage(Images.OriginalImage);
-
-            ChangeViewingBoxGrid();
-
-            ReorganizeControls();
         }
 
         #region Saving and Loading Files
@@ -491,7 +466,7 @@ namespace PixelArtEditor
 
             if (properties["PixelSize"])
             {
-                toolParameters.PixelSize = (int)DrawingZoomNumberBox.Value;
+                toolParameters.PixelSize = Images.DrawingPixelSize;
             }
 
             return toolParameters;
@@ -591,14 +566,62 @@ namespace PixelArtEditor
         }
         #endregion
 
+        #region Viewing Box Size
+        /// <summary>
+        /// Saves the size values in the ImageHandler class.
+        /// Then changes the size of the Viewing Box and generates a new grid for it based on the size values.
+        /// </summary>
+        private void ViewingBoxSizeButton_Click(object sender, EventArgs e)
+        {
+            SetViewingSizeValues();
+
+            SetViewingBoxSize();
+        }
+
+        /// <summary>
+        /// Changes the Original Image Pixel Size in the ImageHandler class, then resizes the image and the Viewing Box.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            int zoom = (int)ViewingZoomNumberBox.Value;
+            Images.ChangeOriginalImageZoom(zoom);
+
+            SetViewingBoxSize();
+        }
+
+        /// <summary>
+        /// Gets the size values from the Viewing Number Boxes and sets them in the Image Handler, then updates the Viewing Box size.
+        /// </summary>
+        private void SetViewingSizeValues()
+        {
+            int height = (int)PixelHeightNumberBox.Value;
+            int width = (int)PixelWidthNumberBox.Value;
+            int zoom = (int)ViewingZoomNumberBox.Value;
+
+            Images.ChangeOriginalImageSize(height, width, zoom);
+        }
+
+        /// <summary>
+        /// Sets a new size to the Viewing Box based on the size of the Original Image, then updates the image and the grid.
+        /// </summary>
+        private void SetViewingBoxSize()
+        {
+            ViewingBox.SetNewSize(Images.OriginalImage.Width, Images.OriginalImage.Height);
+            ViewingBox.SetNewImage(Images.OriginalImage);
+            ChangeViewingBoxGrid();
+            ReorganizeControls();
+        }
+        #endregion
+
         #region Grid Definition and Generation
         /// <summary>
         /// Sets the background grid for the Viewing box.
         /// </summary>
         private void ChangeViewingBoxGrid()
         {
-            (int width, int height, int zoom) = GetViewingSizeValues();
-            ViewingBox.SetBackgroundGrid(width * zoom, height * zoom, zoom);
+            ViewingBox.SetBackgroundGrid(Images.OriginalImage.Width, Images.OriginalImage.Height, Images.OriginalPixelSize);
         }
 
         /// <summary>
@@ -665,33 +688,6 @@ namespace PixelArtEditor
         {
             SetDrawingBoxSize();
             ChangeDrawingBoxGrid();
-            ReorganizeControls();
-        }
-
-        /// <summary>
-        /// Gets the values for the image's width, height and zoom amount from the respective ComboBoxes and returns them as a tuple.
-        /// </summary>
-        /// <returns>A tuple of Width, Height and Zoom values, in this order.</returns>
-        private (int width, int height, int zoom) GetViewingSizeValues()
-        {
-            int height = (int)PixelHeightNumberBox.Value;
-            int width = (int)PixelWidthNumberBox.Value;
-            int zoom = (int)ViewingZoomNumberBox.Value;
-
-            return (width, height, zoom);
-        }
-
-        private void SetViewingBoxSize()
-        {
-            (int width, int height, int zoom) = GetViewingSizeValues();
-
-            ViewingBox.SetNewSize(width * zoom, height * zoom);
-        }
-
-        private void ViewingBoxSizeButton_Click(object sender, EventArgs e)
-        {
-            SetViewingBoxSize();
-            ChangeViewingBoxGrid();
             ReorganizeControls();
         }
 
