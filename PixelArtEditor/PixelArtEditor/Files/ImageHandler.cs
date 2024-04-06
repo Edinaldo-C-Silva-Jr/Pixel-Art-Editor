@@ -155,8 +155,7 @@ namespace PixelArtEditor.Files
             using Bitmap copiedImagePiece = OriginalImage.Clone(areaToCopyFromOriginalImage, PixelFormat.Format32bppArgb);
 
             // Applies the Drawing Image pixel size to the image.
-            ApplyZoom(copiedImagePiece, DrawingDimensions.Width * DrawingPixelSize, DrawingDimensions.Height * DrawingPixelSize);
-            DrawingImage = new(copiedImagePiece);
+            DrawingImage = ApplyZoom(copiedImagePiece, DrawingDimensions.Width * DrawingPixelSize, DrawingDimensions.Height * DrawingPixelSize);
         }
 
         /// <summary>
@@ -164,14 +163,16 @@ namespace PixelArtEditor.Files
         /// </summary>
         public void ApplyDrawnImage()
         {
-            using Bitmap drawingImageToApply = new(DrawingDimensions.Width * OriginalPixelSize, DrawingDimensions.Height * OriginalPixelSize);
+            Bitmap drawingImageToApply = new(DrawingDimensions.Width * OriginalPixelSize, DrawingDimensions.Height * OriginalPixelSize);
 
             // Applies the Original Image zoom, to ensure the Drawing Image has the same size it had when it was copied.
-            ApplyZoom(drawingImageToApply, drawingImageToApply.Width, drawingImageToApply.Height);
+            drawingImageToApply = ApplyZoom(DrawingImage, drawingImageToApply.Width, drawingImageToApply.Height);
             
             // Draws the Drawing Image onto the Original Image, in the currently defined location.
             using Graphics mergeGraphics = Graphics.FromImage(OriginalImage);
             mergeGraphics.DrawImage(drawingImageToApply, DrawingLocation);
+
+            drawingImageToApply.Dispose();
         }
         #endregion
 
@@ -182,10 +183,11 @@ namespace PixelArtEditor.Files
         /// <param name="originalImage">The image to apply the zoom to.</param>
         /// <param name="zoomWidth">The new width to be applied to the image.</param>
         /// <param name="zoomHeight">The new height to be applied to the image.</param>
-        private static void ApplyZoom(Bitmap originalImage, int zoomWidth, int zoomHeight)
+        /// <returns>A new image with the zoom applied.</returns>
+        private static Bitmap ApplyZoom(Bitmap originalImage, int zoomWidth, int zoomHeight)
         {
             // Creates an image with the newly desired size.
-            using Bitmap zoomedImage = new(zoomWidth, zoomHeight);
+            Bitmap zoomedImage = new(zoomWidth, zoomHeight);
             using Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
 
             // Sets the Interpolation mode and Pixel Offset to use for the editor. Uses Nearest Neighbor to preserve the pixels.
@@ -194,7 +196,7 @@ namespace PixelArtEditor.Files
 
             // Draws the original image onto the zoomed image, using the new size and interpolation mode defined.
             zoomGraphics.DrawImage(originalImage, 0, 0, zoomWidth, zoomHeight);
-            originalImage = new(zoomedImage);
+            return zoomedImage;
         }
 
         /// <summary>
@@ -212,7 +214,7 @@ namespace PixelArtEditor.Files
         /// </summary>
         private void ZoomOriginalImage()
         {
-            ApplyZoom(OriginalImage, OriginalDimensions.Width * OriginalPixelSize, OriginalDimensions.Height * OriginalPixelSize);
+            OriginalImage = ApplyZoom(OriginalImage, OriginalDimensions.Width * OriginalPixelSize, OriginalDimensions.Height * OriginalPixelSize);
         }
 
         /// <summary>
@@ -230,7 +232,7 @@ namespace PixelArtEditor.Files
         /// </summary>
         private void ZoomDrawingImage()
         {
-            ApplyZoom(DrawingImage, DrawingDimensions.Width * DrawingPixelSize, DrawingDimensions.Height * DrawingPixelSize);
+            DrawingImage = ApplyZoom(DrawingImage, DrawingDimensions.Width * DrawingPixelSize, DrawingDimensions.Height * DrawingPixelSize);
         }
         #endregion
 
