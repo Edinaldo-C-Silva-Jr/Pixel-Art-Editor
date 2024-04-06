@@ -426,24 +426,6 @@ namespace PixelArtEditor
             }
         }
 
-        private void CalculateMaximumZoom(int size)
-        {
-            int zoom = 4096 / size;
-            ViewingZoomNumberBox.Maximum = zoom;
-        }
-
-        private void SizeValuesChanged(object sender, EventArgs e)
-        {
-            if (PixelHeightNumberBox.Value > PixelWidthNumberBox.Value)
-            {
-                CalculateMaximumZoom((int)PixelHeightNumberBox.Value);
-            }
-            else
-            {
-                CalculateMaximumZoom((int)PixelWidthNumberBox.Value);
-            }
-        }
-
         private void TransparencyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
@@ -480,7 +462,7 @@ namespace PixelArtEditor
         {
             int width = DrawingBox.Width;
             int height = DrawingBox.Height;
-            int zoom = (int)ViewingZoomNumberBox.Value;
+            int zoom = Images.DrawingPixelSize;
             Images.ChangeImageSelection(location, width, height, zoom);
             DrawingBox.Invalidate();
         }
@@ -717,9 +699,23 @@ namespace PixelArtEditor
         {
             MouseEventArgs mouseArgs = (MouseEventArgs)e;
 
-            int xPos = mouseArgs.X - (mouseArgs.X % (int)(DrawingWidthNumberBox.Value * ViewingZoomNumberBox.Value));
-            int yPos = mouseArgs.Y - (mouseArgs.Y % (int)(DrawingHeightNumberBox.Value * ViewingZoomNumberBox.Value));
-            SetImageOnDrawingBox(new Point(xPos, yPos));
+            int xPosition = mouseArgs.X;
+            int yPosition = mouseArgs.Y;
+
+            xPosition -= xPosition % (Images.OriginalPixelSize * 5);
+            yPosition -= yPosition % (Images.OriginalPixelSize * 5);
+
+            if (xPosition > Images.OriginalImage.Width - Images.DrawingDimensions.Width * Images.OriginalPixelSize)
+            {
+                xPosition = Images.OriginalImage.Width - Images.DrawingDimensions.Width * Images.OriginalPixelSize;
+            }
+
+            if (yPosition > Images.OriginalImage.Height - Images.DrawingDimensions.Height * Images.OriginalPixelSize)
+            {
+                yPosition = Images.OriginalImage.Height - Images.DrawingDimensions.Height * Images.OriginalPixelSize;
+            }
+
+            SetImageOnDrawingBox(new Point(xPosition, yPosition));
         }
     }
 }

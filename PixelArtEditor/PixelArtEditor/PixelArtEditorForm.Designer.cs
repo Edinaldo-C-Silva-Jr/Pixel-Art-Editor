@@ -113,7 +113,6 @@
             PixelWidthNumberBox.Size = new Size(50, 23);
             PixelWidthNumberBox.TabIndex = 1;
             PixelWidthNumberBox.Value = new decimal(new int[] { 64, 0, 0, 0 });
-            PixelWidthNumberBox.ValueChanged += SizeValuesChanged;
             // 
             // PixelHeightNumberBox
             // 
@@ -124,7 +123,6 @@
             PixelHeightNumberBox.Size = new Size(50, 23);
             PixelHeightNumberBox.TabIndex = 3;
             PixelHeightNumberBox.Value = new decimal(new int[] { 64, 0, 0, 0 });
-            PixelHeightNumberBox.ValueChanged += SizeValuesChanged;
             // 
             // PixelHeightLabel
             // 
