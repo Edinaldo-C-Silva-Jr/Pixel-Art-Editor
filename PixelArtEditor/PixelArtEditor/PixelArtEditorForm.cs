@@ -191,6 +191,17 @@ namespace PixelArtEditor
         }
 
         /// <summary>
+        /// Changes the Drawing Image Pixel Size in the ImageHandler class, then resizes the image and the Drawing Box.
+        /// </summary>
+        private void DrawingZoomNumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            int zoom = (int)DrawingZoomNumberBox.Value;
+            Images.ChangeDrawingImageZoom(zoom);
+
+            SetDrawingBoxSize();
+        }
+
+        /// <summary>
         /// Gets the size values from the Drawing Number Boxes and sets them in the Image Handler, then updates the Drawing Box size.
         /// </summary>
         private void SetDrawingSizeValues()

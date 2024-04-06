@@ -655,6 +655,7 @@
             DrawingZoomNumberBox.Size = new Size(50, 23);
             DrawingZoomNumberBox.TabIndex = 29;
             DrawingZoomNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
+            DrawingZoomNumberBox.ValueChanged += DrawingZoomNumberBox_ValueChanged;
             // 
             // label1
             // 
