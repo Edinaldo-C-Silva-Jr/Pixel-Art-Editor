@@ -61,9 +61,7 @@ namespace PixelArtEditor
 
             // Initializes the Drawing and Viewing Boxes.
             SetViewingSizeValues();
-            SetViewingBoxSize();
             SetDrawingSizeValues();
-            SetDrawingBoxSize();
             CreateNewImageForBoxes();
 
             ReorganizeControls();
@@ -139,8 +137,6 @@ namespace PixelArtEditor
         private void ViewingBoxSizeButton_Click(object sender, EventArgs e)
         {
             SetViewingSizeValues();
-
-            SetViewingBoxSize();
         }
 
         /// <summary>
@@ -156,14 +152,21 @@ namespace PixelArtEditor
 
         /// <summary>
         /// Gets the size values from the Viewing Number Boxes and sets them in the Image Handler, then updates the Viewing Box size.
+        /// Also checks if the Drawing Box size is still valid after resizing.
         /// </summary>
         private void SetViewingSizeValues()
         {
-            int height = (int)PixelHeightNumberBox.Value;
             int width = (int)PixelWidthNumberBox.Value;
+            int height = (int)PixelHeightNumberBox.Value;
             int zoom = (int)ViewingZoomNumberBox.Value;
 
-            Images.ChangeOriginalImageSize(height, width, zoom);
+            Images.ChangeOriginalImageSize(width, height, zoom);
+
+            SetViewingBoxSize();
+
+            // Sets the Drawing Box values as well to ensure they're still valid.
+            // They'll be invalid if the new Viewing Box size is smaller than the current Drawing Box size.
+            SetDrawingSizeValues();
         }
 
         /// <summary>
@@ -186,8 +189,6 @@ namespace PixelArtEditor
         private void DrawingBoxSizeButton_Click(object sender, EventArgs e)
         {
             SetDrawingSizeValues();
-
-            SetDrawingBoxSize();
         }
 
         /// <summary>
@@ -211,6 +212,13 @@ namespace PixelArtEditor
             int zoom = (int)DrawingZoomNumberBox.Value;
 
             Images.ChangeDrawingImageSize(width, height, zoom);
+
+            // Changes the Number Box values to match the new Drawing Dimensions.
+            // This updates the Number Boxes in case the values passed are invalid.
+            DrawingWidthNumberBox.Value = Images.DrawingDimensions.Width;
+            DrawingHeightNumberBox.Value = Images.DrawingDimensions.Height;
+
+            SetDrawingBoxSize();
         }
 
         /// <summary>

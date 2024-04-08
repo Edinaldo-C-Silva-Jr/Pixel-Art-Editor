@@ -125,10 +125,34 @@ namespace PixelArtEditor.Files
         /// <param name="pixelSize">The size of each pixel in the image.</param>
         public void ChangeDrawingImageSize(int pixelWidth, int pixelHeight, int pixelSize)
         {
+            (pixelWidth, pixelHeight) = ValidateDrawingSize(pixelWidth, pixelHeight);
+
             DrawingDimensions = new Size(pixelWidth, pixelHeight);
             DrawingPixelSize = pixelSize;
 
             CreateImageToDraw();
+        }
+
+        /// <summary>
+        /// Checks if the Drawing Image Dimensions are bigger than the Original Image Dimensions.
+        /// If they are bigger, reduces them to match the Original Image.
+        /// </summary>
+        /// <param name="pixelWidth">The pixel width of the Drawing Image.</param>
+        /// <param name="pixelHeight">The pixel height of the Drawing Image.</param>
+        /// <returns>A tuple of width and height values.</returns>
+        private (int, int) ValidateDrawingSize(int pixelWidth, int pixelHeight)
+        {
+            // Makes sure the Drawing Image isn't bigger than the Original Image, since it is supposed to be a copy of a piece the Original Image.
+            if (pixelWidth > OriginalDimensions.Width)
+            {
+                pixelWidth = OriginalDimensions.Width;
+            }
+            if (pixelHeight > OriginalDimensions.Height)
+            {
+                pixelHeight = OriginalDimensions.Height;
+            }
+
+            return (pixelWidth, pixelHeight);
         }
 
         /// <summary>
