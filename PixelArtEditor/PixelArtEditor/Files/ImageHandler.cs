@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Reflection;
 
 namespace PixelArtEditor.Files
 {
@@ -161,9 +162,29 @@ namespace PixelArtEditor.Files
         /// <param name="location">The new location from which the Drawing Image will be copied in the Original Image.</param>
         public void ChangeDrawingImageLocation(Point location)
         {
+            location = ValidadeDrawingLocation(location);
+
             DrawingLocation = location;
 
             CreateImageToDraw();
+        }
+
+        private Point ValidadeDrawingLocation(Point location)
+        {
+            location.X -= location.X % (OriginalPixelSize * 5);
+            location.Y -= location.Y % (OriginalPixelSize * 5);
+
+            if (location.X > OriginalImage.Width - DrawingDimensions.Width * OriginalPixelSize)
+            {
+                location.X = OriginalImage.Width - DrawingDimensions.Width * OriginalPixelSize;
+            }
+
+            if (location.Y > OriginalImage.Height - DrawingDimensions.Height * OriginalPixelSize)
+            {
+                location.Y = OriginalImage.Height - DrawingDimensions.Height * OriginalPixelSize;
+            }
+
+            return location;
         }
 
         /// <summary>

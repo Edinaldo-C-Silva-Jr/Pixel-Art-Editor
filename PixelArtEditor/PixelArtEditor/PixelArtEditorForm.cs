@@ -304,7 +304,6 @@ namespace PixelArtEditor
         private void SetImageOnDrawingBox(Point drawingImageLocation)
         {
             Images.ChangeDrawingImageLocation(drawingImageLocation);
-            Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DrawingImage);
         }
         #endregion
@@ -707,23 +706,7 @@ namespace PixelArtEditor
         {
             MouseEventArgs mouseArgs = (MouseEventArgs)e;
 
-            int xPosition = mouseArgs.X;
-            int yPosition = mouseArgs.Y;
-
-            xPosition -= xPosition % (Images.OriginalPixelSize * 5);
-            yPosition -= yPosition % (Images.OriginalPixelSize * 5);
-
-            if (xPosition > Images.OriginalImage.Width - Images.DrawingDimensions.Width * Images.OriginalPixelSize)
-            {
-                xPosition = Images.OriginalImage.Width - Images.DrawingDimensions.Width * Images.OriginalPixelSize;
-            }
-
-            if (yPosition > Images.OriginalImage.Height - Images.DrawingDimensions.Height * Images.OriginalPixelSize)
-            {
-                yPosition = Images.OriginalImage.Height - Images.DrawingDimensions.Height * Images.OriginalPixelSize;
-            }
-
-            SetImageOnDrawingBox(new Point(xPosition, yPosition));
+            SetImageOnDrawingBox(mouseArgs.Location);
         }
     }
 }
