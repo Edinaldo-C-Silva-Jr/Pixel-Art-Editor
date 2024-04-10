@@ -1,6 +1,5 @@
 ﻿using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Reflection;
 
 namespace PixelArtEditor.Files
 {
@@ -131,6 +130,8 @@ namespace PixelArtEditor.Files
             DrawingDimensions = new Size(pixelWidth, pixelHeight);
             DrawingPixelSize = pixelSize;
 
+            ChangeDrawingImageLocation();
+
             CreateImageToDraw();
         }
 
@@ -162,6 +163,7 @@ namespace PixelArtEditor.Files
         /// <param name="location">The new location from which the Drawing Image will be copied in the Original Image.</param>
         public void ChangeDrawingImageLocation(Point location)
         {
+            location = RemoveZoomFromLocation(location);
             location = ValidadeDrawingLocation(location);
 
             DrawingLocation = location;
@@ -169,20 +171,38 @@ namespace PixelArtEditor.Files
             CreateImageToDraw();
         }
 
+        private void ChangeDrawingImageLocation()
+        {
+            DrawingLocation = ValidadeDrawingLocation(DrawingLocation);
+
+            CreateImageToDraw();
+        }
+
         private Point ValidadeDrawingLocation(Point location)
         {
-            location.X -= location.X % (OriginalPixelSize * 5);
-            location.Y -= location.Y % (OriginalPixelSize * 5);
+            location.X -= location.X % 5;
+            location.Y -= location.Y % 5;
 
-            if (location.X > OriginalImage.Width - DrawingDimensions.Width * OriginalPixelSize)
+            if (location.X > OriginalDimensions.Width - DrawingDimensions.Width)
             {
-                location.X = OriginalImage.Width - DrawingDimensions.Width * OriginalPixelSize;
+                location.X = OriginalDimensions.Width - DrawingDimensions.Width;
             }
 
-            if (location.Y > OriginalImage.Height - DrawingDimensions.Height * OriginalPixelSize)
+            if (location.Y > OriginalDimensions.Height - DrawingDimensions.Height)
             {
-                location.Y = OriginalImage.Height - DrawingDimensions.Height * OriginalPixelSize;
+                location.Y = OriginalDimensions.Height - DrawingDimensions.Height;
             }
+
+            return location;
+        }
+
+        private Point RemoveZoomFromLocation(Point location)
+        {
+            location.X -= location.X % OriginalPixelSize;
+            location.Y -= location.Y % OriginalPixelSize;
+
+            location.X /= OriginalPixelSize;
+            location.Y /= OriginalPixelSize;
 
             return location;
         }
@@ -196,7 +216,8 @@ namespace PixelArtEditor.Files
             // Defines a rectangle to clone the Drawing Image from the Original Image.
             // The rectangle will be cloned from the Original Image, so it has to use the Original Image's pixel size.
             Size drawingImageSize = new(DrawingDimensions.Width * OriginalPixelSize, DrawingDimensions.Height * OriginalPixelSize);
-            Rectangle areaToCopyFromOriginalImage = new(DrawingLocation, drawingImageSize);
+            Point location = new(DrawingLocation.X * OriginalPixelSize, DrawingLocation.Y * OriginalPixelSize);
+            Rectangle areaToCopyFromOriginalImage = new(location, drawingImageSize);
             using Bitmap copiedImagePiece = OriginalImage.Clone(areaToCopyFromOriginalImage, PixelFormat.Format32bppArgb);
 
             // Applies the Drawing Image pixel size to the image.
@@ -209,13 +230,14 @@ namespace PixelArtEditor.Files
         public void ApplyDrawnImage()
         {
             Bitmap drawingImageToApply = new(DrawingDimensions.Width * OriginalPixelSize, DrawingDimensions.Height * OriginalPixelSize);
+            Point location = new(DrawingLocation.X * OriginalPixelSize, DrawingLocation.Y * OriginalPixelSize);
 
             // Applies the Original Image zoom, to ensure the Drawing Image has the same size it had when it was copied.
             drawingImageToApply = ApplyZoom(DrawingImage, drawingImageToApply.Width, drawingImageToApply.Height);
             
             // Draws the Drawing Image onto the Original Image, in the currently defined location.
             using Graphics mergeGraphics = Graphics.FromImage(OriginalImage);
-            mergeGraphics.DrawImage(drawingImageToApply, DrawingLocation);
+            mergeGraphics.DrawImage(drawingImageToApply, location);
 
             drawingImageToApply.Dispose();
         }
