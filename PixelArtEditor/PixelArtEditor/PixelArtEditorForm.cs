@@ -707,6 +707,14 @@ namespace PixelArtEditor
             MouseEventArgs mouseArgs = (MouseEventArgs)e;
 
             SetImageOnDrawingBox(mouseArgs.Location);
+
+            ViewingBox.Invalidate();
+        }
+
+        private void ViewingBox_Paint(object sender, PaintEventArgs e)
+        {
+            Point location = new(Images.DrawingLocation.X * Images.OriginalPixelSize, Images.DrawingLocation.Y * Images.OriginalPixelSize);
+            ViewingBox.DrawDrawingBoxOverlay(e.Graphics, location, Images.DrawingDimensions * Images.OriginalPixelSize);
         }
     }
 }

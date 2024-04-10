@@ -643,6 +643,7 @@
             ViewingBox.TabIndex = 0;
             ViewingBox.TabStop = false;
             ViewingBox.Click += ViewingBox_Click;
+            ViewingBox.Paint += ViewingBox_Paint;
             // 
             // DrawingZoomNumberBox
             // 

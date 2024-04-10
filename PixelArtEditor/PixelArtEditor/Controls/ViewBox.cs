@@ -42,5 +42,14 @@ namespace PixelArtEditor.Controls
             using Graphics gridGraphics = Graphics.FromImage(BackgroundImage);
             GridGenerator.ApplyGrid(gridGraphics, imageWidth, imageHeight);
         }
+
+        public void DrawDrawingBoxOverlay(Graphics paintGraphics, Point location, Size boxSize)
+        {
+            using Pen blackPen = new(Color.Black);
+            using Pen whitePen = new(Color.White);
+
+            paintGraphics.DrawRectangle(blackPen, location.X, location.Y, boxSize.Width, boxSize.Height);
+            paintGraphics.DrawRectangle(whitePen, location.X + 1, location.Y + 1, boxSize.Width - 2, boxSize.Height - 2);
+        }
     }
 }
