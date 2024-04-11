@@ -40,7 +40,7 @@ namespace PixelArtEditor.Files
         /// <summary>
         /// The pixel dimensions of the Drawing Image, without the zoom.
         /// </summary>
-        public Size DrawingDimensions{ get; private set; }
+        public Size DrawingDimensions { get; private set; }
 
         /// <summary>
         /// The size of each pixel in the Drawing image.
@@ -178,29 +178,6 @@ namespace PixelArtEditor.Files
             CreateImageToDraw();
         }
 
-        private Point ValidadeDrawingLocation(Point location)
-        {
-            if (location.X < OriginalDimensions.Width - DrawingDimensions.Width)
-            {
-                location.X -= location.X % 5;
-            }
-            else
-            {
-                location.X = OriginalDimensions.Width - DrawingDimensions.Width;
-            }
-
-            if (location.Y < OriginalDimensions.Height - DrawingDimensions.Height)
-            {
-                location.Y -= location.Y % 5;
-            }
-            else
-            {
-                location.Y = OriginalDimensions.Height - DrawingDimensions.Height;
-            }
-
-            return location;
-        }
-
         private Point RemoveZoomFromLocation(Point location)
         {
             location.X -= location.X % OriginalPixelSize;
@@ -210,6 +187,54 @@ namespace PixelArtEditor.Files
             location.Y /= OriginalPixelSize;
 
             return location;
+        }
+
+        private Point ValidadeDrawingLocation(Point location)
+        {
+            if (location.X < OriginalDimensions.Width - DrawingDimensions.Width)
+            {
+                location.X -= location.X % GetInterval(DrawingDimensions.Width);
+            }
+            else
+            {
+                location.X = OriginalDimensions.Width - DrawingDimensions.Width;
+            }
+
+            if (location.Y < OriginalDimensions.Height - DrawingDimensions.Height)
+            {
+                location.Y -= location.Y % GetInterval(DrawingDimensions.Height);
+            }
+            else
+            {
+                location.Y = OriginalDimensions.Height - DrawingDimensions.Height;
+            }
+
+            return location;
+        }
+
+        private static int GetInterval(int dimension)
+        {
+            // List of 3 { 6, 9, 11, 15, 17, 18, 21, 23, 27, 29, 33, 39, 51, 54, 57 }
+            // List of 4 { 8, 12, 16, 20, 22, 24, 28, 32, 34, 36, 40, 44, 48, 52, 56, 60, 64 }
+            // List of 5 { 5, 10, 13, 19, 25, 30, 35, 37, 38, 43, 45, 50, 55, 58, 59 }
+            // List of 7 { 7, 14, 21, 26, 31, 41, 42, 46, 47, 49, 53, 61, 62, 63 }
+
+            List<List<int>> listOfSizes = new()
+            {
+                new() { 6, 9, 11, 15, 17, 18, 21, 23, 27, 29, 33, 39, 51, 54, 57 },
+                new() { 5, 10, 13, 19, 25, 30, 35, 37, 38, 43, 45, 50, 55, 58, 59 },
+                new() { 7, 14, 21, 26, 31, 41, 42, 46, 47, 49, 53, 61, 62, 63 }
+            };
+
+            int interval = 4;
+            for (int i = 0; i < 3; i++)
+            {
+                if (listOfSizes[i].Contains(dimension))
+                {
+                    interval = 2 * i + 3;
+                }
+            }
+            return interval;
         }
 
         /// <summary>
@@ -239,7 +264,7 @@ namespace PixelArtEditor.Files
 
             // Applies the Original Image zoom, to ensure the Drawing Image has the same size it had when it was copied.
             drawingImageToApply = ApplyZoom(DrawingImage, drawingImageToApply.Width, drawingImageToApply.Height);
-            
+
             // Draws the Drawing Image onto the Original Image, in the currently defined location.
             using Graphics mergeGraphics = Graphics.FromImage(OriginalImage);
             mergeGraphics.DrawImage(drawingImageToApply, location);
@@ -342,7 +367,7 @@ namespace PixelArtEditor.Files
                 OriginalImage = new(newOriginalImage);
             }
             else
-            { 
+            {
                 using Bitmap nonResizedImage = new(drawingBoxWidth, drawingBoxHeight);
                 using Graphics newImageGraphics = Graphics.FromImage(nonResizedImage);
                 newImageGraphics.DrawImage(newOriginalImage, 0, 0);
