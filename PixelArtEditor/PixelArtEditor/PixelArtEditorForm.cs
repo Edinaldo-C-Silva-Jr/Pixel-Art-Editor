@@ -189,6 +189,8 @@ namespace PixelArtEditor
         private void DrawingBoxSizeButton_Click(object sender, EventArgs e)
         {
             SetDrawingSizeValues();
+
+            ViewingBox.Invalidate();
         }
 
         /// <summary>

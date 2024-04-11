@@ -180,15 +180,20 @@ namespace PixelArtEditor.Files
 
         private Point ValidadeDrawingLocation(Point location)
         {
-            location.X -= location.X % 5;
-            location.Y -= location.Y % 5;
-
-            if (location.X > OriginalDimensions.Width - DrawingDimensions.Width)
+            if (location.X < OriginalDimensions.Width - DrawingDimensions.Width)
+            {
+                location.X -= location.X % 5;
+            }
+            else
             {
                 location.X = OriginalDimensions.Width - DrawingDimensions.Width;
             }
 
-            if (location.Y > OriginalDimensions.Height - DrawingDimensions.Height)
+            if (location.Y < OriginalDimensions.Height - DrawingDimensions.Height)
+            {
+                location.Y -= location.Y % 5;
+            }
+            else
             {
                 location.Y = OriginalDimensions.Height - DrawingDimensions.Height;
             }
