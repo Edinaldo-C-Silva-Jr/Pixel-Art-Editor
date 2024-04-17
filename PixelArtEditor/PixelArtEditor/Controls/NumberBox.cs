@@ -8,6 +8,7 @@
         public NumberBox()
         {
             InitializeComponent();
+
             // Removes the arrows from the control.
             Controls[0].Enabled = false;
             Controls[0].Visible = false;
@@ -15,7 +16,8 @@
 
         protected override void OnTextBoxResize(object source, EventArgs e)
         {
-            Controls[1].Width = Width - 4; // Resizes the Textbox to fit the whole control, including the space the arrows were originally.
+            // Resizes the Textbox to fit the whole control, including the space the arrows were originally in.
+            Controls[1].Width = Width - 4;
         }
     }
 }

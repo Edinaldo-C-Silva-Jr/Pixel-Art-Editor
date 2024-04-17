@@ -230,6 +230,7 @@
 
         /// <summary>
         /// Reads ARGB values out of a string and applies them into each cell within the Color Table. The ARBG values should be separated by a |.
+        /// Ensures the color has an alpha value of 255 before setting it into a cell.
         /// </summary>
         /// <param name="paletteColors">The string containing a list of ARGB values, separated by a |.</param>
         public void SetAllColorValues(string paletteColors)

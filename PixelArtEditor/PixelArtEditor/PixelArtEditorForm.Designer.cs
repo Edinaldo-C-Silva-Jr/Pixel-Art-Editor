@@ -28,15 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            PixelWidthLabel = new Label();
-            PixelWidthNumberBox = new Controls.NumberBox();
-            PixelHeightNumberBox = new Controls.NumberBox();
-            PixelHeightLabel = new Label();
-            ViewingZoomNumberBox = new Controls.NumberBox();
-            ViewingZoomLabel = new Label();
+            ViewPixelWidthLabel = new Label();
+            ViewWidthNumberBox = new Controls.NumberBox();
+            ViewHeightNumberBox = new Controls.NumberBox();
+            ViewPixelHeightLabel = new Label();
+            ViewPixelSizeNumberBox = new Controls.NumberBox();
+            ViewPixelSizeLabel = new Label();
             GridTypeLabel = new Label();
             GridTypeComboBox = new ComboBox();
-            SetNewImageButton = new Button();
+            NewImageButton = new Button();
             SaveImageButton = new Button();
             ColorPickerDialog = new ColorDialog();
             DrawingBackgroundPanel = new Controls.BackgroundPanel();
@@ -73,89 +73,89 @@
             PixelPenButton = new Controls.ToolButton();
             ViewingBackgroundPanel = new Controls.BackgroundPanel();
             ViewingBox = new Controls.ViewBox();
-            DrawingZoomNumberBox = new Controls.NumberBox();
-            label1 = new Label();
-            DrawingHeightNumberBox = new Controls.NumberBox();
-            label2 = new Label();
-            DrawingWidthNumberBox = new Controls.NumberBox();
-            label3 = new Label();
+            DrawPixelSizeNumberBox = new Controls.NumberBox();
+            DrawPixelSizeLabel = new Label();
+            DrawHeightNumberBox = new Controls.NumberBox();
+            DrawHeightLabel = new Label();
+            DrawWidthNumberBox = new Controls.NumberBox();
+            DrawWidthLabel = new Label();
             DrawingBoxSizeButton = new Button();
             ViewingBoxSizeButton = new Button();
             ViewAreaGroupBox = new GroupBox();
             DrawAreaGroupBox = new GroupBox();
-            ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ViewWidthNumberBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ViewHeightNumberBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ViewPixelSizeNumberBox).BeginInit();
             DrawingBackgroundPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DrawingBox).BeginInit();
             ColorsBackgroundPanel.SuspendLayout();
             DrawingToolButtonPanel.SuspendLayout();
             ViewingBackgroundPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ViewingBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)DrawingZoomNumberBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)DrawingHeightNumberBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)DrawingWidthNumberBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DrawPixelSizeNumberBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DrawHeightNumberBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DrawWidthNumberBox).BeginInit();
             ViewAreaGroupBox.SuspendLayout();
             DrawAreaGroupBox.SuspendLayout();
             SuspendLayout();
             // 
-            // PixelWidthLabel
+            // ViewPixelWidthLabel
             // 
-            PixelWidthLabel.Location = new Point(5, 20);
-            PixelWidthLabel.Name = "PixelWidthLabel";
-            PixelWidthLabel.Size = new Size(50, 20);
-            PixelWidthLabel.TabIndex = 0;
-            PixelWidthLabel.Text = "Width";
-            PixelWidthLabel.TextAlign = ContentAlignment.MiddleCenter;
+            ViewPixelWidthLabel.Location = new Point(5, 20);
+            ViewPixelWidthLabel.Name = "ViewPixelWidthLabel";
+            ViewPixelWidthLabel.Size = new Size(50, 20);
+            ViewPixelWidthLabel.TabIndex = 0;
+            ViewPixelWidthLabel.Text = "Width";
+            ViewPixelWidthLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // PixelWidthNumberBox
+            // ViewWidthNumberBox
             // 
-            PixelWidthNumberBox.Location = new Point(50, 20);
-            PixelWidthNumberBox.Maximum = new decimal(new int[] { 1024, 0, 0, 0 });
-            PixelWidthNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
-            PixelWidthNumberBox.Name = "PixelWidthNumberBox";
-            PixelWidthNumberBox.Size = new Size(35, 23);
-            PixelWidthNumberBox.TabIndex = 1;
-            PixelWidthNumberBox.Value = new decimal(new int[] { 64, 0, 0, 0 });
+            ViewWidthNumberBox.Location = new Point(50, 20);
+            ViewWidthNumberBox.Maximum = new decimal(new int[] { 1024, 0, 0, 0 });
+            ViewWidthNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
+            ViewWidthNumberBox.Name = "ViewWidthNumberBox";
+            ViewWidthNumberBox.Size = new Size(35, 23);
+            ViewWidthNumberBox.TabIndex = 1;
+            ViewWidthNumberBox.Value = new decimal(new int[] { 64, 0, 0, 0 });
             // 
-            // PixelHeightNumberBox
+            // ViewHeightNumberBox
             // 
-            PixelHeightNumberBox.Location = new Point(50, 45);
-            PixelHeightNumberBox.Maximum = new decimal(new int[] { 1024, 0, 0, 0 });
-            PixelHeightNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
-            PixelHeightNumberBox.Name = "PixelHeightNumberBox";
-            PixelHeightNumberBox.Size = new Size(35, 23);
-            PixelHeightNumberBox.TabIndex = 3;
-            PixelHeightNumberBox.Value = new decimal(new int[] { 64, 0, 0, 0 });
+            ViewHeightNumberBox.Location = new Point(50, 45);
+            ViewHeightNumberBox.Maximum = new decimal(new int[] { 1024, 0, 0, 0 });
+            ViewHeightNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
+            ViewHeightNumberBox.Name = "ViewHeightNumberBox";
+            ViewHeightNumberBox.Size = new Size(35, 23);
+            ViewHeightNumberBox.TabIndex = 3;
+            ViewHeightNumberBox.Value = new decimal(new int[] { 64, 0, 0, 0 });
             // 
-            // PixelHeightLabel
+            // ViewPixelHeightLabel
             // 
-            PixelHeightLabel.Location = new Point(5, 45);
-            PixelHeightLabel.Name = "PixelHeightLabel";
-            PixelHeightLabel.Size = new Size(50, 20);
-            PixelHeightLabel.TabIndex = 2;
-            PixelHeightLabel.Text = "Height";
-            PixelHeightLabel.TextAlign = ContentAlignment.MiddleCenter;
+            ViewPixelHeightLabel.Location = new Point(5, 45);
+            ViewPixelHeightLabel.Name = "ViewPixelHeightLabel";
+            ViewPixelHeightLabel.Size = new Size(50, 20);
+            ViewPixelHeightLabel.TabIndex = 2;
+            ViewPixelHeightLabel.Text = "Height";
+            ViewPixelHeightLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // ViewingZoomNumberBox
+            // ViewPixelSizeNumberBox
             // 
-            ViewingZoomNumberBox.Location = new Point(100, 40);
-            ViewingZoomNumberBox.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
-            ViewingZoomNumberBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            ViewingZoomNumberBox.Name = "ViewingZoomNumberBox";
-            ViewingZoomNumberBox.Size = new Size(20, 23);
-            ViewingZoomNumberBox.TabIndex = 5;
-            ViewingZoomNumberBox.Value = new decimal(new int[] { 4, 0, 0, 0 });
-            ViewingZoomNumberBox.ValueChanged += ViewingZoomNumberBox_ValueChanged;
+            ViewPixelSizeNumberBox.Location = new Point(100, 40);
+            ViewPixelSizeNumberBox.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
+            ViewPixelSizeNumberBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            ViewPixelSizeNumberBox.Name = "ViewPixelSizeNumberBox";
+            ViewPixelSizeNumberBox.Size = new Size(20, 23);
+            ViewPixelSizeNumberBox.TabIndex = 5;
+            ViewPixelSizeNumberBox.Value = new decimal(new int[] { 4, 0, 0, 0 });
+            ViewPixelSizeNumberBox.ValueChanged += ViewingZoomNumberBox_ValueChanged;
             // 
-            // ViewingZoomLabel
+            // ViewPixelSizeLabel
             // 
-            ViewingZoomLabel.Location = new Point(90, 20);
-            ViewingZoomLabel.Name = "ViewingZoomLabel";
-            ViewingZoomLabel.Size = new Size(40, 20);
-            ViewingZoomLabel.TabIndex = 4;
-            ViewingZoomLabel.Text = "Zoom";
-            ViewingZoomLabel.TextAlign = ContentAlignment.MiddleCenter;
+            ViewPixelSizeLabel.Location = new Point(90, 20);
+            ViewPixelSizeLabel.Name = "ViewPixelSizeLabel";
+            ViewPixelSizeLabel.Size = new Size(40, 20);
+            ViewPixelSizeLabel.TabIndex = 4;
+            ViewPixelSizeLabel.Text = "Zoom";
+            ViewPixelSizeLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // GridTypeLabel
             // 
@@ -176,15 +176,15 @@
             GridTypeComboBox.TabIndex = 7;
             GridTypeComboBox.SelectedIndexChanged += ChangeGrid_GridTypeComboBoxIndexChanged;
             // 
-            // SetNewImageButton
+            // NewImageButton
             // 
-            SetNewImageButton.Location = new Point(311, 10);
-            SetNewImageButton.Name = "SetNewImageButton";
-            SetNewImageButton.Size = new Size(80, 25);
-            SetNewImageButton.TabIndex = 8;
-            SetNewImageButton.Text = "New Image";
-            SetNewImageButton.UseVisualStyleBackColor = true;
-            SetNewImageButton.Click += SetNewImageButton_Click;
+            NewImageButton.Location = new Point(311, 10);
+            NewImageButton.Name = "NewImageButton";
+            NewImageButton.Size = new Size(80, 25);
+            NewImageButton.TabIndex = 8;
+            NewImageButton.Text = "New Image";
+            NewImageButton.UseVisualStyleBackColor = true;
+            NewImageButton.Click += SetNewImageButton_Click;
             // 
             // SaveImageButton
             // 
@@ -649,63 +649,63 @@
             ViewingBox.Click += ViewingBox_Click;
             ViewingBox.Paint += ViewingBox_Paint;
             // 
-            // DrawingZoomNumberBox
+            // DrawPixelSizeNumberBox
             // 
-            DrawingZoomNumberBox.Location = new Point(120, 15);
-            DrawingZoomNumberBox.Maximum = new decimal(new int[] { 32, 0, 0, 0 });
-            DrawingZoomNumberBox.Minimum = new decimal(new int[] { 8, 0, 0, 0 });
-            DrawingZoomNumberBox.Name = "DrawingZoomNumberBox";
-            DrawingZoomNumberBox.Size = new Size(25, 23);
-            DrawingZoomNumberBox.TabIndex = 29;
-            DrawingZoomNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
-            DrawingZoomNumberBox.ValueChanged += DrawingZoomNumberBox_ValueChanged;
+            DrawPixelSizeNumberBox.Location = new Point(120, 15);
+            DrawPixelSizeNumberBox.Maximum = new decimal(new int[] { 32, 0, 0, 0 });
+            DrawPixelSizeNumberBox.Minimum = new decimal(new int[] { 8, 0, 0, 0 });
+            DrawPixelSizeNumberBox.Name = "DrawPixelSizeNumberBox";
+            DrawPixelSizeNumberBox.Size = new Size(25, 23);
+            DrawPixelSizeNumberBox.TabIndex = 29;
+            DrawPixelSizeNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
+            DrawPixelSizeNumberBox.ValueChanged += DrawingZoomNumberBox_ValueChanged;
             // 
-            // label1
+            // DrawPixelSizeLabel
             // 
-            label1.Location = new Point(80, 15);
-            label1.Name = "label1";
-            label1.Size = new Size(40, 20);
-            label1.TabIndex = 28;
-            label1.Text = "Zoom";
-            label1.TextAlign = ContentAlignment.MiddleCenter;
+            DrawPixelSizeLabel.Location = new Point(80, 15);
+            DrawPixelSizeLabel.Name = "DrawPixelSizeLabel";
+            DrawPixelSizeLabel.Size = new Size(40, 20);
+            DrawPixelSizeLabel.TabIndex = 28;
+            DrawPixelSizeLabel.Text = "Zoom";
+            DrawPixelSizeLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // DrawingHeightNumberBox
+            // DrawHeightNumberBox
             // 
-            DrawingHeightNumberBox.Location = new Point(50, 45);
-            DrawingHeightNumberBox.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
-            DrawingHeightNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
-            DrawingHeightNumberBox.Name = "DrawingHeightNumberBox";
-            DrawingHeightNumberBox.Size = new Size(25, 23);
-            DrawingHeightNumberBox.TabIndex = 27;
-            DrawingHeightNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
+            DrawHeightNumberBox.Location = new Point(50, 45);
+            DrawHeightNumberBox.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
+            DrawHeightNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
+            DrawHeightNumberBox.Name = "DrawHeightNumberBox";
+            DrawHeightNumberBox.Size = new Size(25, 23);
+            DrawHeightNumberBox.TabIndex = 27;
+            DrawHeightNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
             // 
-            // label2
+            // DrawHeightLabel
             // 
-            label2.Location = new Point(5, 45);
-            label2.Name = "label2";
-            label2.Size = new Size(50, 20);
-            label2.TabIndex = 26;
-            label2.Text = "Height";
-            label2.TextAlign = ContentAlignment.MiddleCenter;
+            DrawHeightLabel.Location = new Point(5, 45);
+            DrawHeightLabel.Name = "DrawHeightLabel";
+            DrawHeightLabel.Size = new Size(50, 20);
+            DrawHeightLabel.TabIndex = 26;
+            DrawHeightLabel.Text = "Height";
+            DrawHeightLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // DrawingWidthNumberBox
+            // DrawWidthNumberBox
             // 
-            DrawingWidthNumberBox.Location = new Point(50, 20);
-            DrawingWidthNumberBox.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
-            DrawingWidthNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
-            DrawingWidthNumberBox.Name = "DrawingWidthNumberBox";
-            DrawingWidthNumberBox.Size = new Size(25, 23);
-            DrawingWidthNumberBox.TabIndex = 25;
-            DrawingWidthNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
+            DrawWidthNumberBox.Location = new Point(50, 20);
+            DrawWidthNumberBox.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
+            DrawWidthNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
+            DrawWidthNumberBox.Name = "DrawWidthNumberBox";
+            DrawWidthNumberBox.Size = new Size(25, 23);
+            DrawWidthNumberBox.TabIndex = 25;
+            DrawWidthNumberBox.Value = new decimal(new int[] { 16, 0, 0, 0 });
             // 
-            // label3
+            // DrawWidthLabel
             // 
-            label3.Location = new Point(5, 20);
-            label3.Name = "label3";
-            label3.Size = new Size(50, 20);
-            label3.TabIndex = 24;
-            label3.Text = "Width";
-            label3.TextAlign = ContentAlignment.MiddleCenter;
+            DrawWidthLabel.Location = new Point(5, 20);
+            DrawWidthLabel.Name = "DrawWidthLabel";
+            DrawWidthLabel.Size = new Size(50, 20);
+            DrawWidthLabel.TabIndex = 24;
+            DrawWidthLabel.Text = "Width";
+            DrawWidthLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // DrawingBoxSizeButton
             // 
@@ -729,13 +729,13 @@
             // 
             // ViewAreaGroupBox
             // 
-            ViewAreaGroupBox.Controls.Add(PixelWidthNumberBox);
+            ViewAreaGroupBox.Controls.Add(ViewWidthNumberBox);
             ViewAreaGroupBox.Controls.Add(ViewingBoxSizeButton);
-            ViewAreaGroupBox.Controls.Add(PixelWidthLabel);
-            ViewAreaGroupBox.Controls.Add(PixelHeightNumberBox);
-            ViewAreaGroupBox.Controls.Add(PixelHeightLabel);
-            ViewAreaGroupBox.Controls.Add(ViewingZoomNumberBox);
-            ViewAreaGroupBox.Controls.Add(ViewingZoomLabel);
+            ViewAreaGroupBox.Controls.Add(ViewPixelWidthLabel);
+            ViewAreaGroupBox.Controls.Add(ViewHeightNumberBox);
+            ViewAreaGroupBox.Controls.Add(ViewPixelHeightLabel);
+            ViewAreaGroupBox.Controls.Add(ViewPixelSizeNumberBox);
+            ViewAreaGroupBox.Controls.Add(ViewPixelSizeLabel);
             ViewAreaGroupBox.Location = new Point(170, 5);
             ViewAreaGroupBox.Name = "ViewAreaGroupBox";
             ViewAreaGroupBox.Size = new Size(135, 105);
@@ -745,13 +745,13 @@
             // 
             // DrawAreaGroupBox
             // 
-            DrawAreaGroupBox.Controls.Add(DrawingWidthNumberBox);
-            DrawAreaGroupBox.Controls.Add(label3);
-            DrawAreaGroupBox.Controls.Add(DrawingZoomNumberBox);
+            DrawAreaGroupBox.Controls.Add(DrawWidthNumberBox);
+            DrawAreaGroupBox.Controls.Add(DrawWidthLabel);
+            DrawAreaGroupBox.Controls.Add(DrawPixelSizeNumberBox);
             DrawAreaGroupBox.Controls.Add(DrawingBoxSizeButton);
-            DrawAreaGroupBox.Controls.Add(label1);
-            DrawAreaGroupBox.Controls.Add(DrawingHeightNumberBox);
-            DrawAreaGroupBox.Controls.Add(label2);
+            DrawAreaGroupBox.Controls.Add(DrawPixelSizeLabel);
+            DrawAreaGroupBox.Controls.Add(DrawHeightNumberBox);
+            DrawAreaGroupBox.Controls.Add(DrawHeightLabel);
             DrawAreaGroupBox.Controls.Add(GridTypeLabel);
             DrawAreaGroupBox.Controls.Add(GridTypeComboBox);
             DrawAreaGroupBox.Location = new Point(5, 5);
@@ -783,22 +783,22 @@
             Controls.Add(ColorsBackgroundPanel);
             Controls.Add(DrawingBackgroundPanel);
             Controls.Add(SaveImageButton);
-            Controls.Add(SetNewImageButton);
+            Controls.Add(NewImageButton);
             Name = "PixelArtEditorForm";
             Text = "Pixel Art Editor";
             Load += PixelArtEditorForm_Load;
-            ((System.ComponentModel.ISupportInitialize)PixelWidthNumberBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)PixelHeightNumberBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ViewingZoomNumberBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ViewWidthNumberBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ViewHeightNumberBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ViewPixelSizeNumberBox).EndInit();
             DrawingBackgroundPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)DrawingBox).EndInit();
             ColorsBackgroundPanel.ResumeLayout(false);
             DrawingToolButtonPanel.ResumeLayout(false);
             ViewingBackgroundPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)ViewingBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)DrawingZoomNumberBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)DrawingHeightNumberBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)DrawingWidthNumberBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DrawPixelSizeNumberBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DrawHeightNumberBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DrawWidthNumberBox).EndInit();
             ViewAreaGroupBox.ResumeLayout(false);
             DrawAreaGroupBox.ResumeLayout(false);
             ResumeLayout(false);
@@ -807,15 +807,15 @@
 
         #endregion
 
-        private Label PixelWidthLabel;
-        private Controls.NumberBox PixelWidthNumberBox;
-        private Controls.NumberBox PixelHeightNumberBox;
-        private Label PixelHeightLabel;
-        private Controls.NumberBox ViewingZoomNumberBox;
-        private Label ViewingZoomLabel;
+        private Label ViewPixelWidthLabel;
+        private Controls.NumberBox ViewWidthNumberBox;
+        private Controls.NumberBox ViewHeightNumberBox;
+        private Label ViewPixelHeightLabel;
+        private Controls.NumberBox ViewPixelSizeNumberBox;
+        private Label ViewPixelSizeLabel;
         private Label GridTypeLabel;
         private ComboBox GridTypeComboBox;
-        private Button SetNewImageButton;
+        private Button NewImageButton;
         private Button SaveImageButton;
         private ColorDialog ColorPickerDialog;
         private Controls.BackgroundPanel DrawingBackgroundPanel;
@@ -852,12 +852,12 @@
         private Controls.ToolButton OutlineRectangleButton;
         private Controls.BackgroundPanel ViewingBackgroundPanel;
         private Controls.ViewBox ViewingBox;
-        private Controls.NumberBox DrawingZoomNumberBox;
-        private Label label1;
-        private Controls.NumberBox DrawingHeightNumberBox;
-        private Label label2;
-        private Controls.NumberBox DrawingWidthNumberBox;
-        private Label label3;
+        private Controls.NumberBox DrawPixelSizeNumberBox;
+        private Label DrawPixelSizeLabel;
+        private Controls.NumberBox DrawHeightNumberBox;
+        private Label DrawHeightLabel;
+        private Controls.NumberBox DrawWidthNumberBox;
+        private Label DrawWidthLabel;
         private Button DrawingBoxSizeButton;
         private Button ViewingBoxSizeButton;
         private GroupBox ViewAreaGroupBox;

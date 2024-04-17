@@ -144,7 +144,7 @@ namespace PixelArtEditor
         /// </summary>
         private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
         {
-            int zoom = (int)ViewingZoomNumberBox.Value;
+            int zoom = (int)ViewPixelSizeNumberBox.Value;
             Images.ChangeOriginalImageZoom(zoom);
 
             SetViewingBoxSize();
@@ -156,9 +156,9 @@ namespace PixelArtEditor
         /// </summary>
         private void SetViewingSizeValues()
         {
-            int width = (int)PixelWidthNumberBox.Value;
-            int height = (int)PixelHeightNumberBox.Value;
-            int zoom = (int)ViewingZoomNumberBox.Value;
+            int width = (int)ViewWidthNumberBox.Value;
+            int height = (int)ViewHeightNumberBox.Value;
+            int zoom = (int)ViewPixelSizeNumberBox.Value;
 
             Images.ChangeOriginalImageSize(width, height, zoom);
 
@@ -198,7 +198,7 @@ namespace PixelArtEditor
         /// </summary>
         private void DrawingZoomNumberBox_ValueChanged(object sender, EventArgs e)
         {
-            int zoom = (int)DrawingZoomNumberBox.Value;
+            int zoom = (int)DrawPixelSizeNumberBox.Value;
             Images.ChangeDrawingImageZoom(zoom);
 
             SetDrawingBoxSize();
@@ -209,16 +209,16 @@ namespace PixelArtEditor
         /// </summary>
         private void SetDrawingSizeValues()
         {
-            int width = (int)DrawingWidthNumberBox.Value;
-            int height = (int)DrawingHeightNumberBox.Value;
-            int zoom = (int)DrawingZoomNumberBox.Value;
+            int width = (int)DrawWidthNumberBox.Value;
+            int height = (int)DrawHeightNumberBox.Value;
+            int zoom = (int)DrawPixelSizeNumberBox.Value;
 
             Images.ChangeDrawingImageSize(width, height, zoom);
 
             // Changes the Number Box values to match the new Drawing Dimensions.
             // This updates the Number Boxes in case the values passed are invalid.
-            DrawingWidthNumberBox.Value = Images.DrawingDimensions.Width;
-            DrawingHeightNumberBox.Value = Images.DrawingDimensions.Height;
+            DrawWidthNumberBox.Value = Images.DrawingDimensions.Width;
+            DrawHeightNumberBox.Value = Images.DrawingDimensions.Height;
 
             SetDrawingBoxSize();
         }

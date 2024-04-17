@@ -48,13 +48,14 @@
             foreach (Control child in Controls)
             {
                 // The "Total Width" represents the size the panel needs to be to contain the child control.
-                // This takes in consideration the child control's position and its width.
+                // This takes in consideration the child control's X position and its width.
                 totalChildControlWidth = child.Location.X + child.Width;
                 if (totalChildControlWidth > highestChildWidth)
                 {
                     highestChildWidth = totalChildControlWidth;
                 }
 
+                // The "Total Height" works like the Total Width, but with the child control's Y position and its height.
                 totalChildControlHeight = child.Location.Y + child.Height;
                 if (totalChildControlHeight > highestChildHeight)
                 {
@@ -83,6 +84,8 @@
                 Width = MaximumWidth; // Reduce the width, which will cause scroll bars to appear...
                 Height += SystemInformation.VerticalScrollBarWidth; // And increase the height to compensate for the scroll bars being inside the control.
             }
+
+            // Do the same for the height.
             if (controlSize.Height > MaximumHeight)
             {
                 Height = MaximumHeight;
