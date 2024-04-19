@@ -129,7 +129,7 @@ namespace PixelArtEditor
             ReorganizeControls();
         }
 
-        #region Viewing Box Size
+        #region Viewing Box Size and Clicking
         /// <summary>
         /// Saves the size values in the ImageHandler class.
         /// Then changes the size of the Viewing Box and generates a new grid for it based on the size values.
@@ -137,17 +137,6 @@ namespace PixelArtEditor
         private void ViewingBoxSizeButton_Click(object sender, EventArgs e)
         {
             SetViewingSizeValues();
-        }
-
-        /// <summary>
-        /// Changes the Original Image Pixel Size in the ImageHandler class, then resizes the image and the Viewing Box.
-        /// </summary>
-        private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
-        {
-            int zoom = (int)ViewPixelSizeNumberBox.Value;
-            Images.ChangeOriginalImageZoom(zoom);
-
-            SetViewingBoxSize();
         }
 
         /// <summary>
@@ -170,6 +159,17 @@ namespace PixelArtEditor
         }
 
         /// <summary>
+        /// Changes the Original Image Pixel Size in the ImageHandler class, then resizes the image and the Viewing Box.
+        /// </summary>
+        private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            int zoom = (int)ViewPixelSizeNumberBox.Value;
+            Images.ChangeOriginalImageZoom(zoom);
+
+            SetViewingBoxSize();
+        }
+
+        /// <summary>
         /// Sets a new size to the Viewing Box based on the size of the Original Image, then updates the image and the grid.
         /// </summary>
         private void SetViewingBoxSize()
@@ -178,6 +178,18 @@ namespace PixelArtEditor
             ViewingBox.SetNewImage(Images.OriginalImage);
             ChangeViewingBoxGrid();
             ReorganizeControls();
+        }
+
+        /// <summary>
+        /// Defines a new position for the Drawing Box inside the Viewing Box, depending on the click location.
+        /// </summary>
+        private void ViewingBox_Click(object sender, EventArgs e)
+        {
+            MouseEventArgs mouseArgs = (MouseEventArgs)e;
+
+            SetImageOnDrawingBox(mouseArgs.Location);
+
+            ViewingBox.Invalidate();
         }
         #endregion
 
@@ -189,19 +201,7 @@ namespace PixelArtEditor
         private void DrawingBoxSizeButton_Click(object sender, EventArgs e)
         {
             SetDrawingSizeValues();
-
-            ViewingBox.Invalidate();
-        }
-
-        /// <summary>
-        /// Changes the Drawing Image Pixel Size in the ImageHandler class, then resizes the image and the Drawing Box.
-        /// </summary>
-        private void DrawingZoomNumberBox_ValueChanged(object sender, EventArgs e)
-        {
-            int zoom = (int)DrawPixelSizeNumberBox.Value;
-            Images.ChangeDrawingImageZoom(zoom);
-
-            SetDrawingBoxSize();
+            ViewingBox.Invalidate(); // Invalidates The Viewing Box in order to redraw the Drawing Box overlay in the Viewing Box.
         }
 
         /// <summary>
@@ -219,6 +219,17 @@ namespace PixelArtEditor
             // This updates the Number Boxes in case the values passed are invalid.
             DrawWidthNumberBox.Value = Images.DrawingDimensions.Width;
             DrawHeightNumberBox.Value = Images.DrawingDimensions.Height;
+
+            SetDrawingBoxSize();
+        }
+
+        /// <summary>
+        /// Changes the Drawing Image Pixel Size in the ImageHandler class, then resizes the image and the Drawing Box.
+        /// </summary>
+        private void DrawingZoomNumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            int zoom = (int)DrawPixelSizeNumberBox.Value;
+            Images.ChangeDrawingImageZoom(zoom);
 
             SetDrawingBoxSize();
         }
@@ -310,7 +321,194 @@ namespace PixelArtEditor
         }
         #endregion
 
+        #region Viewing and Drawing Box Paint
+        /// <summary>
+        /// Uses the current tool's Preview method.
+        /// Draws the selection onto the image.
+        /// </summary>
+        private void DrawingBox_Paint(object sender, PaintEventArgs e)
+        {
+            // Uses the Drawing Tool in the Drawing Box.
+            if (MouseOnDrawingBox.HasValue)
+            {
+                OptionalToolParameters toolParameters = GetToolParameters(MouseOnDrawingBox.Value);
 
+                DrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
+            }
+
+            Images.DrawSelectionOntoDrawingBox(e.Graphics);
+
+            // Applies the grid on top of the Drawing Box.
+            IGridGenerator gridGenerator = GridFactory.GetGrid();
+            gridGenerator.ApplyGrid(e.Graphics, Images.DrawingImage.Width, Images.DrawingImage.Height);
+        }
+
+        /// <summary>
+        /// Draws the Drawing Box location on the Viewing Box.
+        /// </summary>
+        private void ViewingBox_Paint(object sender, PaintEventArgs e)
+        {
+            // Draws the overlay indicating the Drawing Box position inside the Viewing Box.
+            Point location = new(Images.DrawingLocation.X * Images.OriginalPixelSize, Images.DrawingLocation.Y * Images.OriginalPixelSize);
+            ViewingBox.DrawDrawingBoxOverlay(e.Graphics, location, Images.DrawingDimensions * Images.OriginalPixelSize);
+        }
+        #endregion
+
+
+        #region Drawing Tools and Drawing Events
+        /// <summary>
+        /// Changes the currently selected ToolButton to the button clicked, and changes the current tool to the newly selected one.
+        /// </summary>
+        private void ChangeTool_ToolButtonsClick(object sender, EventArgs e)
+        {
+            if (sender is not ToolButton toolButton)
+            {
+                return;
+            }
+
+            if (toolButton.Parent is not ToolButtonPanel buttonPanel)
+            {
+                return;
+            }
+
+            buttonPanel.ChangeCurrentButton(toolButton);
+            ToolFactory.ChangeCurrentTool(toolButton.ToolValue);
+
+            MouseOnDrawingBox = null;
+        }
+
+        /// <summary>
+        /// Gets the tool parameters from the current tool button and returns them as an OptionalToolParameters object.
+        /// </summary>
+        /// <param name="mouseLocation">The mouse's current location.</param>
+        /// <returns>An OptionalToolParameters object containing the parameters relevant for the current tool.</returns>
+        private OptionalToolParameters GetToolParameters(Point mouseLocation)
+        {
+            OptionalToolParameters toolParameters = new();
+
+            Dictionary<string, bool> properties = DrawingToolButtonPanel.CheckToolDrawProperties();
+
+            if (properties["ClickLocation"])
+            {
+                toolParameters.ClickLocation = mouseLocation;
+            }
+
+            if (properties["ImageSize"])
+            {
+                toolParameters.ImageSize = Images.DrawingImage.Size;
+            }
+
+            if (properties["Transparency"])
+            {
+                toolParameters.Transparency = TransparencyCheckBox.Checked;
+            }
+
+            if (properties["BackgroundColor"])
+            {
+                toolParameters.BackgroundColor = BackgroundColorTable.GetCurrentColor();
+            }
+
+            if (properties["PixelSize"])
+            {
+                toolParameters.PixelSize = Images.DrawingPixelSize;
+            }
+
+            return toolParameters;
+        }
+
+        /// <summary>
+        /// Uses the current tool's Mouse Click method.
+        /// Sets the mouse location and fires the Paint event for the tool's preview.
+        /// Defines the start of the image selection on right click.
+        /// </summary>
+        private void ViewingAreaDrawingBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                Images.ClearImageSelection();
+
+                Color paletteColor = PaletteColorTable.GetCurrentColor();
+
+                OptionalToolParameters toolParameters = GetToolParameters(e.Location);
+
+                DrawingBox.DrawClick(ToolFactory.GetTool(), Images.DrawingImage, paletteColor, toolParameters);
+                DrawingBox.Image = Images.DrawingImage;
+            }
+
+            if (e.Button == MouseButtons.Right)
+            {
+                Images.DefineSelectionStart(e.Location);
+                ChangeSelectionOnImage(e.Location);
+            }
+
+            Dictionary<string, bool> previewProperties = DrawingToolButtonPanel.CheckToolPreviewProperties();
+
+            if (previewProperties["PreviewHold"] && e.Button == MouseButtons.Left)
+            {
+                MouseOnDrawingBox = e.Location;
+                DrawingBox.Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Uses the current tool's Mouse Hold method.
+        /// Sets the mouse location and fires the Paint event for the tool's preview.
+        /// Changes the image selection.
+        /// </summary>
+        private void ViewingAreaDrawingBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.X < 0 || e.Y < 0 || e.X >= Images.DrawingImage.Width || e.Y >= Images.DrawingImage.Height)
+            {
+                MouseOnDrawingBox = e.Location;
+            }
+
+            if (e.Button == MouseButtons.Left)
+            {
+                OptionalToolParameters toolParameters = GetToolParameters(e.Location);
+
+                DrawingBox.DrawHold(ToolFactory.GetTool(), toolParameters);
+                DrawingBox.Image = Images.DrawingImage;
+            }
+
+            if (e.Button == MouseButtons.Right)
+            {
+                ChangeSelectionOnImage(e.Location);
+            }
+
+            Dictionary<string, bool> previewProperties = DrawingToolButtonPanel.CheckToolPreviewProperties();
+
+            if (previewProperties["PreviewMove"] || (previewProperties["PreviewHold"] && e.Button == MouseButtons.Left))
+            {
+                MouseOnDrawingBox = e.Location;
+                DrawingBox.Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Uses the current tool's Mouse Release method.
+        /// </summary>
+        private void ViewingAreaDrawingBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                OptionalToolParameters toolParameters = GetToolParameters(e.Location);
+
+                DrawingBox.DrawRelease(ToolFactory.GetTool(), toolParameters);
+                DrawingBox.Image = Images.DrawingImage;
+
+                Images.ApplyDrawnImage();
+                ViewingBox.Image = Images.OriginalImage;
+            }
+
+            MouseOnDrawingBox = null;
+        }
+
+        private void ViewingAreaDrawingBox_MouseLeave(object sender, EventArgs e)
+        {
+            MouseOnDrawingBox = null;
+            DrawingBox.Invalidate();
+        }
+        #endregion
 
 
         /// <summary>
@@ -529,194 +727,5 @@ namespace PixelArtEditor
             PaletteColorTable.SetAllColorValues(paletteValues);
         }
         #endregion
-
-        #region Drawing Tools and Drawing Events
-        /// <summary>
-        /// Changes the currently selected ToolButton to the button clicked, and changes the current tool to the newly selected one.
-        /// </summary>
-        private void ChangeTool_ToolButtonsClick(object sender, EventArgs e)
-        {
-            if (sender is not ToolButton toolButton)
-            {
-                return;
-            }
-
-            if (toolButton.Parent is not ToolButtonPanel buttonPanel)
-            {
-                return;
-            }
-
-            buttonPanel.ChangeCurrentButton(toolButton);
-            ToolFactory.ChangeCurrentTool(toolButton.ToolValue);
-
-            MouseOnDrawingBox = null;
-        }
-
-        /// <summary>
-        /// Gets the tool parameters from the current tool button and returns them as an OptionalToolParameters object.
-        /// </summary>
-        /// <param name="mouseLocation">The mouse's current location.</param>
-        /// <returns>An OptionalToolParameters object containing the parameters relevant for the current tool.</returns>
-        private OptionalToolParameters GetToolParameters(Point mouseLocation)
-        {
-            OptionalToolParameters toolParameters = new();
-
-            Dictionary<string, bool> properties = DrawingToolButtonPanel.CheckToolDrawProperties();
-
-            if (properties["ClickLocation"])
-            {
-                toolParameters.ClickLocation = mouseLocation;
-            }
-
-            if (properties["ImageSize"])
-            {
-                toolParameters.ImageSize = Images.DrawingImage.Size;
-            }
-
-            if (properties["Transparency"])
-            {
-                toolParameters.Transparency = TransparencyCheckBox.Checked;
-            }
-
-            if (properties["BackgroundColor"])
-            {
-                toolParameters.BackgroundColor = BackgroundColorTable.GetCurrentColor();
-            }
-
-            if (properties["PixelSize"])
-            {
-                toolParameters.PixelSize = Images.DrawingPixelSize;
-            }
-
-            return toolParameters;
-        }
-
-        /// <summary>
-        /// Uses the current tool's Mouse Click method.
-        /// Sets the mouse location and fires the Paint event for the tool's preview.
-        /// Defines the start of the image selection on right click.
-        /// </summary>
-        private void ViewingAreaDrawingBox_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                Images.ClearImageSelection();
-
-                Color paletteColor = PaletteColorTable.GetCurrentColor();
-
-                OptionalToolParameters toolParameters = GetToolParameters(e.Location);
-
-                DrawingBox.DrawClick(ToolFactory.GetTool(), Images.DrawingImage, paletteColor, toolParameters);
-                DrawingBox.Image = Images.DrawingImage;
-            }
-
-            if (e.Button == MouseButtons.Right)
-            {
-                Images.DefineSelectionStart(e.Location);
-                ChangeSelectionOnImage(e.Location);
-            }
-
-            Dictionary<string, bool> previewProperties = DrawingToolButtonPanel.CheckToolPreviewProperties();
-
-            if (previewProperties["PreviewHold"] && e.Button == MouseButtons.Left)
-            {
-                MouseOnDrawingBox = e.Location;
-                DrawingBox.Invalidate();
-            }
-        }
-
-        /// <summary>
-        /// Uses the current tool's Mouse Hold method.
-        /// Sets the mouse location and fires the Paint event for the tool's preview.
-        /// Changes the image selection.
-        /// </summary>
-        private void ViewingAreaDrawingBox_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.X < 0 || e.Y < 0 || e.X >= Images.DrawingImage.Width || e.Y >= Images.DrawingImage.Height)
-            {
-                MouseOnDrawingBox = e.Location;
-            }
-
-            if (e.Button == MouseButtons.Left)
-            {
-                OptionalToolParameters toolParameters = GetToolParameters(e.Location);
-
-                DrawingBox.DrawHold(ToolFactory.GetTool(), toolParameters);
-                DrawingBox.Image = Images.DrawingImage;
-            }
-
-            if (e.Button == MouseButtons.Right)
-            {
-                ChangeSelectionOnImage(e.Location);
-            }
-
-            Dictionary<string, bool> previewProperties = DrawingToolButtonPanel.CheckToolPreviewProperties();
-
-            if (previewProperties["PreviewMove"] || (previewProperties["PreviewHold"] && e.Button == MouseButtons.Left))
-            {
-                MouseOnDrawingBox = e.Location;
-                DrawingBox.Invalidate();
-            }
-        }
-
-        /// <summary>
-        /// Uses the current tool's Mouse Release method.
-        /// </summary>
-        private void ViewingAreaDrawingBox_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                OptionalToolParameters toolParameters = GetToolParameters(e.Location);
-
-                DrawingBox.DrawRelease(ToolFactory.GetTool(), toolParameters);
-                DrawingBox.Image = Images.DrawingImage;
-
-                Images.ApplyDrawnImage();
-                ViewingBox.Image = Images.OriginalImage;
-            }
-
-            MouseOnDrawingBox = null;
-        }
-
-        private void ViewingAreaDrawingBox_MouseLeave(object sender, EventArgs e)
-        {
-            MouseOnDrawingBox = null;
-            DrawingBox.Invalidate();
-        }
-        #endregion
-
-        /// <summary>
-        /// Uses the current tool's Preview method.
-        /// Draws the selection onto the image.
-        /// </summary>
-        private void ViewingAreaDrawingBox_Paint(object sender, PaintEventArgs e)
-        {
-            if (MouseOnDrawingBox.HasValue)
-            {
-                OptionalToolParameters toolParameters = GetToolParameters(MouseOnDrawingBox.Value);
-
-                DrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
-            }
-
-            Images.DrawSelectionOntoDrawingBox(e.Graphics);
-
-            IGridGenerator gridGenerator = GridFactory.GetGrid();
-            gridGenerator.ApplyGrid(e.Graphics, Images.DrawingImage.Width, Images.DrawingImage.Height);
-        }
-
-        private void ViewingBox_Click(object sender, EventArgs e)
-        {
-            MouseEventArgs mouseArgs = (MouseEventArgs)e;
-
-            SetImageOnDrawingBox(mouseArgs.Location);
-
-            ViewingBox.Invalidate();
-        }
-
-        private void ViewingBox_Paint(object sender, PaintEventArgs e)
-        {
-            Point location = new(Images.DrawingLocation.X * Images.OriginalPixelSize, Images.DrawingLocation.Y * Images.OriginalPixelSize);
-            ViewingBox.DrawDrawingBoxOverlay(e.Graphics, location, Images.DrawingDimensions * Images.OriginalPixelSize);
-        }
     }
 }

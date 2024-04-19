@@ -158,7 +158,7 @@ namespace PixelArtEditor.Files
         }
 
         /// <summary>
-        /// Defines a new location for the Drawing Image to be taken from the Original Image. Also creates the Drawing Image.
+        /// Defines a new location for the Drawing Image to be taken from the Original Image, by receiving the location value as a parameter.
         /// </summary>
         /// <param name="location">The new location from which the Drawing Image will be copied in the Original Image.</param>
         public void ChangeDrawingImageLocation(Point location)
@@ -171,6 +171,9 @@ namespace PixelArtEditor.Files
             CreateImageToDraw();
         }
 
+        /// <summary>
+        /// Defines a new location for the Drawing Image to be taken from the Original Image, uses the current Drawing Location.
+        /// </summary>
         private void ChangeDrawingImageLocation()
         {
             DrawingLocation = ValidadeDrawingLocation(DrawingLocation);
@@ -178,6 +181,11 @@ namespace PixelArtEditor.Files
             CreateImageToDraw();
         }
 
+        /// <summary>
+        /// Removes the current Pixel Size from the drawing location, to get the raw location value for it.
+        /// </summary>
+        /// <param name="location">The location value received, which has the zoom applied.</param>
+        /// <returns>The location value without the zoom, which represents the raw pixel location.</returns>
         private Point RemoveZoomFromLocation(Point location)
         {
             location.X -= location.X % OriginalPixelSize;
@@ -189,36 +197,53 @@ namespace PixelArtEditor.Files
             return location;
         }
 
+        /// <summary>
+        /// Validates the Drawing Location to make sure the Drawing Box stays within the Original Image's boundaries.
+        /// It also sets an interval for moving the Drawing Box to make the clicking more lenient.
+        /// </summary>
+        /// <param name="location">The drawing location value to validate.</param>
+        /// <returns>A location value that keeps the Drawing Box inside the Original Image, and snaps the box depending on its size.</returns>
         private Point ValidadeDrawingLocation(Point location)
         {
             if (location.X < OriginalDimensions.Width - DrawingDimensions.Width)
             {
+                // Snaps the location to a position interval depending on the Drawing Box's width.
                 location.X -= location.X % GetInterval(DrawingDimensions.Width);
             }
             else
             {
+                // Changes the location to the last pixel to keep the Drawing Box within the image's boundaries.
                 location.X = OriginalDimensions.Width - DrawingDimensions.Width;
             }
 
             if (location.Y < OriginalDimensions.Height - DrawingDimensions.Height)
             {
+                // Snaps the location to a position interval depending on the Drawing Box's height.
                 location.Y -= location.Y % GetInterval(DrawingDimensions.Height);
             }
             else
             {
+                // Changes the location to the last pixel to keep the Drawing Box within the image's boundaries.
                 location.Y = OriginalDimensions.Height - DrawingDimensions.Height;
             }
 
             return location;
         }
 
+        /// <summary>
+        /// Calculates a pixel interval for the Drawing Box. This interval defines how many pixels the Drawing Box will move.
+        /// The interval is calculated based on the Drawing Box size.
+        /// It is used to make choosing the Drawing Box position more lenient, rather than having it be pixel accurate.
+        /// </summary>
+        /// <param name="dimension">The dimension of the Drawing Box, can be either width or height.</param>
+        /// <returns>The pixel interval to use for that dimension.</returns>
         private static int GetInterval(int dimension)
         {
-            // List of 3 { 6, 9, 11, 15, 17, 18, 21, 23, 27, 29, 33, 39, 51, 54, 57 }
-            // List of 4 { 8, 12, 16, 20, 22, 24, 28, 32, 34, 36, 40, 44, 48, 52, 56, 60, 64 }
-            // List of 5 { 5, 10, 13, 19, 25, 30, 35, 37, 38, 43, 45, 50, 55, 58, 59 }
-            // List of 7 { 7, 14, 21, 26, 31, 41, 42, 46, 47, 49, 53, 61, 62, 63 }
-
+            // These lists contain the Drawing Box sizes, with each list being tied with a specific pixel interval.
+            // List of values with a 3 pixel interval { 6, 9, 11, 15, 17, 18, 21, 23, 27, 29, 33, 39, 51, 54, 57 }
+            // List of values with a 4 pixel interval { 8, 12, 16, 20, 22, 24, 28, 32, 34, 36, 40, 44, 48, 52, 56, 60, 64 }
+            // List of values with a 5 pixel interval { 5, 10, 13, 19, 25, 30, 35, 37, 38, 43, 45, 50, 55, 58, 59 }
+            // List of values with a 7 pixel interval { 7, 14, 21, 26, 31, 41, 42, 46, 47, 49, 53, 61, 62, 63 }
             List<List<int>> listOfSizes = new()
             {
                 new() { 6, 9, 11, 15, 17, 18, 21, 23, 27, 29, 33, 39, 51, 54, 57 },
@@ -226,12 +251,12 @@ namespace PixelArtEditor.Files
                 new() { 7, 14, 21, 26, 31, 41, 42, 46, 47, 49, 53, 61, 62, 63 }
             };
 
-            int interval = 4;
+            int interval = 4; // Defaults the interval to 4.
             for (int i = 0; i < 3; i++)
             {
-                if (listOfSizes[i].Contains(dimension))
+                if (listOfSizes[i].Contains(dimension)) // Checks if the dimension value exists in any of the lists.
                 {
-                    interval = 2 * i + 3;
+                    interval = 2 * i + 3; // If it exists, set the interval to that value (3, 5 or 7).
                 }
             }
             return interval;
@@ -299,10 +324,10 @@ namespace PixelArtEditor.Files
         /// <summary>
         /// Changes only the pixel size value of the Original Image. Also zooms the image to the new pixel size.
         /// </summary>
-        /// <param name="PixelSize"></param>
-        public void ChangeOriginalImageZoom(int PixelSize)
+        /// <param name="pixelSize">The new pixel size to use for the Original Image</param>
+        public void ChangeOriginalImageZoom(int pixelSize)
         {
-            OriginalPixelSize = PixelSize;
+            OriginalPixelSize = pixelSize;
             ZoomOriginalImage();
         }
 
@@ -317,7 +342,7 @@ namespace PixelArtEditor.Files
         /// <summary>
         /// Changes only the pixel size value of the Drawing Image.
         /// </summary>
-        /// <param name="PixelSize"></param>
+        /// <param name="pixelSize">The new pixel size to use for the Drawing Image.</param>
         public void ChangeDrawingImageZoom(int pixelSize)
         {
             DrawingPixelSize = pixelSize;

@@ -217,7 +217,7 @@
             DrawingBox.Size = new Size(20, 20);
             DrawingBox.TabIndex = 0;
             DrawingBox.TabStop = false;
-            DrawingBox.Paint += ViewingAreaDrawingBox_Paint;
+            DrawingBox.Paint += DrawingBox_Paint;
             DrawingBox.MouseDown += ViewingAreaDrawingBox_MouseDown;
             DrawingBox.MouseLeave += ViewingAreaDrawingBox_MouseLeave;
             DrawingBox.MouseMove += ViewingAreaDrawingBox_MouseMove;
