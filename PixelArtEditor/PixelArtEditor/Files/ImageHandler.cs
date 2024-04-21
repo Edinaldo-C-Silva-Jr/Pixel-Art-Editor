@@ -114,6 +114,18 @@ namespace PixelArtEditor.Files
             newSizeGraphics.DrawImage(OriginalImage, 0, 0);
             OriginalImage = new(imageWithNewSize);
         }
+
+        /// <summary>
+        /// Replaces the Original Image with a new one, while maintaining the image's size.
+        /// </summary>
+        /// <param name="newOriginalImage">The new image that will be set in place of the current Original Image.</param>
+        public void ReplaceOriginalImage(Bitmap newOriginalImage)
+        {
+            CreateNewBlankImage(Color.White, true);
+
+            using Graphics newImageGraphics = Graphics.FromImage(OriginalImage);
+            newImageGraphics.DrawImage(newOriginalImage, 0, 0);
+        }
         #endregion
 
         #region Drawing Image Size, Creation and Application
@@ -384,22 +396,6 @@ namespace PixelArtEditor.Files
             OriginalImage = new(temporaryImage);
         }
         #endregion
-
-        public void DefineNewImage(Bitmap newOriginalImage, bool resizeOnLoad, int drawingBoxWidth, int drawingBoxHeight)
-        {
-            if (resizeOnLoad)
-            {
-                OriginalImage = new(newOriginalImage);
-            }
-            else
-            {
-                using Bitmap nonResizedImage = new(drawingBoxWidth, drawingBoxHeight);
-                using Graphics newImageGraphics = Graphics.FromImage(nonResizedImage);
-                newImageGraphics.DrawImage(newOriginalImage, 0, 0);
-
-                OriginalImage = new(nonResizedImage);
-            }
-        }
 
         public void DefineSelectionStart(Point location)
         {

@@ -53,7 +53,6 @@
             ColorChangeCheckBox = new CheckBox();
             LoadImageButton = new Button();
             DialogForLoadingFiles = new OpenFileDialog();
-            ResizeOnLoadCheckBox = new CheckBox();
             CopyButton = new Button();
             PasteButton = new Button();
             LoadPaletteButton = new Button();
@@ -357,16 +356,6 @@
             LoadImageButton.Text = "Load Image";
             LoadImageButton.UseVisualStyleBackColor = true;
             LoadImageButton.Click += LoadImageButton_Click;
-            // 
-            // ResizeOnLoadCheckBox
-            // 
-            ResizeOnLoadCheckBox.AutoSize = true;
-            ResizeOnLoadCheckBox.Location = new Point(510, 35);
-            ResizeOnLoadCheckBox.Name = "ResizeOnLoadCheckBox";
-            ResizeOnLoadCheckBox.Size = new Size(104, 19);
-            ResizeOnLoadCheckBox.TabIndex = 15;
-            ResizeOnLoadCheckBox.Text = "Resize on Load";
-            ResizeOnLoadCheckBox.UseVisualStyleBackColor = true;
             // 
             // CopyButton
             // 
@@ -776,7 +765,6 @@
             Controls.Add(SavePaletteButton);
             Controls.Add(PasteButton);
             Controls.Add(CopyButton);
-            Controls.Add(ResizeOnLoadCheckBox);
             Controls.Add(LoadImageButton);
             Controls.Add(ColorChangeCheckBox);
             Controls.Add(TransparencyCheckBox);
@@ -802,7 +790,6 @@
             ViewAreaGroupBox.ResumeLayout(false);
             DrawAreaGroupBox.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -832,7 +819,6 @@
         private CheckBox ColorChangeCheckBox;
         private Button LoadImageButton;
         private OpenFileDialog DialogForLoadingFiles;
-        private CheckBox ResizeOnLoadCheckBox;
         private Button CopyButton;
         private Button PasteButton;
         private Button LoadPaletteButton;

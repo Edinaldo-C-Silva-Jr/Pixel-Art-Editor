@@ -97,20 +97,18 @@ namespace PixelArtEditor.Files
         /// <returns>The Bitmap loaded from the file, or null, in case no image was loaded.</returns>
         public Bitmap LoadImage()
         {
+            string directory = DefineFileDirectory("SavedImages");
+
+            DialogForOpeningFiles.InitialDirectory = directory;
+            DialogForOpeningFiles.Title = "Load an image into the editor";
+            DialogResult result = DialogForOpeningFiles.ShowDialog();
+
+            Bitmap? imageLoaded = null;
+            if (result == DialogResult.OK)
             {
-                string directory = DefineFileDirectory("SavedImages");
-
-                DialogForOpeningFiles.InitialDirectory = directory;
-                DialogForOpeningFiles.Title = "Load an image into the editor";
-                DialogResult result = DialogForOpeningFiles.ShowDialog();
-
-                Bitmap? imageLoaded = null;
-                if (result == DialogResult.OK)
-                {
-                    imageLoaded = new(DialogForOpeningFiles.FileName);
-                }
-                return imageLoaded!;
+                imageLoaded = new(DialogForOpeningFiles.FileName);
             }
+            return imageLoaded!;
         }
 
         /// <summary>

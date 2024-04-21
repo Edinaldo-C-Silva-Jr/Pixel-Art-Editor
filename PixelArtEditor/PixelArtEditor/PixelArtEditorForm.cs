@@ -108,7 +108,6 @@ namespace PixelArtEditor
             ColorAmountComboBox.SelectedIndex = 3;
             TransparencyCheckBox.Checked = false;
             ColorChangeCheckBox.Checked = true;
-            ResizeOnLoadCheckBox.Checked = true;
 
             DrawingToolButtonPanel.ReorganizeButtons();
         }
@@ -624,7 +623,7 @@ namespace PixelArtEditor
             using Graphics auxiliaryGraphics = Graphics.FromImage(auxiliaryImage);
             auxiliaryGraphics.Clear(newColor);
             auxiliaryGraphics.DrawImage(Images.OriginalImage, 0, 0);
-            Images.DefineNewImage(auxiliaryImage, true, 0, 0);
+            Images.ReplaceOriginalImage(auxiliaryImage);
 
             // Restored transparency to image if needed.
             if (TransparencyCheckBox.Checked)
@@ -688,25 +687,15 @@ namespace PixelArtEditor
         /// </summary>
         private void LoadImageButton_Click(object sender, EventArgs e)
         {
+            using Bitmap imageLoaded = FileSaverLoader.LoadImage();
+            if (imageLoaded != null) // Null check in case no image is loaded.
             {
-                using Bitmap imageLoaded = FileSaverLoader.LoadImage();
-                if (imageLoaded != null) // Null check in case no image is loaded.
-                {
-                    bool resizeOnLoad = ResizeOnLoadCheckBox.Checked;
-                    int width = DrawingBox.Width;
-                    int height = DrawingBox.Height;
-                    Images.DefineNewImage(imageLoaded, resizeOnLoad, width, height);
-
-                    if (resizeOnLoad)
-                    {
-                        ViewingBox.SetNewSize(Images.OriginalImage.Width, Images.OriginalImage.Height);
-                    }
-                }
-
-                ViewingBox.SetNewImage(Images.OriginalImage);
-
-                ReorganizeControls();
+                Images.ReplaceOriginalImage(imageLoaded);
             }
+
+            ViewingBox.SetNewImage(Images.OriginalImage);
+            Images.CreateImageToDraw();
+            DrawingBox.SetNewImage(Images.DrawingImage);
         }
 
         /// <summary>
