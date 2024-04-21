@@ -5,7 +5,7 @@ namespace PixelArtEditor.Grids
     /// <summary>
     /// A factory that generates Grids.
     /// </summary>
-    internal class GridGeneratorFactory
+    internal class GridGeneratorFactory : IDisposable
     {
         /// <summary>
         /// The current Grid implementation. It is stored to be reused until a new grid is generated.
@@ -40,6 +40,8 @@ namespace PixelArtEditor.Grids
         /// <param name="gridColor">The color of the grid.</param>
         public void ChangeCurrentGrid(GridType gridType, int imageWidth, int imageHeight, int cellSize, Color gridColor)
         {
+            Grid?.Dispose();
+
             Grid = gridType switch
             {
                 GridType.Line => new LineGrid(),
@@ -47,6 +49,11 @@ namespace PixelArtEditor.Grids
             };
 
             Grid.GenerateGrid(imageWidth, imageHeight, cellSize, gridColor);
+        }
+
+        public void Dispose()
+        {
+            Grid?.Dispose();
         }
     }
 }

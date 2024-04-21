@@ -774,6 +774,7 @@
             Controls.Add(NewImageButton);
             Name = "PixelArtEditorForm";
             Text = "Pixel Art Editor";
+            FormClosing += PixelArtEditorForm_FormClosing;
             Load += PixelArtEditorForm_Load;
             ((System.ComponentModel.ISupportInitialize)ViewWidthNumberBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)ViewHeightNumberBox).EndInit();

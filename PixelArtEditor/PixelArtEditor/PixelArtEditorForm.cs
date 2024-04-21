@@ -47,7 +47,7 @@ namespace PixelArtEditor
             InitializeComponent();
         }
 
-        #region Form and Control Initialization
+        #region Form Initialization and Closing
         /// <summary>
         /// Runs all the initialization methods.
         /// Initializes the control values, default values, position and text values, builds the color tables and creates a default blank image.
@@ -67,6 +67,17 @@ namespace PixelArtEditor
             ReorganizeControls();
         }
 
+        /// <summary>
+        /// Disposes of the necessary resources.
+        /// </summary>
+        private void PixelArtEditorForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Images?.Dispose();
+            GridFactory?.Dispose();
+        }
+        #endregion
+
+        #region Control Initialization
         /// <summary>
         /// Sets all the location and text values to the controls in the ColorAreaBackgroundPanel.
         /// Builds the panel programatically as to prevent Designer clutter.

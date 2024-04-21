@@ -3,7 +3,7 @@
     /// <summary>
     /// Implements a line based grid, where every cell is separated by a single pixel thick line of a specified color.
     /// </summary>
-    internal class LineGrid : IGridGenerator, IDisposable
+    internal class LineGrid : IGridGenerator
     {
         /// <summary>
         /// A piece of a line based grid. It is used to tile the entire grid.

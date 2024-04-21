@@ -7,6 +7,7 @@ namespace PixelArtEditor.Controls
     /// </summary>
     public partial class ViewBox : PictureBox
     {
+        // Disposed in the Designer file.
         /// <summary>
         /// The grid generator used to create the background grid of the Viewing Box.
         /// </summary>

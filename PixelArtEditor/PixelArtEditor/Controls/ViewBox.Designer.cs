@@ -17,6 +17,9 @@
             {
                 components.Dispose();
             }
+
+            GridGenerator?.Dispose();
+
             base.Dispose(disposing);
         }
 

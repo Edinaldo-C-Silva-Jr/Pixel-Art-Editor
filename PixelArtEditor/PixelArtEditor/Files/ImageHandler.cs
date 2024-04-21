@@ -296,17 +296,15 @@ namespace PixelArtEditor.Files
         /// </summary>
         public void ApplyDrawnImage()
         {
-            Bitmap drawingImageToApply = new(DrawingDimensions.Width * OriginalPixelSize, DrawingDimensions.Height * OriginalPixelSize);
-            Point location = new(DrawingLocation.X * OriginalPixelSize, DrawingLocation.Y * OriginalPixelSize);
-
             // Applies the Original Image zoom, to ensure the Drawing Image has the same size it had when it was copied.
-            drawingImageToApply = ApplyZoom(DrawingImage, drawingImageToApply.Width, drawingImageToApply.Height);
+            int drawingImageWidth = DrawingDimensions.Width * OriginalPixelSize;
+            int drawingImageHeight = DrawingDimensions.Height * OriginalPixelSize;
+            using Bitmap drawingImageToApply = ApplyZoom(DrawingImage, drawingImageWidth, drawingImageHeight);
 
             // Draws the Drawing Image onto the Original Image, in the currently defined location.
+            Point location = new(DrawingLocation.X * OriginalPixelSize, DrawingLocation.Y * OriginalPixelSize);
             using Graphics mergeGraphics = Graphics.FromImage(OriginalImage);
             mergeGraphics.DrawImage(drawingImageToApply, location);
-
-            drawingImageToApply.Dispose();
         }
         #endregion
 

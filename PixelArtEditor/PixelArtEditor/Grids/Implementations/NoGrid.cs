@@ -20,5 +20,13 @@
         {
             return;
         }
+
+        /// <summary>
+        /// Does nothing as there's no resources used.
+        /// </summary>
+        public void Dispose()
+        {
+            return;
+        }
     }
 }

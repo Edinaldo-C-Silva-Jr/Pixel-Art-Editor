@@ -5,7 +5,7 @@
     /// This grid will be used as the background for the Drawing Box.
     /// The colors used are the specified grid color and white.
     /// </summary>
-    internal class BackgroundGrid : IGridGenerator, IDisposable
+    internal class BackgroundGrid : IGridGenerator
     {
         /// <summary>
         /// A piece of the checkered grid. It is used to fill the entire grid in an optimized way.
