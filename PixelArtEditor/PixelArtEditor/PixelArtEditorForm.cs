@@ -197,7 +197,10 @@ namespace PixelArtEditor
         {
             MouseEventArgs mouseArgs = (MouseEventArgs)e;
 
-            SetImageOnDrawingBox(mouseArgs.Location);
+            if (mouseArgs.Button == MouseButtons.Left)
+            {
+                SetImageOnDrawingBox(mouseArgs.Location);
+            }
 
             ViewingBox.Invalidate();
         }
@@ -346,8 +349,6 @@ namespace PixelArtEditor
                 DrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
             }
 
-            Images.DrawSelectionOntoDrawingBox(e.Graphics);
-
             // Applies the grid on top of the Drawing Box.
             IGridGenerator gridGenerator = GridFactory.GetGrid();
             gridGenerator.ApplyGrid(e.Graphics, Images.DrawingImage.Width, Images.DrawingImage.Height);
@@ -358,6 +359,8 @@ namespace PixelArtEditor
         /// </summary>
         private void ViewingBox_Paint(object sender, PaintEventArgs e)
         {
+            Images.DrawSelectionOntoDrawingBox(e.Graphics);
+
             // Draws the overlay indicating the Drawing Box position inside the Viewing Box.
             Point location = new(Images.DrawingLocation.X * Images.OriginalPixelSize, Images.DrawingLocation.Y * Images.OriginalPixelSize);
             ViewingBox.DrawDrawingBoxOverlay(e.Graphics, location, Images.DrawingDimensions * Images.OriginalPixelSize);
@@ -431,7 +434,7 @@ namespace PixelArtEditor
         /// Sets the mouse location and fires the Paint event for the tool's preview.
         /// Defines the start of the image selection on right click.
         /// </summary>
-        private void ViewingAreaDrawingBox_MouseDown(object sender, MouseEventArgs e)
+        private void DrawingBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -443,12 +446,6 @@ namespace PixelArtEditor
 
                 DrawingBox.DrawClick(ToolFactory.GetTool(), Images.DrawingImage, paletteColor, toolParameters);
                 DrawingBox.Image = Images.DrawingImage;
-            }
-
-            if (e.Button == MouseButtons.Right)
-            {
-                Images.DefineSelectionStart(e.Location);
-                ChangeSelectionOnImage(e.Location);
             }
 
             Dictionary<string, bool> previewProperties = DrawingToolButtonPanel.CheckToolPreviewProperties();
@@ -465,7 +462,7 @@ namespace PixelArtEditor
         /// Sets the mouse location and fires the Paint event for the tool's preview.
         /// Changes the image selection.
         /// </summary>
-        private void ViewingAreaDrawingBox_MouseMove(object sender, MouseEventArgs e)
+        private void DrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.X < 0 || e.Y < 0 || e.X >= Images.DrawingImage.Width || e.Y >= Images.DrawingImage.Height)
             {
@@ -480,11 +477,6 @@ namespace PixelArtEditor
                 DrawingBox.Image = Images.DrawingImage;
             }
 
-            if (e.Button == MouseButtons.Right)
-            {
-                ChangeSelectionOnImage(e.Location);
-            }
-
             Dictionary<string, bool> previewProperties = DrawingToolButtonPanel.CheckToolPreviewProperties();
 
             if (previewProperties["PreviewMove"] || (previewProperties["PreviewHold"] && e.Button == MouseButtons.Left))
@@ -497,7 +489,7 @@ namespace PixelArtEditor
         /// <summary>
         /// Uses the current tool's Mouse Release method.
         /// </summary>
-        private void ViewingAreaDrawingBox_MouseUp(object sender, MouseEventArgs e)
+        private void DrawingBox_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -513,7 +505,7 @@ namespace PixelArtEditor
             MouseOnDrawingBox = null;
         }
 
-        private void ViewingAreaDrawingBox_MouseLeave(object sender, EventArgs e)
+        private void DrawingBox_MouseLeave(object sender, EventArgs e)
         {
             MouseOnDrawingBox = null;
             DrawingBox.Invalidate();
@@ -663,6 +655,24 @@ namespace PixelArtEditor
             DrawingBox.SetNewImage(Images.DrawingImage);
         }
 
+        private void ViewingBox_MouseDown(object sender, MouseEventArgs e)
+        {
+
+            if (e.Button == MouseButtons.Right)
+            {
+                Images.DefineSelectionStart(e.Location);
+                ChangeSelectionOnImage(e.Location);
+            }
+        }
+
+        private void ViewingBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                ChangeSelectionOnImage(e.Location);
+            }
+        }
+
         private void CopyButton_Click(object sender, EventArgs e)
         {
             Images.CopySelectionFromImage();
@@ -672,16 +682,16 @@ namespace PixelArtEditor
         {
             Images.PasteSelectionInImage();
 
-            DrawingBox.SetNewImage(Images.OriginalImage);
+            ViewingBox.SetNewImage(Images.OriginalImage);
         }
 
         private void ChangeSelectionOnImage(Point location)
         {
-            int width = DrawingBox.Width;
-            int height = DrawingBox.Height;
-            int zoom = Images.DrawingPixelSize;
+            int width = ViewingBox.Width;
+            int height = ViewingBox.Height;
+            int zoom = Images.OriginalPixelSize;
             Images.ChangeImageSelection(location, width, height, zoom);
-            DrawingBox.Invalidate();
+            ViewingBox.Invalidate();
         }
 
         #region Saving and Loading Files

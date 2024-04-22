@@ -217,10 +217,10 @@
             DrawingBox.TabIndex = 0;
             DrawingBox.TabStop = false;
             DrawingBox.Paint += DrawingBox_Paint;
-            DrawingBox.MouseDown += ViewingAreaDrawingBox_MouseDown;
-            DrawingBox.MouseLeave += ViewingAreaDrawingBox_MouseLeave;
-            DrawingBox.MouseMove += ViewingAreaDrawingBox_MouseMove;
-            DrawingBox.MouseUp += ViewingAreaDrawingBox_MouseUp;
+            DrawingBox.MouseDown += DrawingBox_MouseDown;
+            DrawingBox.MouseLeave += DrawingBox_MouseLeave;
+            DrawingBox.MouseMove += DrawingBox_MouseMove;
+            DrawingBox.MouseUp += DrawingBox_MouseUp;
             // 
             // ColorsBackgroundPanel
             // 
@@ -637,6 +637,8 @@
             ViewingBox.TabStop = false;
             ViewingBox.Click += ViewingBox_Click;
             ViewingBox.Paint += ViewingBox_Paint;
+            ViewingBox.MouseDown += ViewingBox_MouseDown;
+            ViewingBox.MouseMove += ViewingBox_MouseMove;
             // 
             // DrawPixelSizeNumberBox
             // 
