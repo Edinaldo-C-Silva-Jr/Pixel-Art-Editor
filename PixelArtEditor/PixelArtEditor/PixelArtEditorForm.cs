@@ -655,9 +655,11 @@ namespace PixelArtEditor
             DrawingBox.SetNewImage(Images.DrawingImage);
         }
 
+        /// <summary>
+        /// Defines the place where the selection starts based on the mouse's right click position.
+        /// </summary>
         private void ViewingBox_MouseDown(object sender, MouseEventArgs e)
         {
-
             if (e.Button == MouseButtons.Right)
             {
                 Images.DefineSelectionStart(e.Location);
@@ -665,6 +667,9 @@ namespace PixelArtEditor
             }
         }
 
+        /// <summary>
+        /// Changes the selection on the image while the right mouse button is still held.
+        /// </summary>
         private void ViewingBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -673,11 +678,17 @@ namespace PixelArtEditor
             }
         }
 
+        /// <summary>
+        /// Copies the current selection.
+        /// </summary>
         private void CopyButton_Click(object sender, EventArgs e)
         {
             Images.CopySelectionFromImage();
         }
 
+        /// <summary>
+        /// Pastes the previously copied image to the current selection.
+        /// </summary>
         private void PasteButton_Click(object sender, EventArgs e)
         {
             Images.PasteSelectionInImage();
@@ -685,12 +696,13 @@ namespace PixelArtEditor
             ViewingBox.SetNewImage(Images.OriginalImage);
         }
 
+        /// <summary>
+        /// Changes the selection of the image, and then calls a redraw for it on the Viewing Box.
+        /// </summary>
+        /// <param name="location">The current location of the mouse cursor.</param>
         private void ChangeSelectionOnImage(Point location)
         {
-            int width = ViewingBox.Width;
-            int height = ViewingBox.Height;
-            int zoom = Images.OriginalPixelSize;
-            Images.ChangeImageSelection(location, width, height, zoom);
+            Images.ChangeImageSelection(location, ViewingBox.Width, ViewingBox.Height, Images.OriginalPixelSize);
             ViewingBox.Invalidate();
         }
 
