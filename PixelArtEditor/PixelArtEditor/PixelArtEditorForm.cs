@@ -383,6 +383,8 @@ namespace PixelArtEditor
         #endregion
 
 
+
+
         #region Drawing Tools and Drawing Events
         /// <summary>
         /// Changes the currently selected ToolButton to the button clicked, and changes the current tool to the newly selected one.
@@ -572,6 +574,53 @@ namespace PixelArtEditor
 
         #endregion
 
+        #region Image Selection and Copy/Paste
+        /// <summary>
+        /// Copies the current selection.
+        /// </summary>
+        private void CopyButton_Click(object sender, EventArgs e)
+        {
+            Images.CopySelectionFromImage(Selector.SelectedArea, Selector.CurrentImage);
+        }
+
+        /// <summary>
+        /// Pastes the previously copied image to the current selection.
+        /// </summary>
+        private void PasteButton_Click(object sender, EventArgs e)
+        {
+            Images.PasteSelectionOnImage(Selector.SelectedArea, Selector.CurrentImage);
+
+            ViewingBox.SetNewImage(Images.OriginalImage);
+            DrawingBox.SetNewImage(Images.DrawingImage);
+        }
+
+        /// <summary>
+        /// Changes the selection of the Original Image, and then calls a redraw for the boxes.
+        /// Redraws the Viewing Box to show the selection, and redraws the Drawing Box to remove any selection, if there was one in it.
+        /// </summary>
+        /// <param name="location">The current location of the mouse cursor.</param>
+        private void ChangeSelectionOnOriginalImage(Point location)
+        {
+            Selector.ChangeSelectionArea(location, ViewingBox.Width, ViewingBox.Height, Images.OriginalPixelSize);
+            DrawingBox.Invalidate();
+            ViewingBox.Invalidate();
+        }
+
+        /// <summary>
+        /// Changes the selection of the Drawing Image, and then calls a redraw for the boxes.
+        /// Redraws the Drawing Box to show the selection, and redraws the Viewing Box to remove any selection, if there was one in it.
+        /// </summary>
+        /// <param name="location">The current location of the mouse cursor.</param>
+        private void ChangeSelectionOnDrawingImage(Point location)
+        {
+            Selector.ChangeSelectionArea(location, DrawingBox.Width, DrawingBox.Height, Images.DrawingPixelSize);
+            DrawingBox.Invalidate();
+            ViewingBox.Invalidate();
+        }
+        #endregion
+
+
+
         /// <summary>
         /// Resizes all Background Panels to fit the current size of their controls and updates their location accordingly to the size of the ones around them.
         /// </summary>
@@ -712,47 +761,6 @@ namespace PixelArtEditor
             ViewingBox.SetNewImage(Images.OriginalImage);
             Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DrawingImage);
-        }
-
-        
-
-        
-
-        /// <summary>
-        /// Copies the current selection.
-        /// </summary>
-        private void CopyButton_Click(object sender, EventArgs e)
-        {
-            Images.CopySelectionFromImage(Selector.SelectedArea, Selector.CurrentImage);
-        }
-
-        /// <summary>
-        /// Pastes the previously copied image to the current selection.
-        /// </summary>
-        private void PasteButton_Click(object sender, EventArgs e)
-        {
-            Images.PasteSelectionOnImage(Selector.SelectedArea, Selector.CurrentImage);
-
-            ViewingBox.SetNewImage(Images.OriginalImage);
-            DrawingBox.SetNewImage(Images.DrawingImage);
-        }
-
-        /// <summary>
-        /// Changes the selection of the image, and then calls a redraw for it on the Viewing Box.
-        /// </summary>
-        /// <param name="location">The current location of the mouse cursor.</param>
-        private void ChangeSelectionOnOriginalImage(Point location)
-        {
-            Selector.ChangeSelectionArea(location, ViewingBox.Width, ViewingBox.Height, Images.OriginalPixelSize);
-            DrawingBox.Invalidate();
-            ViewingBox.Invalidate();
-        }
-
-        private void ChangeSelectionOnDrawingImage(Point location)
-        {
-            Selector.ChangeSelectionArea(location, DrawingBox.Width, DrawingBox.Height, Images.DrawingPixelSize);
-            DrawingBox.Invalidate();
-            ViewingBox.Invalidate();
         }
 
         #region Saving and Loading Files

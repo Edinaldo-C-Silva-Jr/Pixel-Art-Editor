@@ -21,12 +21,12 @@ namespace PixelArtEditor.Files
         public Bitmap DrawingImage { get; private set; }
 
         /// <summary>
-        /// The image that represents the clipboard, used to copy and paste the selected portion of the original image.
+        /// The image that represents the clipboard, used to copy and paste the selected portion of the Original Image.
         /// </summary>
         public Bitmap ClipboardOriginalImage { get; private set; }
 
         /// <summary>
-        /// The image that represents the clipboard, used to copy and paste the selected portion of the drawing image.
+        /// The image that represents the clipboard, used to copy and paste the selected portion of the Drawing Image.
         /// </summary>
         public Bitmap ClipboardDrawingImage { get; private set; }
 
@@ -398,37 +398,51 @@ namespace PixelArtEditor.Files
         }
         #endregion
 
+        #region Copy and Paste
+        /// <summary>
+        /// Copies the portion of the image that corresponds to the selection area.
+        /// Which image gets copied depends on the ImageType parameter.
+        /// </summary>
+        /// <param name="selectedArea">The rectangle area selected on the image.</param>
+        /// <param name="currentImage">Which of the images is currently selected.</param>
         public void CopySelectionFromImage(Rectangle selectedArea, ImageType currentImage)
         {
             if (selectedArea != Rectangle.Empty)
             {
-                if (currentImage == ImageType.OriginalImage)
+                if (currentImage == ImageType.OriginalImage) // Copies the Original Image.
                 {
                     ClipboardOriginalImage = OriginalImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
                 }
-                else
+                else // Copies the Drawing Image.
                 {
                     ClipboardDrawingImage = DrawingImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
                 }
             }
         }
 
+        /// <summary>
+        /// Pastes the previously copied portion of the image into the current selection position.
+        /// Which image gets pasted depends on the ImageType parameter.
+        /// </summary>
+        /// <param name="selectedArea">he rectangle area selected on the image.</param>
+        /// <param name="currentImage">Which of the images is currently selected.</param>
         public void PasteSelectionOnImage(Rectangle selectedArea, ImageType currentImage)
         {
             if (selectedArea != Rectangle.Empty)
             {
-                if (currentImage == ImageType.OriginalImage)
+                if (currentImage == ImageType.OriginalImage) // Pastes the Clipboard Original Image into the Original Image.
                 {
                     using Graphics pasteGraphics = Graphics.FromImage(OriginalImage);
                     pasteGraphics.DrawImage(ClipboardOriginalImage, new Point(selectedArea.X, selectedArea.Y));
                 }
-                else
+                else // Pastes the Clipboard Drawing Image into the Drawing Image.
                 {
                     using Graphics pasteGraphics = Graphics.FromImage(DrawingImage);
                     pasteGraphics.DrawImage(ClipboardDrawingImage, new Point(selectedArea.X, selectedArea.Y));
                 }
             }
         }
+        #endregion
 
         public void Dispose()
         {
