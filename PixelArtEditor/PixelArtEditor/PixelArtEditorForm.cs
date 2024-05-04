@@ -356,6 +356,11 @@ namespace PixelArtEditor
                 DrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
             }
 
+            if (Selector.CurrentImage == ImageType.DrawingImage)
+            {
+                Selector.DrawSelection(e.Graphics);
+            }
+
             // Applies the grid on top of the Drawing Box.
             IGridGenerator gridGenerator = GridFactory.GetGrid();
             gridGenerator.ApplyGrid(e.Graphics, Images.DrawingImage.Width, Images.DrawingImage.Height);
@@ -366,7 +371,10 @@ namespace PixelArtEditor
         /// </summary>
         private void ViewingBox_Paint(object sender, PaintEventArgs e)
         {
-            Selector.DrawSelection(e.Graphics);
+            if (Selector.CurrentImage == ImageType.OriginalImage)
+            {
+                Selector.DrawSelection(e.Graphics);
+            }
 
             // Draws the overlay indicating the Drawing Box position inside the Viewing Box.
             Point location = new(Images.DrawingLocation.X * Images.OriginalPixelSize, Images.DrawingLocation.Y * Images.OriginalPixelSize);
@@ -455,6 +463,13 @@ namespace PixelArtEditor
                 DrawingBox.Image = Images.DrawingImage;
             }
 
+            if (e.Button == MouseButtons.Right)
+            {
+                Selector.DefineStart(e.Location);
+                Selector.CurrentImage = ImageType.DrawingImage;
+                ChangeSelectionOnDrawingImage(e.Location);
+            }
+
             Dictionary<string, bool> previewProperties = DrawingToolButtonPanel.CheckToolPreviewProperties();
 
             if (previewProperties["PreviewHold"] && e.Button == MouseButtons.Left)
@@ -482,6 +497,11 @@ namespace PixelArtEditor
 
                 DrawingBox.DrawHold(ToolFactory.GetTool(), toolParameters);
                 DrawingBox.Image = Images.DrawingImage;
+            }
+
+            if (e.Button == MouseButtons.Right)
+            {
+                ChangeSelectionOnDrawingImage(e.Location);
             }
 
             Dictionary<string, bool> previewProperties = DrawingToolButtonPanel.CheckToolPreviewProperties();
@@ -525,10 +545,17 @@ namespace PixelArtEditor
         /// </summary>
         private void ViewingBox_MouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button == MouseButtons.Left)
+            {
+                Selector.ClearSelection();
+                ViewingBox.Invalidate();
+            }
+
             if (e.Button == MouseButtons.Right)
             {
                 Selector.DefineStart(e.Location);
-                ChangeSelectionOnImage(e.Location);
+                Selector.CurrentImage = ImageType.OriginalImage;
+                ChangeSelectionOnOriginalImage(e.Location);
             }
         }
 
@@ -539,7 +566,7 @@ namespace PixelArtEditor
         {
             if (e.Button == MouseButtons.Right)
             {
-                ChangeSelectionOnImage(e.Location);
+                ChangeSelectionOnOriginalImage(e.Location);
             }
         }
 
@@ -696,7 +723,7 @@ namespace PixelArtEditor
         /// </summary>
         private void CopyButton_Click(object sender, EventArgs e)
         {
-            Images.CopySelectionFromImage(Selector.SelectedArea);
+            Images.CopySelectionFromImage(Selector.SelectedArea, Selector.CurrentImage);
         }
 
         /// <summary>
@@ -704,18 +731,27 @@ namespace PixelArtEditor
         /// </summary>
         private void PasteButton_Click(object sender, EventArgs e)
         {
-            Images.PasteSelectionInImage(Selector.SelectedArea);
+            Images.PasteSelectionOnImage(Selector.SelectedArea, Selector.CurrentImage);
 
             ViewingBox.SetNewImage(Images.OriginalImage);
+            DrawingBox.SetNewImage(Images.DrawingImage);
         }
 
         /// <summary>
         /// Changes the selection of the image, and then calls a redraw for it on the Viewing Box.
         /// </summary>
         /// <param name="location">The current location of the mouse cursor.</param>
-        private void ChangeSelectionOnImage(Point location)
+        private void ChangeSelectionOnOriginalImage(Point location)
         {
             Selector.ChangeSelectionArea(location, ViewingBox.Width, ViewingBox.Height, Images.OriginalPixelSize);
+            DrawingBox.Invalidate();
+            ViewingBox.Invalidate();
+        }
+
+        private void ChangeSelectionOnDrawingImage(Point location)
+        {
+            Selector.ChangeSelectionArea(location, DrawingBox.Width, DrawingBox.Height, Images.DrawingPixelSize);
+            DrawingBox.Invalidate();
             ViewingBox.Invalidate();
         }
 

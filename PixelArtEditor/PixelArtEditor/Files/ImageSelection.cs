@@ -2,6 +2,7 @@
 {
     internal class ImageSelection : IDisposable
     {
+        #region Properties
         /// <summary>
         /// The brush used to draw the selection box in the image when making a selection.
         /// </summary>
@@ -16,6 +17,9 @@
         /// The rectangle currently used as the selection area in the image.
         /// </summary>
         public Rectangle SelectedArea { get; private set; }
+
+        public ImageType CurrentImage { get; set; }
+        #endregion
 
         /// <summary>
         /// Default constructor. Initializes the selection with a light blue color.

@@ -23,7 +23,12 @@ namespace PixelArtEditor.Files
         /// <summary>
         /// The image that represents the clipboard, used to copy and paste the selected portion of the original image.
         /// </summary>
-        public Bitmap ClipboardImage { get; private set; }
+        public Bitmap ClipboardOriginalImage { get; private set; }
+
+        /// <summary>
+        /// The image that represents the clipboard, used to copy and paste the selected portion of the drawing image.
+        /// </summary>
+        public Bitmap ClipboardDrawingImage { get; private set; }
 
         /// <summary>
         /// The pixel dimensions of the Original Image, without the zoom.
@@ -58,7 +63,8 @@ namespace PixelArtEditor.Files
         {
             OriginalImage = new(1, 1);
             DrawingImage = new(1, 1);
-            ClipboardImage = new(1, 1);
+            ClipboardOriginalImage = new(1, 1);
+            ClipboardDrawingImage = new(1, 1);
 
             OriginalPixelSize = 1;
             DrawingPixelSize = 1;
@@ -392,27 +398,43 @@ namespace PixelArtEditor.Files
         }
         #endregion
 
-        public void CopySelectionFromImage(Rectangle selectedArea)
+        public void CopySelectionFromImage(Rectangle selectedArea, ImageType currentImage)
         {
             if (selectedArea != Rectangle.Empty)
             {
-                ClipboardImage = OriginalImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
+                if (currentImage == ImageType.OriginalImage)
+                {
+                    ClipboardOriginalImage = OriginalImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
+                }
+                else
+                {
+                    ClipboardDrawingImage = DrawingImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
+                }
             }
         }
 
-        public void PasteSelectionInImage(Rectangle selectedArea)
+        public void PasteSelectionOnImage(Rectangle selectedArea, ImageType currentImage)
         {
             if (selectedArea != Rectangle.Empty)
             {
-                using Graphics pasteGraphics = Graphics.FromImage(OriginalImage);
-                pasteGraphics.DrawImage(ClipboardImage, new Point(selectedArea.X, selectedArea.Y));
+                if (currentImage == ImageType.OriginalImage)
+                {
+                    using Graphics pasteGraphics = Graphics.FromImage(OriginalImage);
+                    pasteGraphics.DrawImage(ClipboardOriginalImage, new Point(selectedArea.X, selectedArea.Y));
+                }
+                else
+                {
+                    using Graphics pasteGraphics = Graphics.FromImage(DrawingImage);
+                    pasteGraphics.DrawImage(ClipboardDrawingImage, new Point(selectedArea.X, selectedArea.Y));
+                }
             }
         }
 
         public void Dispose()
         {
             OriginalImage?.Dispose();
-            ClipboardImage?.Dispose();
+            ClipboardDrawingImage?.Dispose();
+            ClipboardOriginalImage?.Dispose();
             DrawingImage?.Dispose();
         }
     }
