@@ -590,6 +590,11 @@ namespace PixelArtEditor
         {
             Images.PasteSelectionOnImage(Selector.SelectedArea, Selector.CurrentImage);
 
+            if (Selector.CurrentImage == ImageType.DrawingImage)
+            {
+                Images.ApplyDrawnImage();
+            }
+
             ViewingBox.SetNewImage(Images.OriginalImage);
             DrawingBox.SetNewImage(Images.DrawingImage);
         }
