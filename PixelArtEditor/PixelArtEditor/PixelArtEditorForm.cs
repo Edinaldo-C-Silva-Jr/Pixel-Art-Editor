@@ -29,12 +29,18 @@ namespace PixelArtEditor
         private GridGeneratorFactory GridFactory { get; set; }
 
         /// <summary>
+        /// The class that handles the selection on the images.
+        /// </summary>
+        private ImageSelection Selector { get; set; }
+
+        /// <summary>
         /// A point that indicates the mouse position inside the Drawing Box.
         /// Used in the Paint event to define the tool preview location.
         /// </summary>
         private Point? MouseOnDrawingBox { get; set; }
         #endregion
 
+        #region Form Initialization and Closing
         /// <summary>
         /// Default constructor. Initializes the requirede properties.
         /// </summary>
@@ -44,10 +50,10 @@ namespace PixelArtEditor
             FileSaverLoader = new();
             ToolFactory = new();
             GridFactory = new();
+            Selector = new();
             InitializeComponent();
         }
 
-        #region Form Initialization and Closing
         /// <summary>
         /// Runs all the initialization methods.
         /// Initializes the control values, default values, position and text values, builds the color tables and creates a default blank image.
@@ -74,6 +80,7 @@ namespace PixelArtEditor
         {
             Images?.Dispose();
             GridFactory?.Dispose();
+            Selector?.Dispose();
         }
         #endregion
 
@@ -359,7 +366,7 @@ namespace PixelArtEditor
         /// </summary>
         private void ViewingBox_Paint(object sender, PaintEventArgs e)
         {
-            Images.DrawSelectionOntoDrawingBox(e.Graphics);
+            Selector.DrawSelection(e.Graphics);
 
             // Draws the overlay indicating the Drawing Box position inside the Viewing Box.
             Point location = new(Images.DrawingLocation.X * Images.OriginalPixelSize, Images.DrawingLocation.Y * Images.OriginalPixelSize);
@@ -438,7 +445,7 @@ namespace PixelArtEditor
         {
             if (e.Button == MouseButtons.Left)
             {
-                Images.ClearImageSelection();
+                Selector.ClearSelection();
 
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
 
@@ -512,6 +519,31 @@ namespace PixelArtEditor
         }
         #endregion
 
+        #region Viewing Box Events
+        /// <summary>
+        /// Defines the place where the selection starts based on the mouse's right click position.
+        /// </summary>
+        private void ViewingBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                Selector.DefineStart(e.Location);
+                ChangeSelectionOnImage(e.Location);
+            }
+        }
+
+        /// <summary>
+        /// Changes the selection on the image while the right mouse button is still held.
+        /// </summary>
+        private void ViewingBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                ChangeSelectionOnImage(e.Location);
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// Resizes all Background Panels to fit the current size of their controls and updates their location accordingly to the size of the ones around them.
@@ -655,35 +687,16 @@ namespace PixelArtEditor
             DrawingBox.SetNewImage(Images.DrawingImage);
         }
 
-        /// <summary>
-        /// Defines the place where the selection starts based on the mouse's right click position.
-        /// </summary>
-        private void ViewingBox_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                Images.DefineSelectionStart(e.Location);
-                ChangeSelectionOnImage(e.Location);
-            }
-        }
+        
 
-        /// <summary>
-        /// Changes the selection on the image while the right mouse button is still held.
-        /// </summary>
-        private void ViewingBox_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                ChangeSelectionOnImage(e.Location);
-            }
-        }
+        
 
         /// <summary>
         /// Copies the current selection.
         /// </summary>
         private void CopyButton_Click(object sender, EventArgs e)
         {
-            Images.CopySelectionFromImage();
+            Images.CopySelectionFromImage(Selector.SelectedArea);
         }
 
         /// <summary>
@@ -691,7 +704,7 @@ namespace PixelArtEditor
         /// </summary>
         private void PasteButton_Click(object sender, EventArgs e)
         {
-            Images.PasteSelectionInImage();
+            Images.PasteSelectionInImage(Selector.SelectedArea);
 
             ViewingBox.SetNewImage(Images.OriginalImage);
         }
@@ -702,7 +715,7 @@ namespace PixelArtEditor
         /// <param name="location">The current location of the mouse cursor.</param>
         private void ChangeSelectionOnImage(Point location)
         {
-            Images.ChangeImageSelection(location, ViewingBox.Width, ViewingBox.Height, Images.OriginalPixelSize);
+            Selector.ChangeSelectionArea(location, ViewingBox.Width, ViewingBox.Height, Images.OriginalPixelSize);
             ViewingBox.Invalidate();
         }
 

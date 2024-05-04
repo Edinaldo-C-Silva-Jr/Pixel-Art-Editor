@@ -10,8 +10,6 @@ namespace PixelArtEditor.Files
     internal class ImageHandler : IDisposable
     {
         #region Properties
-        private ImageSelection Selector { get; set; }
-
         /// <summary>
         /// The full image being used in the pixel art editor.
         /// </summary>
@@ -58,7 +56,6 @@ namespace PixelArtEditor.Files
         /// </summary>
         public ImageHandler()
         {
-            Selector = new();
             OriginalImage = new(1, 1);
             DrawingImage = new(1, 1);
             ClipboardImage = new(1, 1);
@@ -395,40 +392,20 @@ namespace PixelArtEditor.Files
         }
         #endregion
 
-        public void DefineSelectionStart(Point location)
+        public void CopySelectionFromImage(Rectangle selectedArea)
         {
-            Selector.DefineStart(location);
-        }
-
-        public void ClearImageSelection()
-        {
-            Selector.ClearSelection();
-        }
-
-        public void ChangeImageSelection(Point selectionEnd, int drawingBoxWidth, int drawingBoxHeight, int zoom)
-        {
-            Selector.ChangeSelectionArea(selectionEnd, drawingBoxWidth, drawingBoxHeight, zoom);
-        }
-
-        public void DrawSelectionOntoDrawingBox(Graphics paintGraphics)
-        {
-            Selector.DrawSelection(paintGraphics);
-        }
-
-        public void CopySelectionFromImage()
-        {
-            if (Selector.SelectedArea != Rectangle.Empty)
+            if (selectedArea != Rectangle.Empty)
             {
-                ClipboardImage = OriginalImage.Clone(Selector.SelectedArea, PixelFormat.Format32bppArgb);
+                ClipboardImage = OriginalImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
             }
         }
 
-        public void PasteSelectionInImage()
+        public void PasteSelectionInImage(Rectangle selectedArea)
         {
-            if (Selector.SelectedArea != Rectangle.Empty)
+            if (selectedArea != Rectangle.Empty)
             {
                 using Graphics pasteGraphics = Graphics.FromImage(OriginalImage);
-                pasteGraphics.DrawImage(ClipboardImage, new Point(Selector.SelectedArea.X, Selector.SelectedArea.Y));
+                pasteGraphics.DrawImage(ClipboardImage, new Point(selectedArea.X, selectedArea.Y));
             }
         }
 
@@ -437,7 +414,6 @@ namespace PixelArtEditor.Files
             OriginalImage?.Dispose();
             ClipboardImage?.Dispose();
             DrawingImage?.Dispose();
-            Selector.Dispose();
         }
     }
 }

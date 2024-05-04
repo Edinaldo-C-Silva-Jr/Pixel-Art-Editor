@@ -15,7 +15,7 @@
         /// <summary>
         /// The rectangle currently used as the selection area in the image.
         /// </summary>
-        public Rectangle SelectedArea { get; set; }
+        public Rectangle SelectedArea { get; private set; }
 
         /// <summary>
         /// Default constructor. Initializes the selection with a light blue color.
