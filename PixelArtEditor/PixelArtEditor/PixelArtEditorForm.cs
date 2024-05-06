@@ -191,6 +191,11 @@ namespace PixelArtEditor
         /// </summary>
         private void SetViewingBoxSize()
         {
+            if (Selector.CurrentImage == ImageType.OriginalImage)
+            {
+                Selector.ClearSelection();
+            }
+
             ViewingBox.SetNewSize(Images.OriginalImage.Width, Images.OriginalImage.Height);
             ViewingBox.SetNewImage(Images.OriginalImage);
             ChangeViewingBoxGrid();
@@ -259,6 +264,11 @@ namespace PixelArtEditor
         /// </summary>
         private void SetDrawingBoxSize()
         {
+            if (Selector.CurrentImage == ImageType.DrawingImage)
+            {
+                Selector.ClearSelection();
+            }
+
             DrawingBox.SetNewSize(Images.DrawingImage.Width, Images.DrawingImage.Height);
             DrawingBox.SetNewImage(Images.DrawingImage);
             ChangeDrawingBoxGrid();
@@ -340,6 +350,10 @@ namespace PixelArtEditor
             DrawingBox.SetNewImage(Images.DrawingImage);
         }
         #endregion
+
+
+
+
 
         #region Viewing and Drawing Box Paint
         /// <summary>
@@ -590,9 +604,14 @@ namespace PixelArtEditor
         {
             Images.PasteSelectionOnImage(Selector.SelectedArea, Selector.CurrentImage);
 
-            if (Selector.CurrentImage == ImageType.DrawingImage)
+            switch (Selector.CurrentImage)
             {
-                Images.ApplyDrawnImage();
+                case ImageType.OriginalImage:
+                    Images.CreateImageToDraw();
+                    break;
+                case ImageType.DrawingImage:
+                    Images.ApplyDrawnImage();
+                    break;
             }
 
             ViewingBox.SetNewImage(Images.OriginalImage);
