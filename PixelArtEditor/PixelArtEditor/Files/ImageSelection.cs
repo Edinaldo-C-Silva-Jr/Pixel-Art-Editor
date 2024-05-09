@@ -102,29 +102,33 @@
         /// <param name="selectionEnd">The current click location, which is where the selecion ends.</param>
         /// <param name="boxWidth">The width of the current Image's Box.</param>
         /// <param name="boxHeight">The height of the current Image's Box.</param>
-        /// <param name="zoom">The size of each pixel in the image.</param>
-        public void ChangeSelectionArea(Point selectionEnd, int boxWidth, int boxHeight, int zoom)
+        /// <param name="selectionSize">The size each individual square of selection.</param>
+        public void ChangeSelectionArea(Point selectionEnd, int boxWidth, int boxHeight, int selectionSize)
         {
             Point beginSelecion = SelectionStart;
             Rectangle areaToSelect = new();
 
-            // Makes sure the selection can't go outside the boundaries of the current image's box.
-            selectionEnd.X = KeepValueBelowMaximum(selectionEnd.X, boxWidth - 1);
-            selectionEnd.Y = KeepValueBelowMaximum(selectionEnd.Y, boxHeight - 1);
-            selectionEnd.X = KeepValueAboveMinimum(selectionEnd.X, 0);
-            selectionEnd.Y = KeepValueAboveMinimum(selectionEnd.Y, 0);
-
-            // Makes sure the begin and end coordinates are correct.
+            // Makes sure the begin and end coordinates are correctly ordered (the end coordinate has to be bigger than the begin coordinate)
             (beginSelecion.X, selectionEnd.X) = SwapCoordinatesWhenStartIsBigger(beginSelecion.X, selectionEnd.X);
             (beginSelecion.Y, selectionEnd.Y) = SwapCoordinatesWhenStartIsBigger(beginSelecion.Y, selectionEnd.Y);
 
-            // Snaps the begin point to the start of the pixel, and the end point to the start of the next pixel.
-            areaToSelect.X = beginSelecion.X - beginSelecion.X % zoom;
-            areaToSelect.Y = beginSelecion.Y - beginSelecion.Y % zoom;
-            selectionEnd.X = selectionEnd.X - selectionEnd.X % zoom + zoom;
-            selectionEnd.Y = selectionEnd.Y - selectionEnd.Y % zoom + zoom;
+            // Snaps the begin point to the top left of its equivalent selection square.
+            areaToSelect.X = beginSelecion.X - beginSelecion.X % selectionSize;
+            areaToSelect.Y = beginSelecion.Y - beginSelecion.Y % selectionSize;
 
-            // Defines the Selection Area with the coordinates.
+            // Makes sure the begin coordinates don't go outside the top or left of the box.
+            areaToSelect.X = KeepValueAboveMinimum(areaToSelect.X, 0);
+            areaToSelect.Y = KeepValueAboveMinimum(areaToSelect.Y, 0);
+
+            // Snaps the end point to the bottom right of its equivalent selection square.
+            selectionEnd.X = selectionEnd.X - selectionEnd.X % selectionSize + selectionSize;
+            selectionEnd.Y = selectionEnd.Y - selectionEnd.Y % selectionSize + selectionSize;
+
+            // Makes sure the end coordinates don't go outside the bottom or right of the box.
+            selectionEnd.X = KeepValueBelowMaximum(selectionEnd.X, boxWidth - 1);
+            selectionEnd.Y = KeepValueBelowMaximum(selectionEnd.Y, boxHeight - 1);
+
+            // Defines the Selection Area size with the coordinates.
             areaToSelect.Width = selectionEnd.X - areaToSelect.X;
             areaToSelect.Height = selectionEnd.Y - areaToSelect.Y;
             SelectedArea = areaToSelect;

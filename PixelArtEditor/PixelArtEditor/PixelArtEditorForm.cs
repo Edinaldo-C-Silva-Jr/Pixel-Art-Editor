@@ -484,6 +484,7 @@ namespace PixelArtEditor
                 Selector.DefineStart(e.Location);
                 Selector.CurrentImage = ImageType.DrawingImage;
                 ChangeSelectionOnDrawingImage(e.Location);
+                ViewingBox.Invalidate();
             }
 
             Dictionary<string, bool> previewProperties = DrawingToolButtonPanel.CheckToolPreviewProperties();
@@ -572,6 +573,7 @@ namespace PixelArtEditor
                 Selector.DefineStart(e.Location);
                 Selector.CurrentImage = ImageType.OriginalImage;
                 ChangeSelectionOnOriginalImage(e.Location);
+                DrawingBox.Invalidate();
             }
         }
 
@@ -585,7 +587,6 @@ namespace PixelArtEditor
                 ChangeSelectionOnOriginalImage(e.Location);
             }
         }
-
         #endregion
 
         #region Image Selection and Copy/Paste
@@ -625,8 +626,7 @@ namespace PixelArtEditor
         /// <param name="location">The current location of the mouse cursor.</param>
         private void ChangeSelectionOnOriginalImage(Point location)
         {
-            Selector.ChangeSelectionArea(location, ViewingBox.Width, ViewingBox.Height, Images.OriginalPixelSize);
-            DrawingBox.Invalidate();
+            Selector.ChangeSelectionArea(location, ViewingBox.Width, ViewingBox.Height, Images.OriginalPixelSize * 5);
             ViewingBox.Invalidate();
         }
 
@@ -639,7 +639,6 @@ namespace PixelArtEditor
         {
             Selector.ChangeSelectionArea(location, DrawingBox.Width, DrawingBox.Height, Images.DrawingPixelSize);
             DrawingBox.Invalidate();
-            ViewingBox.Invalidate();
         }
         #endregion
 
