@@ -123,6 +123,7 @@ namespace PixelArtEditor
 
             // Sets default values for the ComboBoxes and CheckBoxes
             GridTypeComboBox.SelectedItem = GridType.None;
+            SelectionSizeComboBox.SelectedIndex = 0;
             ColorAmountComboBox.SelectedIndex = 3;
             TransparencyCheckBox.Checked = false;
             ColorChangeCheckBox.Checked = true;
@@ -620,13 +621,30 @@ namespace PixelArtEditor
         }
 
         /// <summary>
+        /// Gets the size to use for the selection in the ViewingBox.
+        /// </summary>
+        /// <returns>The size to use for the Viewing Box selection.</returns>
+        private Size GetViewingSelectionSize()
+        {
+            if (SelectionSizeComboBox.SelectedIndex == 4)
+            {
+                return new Size(Images.DrawingDimensions.Width, Images.DrawingDimensions.Height);
+            }
+            else
+            {
+                int value = int.Parse(SelectionSizeComboBox.SelectedItem.ToString() ?? "1");
+                return new Size(value, value);
+            }
+        }
+
+        /// <summary>
         /// Changes the selection of the Original Image, and then calls a redraw for the boxes.
         /// Redraws the Viewing Box to show the selection, and redraws the Drawing Box to remove any selection, if there was one in it.
         /// </summary>
         /// <param name="location">The current location of the mouse cursor.</param>
         private void ChangeSelectionOnOriginalImage(Point location)
         {
-            Selector.ChangeSelectionArea(location, ViewingBox.Width, ViewingBox.Height, Images.OriginalPixelSize * 5);
+            Selector.ChangeSelectionArea(location, ViewingBox.Width, ViewingBox.Height, Images.OriginalPixelSize, GetViewingSelectionSize());
             ViewingBox.Invalidate();
         }
 

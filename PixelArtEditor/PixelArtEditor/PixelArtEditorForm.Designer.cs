@@ -82,6 +82,8 @@
             ViewingBoxSizeButton = new Button();
             ViewAreaGroupBox = new GroupBox();
             DrawAreaGroupBox = new GroupBox();
+            SelectionSizeComboBox = new ComboBox();
+            SeelctionSizeLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)ViewWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewPixelSizeNumberBox).BeginInit();
@@ -330,7 +332,7 @@
             // 
             // TransparencyCheckBox
             // 
-            TransparencyCheckBox.Location = new Point(515, 60);
+            TransparencyCheckBox.Location = new Point(490, 36);
             TransparencyCheckBox.Name = "TransparencyCheckBox";
             TransparencyCheckBox.Size = new Size(90, 20);
             TransparencyCheckBox.TabIndex = 12;
@@ -429,7 +431,7 @@
             DrawingToolButtonPanel.Controls.Add(HorizontalMirrorPenButton);
             DrawingToolButtonPanel.Controls.Add(PixelPenButton);
             DrawingToolButtonPanel.Controls.Add(FullMirrorPenButton);
-            DrawingToolButtonPanel.Location = new Point(650, 20);
+            DrawingToolButtonPanel.Location = new Point(700, 20);
             DrawingToolButtonPanel.Name = "DrawingToolButtonPanel";
             DrawingToolButtonPanel.Size = new Size(240, 80);
             DrawingToolButtonPanel.TabIndex = 22;
@@ -752,6 +754,25 @@
             DrawAreaGroupBox.TabStop = false;
             DrawAreaGroupBox.Text = "Draw Area";
             // 
+            // SelectionSizeComboBox
+            // 
+            SelectionSizeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            SelectionSizeComboBox.FormattingEnabled = true;
+            SelectionSizeComboBox.Items.AddRange(new object[] { "3", "4", "5", "6", "Draw Box" });
+            SelectionSizeComboBox.Location = new Point(615, 70);
+            SelectionSizeComboBox.Name = "SelectionSizeComboBox";
+            SelectionSizeComboBox.Size = new Size(70, 23);
+            SelectionSizeComboBox.TabIndex = 34;
+            // 
+            // SeelctionSizeLabel
+            // 
+            SeelctionSizeLabel.AutoSize = true;
+            SeelctionSizeLabel.Location = new Point(610, 55);
+            SeelctionSizeLabel.Name = "SeelctionSizeLabel";
+            SeelctionSizeLabel.Size = new Size(78, 15);
+            SeelctionSizeLabel.TabIndex = 35;
+            SeelctionSizeLabel.Text = "Selection Size";
+            // 
             // PixelArtEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -759,6 +780,8 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(984, 461);
+            Controls.Add(SeelctionSizeLabel);
+            Controls.Add(SelectionSizeComboBox);
             Controls.Add(DrawAreaGroupBox);
             Controls.Add(ViewAreaGroupBox);
             Controls.Add(ViewingBackgroundPanel);
@@ -793,6 +816,7 @@
             ViewAreaGroupBox.ResumeLayout(false);
             DrawAreaGroupBox.ResumeLayout(false);
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -851,5 +875,7 @@
         private Button ViewingBoxSizeButton;
         private GroupBox ViewAreaGroupBox;
         private GroupBox DrawAreaGroupBox;
+        private ComboBox SelectionSizeComboBox;
+        private Label SeelctionSizeLabel;
     }
 }
