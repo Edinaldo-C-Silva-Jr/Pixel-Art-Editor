@@ -680,19 +680,6 @@ namespace PixelArtEditor
             DrawingBackgroundPanel.ResizePanelToFitControls();
             ViewingBackgroundPanel.ResizePanelToFitControls();
             ColorsBackgroundPanel.ResizePanelToFitControls();
-
-            // Sets a new location to the panels after resizing them to make sure they don't overlap.
-            ViewingBackgroundPanel.Location = new Point(DrawingBackgroundPanel.Left + DrawingBackgroundPanel.Width + 10, DrawingBackgroundPanel.Top);
-
-            if (DrawingBackgroundPanel.Height > ViewingBackgroundPanel.Height)
-            {
-                ColorsBackgroundPanel.Location = new Point(ColorsBackgroundPanel.Location.X, DrawingBackgroundPanel.Top + DrawingBackgroundPanel.Height + 10);
-            }
-            else
-            {
-                ColorsBackgroundPanel.Location = new Point(ColorsBackgroundPanel.Location.X, ViewingBackgroundPanel.Top + ViewingBackgroundPanel.Height + 10);
-            }
-
             ResumeLayout();
         }
 
