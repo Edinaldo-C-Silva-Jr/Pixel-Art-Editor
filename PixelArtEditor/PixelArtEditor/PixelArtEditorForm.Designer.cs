@@ -797,10 +797,12 @@
             Controls.Add(DrawingBackgroundPanel);
             Controls.Add(SaveImageButton);
             Controls.Add(NewImageButton);
+            KeyPreview = true;
             Name = "PixelArtEditorForm";
             Text = "Pixel Art Editor";
             FormClosing += PixelArtEditorForm_FormClosing;
             Load += PixelArtEditorForm_Load;
+            KeyDown += PixelArtEditorForm_KeyDown;
             ((System.ComponentModel.ISupportInitialize)ViewWidthNumberBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)ViewHeightNumberBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)ViewPixelSizeNumberBox).EndInit();

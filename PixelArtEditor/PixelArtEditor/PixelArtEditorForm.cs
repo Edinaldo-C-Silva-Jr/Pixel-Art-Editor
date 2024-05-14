@@ -604,6 +604,15 @@ namespace PixelArtEditor
         /// </summary>
         private void PasteButton_Click(object sender, EventArgs e)
         {
+            PasteImage();
+        }
+
+        /// <summary>
+        /// Pastes the clipboard image into its corresponding image box.
+        /// Then refreshes the images for both Drawing and Viewing Box to keep them in sync.
+        /// </summary>
+        private void PasteImage()
+        {
             Images.PasteSelectionOnImage(Selector.SelectedArea, Selector.CurrentImage);
 
             switch (Selector.CurrentImage)
@@ -847,5 +856,24 @@ namespace PixelArtEditor
             PaletteColorTable.SetAllColorValues(paletteValues);
         }
         #endregion
+
+        /// <summary>
+        /// Handles the keyboard shortcuts.
+        /// </summary>
+        private void PixelArtEditorForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control) // Control Key.
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.C: // Control C: Copy.
+                        Images.CopySelectionFromImage(Selector.SelectedArea, Selector.CurrentImage);
+                        break;
+                    case Keys.V: // Control V: Paste.
+                        PasteImage();
+                        break;
+                }
+            }
+        }
     }
 }
