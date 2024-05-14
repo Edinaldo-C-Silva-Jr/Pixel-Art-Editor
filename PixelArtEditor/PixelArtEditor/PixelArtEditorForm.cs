@@ -644,7 +644,7 @@ namespace PixelArtEditor
         /// <param name="location">The current location of the mouse cursor.</param>
         private void ChangeSelectionOnOriginalImage(Point location)
         {
-            Selector.ChangeSelectionArea(location, ViewingBox.Width, ViewingBox.Height, Images.OriginalPixelSize, GetViewingSelectionSize());
+            Selector.ChangeSelectionArea(location, ViewingBox.Size, Images.OriginalPixelSize, GetViewingSelectionSize());
             ViewingBox.Invalidate();
         }
 
@@ -655,7 +655,7 @@ namespace PixelArtEditor
         /// <param name="location">The current location of the mouse cursor.</param>
         private void ChangeSelectionOnDrawingImage(Point location)
         {
-            Selector.ChangeSelectionArea(location, DrawingBox.Width, DrawingBox.Height, Images.DrawingPixelSize);
+            Selector.ChangeSelectionArea(location, DrawingBox.Size, Images.DrawingPixelSize);
             DrawingBox.Invalidate();
         }
         #endregion

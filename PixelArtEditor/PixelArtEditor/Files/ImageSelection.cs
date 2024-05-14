@@ -98,16 +98,18 @@
 
         /// <summary>
         /// Changes the selection area based on the initial and final locations.
-        /// Utilizes the image's pixel size along with a multiplier to define the size to increment the selection.
+        /// Utilizes the image's pixel size along with a multiplier to define the base size of the selection.
         /// </summary>
         /// <param name="selectionEnd">The current click location, which is where the selecion ends.</param>
-        /// <param name="boxWidth">The width of the current Image's Box.</param>
-        /// <param name="boxHeight">The height of the current Image's Box.</param>
+        /// <param name="boxSize">The size of the current Image's Box.</param>
         /// <param name="pixelSize">The size of an individual pixel in the image being currently selected.</param>
         /// <param name="selectionMultiplier">The multiplier to use along with the pixel size to define the selection.</param>
-        public void ChangeSelectionArea(Point selectionEnd, int boxWidth, int boxHeight, int pixelSize, Size selectionMultiplier)
+        public void ChangeSelectionArea(Point selectionEnd, Size boxSize, int pixelSize, Size selectionMultiplier)
         {
-            ChangeSelectArea(selectionEnd, boxWidth, boxHeight, pixelSize, selectionMultiplier);
+            // Defines the selection size to use for the width and height based on the pixel size and the multiplier.
+            int xSelectionSize = pixelSize * selectionMultiplier.Width;
+            int ySelectionSize = pixelSize * selectionMultiplier.Height;
+            ChangeSelectArea(selectionEnd, boxSize, xSelectionSize, ySelectionSize);
         }
 
         /// <summary>
@@ -115,51 +117,45 @@
         /// Utilizes the image's pixel size as the base size for the selection.
         /// </summary>
         /// <param name="selectionEnd">The current click location, which is where the selecion ends.</param>
-        /// <param name="boxWidth">The width of the current Image's Box.</param>
-        /// <param name="boxHeight">The height of the current Image's Box.</param>
+        /// <param name="boxSize">The size of the current Image's Box.</param>
         /// <param name="pixelSize">The size of an individual pixel in the image being currently selected.</param>
-        public void ChangeSelectionArea(Point selectionEnd, int boxWidth, int boxHeight, int pixelSize)
+        public void ChangeSelectionArea(Point selectionEnd, Size boxSize, int pixelSize)
         {
-            ChangeSelectArea(selectionEnd, boxWidth, boxHeight, pixelSize, new(1,1));
+            ChangeSelectArea(selectionEnd, boxSize, pixelSize, pixelSize);
         }
 
         /// <summary>
         /// Changes the selection area based on the initial and final locations.
-        /// Utilizes the image's pixel size along with a multiplier to define the size to increment the selection.
+        /// Utilizes a separate value for width and height to allow for rectangular selection areas.
         /// </summary>
         /// <param name="selectionEnd">The current click location, which is where the selecion ends.</param>
-        /// <param name="boxWidth">The width of the current Image's Box.</param>
-        /// <param name="boxHeight">The height of the current Image's Box.</param>
-        /// <param name="pixelSize">The size of an individual pixel in the image being currently selected.</param>
-        /// <param name="selectionMultiplier">The multiplier to use along with the pixel size to define the selection.</param>
-        private void ChangeSelectArea(Point selectionEnd, int boxWidth, int boxHeight, int pixelSize, Size selectionMultiplier)
+        /// <param name="boxSize">The size of the current Image's Box.</param>
+        /// <param name="selectionWidth">The width to use for each increment of the selection.</param>
+        /// <param name="selectionHeight">The height to use for each increment of the selection.</param>
+        private void ChangeSelectArea(Point selectionEnd, Size boxSize, int selectionWidth, int selectionHeight)
         {
             Point beginSelecion = SelectionStart;
             Rectangle areaToSelect = new();
-
-            // Defines the selection size to use for the width and height individually. This allows rectangular selection increments.
-            int xSelectionSize = pixelSize * selectionMultiplier.Width;
-            int ySelectionSize = pixelSize * selectionMultiplier.Height;
 
             // Makes sure the begin and end coordinates are correctly ordered (the end coordinate has to be bigger than the begin coordinate)
             (beginSelecion.X, selectionEnd.X) = SwapCoordinatesWhenStartIsBigger(beginSelecion.X, selectionEnd.X);
             (beginSelecion.Y, selectionEnd.Y) = SwapCoordinatesWhenStartIsBigger(beginSelecion.Y, selectionEnd.Y);
 
             // Snaps the begin point to the top left of its equivalent selection square.
-            areaToSelect.X = beginSelecion.X - beginSelecion.X % xSelectionSize;
-            areaToSelect.Y = beginSelecion.Y - beginSelecion.Y % ySelectionSize;
+            areaToSelect.X = beginSelecion.X - beginSelecion.X % selectionWidth;
+            areaToSelect.Y = beginSelecion.Y - beginSelecion.Y % selectionHeight;
 
             // Makes sure the begin coordinates don't go outside the top or left of the box.
             areaToSelect.X = KeepValueAboveMinimum(areaToSelect.X, 0);
             areaToSelect.Y = KeepValueAboveMinimum(areaToSelect.Y, 0);
 
             // Snaps the end point to the bottom right of its equivalent selection square.
-            selectionEnd.X = selectionEnd.X - selectionEnd.X % xSelectionSize + xSelectionSize;
-            selectionEnd.Y = selectionEnd.Y - selectionEnd.Y % ySelectionSize + ySelectionSize;
+            selectionEnd.X = selectionEnd.X - selectionEnd.X % selectionWidth + selectionWidth;
+            selectionEnd.Y = selectionEnd.Y - selectionEnd.Y % selectionHeight + selectionHeight;
 
             // Makes sure the end coordinates don't go outside the bottom or right of the box.
-            selectionEnd.X = KeepValueBelowMaximum(selectionEnd.X, boxWidth - 1);
-            selectionEnd.Y = KeepValueBelowMaximum(selectionEnd.Y, boxHeight - 1);
+            selectionEnd.X = KeepValueBelowMaximum(selectionEnd.X, boxSize.Width - 1);
+            selectionEnd.Y = KeepValueBelowMaximum(selectionEnd.Y, boxSize.Height - 1);
 
             // Defines the Selection Area size with the coordinates.
             areaToSelect.Width = selectionEnd.X - areaToSelect.X;
