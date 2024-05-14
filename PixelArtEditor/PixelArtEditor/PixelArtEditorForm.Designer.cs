@@ -81,9 +81,9 @@
             DrawingBoxSizeButton = new Button();
             ViewingBoxSizeButton = new Button();
             ViewAreaGroupBox = new GroupBox();
-            DrawAreaGroupBox = new GroupBox();
-            SelectionSizeComboBox = new ComboBox();
             SeelctionSizeLabel = new Label();
+            SelectionSizeComboBox = new ComboBox();
+            DrawAreaGroupBox = new GroupBox();
             TopBarPanel = new Panel();
             DrawingDivisionPanel = new Panel();
             ViewingDivisionPanel = new Panel();
@@ -185,9 +185,9 @@
             // 
             // NewImageButton
             // 
-            NewImageButton.Location = new Point(472, 28);
+            NewImageButton.Location = new Point(5, 10);
             NewImageButton.Name = "NewImageButton";
-            NewImageButton.Size = new Size(80, 25);
+            NewImageButton.Size = new Size(50, 40);
             NewImageButton.TabIndex = 8;
             NewImageButton.Text = "New Image";
             NewImageButton.UseVisualStyleBackColor = true;
@@ -195,9 +195,9 @@
             // 
             // SaveImageButton
             // 
-            SaveImageButton.Location = new Point(472, 58);
+            SaveImageButton.Location = new Point(5, 55);
             SaveImageButton.Name = "SaveImageButton";
-            SaveImageButton.Size = new Size(80, 25);
+            SaveImageButton.Size = new Size(50, 40);
             SaveImageButton.TabIndex = 9;
             SaveImageButton.Text = "Save Image";
             SaveImageButton.UseVisualStyleBackColor = true;
@@ -240,7 +240,7 @@
             ColorsBackgroundPanel.Controls.Add(GridColorTable);
             ColorsBackgroundPanel.Controls.Add(GridColorLabel);
             ColorsBackgroundPanel.Controls.Add(ColorAmountLabel);
-            ColorsBackgroundPanel.Location = new Point(354, 12);
+            ColorsBackgroundPanel.Location = new Point(420, 0);
             ColorsBackgroundPanel.MaximumHeight = 200;
             ColorsBackgroundPanel.MaximumWidth = 300;
             ColorsBackgroundPanel.Name = "ColorsBackgroundPanel";
@@ -338,7 +338,7 @@
             // 
             // TransparencyCheckBox
             // 
-            TransparencyCheckBox.Location = new Point(651, 54);
+            TransparencyCheckBox.Location = new Point(801, 45);
             TransparencyCheckBox.Name = "TransparencyCheckBox";
             TransparencyCheckBox.Size = new Size(90, 20);
             TransparencyCheckBox.TabIndex = 12;
@@ -348,7 +348,7 @@
             // 
             // ColorChangeCheckBox
             // 
-            ColorChangeCheckBox.Location = new Point(651, 28);
+            ColorChangeCheckBox.Location = new Point(759, 21);
             ColorChangeCheckBox.Name = "ColorChangeCheckBox";
             ColorChangeCheckBox.Size = new Size(150, 20);
             ColorChangeCheckBox.TabIndex = 13;
@@ -357,9 +357,9 @@
             // 
             // LoadImageButton
             // 
-            LoadImageButton.Location = new Point(472, 88);
+            LoadImageButton.Location = new Point(5, 100);
             LoadImageButton.Name = "LoadImageButton";
-            LoadImageButton.Size = new Size(80, 25);
+            LoadImageButton.Size = new Size(50, 40);
             LoadImageButton.TabIndex = 14;
             LoadImageButton.Text = "Load Image";
             LoadImageButton.UseVisualStyleBackColor = true;
@@ -367,7 +367,7 @@
             // 
             // CopyButton
             // 
-            CopyButton.Location = new Point(557, 88);
+            CopyButton.Location = new Point(768, 94);
             CopyButton.Name = "CopyButton";
             CopyButton.Size = new Size(50, 25);
             CopyButton.TabIndex = 16;
@@ -377,7 +377,7 @@
             // 
             // PasteButton
             // 
-            PasteButton.Location = new Point(612, 88);
+            PasteButton.Location = new Point(841, 94);
             PasteButton.Name = "PasteButton";
             PasteButton.Size = new Size(50, 25);
             PasteButton.TabIndex = 17;
@@ -387,7 +387,7 @@
             // 
             // LoadPaletteButton
             // 
-            LoadPaletteButton.Location = new Point(557, 58);
+            LoadPaletteButton.Location = new Point(834, 63);
             LoadPaletteButton.Name = "LoadPaletteButton";
             LoadPaletteButton.Size = new Size(80, 25);
             LoadPaletteButton.TabIndex = 19;
@@ -397,7 +397,7 @@
             // 
             // SavePaletteButton
             // 
-            SavePaletteButton.Location = new Point(557, 28);
+            SavePaletteButton.Location = new Point(750, 63);
             SavePaletteButton.Name = "SavePaletteButton";
             SavePaletteButton.Size = new Size(80, 25);
             SavePaletteButton.TabIndex = 18;
@@ -407,7 +407,7 @@
             // 
             // FullMirrorPenButton
             // 
-            FullMirrorPenButton.Location = new Point(120, 0);
+            FullMirrorPenButton.Location = new Point(80, 0);
             FullMirrorPenButton.Name = "FullMirrorPenButton";
             FullMirrorPenButton.PreviewOnHold = false;
             FullMirrorPenButton.PreviewOnMove = true;
@@ -437,14 +437,14 @@
             DrawingToolButtonPanel.Controls.Add(HorizontalMirrorPenButton);
             DrawingToolButtonPanel.Controls.Add(PixelPenButton);
             DrawingToolButtonPanel.Controls.Add(FullMirrorPenButton);
-            DrawingToolButtonPanel.Location = new Point(844, 33);
+            DrawingToolButtonPanel.Location = new Point(920, 15);
             DrawingToolButtonPanel.Name = "DrawingToolButtonPanel";
-            DrawingToolButtonPanel.Size = new Size(240, 80);
+            DrawingToolButtonPanel.Size = new Size(160, 120);
             DrawingToolButtonPanel.TabIndex = 22;
             // 
             // OutlineRectangleButton
             // 
-            OutlineRectangleButton.Location = new Point(200, 40);
+            OutlineRectangleButton.Location = new Point(80, 80);
             OutlineRectangleButton.Name = "OutlineRectangleButton";
             OutlineRectangleButton.PreviewOnHold = true;
             OutlineRectangleButton.PreviewOnMove = false;
@@ -462,7 +462,7 @@
             // 
             // SolidRectangleButton
             // 
-            SolidRectangleButton.Location = new Point(160, 40);
+            SolidRectangleButton.Location = new Point(40, 80);
             SolidRectangleButton.Name = "SolidRectangleButton";
             SolidRectangleButton.PreviewOnHold = true;
             SolidRectangleButton.PreviewOnMove = false;
@@ -534,7 +534,7 @@
             // 
             // EraserButton
             // 
-            EraserButton.Location = new Point(0, 40);
+            EraserButton.Location = new Point(0, 80);
             EraserButton.Name = "EraserButton";
             EraserButton.PreviewOnHold = false;
             EraserButton.PreviewOnMove = true;
@@ -552,7 +552,7 @@
             // 
             // FourMirrorPenButton
             // 
-            FourMirrorPenButton.Location = new Point(160, 0);
+            FourMirrorPenButton.Location = new Point(120, 0);
             FourMirrorPenButton.Name = "FourMirrorPenButton";
             FourMirrorPenButton.PreviewOnHold = false;
             FourMirrorPenButton.PreviewOnMove = true;
@@ -570,7 +570,7 @@
             // 
             // VerticalMirrorPenButton
             // 
-            VerticalMirrorPenButton.Location = new Point(80, 0);
+            VerticalMirrorPenButton.Location = new Point(40, 0);
             VerticalMirrorPenButton.Name = "VerticalMirrorPenButton";
             VerticalMirrorPenButton.PreviewOnHold = false;
             VerticalMirrorPenButton.PreviewOnMove = true;
@@ -588,7 +588,7 @@
             // 
             // HorizontalMirrorPenButton
             // 
-            HorizontalMirrorPenButton.Location = new Point(40, 0);
+            HorizontalMirrorPenButton.Location = new Point(0, 0);
             HorizontalMirrorPenButton.Name = "HorizontalMirrorPenButton";
             HorizontalMirrorPenButton.PreviewOnHold = false;
             HorizontalMirrorPenButton.PreviewOnMove = true;
@@ -606,7 +606,7 @@
             // 
             // PixelPenButton
             // 
-            PixelPenButton.Location = new Point(0, 0);
+            PixelPenButton.Location = new Point(0, 40);
             PixelPenButton.Name = "PixelPenButton";
             PixelPenButton.PreviewOnHold = false;
             PixelPenButton.PreviewOnMove = true;
@@ -730,17 +730,38 @@
             // 
             ViewAreaGroupBox.Controls.Add(ViewWidthNumberBox);
             ViewAreaGroupBox.Controls.Add(ViewingBoxSizeButton);
+            ViewAreaGroupBox.Controls.Add(SeelctionSizeLabel);
+            ViewAreaGroupBox.Controls.Add(SelectionSizeComboBox);
             ViewAreaGroupBox.Controls.Add(ViewPixelWidthLabel);
             ViewAreaGroupBox.Controls.Add(ViewHeightNumberBox);
             ViewAreaGroupBox.Controls.Add(ViewPixelHeightLabel);
             ViewAreaGroupBox.Controls.Add(ViewPixelSizeNumberBox);
             ViewAreaGroupBox.Controls.Add(ViewPixelSizeLabel);
-            ViewAreaGroupBox.Location = new Point(180, 5);
+            ViewAreaGroupBox.Location = new Point(235, 5);
             ViewAreaGroupBox.Name = "ViewAreaGroupBox";
-            ViewAreaGroupBox.Size = new Size(150, 140);
+            ViewAreaGroupBox.Size = new Size(170, 140);
             ViewAreaGroupBox.TabIndex = 32;
             ViewAreaGroupBox.TabStop = false;
             ViewAreaGroupBox.Text = "Viewing Area Options";
+            // 
+            // SeelctionSizeLabel
+            // 
+            SeelctionSizeLabel.Location = new Point(100, 20);
+            SeelctionSizeLabel.Name = "SeelctionSizeLabel";
+            SeelctionSizeLabel.Size = new Size(55, 30);
+            SeelctionSizeLabel.TabIndex = 35;
+            SeelctionSizeLabel.Text = "Selection Size";
+            SeelctionSizeLabel.TextAlign = ContentAlignment.TopCenter;
+            // 
+            // SelectionSizeComboBox
+            // 
+            SelectionSizeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            SelectionSizeComboBox.FormattingEnabled = true;
+            SelectionSizeComboBox.Items.AddRange(new object[] { "3", "4", "5", "6", "Draw Box" });
+            SelectionSizeComboBox.Location = new Point(95, 50);
+            SelectionSizeComboBox.Name = "SelectionSizeComboBox";
+            SelectionSizeComboBox.Size = new Size(70, 23);
+            SelectionSizeComboBox.TabIndex = 34;
             // 
             // DrawAreaGroupBox
             // 
@@ -753,50 +774,29 @@
             DrawAreaGroupBox.Controls.Add(DrawHeightLabel);
             DrawAreaGroupBox.Controls.Add(GridTypeLabel);
             DrawAreaGroupBox.Controls.Add(GridTypeComboBox);
-            DrawAreaGroupBox.Location = new Point(5, 5);
+            DrawAreaGroupBox.Location = new Point(60, 5);
             DrawAreaGroupBox.Name = "DrawAreaGroupBox";
             DrawAreaGroupBox.Size = new Size(170, 140);
             DrawAreaGroupBox.TabIndex = 33;
             DrawAreaGroupBox.TabStop = false;
             DrawAreaGroupBox.Text = "Drawing Area Options";
             // 
-            // SelectionSizeComboBox
-            // 
-            SelectionSizeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            SelectionSizeComboBox.FormattingEnabled = true;
-            SelectionSizeComboBox.Items.AddRange(new object[] { "3", "4", "5", "6", "Draw Box" });
-            SelectionSizeComboBox.Location = new Point(710, 98);
-            SelectionSizeComboBox.Name = "SelectionSizeComboBox";
-            SelectionSizeComboBox.Size = new Size(70, 23);
-            SelectionSizeComboBox.TabIndex = 34;
-            // 
-            // SeelctionSizeLabel
-            // 
-            SeelctionSizeLabel.AutoSize = true;
-            SeelctionSizeLabel.Location = new Point(705, 83);
-            SeelctionSizeLabel.Name = "SeelctionSizeLabel";
-            SeelctionSizeLabel.Size = new Size(78, 15);
-            SeelctionSizeLabel.TabIndex = 35;
-            SeelctionSizeLabel.Text = "Selection Size";
-            // 
             // TopBarPanel
             // 
             TopBarPanel.BackColor = Color.LightGray;
             TopBarPanel.Controls.Add(DrawAreaGroupBox);
-            TopBarPanel.Controls.Add(ViewAreaGroupBox);
-            TopBarPanel.Controls.Add(SeelctionSizeLabel);
-            TopBarPanel.Controls.Add(ColorsBackgroundPanel);
+            TopBarPanel.Controls.Add(PasteButton);
             TopBarPanel.Controls.Add(ColorChangeCheckBox);
-            TopBarPanel.Controls.Add(SelectionSizeComboBox);
+            TopBarPanel.Controls.Add(CopyButton);
+            TopBarPanel.Controls.Add(ColorsBackgroundPanel);
+            TopBarPanel.Controls.Add(LoadPaletteButton);
+            TopBarPanel.Controls.Add(SavePaletteButton);
+            TopBarPanel.Controls.Add(ViewAreaGroupBox);
             TopBarPanel.Controls.Add(NewImageButton);
+            TopBarPanel.Controls.Add(TransparencyCheckBox);
             TopBarPanel.Controls.Add(SaveImageButton);
             TopBarPanel.Controls.Add(DrawingToolButtonPanel);
-            TopBarPanel.Controls.Add(TransparencyCheckBox);
-            TopBarPanel.Controls.Add(LoadPaletteButton);
             TopBarPanel.Controls.Add(LoadImageButton);
-            TopBarPanel.Controls.Add(SavePaletteButton);
-            TopBarPanel.Controls.Add(CopyButton);
-            TopBarPanel.Controls.Add(PasteButton);
             TopBarPanel.Location = new Point(0, 0);
             TopBarPanel.Name = "TopBarPanel";
             TopBarPanel.Size = new Size(1110, 150);
@@ -851,7 +851,6 @@
             ViewAreaGroupBox.ResumeLayout(false);
             DrawAreaGroupBox.ResumeLayout(false);
             TopBarPanel.ResumeLayout(false);
-            TopBarPanel.PerformLayout();
             DrawingDivisionPanel.ResumeLayout(false);
             ViewingDivisionPanel.ResumeLayout(false);
             ResumeLayout(false);
