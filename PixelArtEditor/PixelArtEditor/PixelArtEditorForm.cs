@@ -60,10 +60,8 @@ namespace PixelArtEditor
         /// </summary>
         private void PixelArtEditorForm_Load(object sender, EventArgs e)
         {
-            // Initializes the panels and the controls.
+            // Initializes the controls.
             InitializeControlValues();
-            InitializeColorsPanel();
-            SetPaletteColorAmount();
 
             // Initializes the Drawing and Viewing Boxes.
             SetViewingSizeValues();
@@ -86,37 +84,15 @@ namespace PixelArtEditor
 
         #region Control Initialization
         /// <summary>
-        /// Sets all the location and text values to the controls in the ColorAreaBackgroundPanel.
-        /// Builds the panel programatically as to prevent Designer clutter.
-        /// </summary>
-        private void InitializeColorsPanel()
-        {
-            // Sets the text and size of the Color Amount Label, and moves the ComboBox accordingly
-            ColorAmountLabel.Size = new Size(90, 20);
-            ColorAmountLabel.Text = "Color Amount";
-            ColorAmountComboBox.Location = new Point(ColorAmountLabel.Location.X + ColorAmountLabel.Width, ColorAmountComboBox.Location.Y);
-
-            // Sets the text and size of the Grid Color Label, and moves the ColorTable accordingly
-            GridColorLabel.Size = new Size(65, 20);
-            GridColorLabel.Text = "Grid Color";
-            GridColorTable.Location = new Point(GridColorLabel.Location.X + GridColorLabel.Width, GridColorTable.Location.Y);
-
-            // Sets the text, size and location of the Background Color Label, and moves the ColorTable accordingly
-            BackgroundColorLabel.Size = new Size(110, 20);
-            BackgroundColorLabel.Text = "Background Color";
-            BackgroundColorLabel.Location = new Point(GridColorTable.Location.X + GridColorTable.Width + 10, BackgroundColorLabel.Location.Y);
-            BackgroundColorTable.Location = new Point(BackgroundColorLabel.Location.X + BackgroundColorLabel.Width, BackgroundColorTable.Location.Y);
-        }
-
-        /// <summary>
         /// Sets all the default values for controls that need a default value.
         /// Also initializes the ColorTables and ComboBoxes
         /// </summary>
         private void InitializeControlValues()
         {
-            // Generates the ColorTables for Grid Color and Background Color.
+            // Generates the ColorTables.
             GridColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked), Color.LightGray);
             BackgroundColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked), Color.White);
+            PaletteColorTable.GenerateColorGrid(64, new EventHandler(ColorCellClicked));
 
             // Defines the values for the GridType ComboBox based on the GridType Enum values.
             GridTypeComboBox.DataSource = Enum.GetValues(typeof(GridType));
@@ -124,28 +100,12 @@ namespace PixelArtEditor
             // Sets default values for the ComboBoxes and CheckBoxes
             GridTypeComboBox.SelectedItem = GridType.None;
             SelectionSizeComboBox.SelectedIndex = 0;
-            ColorAmountComboBox.SelectedIndex = 3;
             TransparencyCheckBox.Checked = false;
             ColorChangeCheckBox.Checked = true;
 
             DrawingToolButtonPanel.ReorganizeButtons();
         }
         #endregion
-
-        /// <summary>
-        /// Sets the amount of colors shown in the Palette ColorTable based on the amount of colors selected in the ComboBox. 
-        /// </summary>
-        private void SetPaletteColorAmount()
-        {
-            int colorAmount = int.Parse(ColorAmountComboBox.SelectedItem.ToString() ?? "0");
-            PaletteColorTable.GenerateColorGrid(colorAmount, new EventHandler(ColorCellClicked));
-        }
-
-        private void ColorAmountComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SetPaletteColorAmount();
-            ReorganizeControls();
-        }
 
         #region Viewing Box Size and Clicking
         /// <summary>
@@ -672,14 +632,13 @@ namespace PixelArtEditor
 
 
         /// <summary>
-        /// Resizes all Background Panels to fit the current size of their controls and updates their location accordingly to the size of the ones around them.
+        /// Resizes all Background Panels to fit the current size of their controls.
         /// </summary>
         private void ReorganizeControls()
         {
             SuspendLayout();
             DrawingBackgroundPanel.ResizePanelToFitControls();
             ViewingBackgroundPanel.ResizePanelToFitControls();
-            ColorsBackgroundPanel.ResizePanelToFitControls();
             ResumeLayout();
         }
 

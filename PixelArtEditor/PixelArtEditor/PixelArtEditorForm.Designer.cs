@@ -41,22 +41,19 @@
             ColorPickerDialog = new ColorDialog();
             DrawingBackgroundPanel = new Controls.BackgroundPanel();
             DrawingBox = new Controls.DrawBox();
-            ColorsBackgroundPanel = new Controls.BackgroundPanel();
-            ColorAmountComboBox = new ComboBox();
             PaletteColorTable = new Controls.ColorTable();
             BackgroundColorTable = new Controls.ColorTable();
+            ColorChangeCheckBox = new CheckBox();
             BackgroundColorLabel = new Label();
             GridColorTable = new Controls.ColorTable();
             GridColorLabel = new Label();
-            ColorAmountLabel = new Label();
+            LoadPaletteButton = new Button();
+            SavePaletteButton = new Button();
             TransparencyCheckBox = new CheckBox();
-            ColorChangeCheckBox = new CheckBox();
             LoadImageButton = new Button();
             DialogForLoadingFiles = new OpenFileDialog();
             CopyButton = new Button();
             PasteButton = new Button();
-            LoadPaletteButton = new Button();
-            SavePaletteButton = new Button();
             DialogForSavingFiles = new SaveFileDialog();
             FullMirrorPenButton = new Controls.ToolButton();
             DrawingToolButtonPanel = new Controls.ToolButtonPanel();
@@ -85,6 +82,7 @@
             SelectionSizeComboBox = new ComboBox();
             DrawAreaGroupBox = new GroupBox();
             TopBarPanel = new Panel();
+            ColorsPanel = new Panel();
             DrawingDivisionPanel = new Panel();
             ViewingDivisionPanel = new Panel();
             ((System.ComponentModel.ISupportInitialize)ViewWidthNumberBox).BeginInit();
@@ -92,7 +90,6 @@
             ((System.ComponentModel.ISupportInitialize)ViewPixelSizeNumberBox).BeginInit();
             DrawingBackgroundPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DrawingBox).BeginInit();
-            ColorsBackgroundPanel.SuspendLayout();
             DrawingToolButtonPanel.SuspendLayout();
             ViewingBackgroundPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ViewingBox).BeginInit();
@@ -102,6 +99,7 @@
             ViewAreaGroupBox.SuspendLayout();
             DrawAreaGroupBox.SuspendLayout();
             TopBarPanel.SuspendLayout();
+            ColorsPanel.SuspendLayout();
             DrawingDivisionPanel.SuspendLayout();
             ViewingDivisionPanel.SuspendLayout();
             SuspendLayout();
@@ -230,34 +228,6 @@
             DrawingBox.MouseMove += DrawingBox_MouseMove;
             DrawingBox.MouseUp += DrawingBox_MouseUp;
             // 
-            // ColorsBackgroundPanel
-            // 
-            ColorsBackgroundPanel.BackColor = Color.White;
-            ColorsBackgroundPanel.Controls.Add(ColorAmountComboBox);
-            ColorsBackgroundPanel.Controls.Add(PaletteColorTable);
-            ColorsBackgroundPanel.Controls.Add(BackgroundColorTable);
-            ColorsBackgroundPanel.Controls.Add(BackgroundColorLabel);
-            ColorsBackgroundPanel.Controls.Add(GridColorTable);
-            ColorsBackgroundPanel.Controls.Add(GridColorLabel);
-            ColorsBackgroundPanel.Controls.Add(ColorAmountLabel);
-            ColorsBackgroundPanel.Location = new Point(420, 0);
-            ColorsBackgroundPanel.MaximumHeight = 200;
-            ColorsBackgroundPanel.MaximumWidth = 300;
-            ColorsBackgroundPanel.Name = "ColorsBackgroundPanel";
-            ColorsBackgroundPanel.Size = new Size(120, 120);
-            ColorsBackgroundPanel.TabIndex = 11;
-            // 
-            // ColorAmountComboBox
-            // 
-            ColorAmountComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            ColorAmountComboBox.FormattingEnabled = true;
-            ColorAmountComboBox.Items.AddRange(new object[] { "2", "4", "8", "16", "32", "64" });
-            ColorAmountComboBox.Location = new Point(25, 3);
-            ColorAmountComboBox.Name = "ColorAmountComboBox";
-            ColorAmountComboBox.Size = new Size(50, 23);
-            ColorAmountComboBox.TabIndex = 17;
-            ColorAmountComboBox.SelectedIndexChanged += ColorAmountComboBox_SelectedIndexChanged;
-            // 
             // PaletteColorTable
             // 
             PaletteColorTable.BackColor = SystemColors.Control;
@@ -267,7 +237,7 @@
             PaletteColorTable.ColumnCount = 1;
             PaletteColorTable.ColumnStyles.Add(new ColumnStyle());
             PaletteColorTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            PaletteColorTable.Location = new Point(1, 80);
+            PaletteColorTable.Location = new Point(3, 70);
             PaletteColorTable.MaximumCellAmount = 64;
             PaletteColorTable.Name = "PaletteColorTable";
             PaletteColorTable.RowCount = 2;
@@ -280,12 +250,12 @@
             // 
             BackgroundColorTable.BackColor = SystemColors.Control;
             BackgroundColorTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            BackgroundColorTable.CellSize = 30;
+            BackgroundColorTable.CellSize = 16;
             BackgroundColorTable.CellVisibleSelection = false;
             BackgroundColorTable.ColumnCount = 1;
             BackgroundColorTable.ColumnStyles.Add(new ColumnStyle());
             BackgroundColorTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            BackgroundColorTable.Location = new Point(90, 40);
+            BackgroundColorTable.Location = new Point(160, 45);
             BackgroundColorTable.MaximumCellAmount = 1;
             BackgroundColorTable.Name = "BackgroundColorTable";
             BackgroundColorTable.RowCount = 1;
@@ -294,24 +264,34 @@
             BackgroundColorTable.Size = new Size(20, 20);
             BackgroundColorTable.TabIndex = 14;
             // 
+            // ColorChangeCheckBox
+            // 
+            ColorChangeCheckBox.Location = new Point(115, 20);
+            ColorChangeCheckBox.Name = "ColorChangeCheckBox";
+            ColorChangeCheckBox.Size = new Size(150, 20);
+            ColorChangeCheckBox.TabIndex = 13;
+            ColorChangeCheckBox.Text = "Change Color in Image";
+            ColorChangeCheckBox.UseVisualStyleBackColor = true;
+            // 
             // BackgroundColorLabel
             // 
-            BackgroundColorLabel.Location = new Point(60, 45);
+            BackgroundColorLabel.Location = new Point(80, 45);
             BackgroundColorLabel.Name = "BackgroundColorLabel";
-            BackgroundColorLabel.Size = new Size(30, 20);
+            BackgroundColorLabel.Size = new Size(80, 20);
             BackgroundColorLabel.TabIndex = 15;
-            BackgroundColorLabel.Text = "BC";
+            BackgroundColorLabel.Text = "Background";
+            BackgroundColorLabel.TextAlign = ContentAlignment.TopCenter;
             // 
             // GridColorTable
             // 
             GridColorTable.BackColor = SystemColors.Control;
             GridColorTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            GridColorTable.CellSize = 30;
+            GridColorTable.CellSize = 16;
             GridColorTable.CellVisibleSelection = false;
             GridColorTable.ColumnCount = 1;
             GridColorTable.ColumnStyles.Add(new ColumnStyle());
             GridColorTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            GridColorTable.Location = new Point(30, 40);
+            GridColorTable.Location = new Point(35, 45);
             GridColorTable.MaximumCellAmount = 1;
             GridColorTable.Name = "GridColorTable";
             GridColorTable.RowCount = 2;
@@ -322,38 +302,42 @@
             // 
             // GridColorLabel
             // 
-            GridColorLabel.Location = new Point(0, 45);
+            GridColorLabel.Location = new Point(5, 45);
             GridColorLabel.Name = "GridColorLabel";
             GridColorLabel.Size = new Size(30, 20);
             GridColorLabel.TabIndex = 13;
-            GridColorLabel.Text = "GC";
+            GridColorLabel.Text = "Grid";
+            GridColorLabel.TextAlign = ContentAlignment.TopCenter;
             // 
-            // ColorAmountLabel
+            // LoadPaletteButton
             // 
-            ColorAmountLabel.Location = new Point(0, 5);
-            ColorAmountLabel.Name = "ColorAmountLabel";
-            ColorAmountLabel.Size = new Size(30, 20);
-            ColorAmountLabel.TabIndex = 12;
-            ColorAmountLabel.Text = "CA";
+            LoadPaletteButton.Location = new Point(56, 1);
+            LoadPaletteButton.Name = "LoadPaletteButton";
+            LoadPaletteButton.Size = new Size(55, 40);
+            LoadPaletteButton.TabIndex = 19;
+            LoadPaletteButton.Text = "Load Palette";
+            LoadPaletteButton.UseVisualStyleBackColor = true;
+            LoadPaletteButton.Click += LoadPaletteButton_Click;
+            // 
+            // SavePaletteButton
+            // 
+            SavePaletteButton.Location = new Point(1, 1);
+            SavePaletteButton.Name = "SavePaletteButton";
+            SavePaletteButton.Size = new Size(55, 40);
+            SavePaletteButton.TabIndex = 18;
+            SavePaletteButton.Text = "Save Palette";
+            SavePaletteButton.UseVisualStyleBackColor = true;
+            SavePaletteButton.Click += SavePaletteButton_Click;
             // 
             // TransparencyCheckBox
             // 
-            TransparencyCheckBox.Location = new Point(801, 45);
+            TransparencyCheckBox.Location = new Point(115, 0);
             TransparencyCheckBox.Name = "TransparencyCheckBox";
-            TransparencyCheckBox.Size = new Size(90, 20);
+            TransparencyCheckBox.Size = new Size(160, 20);
             TransparencyCheckBox.TabIndex = 12;
-            TransparencyCheckBox.Text = "Transparent";
+            TransparencyCheckBox.Text = "Transparent Background";
             TransparencyCheckBox.UseVisualStyleBackColor = true;
             TransparencyCheckBox.CheckedChanged += TransparencyCheckBox_CheckedChanged;
-            // 
-            // ColorChangeCheckBox
-            // 
-            ColorChangeCheckBox.Location = new Point(759, 21);
-            ColorChangeCheckBox.Name = "ColorChangeCheckBox";
-            ColorChangeCheckBox.Size = new Size(150, 20);
-            ColorChangeCheckBox.TabIndex = 13;
-            ColorChangeCheckBox.Text = "Change Color in Image";
-            ColorChangeCheckBox.UseVisualStyleBackColor = true;
             // 
             // LoadImageButton
             // 
@@ -367,7 +351,7 @@
             // 
             // CopyButton
             // 
-            CopyButton.Location = new Point(768, 94);
+            CopyButton.Location = new Point(785, 94);
             CopyButton.Name = "CopyButton";
             CopyButton.Size = new Size(50, 25);
             CopyButton.TabIndex = 16;
@@ -384,26 +368,6 @@
             PasteButton.Text = "Paste";
             PasteButton.UseVisualStyleBackColor = true;
             PasteButton.Click += PasteButton_Click;
-            // 
-            // LoadPaletteButton
-            // 
-            LoadPaletteButton.Location = new Point(834, 63);
-            LoadPaletteButton.Name = "LoadPaletteButton";
-            LoadPaletteButton.Size = new Size(80, 25);
-            LoadPaletteButton.TabIndex = 19;
-            LoadPaletteButton.Text = "Load Palette";
-            LoadPaletteButton.UseVisualStyleBackColor = true;
-            LoadPaletteButton.Click += LoadPaletteButton_Click;
-            // 
-            // SavePaletteButton
-            // 
-            SavePaletteButton.Location = new Point(750, 63);
-            SavePaletteButton.Name = "SavePaletteButton";
-            SavePaletteButton.Size = new Size(80, 25);
-            SavePaletteButton.TabIndex = 18;
-            SavePaletteButton.Text = "Save Palette";
-            SavePaletteButton.UseVisualStyleBackColor = true;
-            SavePaletteButton.Click += SavePaletteButton_Click;
             // 
             // FullMirrorPenButton
             // 
@@ -737,7 +701,7 @@
             ViewAreaGroupBox.Controls.Add(ViewPixelHeightLabel);
             ViewAreaGroupBox.Controls.Add(ViewPixelSizeNumberBox);
             ViewAreaGroupBox.Controls.Add(ViewPixelSizeLabel);
-            ViewAreaGroupBox.Location = new Point(235, 5);
+            ViewAreaGroupBox.Location = new Point(240, 5);
             ViewAreaGroupBox.Name = "ViewAreaGroupBox";
             ViewAreaGroupBox.Size = new Size(170, 140);
             ViewAreaGroupBox.TabIndex = 32;
@@ -765,6 +729,7 @@
             // 
             // DrawAreaGroupBox
             // 
+            DrawAreaGroupBox.BackColor = Color.LightGray;
             DrawAreaGroupBox.Controls.Add(DrawWidthNumberBox);
             DrawAreaGroupBox.Controls.Add(DrawWidthLabel);
             DrawAreaGroupBox.Controls.Add(DrawPixelSizeNumberBox);
@@ -784,16 +749,12 @@
             // TopBarPanel
             // 
             TopBarPanel.BackColor = Color.LightGray;
+            TopBarPanel.Controls.Add(ColorsPanel);
             TopBarPanel.Controls.Add(DrawAreaGroupBox);
             TopBarPanel.Controls.Add(PasteButton);
-            TopBarPanel.Controls.Add(ColorChangeCheckBox);
             TopBarPanel.Controls.Add(CopyButton);
-            TopBarPanel.Controls.Add(ColorsBackgroundPanel);
-            TopBarPanel.Controls.Add(LoadPaletteButton);
-            TopBarPanel.Controls.Add(SavePaletteButton);
             TopBarPanel.Controls.Add(ViewAreaGroupBox);
             TopBarPanel.Controls.Add(NewImageButton);
-            TopBarPanel.Controls.Add(TransparencyCheckBox);
             TopBarPanel.Controls.Add(SaveImageButton);
             TopBarPanel.Controls.Add(DrawingToolButtonPanel);
             TopBarPanel.Controls.Add(LoadImageButton);
@@ -801,6 +762,23 @@
             TopBarPanel.Name = "TopBarPanel";
             TopBarPanel.Size = new Size(1110, 150);
             TopBarPanel.TabIndex = 36;
+            // 
+            // ColorsPanel
+            // 
+            ColorsPanel.BackColor = Color.Gainsboro;
+            ColorsPanel.Controls.Add(PaletteColorTable);
+            ColorsPanel.Controls.Add(SavePaletteButton);
+            ColorsPanel.Controls.Add(BackgroundColorTable);
+            ColorsPanel.Controls.Add(TransparencyCheckBox);
+            ColorsPanel.Controls.Add(ColorChangeCheckBox);
+            ColorsPanel.Controls.Add(LoadPaletteButton);
+            ColorsPanel.Controls.Add(BackgroundColorLabel);
+            ColorsPanel.Controls.Add(GridColorLabel);
+            ColorsPanel.Controls.Add(GridColorTable);
+            ColorsPanel.Location = new Point(420, 5);
+            ColorsPanel.Name = "ColorsPanel";
+            ColorsPanel.Size = new Size(280, 140);
+            ColorsPanel.TabIndex = 11;
             // 
             // DrawingDivisionPanel
             // 
@@ -826,6 +804,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BackColor = Color.White;
             ClientSize = new Size(1184, 761);
             Controls.Add(ViewingDivisionPanel);
             Controls.Add(DrawingDivisionPanel);
@@ -841,7 +820,6 @@
             ((System.ComponentModel.ISupportInitialize)ViewPixelSizeNumberBox).EndInit();
             DrawingBackgroundPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)DrawingBox).EndInit();
-            ColorsBackgroundPanel.ResumeLayout(false);
             DrawingToolButtonPanel.ResumeLayout(false);
             ViewingBackgroundPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)ViewingBox).EndInit();
@@ -851,6 +829,7 @@
             ViewAreaGroupBox.ResumeLayout(false);
             DrawAreaGroupBox.ResumeLayout(false);
             TopBarPanel.ResumeLayout(false);
+            ColorsPanel.ResumeLayout(false);
             DrawingDivisionPanel.ResumeLayout(false);
             ViewingDivisionPanel.ResumeLayout(false);
             ResumeLayout(false);
@@ -871,13 +850,10 @@
         private ColorDialog ColorPickerDialog;
         private Controls.BackgroundPanel DrawingBackgroundPanel;
         private Controls.DrawBox DrawingBox;
-        private Controls.BackgroundPanel ColorsBackgroundPanel;
         private Label GridColorLabel;
-        private Label ColorAmountLabel;
         private Controls.ColorTable GridColorTable;
         private Controls.ColorTable BackgroundColorTable;
         private Label BackgroundColorLabel;
-        private ComboBox ColorAmountComboBox;
         private Controls.ColorTable PaletteColorTable;
         private CheckBox TransparencyCheckBox;
         private CheckBox ColorChangeCheckBox;
@@ -917,5 +893,6 @@
         private Panel TopBarPanel;
         private Panel DrawingDivisionPanel;
         private Panel ViewingDivisionPanel;
+        private Panel ColorsPanel;
     }
 }
