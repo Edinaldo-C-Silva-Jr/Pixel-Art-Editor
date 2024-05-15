@@ -70,7 +70,8 @@
 
         /// <summary>
         /// Checks the maximum size of the control after being resized.
-        /// If the new size is bigger than the maximum size, it gets reduced so the scroll bars are enabled.
+        /// If the new size exceeds the maximum size and the scroll bar space, it's reduced so scroll bars are enabled.
+        /// The size is also adjusted to compensate for the space taken by the scroll bars.
         /// </summary>
         public void CheckMaximumAllowedSize()
         {
@@ -78,17 +79,28 @@
             // This is used to get the control's size regardless of the position of the scroll bars.
             Rectangle controlSize = DisplayRectangle;
 
-            // If the current width is bigger than the maximum allowed size...
-            if (controlSize.Width > MaximumWidth)
-            {
-                Width = MaximumWidth; // Reduce the width, which will cause scroll bars to appear...
-                Height += SystemInformation.VerticalScrollBarWidth; // And increase the height to compensate for the scroll bars being inside the control.
-            }
+            // Boolean values to store whether the scroll bars are enabled or not.
+            bool xScroll = false, yScroll = false;
 
-            // Do the same for the height.
-            if (controlSize.Height > MaximumHeight)
+            // Checks if the current width and height are bigger than the maximum allowed, including the size of the scroll bars.
+            if (controlSize.Width > MaximumWidth + SystemInformation.VerticalScrollBarWidth)
             {
+                xScroll = true;
+                Width = MaximumWidth;
+            }
+            if (controlSize.Height > MaximumHeight + SystemInformation.HorizontalScrollBarHeight)
+            {
+                yScroll = true;
                 Height = MaximumHeight;
+            }
+            
+            // Increases the height and width of the panel to compensate for the space taken by scroll bars.
+            if (xScroll) 
+            { 
+                Height += SystemInformation.VerticalScrollBarWidth; 
+            }
+            if (yScroll)
+            {
                 Width += SystemInformation.HorizontalScrollBarHeight;
             }
         }

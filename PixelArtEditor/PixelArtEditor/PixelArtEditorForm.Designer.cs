@@ -209,7 +209,7 @@
             DrawingBackgroundPanel.AutoScrollMargin = new Size(1, 1);
             DrawingBackgroundPanel.BackColor = Color.Black;
             DrawingBackgroundPanel.Controls.Add(DrawingBox);
-            DrawingBackgroundPanel.Location = new Point(10, 10);
+            DrawingBackgroundPanel.Location = new Point(5, 5);
             DrawingBackgroundPanel.MaximumHeight = 514;
             DrawingBackgroundPanel.MaximumWidth = 514;
             DrawingBackgroundPanel.Name = "DrawingBackgroundPanel";
@@ -594,7 +594,7 @@
             ViewingBackgroundPanel.AutoScrollMargin = new Size(1, 1);
             ViewingBackgroundPanel.BackColor = Color.Black;
             ViewingBackgroundPanel.Controls.Add(ViewingBox);
-            ViewingBackgroundPanel.Location = new Point(10, 10);
+            ViewingBackgroundPanel.Location = new Point(5, 5);
             ViewingBackgroundPanel.MaximumHeight = 514;
             ViewingBackgroundPanel.MaximumWidth = 514;
             ViewingBackgroundPanel.Name = "ViewingBackgroundPanel";
