@@ -171,9 +171,9 @@
             // 
             // GridTypeLabel
             // 
-            GridTypeLabel.Location = new Point(105, 25);
+            GridTypeLabel.Location = new Point(105, 20);
             GridTypeLabel.Name = "GridTypeLabel";
-            GridTypeLabel.Size = new Size(40, 20);
+            GridTypeLabel.Size = new Size(40, 15);
             GridTypeLabel.TabIndex = 6;
             GridTypeLabel.Text = "Grid";
             GridTypeLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -182,7 +182,7 @@
             // 
             GridTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             GridTypeComboBox.FormattingEnabled = true;
-            GridTypeComboBox.Location = new Point(95, 45);
+            GridTypeComboBox.Location = new Point(95, 35);
             GridTypeComboBox.Name = "GridTypeComboBox";
             GridTypeComboBox.Size = new Size(60, 23);
             GridTypeComboBox.TabIndex = 7;
@@ -410,7 +410,7 @@
             DrawingToolButtonPanel.Controls.Add(HorizontalMirrorPenButton);
             DrawingToolButtonPanel.Controls.Add(PixelPenButton);
             DrawingToolButtonPanel.Controls.Add(FullMirrorPenButton);
-            DrawingToolButtonPanel.Location = new Point(790, 5);
+            DrawingToolButtonPanel.Location = new Point(800, 5);
             DrawingToolButtonPanel.Name = "DrawingToolButtonPanel";
             DrawingToolButtonPanel.Size = new Size(275, 150);
             DrawingToolButtonPanel.TabIndex = 22;
@@ -634,7 +634,7 @@
             // 
             // DrawPixelSizeNumberBox
             // 
-            DrawPixelSizeNumberBox.Location = new Point(45, 120);
+            DrawPixelSizeNumberBox.Location = new Point(45, 115);
             DrawPixelSizeNumberBox.Maximum = new decimal(new int[] { 32, 0, 0, 0 });
             DrawPixelSizeNumberBox.Minimum = new decimal(new int[] { 8, 0, 0, 0 });
             DrawPixelSizeNumberBox.Name = "DrawPixelSizeNumberBox";
@@ -645,7 +645,7 @@
             // 
             // DrawPixelSizeLabel
             // 
-            DrawPixelSizeLabel.Location = new Point(5, 120);
+            DrawPixelSizeLabel.Location = new Point(5, 115);
             DrawPixelSizeLabel.Name = "DrawPixelSizeLabel";
             DrawPixelSizeLabel.Size = new Size(40, 20);
             DrawPixelSizeLabel.TabIndex = 28;
@@ -654,7 +654,7 @@
             // 
             // DrawHeightNumberBox
             // 
-            DrawHeightNumberBox.Location = new Point(55, 50);
+            DrawHeightNumberBox.Location = new Point(55, 45);
             DrawHeightNumberBox.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
             DrawHeightNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
             DrawHeightNumberBox.Name = "DrawHeightNumberBox";
@@ -664,7 +664,7 @@
             // 
             // DrawHeightLabel
             // 
-            DrawHeightLabel.Location = new Point(5, 50);
+            DrawHeightLabel.Location = new Point(5, 45);
             DrawHeightLabel.Name = "DrawHeightLabel";
             DrawHeightLabel.Size = new Size(50, 20);
             DrawHeightLabel.TabIndex = 26;
@@ -673,7 +673,7 @@
             // 
             // DrawWidthNumberBox
             // 
-            DrawWidthNumberBox.Location = new Point(55, 25);
+            DrawWidthNumberBox.Location = new Point(55, 20);
             DrawWidthNumberBox.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
             DrawWidthNumberBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
             DrawWidthNumberBox.Name = "DrawWidthNumberBox";
@@ -683,7 +683,7 @@
             // 
             // DrawWidthLabel
             // 
-            DrawWidthLabel.Location = new Point(5, 25);
+            DrawWidthLabel.Location = new Point(5, 20);
             DrawWidthLabel.Name = "DrawWidthLabel";
             DrawWidthLabel.Size = new Size(50, 20);
             DrawWidthLabel.TabIndex = 24;
@@ -692,7 +692,7 @@
             // 
             // DrawingBoxSizeButton
             // 
-            DrawingBoxSizeButton.Location = new Point(5, 75);
+            DrawingBoxSizeButton.Location = new Point(5, 70);
             DrawingBoxSizeButton.Name = "DrawingBoxSizeButton";
             DrawingBoxSizeButton.Size = new Size(80, 30);
             DrawingBoxSizeButton.TabIndex = 30;
@@ -712,9 +712,9 @@
             // 
             // SeelctionSizeLabel
             // 
-            SeelctionSizeLabel.Location = new Point(100, 20);
+            SeelctionSizeLabel.Location = new Point(95, 20);
             SeelctionSizeLabel.Name = "SeelctionSizeLabel";
-            SeelctionSizeLabel.Size = new Size(55, 30);
+            SeelctionSizeLabel.Size = new Size(80, 15);
             SeelctionSizeLabel.TabIndex = 35;
             SeelctionSizeLabel.Text = "Selection Size";
             SeelctionSizeLabel.TextAlign = ContentAlignment.TopCenter;
@@ -724,9 +724,9 @@
             SelectionSizeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             SelectionSizeComboBox.FormattingEnabled = true;
             SelectionSizeComboBox.Items.AddRange(new object[] { "3", "4", "5", "6", "Draw Box" });
-            SelectionSizeComboBox.Location = new Point(95, 50);
+            SelectionSizeComboBox.Location = new Point(95, 35);
             SelectionSizeComboBox.Name = "SelectionSizeComboBox";
-            SelectionSizeComboBox.Size = new Size(70, 23);
+            SelectionSizeComboBox.Size = new Size(80, 23);
             SelectionSizeComboBox.TabIndex = 34;
             // 
             // TopBarPanel
@@ -758,7 +758,7 @@
             ViewingAreaOptionsPanel.Controls.Add(ViewHeightNumberBox);
             ViewingAreaOptionsPanel.Location = new Point(320, 5);
             ViewingAreaOptionsPanel.Name = "ViewingAreaOptionsPanel";
-            ViewingAreaOptionsPanel.Size = new Size(170, 150);
+            ViewingAreaOptionsPanel.Size = new Size(180, 150);
             ViewingAreaOptionsPanel.TabIndex = 11;
             // 
             // ViewingAreaOptionsLabel
@@ -767,7 +767,7 @@
             ViewingAreaOptionsLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             ViewingAreaOptionsLabel.Location = new Point(0, 0);
             ViewingAreaOptionsLabel.Name = "ViewingAreaOptionsLabel";
-            ViewingAreaOptionsLabel.Size = new Size(168, 15);
+            ViewingAreaOptionsLabel.Size = new Size(178, 15);
             ViewingAreaOptionsLabel.TabIndex = 36;
             ViewingAreaOptionsLabel.Text = "Viewing Area Options";
             ViewingAreaOptionsLabel.TextAlign = ContentAlignment.TopCenter;
@@ -843,7 +843,7 @@
             ColorPalettePanel.Controls.Add(BackgroundColorLabel);
             ColorPalettePanel.Controls.Add(GridColorLabel);
             ColorPalettePanel.Controls.Add(GridColorTable);
-            ColorPalettePanel.Location = new Point(500, 5);
+            ColorPalettePanel.Location = new Point(510, 5);
             ColorPalettePanel.Name = "ColorPalettePanel";
             ColorPalettePanel.Size = new Size(280, 150);
             ColorPalettePanel.TabIndex = 11;
