@@ -11,12 +11,15 @@
         /// </summary>
         public int CurrentButton { get; private set; }
 
+        private List<ToolButton> ButtonList { get; set; }
+
         /// <summary>
         /// Default constructor, always starts with the ToolButton with value 0 selected.
         /// </summary>
         public ToolButtonPanel()
         {
             CurrentButton = 0;
+            ButtonList = new();
             InitializeComponent();
         }
 
@@ -25,14 +28,17 @@
         /// </summary>
         public void ReorganizeButtons()
         {
-            Control[] unorderedControls = new Control[Controls.Count];
-            Controls.CopyTo(unorderedControls, 0);
-            foreach (ToolButton button in unorderedControls.Cast<ToolButton>()) 
+            foreach (Control control in Controls)
             {
-                Controls.SetChildIndex(button, button.ToolValue);
+                if (control is ToolButton button)
+                {
+                    ButtonList.Add(button);
+                }
             }
 
-            Controls[0].Enabled = false; // Since the tool with value 0 is selected by default, it starts as disabled.
+            ButtonList = ButtonList.OrderBy(button => button.ToolValue).ToList();
+
+            ButtonList[0].Enabled = false; // Since the tool with value 0 is selected by default, it starts as disabled.
         }
 
         /// <summary>
@@ -41,7 +47,7 @@
         /// <param name="button">The new button that will be selected.</param>
         public void ChangeCurrentButton(ToolButton button)
         {
-            Controls[CurrentButton].Enabled = true; // Enables the previously selected button.
+            ButtonList[CurrentButton].Enabled = true; // Enables the previously selected button.
             CurrentButton = button.ToolValue;
             button.Enabled = false; // Disables the newly selected button.
         }
@@ -54,7 +60,7 @@
         {
             Dictionary<string, bool> properties = new();
 
-            if (Controls[CurrentButton] is ToolButton button)
+            if (ButtonList[CurrentButton] is ToolButton button)
             {
                 properties.Add("PreviewMove", button.PreviewOnMove);
                 properties.Add("PreviewHold", button.PreviewOnHold);
@@ -71,7 +77,7 @@
         {
             Dictionary<string, bool> properties = new();
 
-            if (Controls[CurrentButton] is ToolButton button)
+            if (ButtonList[CurrentButton] is ToolButton button)
             {
                 properties.Add("ClickLocation", button.UseClickLocation);
                 properties.Add("ImageSize", button.UseImageSize);
