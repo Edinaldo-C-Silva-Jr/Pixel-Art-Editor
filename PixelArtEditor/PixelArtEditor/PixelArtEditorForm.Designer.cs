@@ -82,6 +82,7 @@
             SelectionSizeComboBox = new ComboBox();
             DrawAreaGroupBox = new GroupBox();
             TopBarPanel = new Panel();
+            ImageManipulationPanel = new Panel();
             ColorsPanel = new Panel();
             DrawingDivisionPanel = new Panel();
             ViewingDivisionPanel = new Panel();
@@ -99,6 +100,7 @@
             ViewAreaGroupBox.SuspendLayout();
             DrawAreaGroupBox.SuspendLayout();
             TopBarPanel.SuspendLayout();
+            ImageManipulationPanel.SuspendLayout();
             ColorsPanel.SuspendLayout();
             DrawingDivisionPanel.SuspendLayout();
             ViewingDivisionPanel.SuspendLayout();
@@ -183,7 +185,7 @@
             // 
             // NewImageButton
             // 
-            NewImageButton.Location = new Point(5, 10);
+            NewImageButton.Location = new Point(5, 5);
             NewImageButton.Name = "NewImageButton";
             NewImageButton.Size = new Size(50, 40);
             NewImageButton.TabIndex = 8;
@@ -193,7 +195,7 @@
             // 
             // SaveImageButton
             // 
-            SaveImageButton.Location = new Point(5, 55);
+            SaveImageButton.Location = new Point(5, 50);
             SaveImageButton.Name = "SaveImageButton";
             SaveImageButton.Size = new Size(50, 40);
             SaveImageButton.TabIndex = 9;
@@ -341,7 +343,7 @@
             // 
             // LoadImageButton
             // 
-            LoadImageButton.Location = new Point(5, 100);
+            LoadImageButton.Location = new Point(5, 95);
             LoadImageButton.Name = "LoadImageButton";
             LoadImageButton.Size = new Size(50, 40);
             LoadImageButton.TabIndex = 14;
@@ -351,9 +353,9 @@
             // 
             // CopyButton
             // 
-            CopyButton.Location = new Point(785, 94);
+            CopyButton.Location = new Point(60, 5);
             CopyButton.Name = "CopyButton";
-            CopyButton.Size = new Size(50, 25);
+            CopyButton.Size = new Size(50, 30);
             CopyButton.TabIndex = 16;
             CopyButton.Text = "Copy";
             CopyButton.UseVisualStyleBackColor = true;
@@ -361,9 +363,9 @@
             // 
             // PasteButton
             // 
-            PasteButton.Location = new Point(841, 94);
+            PasteButton.Location = new Point(60, 35);
             PasteButton.Name = "PasteButton";
-            PasteButton.Size = new Size(50, 25);
+            PasteButton.Size = new Size(50, 30);
             PasteButton.TabIndex = 17;
             PasteButton.Text = "Paste";
             PasteButton.UseVisualStyleBackColor = true;
@@ -371,7 +373,7 @@
             // 
             // FullMirrorPenButton
             // 
-            FullMirrorPenButton.Location = new Point(80, 0);
+            FullMirrorPenButton.Location = new Point(140, 5);
             FullMirrorPenButton.Name = "FullMirrorPenButton";
             FullMirrorPenButton.PreviewOnHold = false;
             FullMirrorPenButton.PreviewOnMove = true;
@@ -389,7 +391,7 @@
             // 
             // DrawingToolButtonPanel
             // 
-            DrawingToolButtonPanel.BackColor = SystemColors.Control;
+            DrawingToolButtonPanel.BackColor = Color.Gainsboro;
             DrawingToolButtonPanel.Controls.Add(OutlineRectangleButton);
             DrawingToolButtonPanel.Controls.Add(SolidRectangleButton);
             DrawingToolButtonPanel.Controls.Add(FreeLineButton);
@@ -401,14 +403,14 @@
             DrawingToolButtonPanel.Controls.Add(HorizontalMirrorPenButton);
             DrawingToolButtonPanel.Controls.Add(PixelPenButton);
             DrawingToolButtonPanel.Controls.Add(FullMirrorPenButton);
-            DrawingToolButtonPanel.Location = new Point(920, 15);
+            DrawingToolButtonPanel.Location = new Point(790, 5);
             DrawingToolButtonPanel.Name = "DrawingToolButtonPanel";
-            DrawingToolButtonPanel.Size = new Size(160, 120);
+            DrawingToolButtonPanel.Size = new Size(280, 140);
             DrawingToolButtonPanel.TabIndex = 22;
             // 
             // OutlineRectangleButton
             // 
-            OutlineRectangleButton.Location = new Point(80, 80);
+            OutlineRectangleButton.Location = new Point(50, 95);
             OutlineRectangleButton.Name = "OutlineRectangleButton";
             OutlineRectangleButton.PreviewOnHold = true;
             OutlineRectangleButton.PreviewOnMove = false;
@@ -426,7 +428,7 @@
             // 
             // SolidRectangleButton
             // 
-            SolidRectangleButton.Location = new Point(40, 80);
+            SolidRectangleButton.Location = new Point(5, 95);
             SolidRectangleButton.Name = "SolidRectangleButton";
             SolidRectangleButton.PreviewOnHold = true;
             SolidRectangleButton.PreviewOnMove = false;
@@ -444,7 +446,7 @@
             // 
             // FreeLineButton
             // 
-            FreeLineButton.Location = new Point(120, 40);
+            FreeLineButton.Location = new Point(95, 50);
             FreeLineButton.Name = "FreeLineButton";
             FreeLineButton.PreviewOnHold = true;
             FreeLineButton.PreviewOnMove = false;
@@ -462,7 +464,7 @@
             // 
             // OrdinalLineButton
             // 
-            OrdinalLineButton.Location = new Point(80, 40);
+            OrdinalLineButton.Location = new Point(50, 50);
             OrdinalLineButton.Name = "OrdinalLineButton";
             OrdinalLineButton.PreviewOnHold = true;
             OrdinalLineButton.PreviewOnMove = false;
@@ -480,7 +482,7 @@
             // 
             // CardinalLineButton
             // 
-            CardinalLineButton.Location = new Point(40, 40);
+            CardinalLineButton.Location = new Point(5, 50);
             CardinalLineButton.Name = "CardinalLineButton";
             CardinalLineButton.PreviewOnHold = true;
             CardinalLineButton.PreviewOnMove = false;
@@ -498,7 +500,7 @@
             // 
             // EraserButton
             // 
-            EraserButton.Location = new Point(0, 80);
+            EraserButton.Location = new Point(230, 5);
             EraserButton.Name = "EraserButton";
             EraserButton.PreviewOnHold = false;
             EraserButton.PreviewOnMove = true;
@@ -516,7 +518,7 @@
             // 
             // FourMirrorPenButton
             // 
-            FourMirrorPenButton.Location = new Point(120, 0);
+            FourMirrorPenButton.Location = new Point(185, 5);
             FourMirrorPenButton.Name = "FourMirrorPenButton";
             FourMirrorPenButton.PreviewOnHold = false;
             FourMirrorPenButton.PreviewOnMove = true;
@@ -534,7 +536,7 @@
             // 
             // VerticalMirrorPenButton
             // 
-            VerticalMirrorPenButton.Location = new Point(40, 0);
+            VerticalMirrorPenButton.Location = new Point(95, 5);
             VerticalMirrorPenButton.Name = "VerticalMirrorPenButton";
             VerticalMirrorPenButton.PreviewOnHold = false;
             VerticalMirrorPenButton.PreviewOnMove = true;
@@ -552,7 +554,7 @@
             // 
             // HorizontalMirrorPenButton
             // 
-            HorizontalMirrorPenButton.Location = new Point(0, 0);
+            HorizontalMirrorPenButton.Location = new Point(50, 5);
             HorizontalMirrorPenButton.Name = "HorizontalMirrorPenButton";
             HorizontalMirrorPenButton.PreviewOnHold = false;
             HorizontalMirrorPenButton.PreviewOnMove = true;
@@ -570,7 +572,7 @@
             // 
             // PixelPenButton
             // 
-            PixelPenButton.Location = new Point(0, 40);
+            PixelPenButton.Location = new Point(5, 5);
             PixelPenButton.Name = "PixelPenButton";
             PixelPenButton.PreviewOnHold = false;
             PixelPenButton.PreviewOnMove = true;
@@ -701,7 +703,7 @@
             ViewAreaGroupBox.Controls.Add(ViewPixelHeightLabel);
             ViewAreaGroupBox.Controls.Add(ViewPixelSizeNumberBox);
             ViewAreaGroupBox.Controls.Add(ViewPixelSizeLabel);
-            ViewAreaGroupBox.Location = new Point(240, 5);
+            ViewAreaGroupBox.Location = new Point(320, 5);
             ViewAreaGroupBox.Name = "ViewAreaGroupBox";
             ViewAreaGroupBox.Size = new Size(170, 140);
             ViewAreaGroupBox.TabIndex = 32;
@@ -739,7 +741,7 @@
             DrawAreaGroupBox.Controls.Add(DrawHeightLabel);
             DrawAreaGroupBox.Controls.Add(GridTypeLabel);
             DrawAreaGroupBox.Controls.Add(GridTypeComboBox);
-            DrawAreaGroupBox.Location = new Point(60, 5);
+            DrawAreaGroupBox.Location = new Point(140, 5);
             DrawAreaGroupBox.Name = "DrawAreaGroupBox";
             DrawAreaGroupBox.Size = new Size(170, 140);
             DrawAreaGroupBox.TabIndex = 33;
@@ -749,19 +751,28 @@
             // TopBarPanel
             // 
             TopBarPanel.BackColor = Color.LightGray;
+            TopBarPanel.Controls.Add(ImageManipulationPanel);
             TopBarPanel.Controls.Add(ColorsPanel);
             TopBarPanel.Controls.Add(DrawAreaGroupBox);
-            TopBarPanel.Controls.Add(PasteButton);
-            TopBarPanel.Controls.Add(CopyButton);
             TopBarPanel.Controls.Add(ViewAreaGroupBox);
-            TopBarPanel.Controls.Add(NewImageButton);
-            TopBarPanel.Controls.Add(SaveImageButton);
             TopBarPanel.Controls.Add(DrawingToolButtonPanel);
-            TopBarPanel.Controls.Add(LoadImageButton);
-            TopBarPanel.Location = new Point(0, 0);
+            TopBarPanel.Location = new Point(3, 3);
             TopBarPanel.Name = "TopBarPanel";
             TopBarPanel.Size = new Size(1110, 150);
             TopBarPanel.TabIndex = 36;
+            // 
+            // ImageManipulationPanel
+            // 
+            ImageManipulationPanel.BackColor = Color.Gainsboro;
+            ImageManipulationPanel.Controls.Add(NewImageButton);
+            ImageManipulationPanel.Controls.Add(PasteButton);
+            ImageManipulationPanel.Controls.Add(CopyButton);
+            ImageManipulationPanel.Controls.Add(SaveImageButton);
+            ImageManipulationPanel.Controls.Add(LoadImageButton);
+            ImageManipulationPanel.Location = new Point(10, 5);
+            ImageManipulationPanel.Name = "ImageManipulationPanel";
+            ImageManipulationPanel.Size = new Size(120, 140);
+            ImageManipulationPanel.TabIndex = 34;
             // 
             // ColorsPanel
             // 
@@ -775,7 +786,7 @@
             ColorsPanel.Controls.Add(BackgroundColorLabel);
             ColorsPanel.Controls.Add(GridColorLabel);
             ColorsPanel.Controls.Add(GridColorTable);
-            ColorsPanel.Location = new Point(420, 5);
+            ColorsPanel.Location = new Point(500, 5);
             ColorsPanel.Name = "ColorsPanel";
             ColorsPanel.Size = new Size(280, 140);
             ColorsPanel.TabIndex = 11;
@@ -784,7 +795,7 @@
             // 
             DrawingDivisionPanel.BackColor = Color.DarkGray;
             DrawingDivisionPanel.Controls.Add(DrawingBackgroundPanel);
-            DrawingDivisionPanel.Location = new Point(0, 150);
+            DrawingDivisionPanel.Location = new Point(3, 153);
             DrawingDivisionPanel.Name = "DrawingDivisionPanel";
             DrawingDivisionPanel.Size = new Size(550, 550);
             DrawingDivisionPanel.TabIndex = 37;
@@ -793,7 +804,7 @@
             // 
             ViewingDivisionPanel.BackColor = Color.DarkGray;
             ViewingDivisionPanel.Controls.Add(ViewingBackgroundPanel);
-            ViewingDivisionPanel.Location = new Point(560, 150);
+            ViewingDivisionPanel.Location = new Point(563, 153);
             ViewingDivisionPanel.Name = "ViewingDivisionPanel";
             ViewingDivisionPanel.Size = new Size(550, 550);
             ViewingDivisionPanel.TabIndex = 38;
@@ -829,6 +840,7 @@
             ViewAreaGroupBox.ResumeLayout(false);
             DrawAreaGroupBox.ResumeLayout(false);
             TopBarPanel.ResumeLayout(false);
+            ImageManipulationPanel.ResumeLayout(false);
             ColorsPanel.ResumeLayout(false);
             DrawingDivisionPanel.ResumeLayout(false);
             ViewingDivisionPanel.ResumeLayout(false);
@@ -894,5 +906,6 @@
         private Panel DrawingDivisionPanel;
         private Panel ViewingDivisionPanel;
         private Panel ColorsPanel;
+        private Panel ImageManipulationPanel;
     }
 }
