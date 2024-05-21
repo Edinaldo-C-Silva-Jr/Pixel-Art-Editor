@@ -1,18 +1,10 @@
-﻿
-namespace PixelArtEditor.Controls
+﻿namespace PixelArtEditor.Controls
 {
     public partial class NumberBar : TrackBar
     {
         public NumberBar()
         {
             InitializeComponent();
-        }
-
-        public void SetSizeDivisions()
-        {
-            int amountOfTicks = 1 + ((Maximum - Minimum) / TickFrequency);
-            int tickLocationInterval = Width / amountOfTicks;
-            Width = tickLocationInterval * amountOfTicks;
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -43,7 +35,16 @@ namespace PixelArtEditor.Controls
         {
             int amountOfTicks = 1 + ((Maximum - Minimum) / TickFrequency);
             int tickLocationInterval = Width / amountOfTicks;
+            ValidateSize(amountOfTicks, tickLocationInterval);
             Value = Minimum + xLocation / tickLocationInterval * TickFrequency;
+        }
+
+        private void ValidateSize(int amountOfTicks, int tickLocationInterval)
+        {
+            if (Width % tickLocationInterval != 0)
+            {
+                Width = tickLocationInterval * amountOfTicks;
+            }
         }
 
         protected override void OnValueChanged(EventArgs e)
