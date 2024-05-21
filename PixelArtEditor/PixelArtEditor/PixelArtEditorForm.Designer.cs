@@ -91,6 +91,7 @@
             ColorPaletteOptionsLabel = new Label();
             DrawingDivisionPanel = new Panel();
             ViewingDivisionPanel = new Panel();
+            DrawPixelSizeNumberBar = new Controls.NumberBar();
             ((System.ComponentModel.ISupportInitialize)ViewWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewPixelSizeNumberBox).BeginInit();
@@ -109,6 +110,7 @@
             ColorPalettePanel.SuspendLayout();
             DrawingDivisionPanel.SuspendLayout();
             ViewingDivisionPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)DrawPixelSizeNumberBar).BeginInit();
             SuspendLayout();
             // 
             // ViewPixelWidthLabel
@@ -776,6 +778,7 @@
             // 
             DrawingAreaOptionsPanel.BackColor = Color.Gainsboro;
             DrawingAreaOptionsPanel.BorderStyle = BorderStyle.FixedSingle;
+            DrawingAreaOptionsPanel.Controls.Add(DrawPixelSizeNumberBar);
             DrawingAreaOptionsPanel.Controls.Add(DrawingAreaOptionsLabel);
             DrawingAreaOptionsPanel.Controls.Add(DrawWidthNumberBox);
             DrawingAreaOptionsPanel.Controls.Add(DrawWidthLabel);
@@ -877,6 +880,19 @@
             ViewingDivisionPanel.Size = new Size(550, 550);
             ViewingDivisionPanel.TabIndex = 38;
             // 
+            // DrawPixelSizeNumberBar
+            // 
+            DrawPixelSizeNumberBar.AutoSize = false;
+            DrawPixelSizeNumberBar.LargeChange = 1;
+            DrawPixelSizeNumberBar.Location = new Point(80, 110);
+            DrawPixelSizeNumberBar.Maximum = 32;
+            DrawPixelSizeNumberBar.Minimum = 8;
+            DrawPixelSizeNumberBar.Name = "DrawPixelSizeNumberBar";
+            DrawPixelSizeNumberBar.Size = new Size(80, 30);
+            DrawPixelSizeNumberBar.TabIndex = 38;
+            DrawPixelSizeNumberBar.TickFrequency = 4;
+            DrawPixelSizeNumberBar.Value = 8;
+            // 
             // PixelArtEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -912,6 +928,7 @@
             ColorPalettePanel.ResumeLayout(false);
             DrawingDivisionPanel.ResumeLayout(false);
             ViewingDivisionPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)DrawPixelSizeNumberBar).EndInit();
             ResumeLayout(false);
         }
 
@@ -980,5 +997,6 @@
         private Label ImageOptionsLabel;
         private Label ColorPaletteOptionsLabel;
         private Label DrawingToolsLabel;
+        private Controls.NumberBar DrawPixelSizeNumberBar;
     }
 }

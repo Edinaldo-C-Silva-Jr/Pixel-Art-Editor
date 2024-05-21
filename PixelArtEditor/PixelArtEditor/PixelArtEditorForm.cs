@@ -103,6 +103,8 @@ namespace PixelArtEditor
             TransparencyCheckBox.Checked = false;
             ColorChangeCheckBox.Checked = true;
 
+            DrawPixelSizeNumberBar.SetSizeDivisions();
+
             DrawingToolButtonPanel.ReorganizeButtons();
         }
         #endregion
