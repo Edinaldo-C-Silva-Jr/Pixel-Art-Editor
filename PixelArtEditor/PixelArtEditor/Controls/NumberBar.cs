@@ -3,11 +3,11 @@
     public partial class NumberBar : Control
     {
         private int _value = 1;
-        public int Value 
-        { 
+        public int Value
+        {
             get { return _value; }
-            set 
-            { 
+            set
+            {
                 _value = value;
                 OnValueChanged();
             }
@@ -88,9 +88,9 @@
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left && e.X > 0 && e.X < Width)
             {
-                if (e.X > 0 && e.X < Width)
+                if (e.X / ValueLocationInterval != MouseValuePosition)
                 {
                     MouseValuePosition = e.X / ValueLocationInterval;
                     Invalidate();
@@ -101,9 +101,9 @@
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left && e.X > 0 && e.X < Width)
             {
-                if (e.X > 0 && e.X < Width)
+                if (e.X / ValueLocationInterval != MouseValuePosition)
                 {
                     MouseValuePosition = e.X / ValueLocationInterval;
                     Invalidate();
@@ -114,12 +114,9 @@
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left && e.X > 0 && e.X < Width)
             {
-                if (e.X > 0 && e.X < Width)
-                {
-                    MouseValuePosition = e.X / ValueLocationInterval;
-                }
+                MouseValuePosition = e.X / ValueLocationInterval;
                 ChangeValueOnClick();
             }
             base.OnMouseUp(e);
