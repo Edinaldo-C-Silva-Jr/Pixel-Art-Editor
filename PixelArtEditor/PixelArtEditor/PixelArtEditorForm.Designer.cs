@@ -772,7 +772,7 @@
             ViewPixelSizeNumberBar.Name = "ViewPixelSizeNumberBar";
             ViewPixelSizeNumberBar.Size = new Size(80, 30);
             ViewPixelSizeNumberBar.TabIndex = 37;
-            ViewPixelSizeNumberBar.Value = 4;
+            ViewPixelSizeNumberBar.Value = 1;
             ViewPixelSizeNumberBar.ValueChangeAmount = 1;
             ViewPixelSizeNumberBar.ValueChanged += ViewPixelSizeNumberBar_ValueChanged;
             // 
@@ -815,7 +815,7 @@
             DrawPixelSizeNumberBar.Name = "DrawPixelSizeNumberBar";
             DrawPixelSizeNumberBar.Size = new Size(77, 30);
             DrawPixelSizeNumberBar.TabIndex = 32;
-            DrawPixelSizeNumberBar.Value = 16;
+            DrawPixelSizeNumberBar.Value = 8;
             DrawPixelSizeNumberBar.ValueChangeAmount = 4;
             DrawPixelSizeNumberBar.ValueChanged += DrawPixelSizeNumberBar_ValueChanged;
             // 

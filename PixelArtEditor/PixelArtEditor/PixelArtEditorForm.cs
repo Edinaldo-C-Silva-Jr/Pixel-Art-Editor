@@ -102,6 +102,8 @@ namespace PixelArtEditor
             SelectionSizeComboBox.SelectedIndex = 0;
             TransparencyCheckBox.Checked = false;
             ColorChangeCheckBox.Checked = true;
+            ViewPixelSizeNumberBar.Value = 4;
+            DrawPixelSizeNumberBar.Value = 16;
 
             DrawingToolButtonPanel.ReorganizeButtons();
         }

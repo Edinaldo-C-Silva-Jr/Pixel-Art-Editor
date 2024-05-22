@@ -35,7 +35,7 @@
             }
         }
 
-        private int _valueChangeAmount = 2;
+        private int _valueChangeAmount = 1;
         public int ValueChangeAmount
         {
             get { return _valueChangeAmount; }
@@ -62,9 +62,12 @@
             }
         }
 
+        private int MouseValuePosition { get; set; }
+
         public event EventHandler? ValueChanged;
         private void OnValueChanged()
         {
+            MouseValuePosition = (Value - MinimumValue) / ValueChangeAmount;
             Invalidate();
             ValueChanged?.Invoke(this, new EventArgs());
         }
@@ -89,7 +92,8 @@
             {
                 if (e.X > 0 && e.X < Width)
                 {
-                    ChangeValueOnClick(e.X);
+                    MouseValuePosition = e.X / ValueLocationInterval;
+                    Invalidate();
                 }
             }
             base.OnMouseDown(e);
@@ -101,29 +105,43 @@
             {
                 if (e.X > 0 && e.X < Width)
                 {
-                    ChangeValueOnClick(e.X);
+                    MouseValuePosition = e.X / ValueLocationInterval;
+                    Invalidate();
                 }
             }
             base.OnMouseMove(e);
         }
 
-        private void ChangeValueOnClick(int xLocation)
+        protected override void OnMouseUp(MouseEventArgs e)
         {
-            Value = MinimumValue + xLocation / ValueLocationInterval * ValueChangeAmount;
+            if (e.Button == MouseButtons.Left)
+            {
+                if (e.X > 0 && e.X < Width)
+                {
+                    MouseValuePosition = e.X / ValueLocationInterval;
+                }
+                ChangeValueOnClick();
+            }
+            base.OnMouseUp(e);
+        }
+
+        private void ChangeValueOnClick()
+        {
+            Value = MinimumValue + MouseValuePosition * ValueChangeAmount;
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             e.Graphics.DrawRectangle(Pens.Black, 0, 0, Width - 1, Height - 1);
-            e.Graphics.FillRectangle(Brushes.Black, 3, 3, Width - 6, 6);
-            e.Graphics.FillRectangle(Brushes.White, 4, 4, Width - 8, 4);
+            e.Graphics.FillRectangle(Brushes.Black, 3, 18, Width - 6, 6);
+            e.Graphics.FillRectangle(Brushes.White, 4, 19, Width - 8, 4);
 
-            int position = (Value - MinimumValue) / ValueChangeAmount;
-            e.Graphics.FillRectangle(Brushes.Black, 3 + position * (ValueLocationInterval - 1), 1, 10, 10);
-            e.Graphics.FillRectangle(Brushes.White, 4 + position * (ValueLocationInterval - 1), 2, 8, 8);
+            e.Graphics.FillRectangle(Brushes.Black, 3 + MouseValuePosition * (ValueLocationInterval - 1), 16, 10, 10);
+            e.Graphics.FillRectangle(Brushes.White, 4 + MouseValuePosition * (ValueLocationInterval - 1), 17, 8, 8);
 
-            string textValue = Value > 10 ? $"{Value}" : $"0{Value}";
-            e.Graphics.DrawString(textValue, new("Segoe UI", 9), Brushes.Black, position * (ValueLocationInterval - 1), 12);
+            int newDrawnValue = MinimumValue + MouseValuePosition * ValueChangeAmount;
+            string textValue = newDrawnValue > 10 ? $"{newDrawnValue}" : $"0{newDrawnValue}";
+            e.Graphics.DrawString(textValue, new("Segoe UI", 8), Brushes.Black, MouseValuePosition * (ValueLocationInterval - 1), 0);
         }
     }
 }
