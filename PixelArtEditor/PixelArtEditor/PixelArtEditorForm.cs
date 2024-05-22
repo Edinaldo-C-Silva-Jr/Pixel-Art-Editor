@@ -141,14 +141,22 @@ namespace PixelArtEditor
         /// <summary>
         /// Changes the Original Image Pixel Size in the ImageHandler class, then resizes the image and the Viewing Box.
         /// </summary>
-        private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
+        private void ViewPixelSizeNumberBox_ValueChanged(object sender, EventArgs e)
         {
-            ViewPixelSizeNumberBar.Value = (int)ViewPixelSizeNumberBox.Value;
+            ViewPixelSizeNumberBar.Value = (int)ViewPixelSizeNumberBox.Value; // Syncs both NumberBox and NumberBar.
 
             int zoom = (int)ViewPixelSizeNumberBox.Value;
             Images.ChangeOriginalImageZoom(zoom);
 
             SetViewingBoxSize();
+        }
+
+        /// <summary>
+        /// Updates the Pixel Size value in the ViewPixelSizeNumberBox.
+        /// </summary>
+        private void ViewPixelSizeNumberBar_ValueChanged(object sender, EventArgs e)
+        {
+            ViewPixelSizeNumberBox.Value = ViewPixelSizeNumberBar.Value;
         }
 
         /// <summary>
@@ -216,14 +224,22 @@ namespace PixelArtEditor
         /// <summary>
         /// Changes the Drawing Image Pixel Size in the ImageHandler class, then resizes the image and the Drawing Box.
         /// </summary>
-        private void DrawingZoomNumberBox_ValueChanged(object sender, EventArgs e)
+        private void DrawPixelSizeNumberBox_ValueChanged(object sender, EventArgs e)
         {
-            DrawPixelSizeNumberBar.Value = (int)DrawPixelSizeNumberBox.Value;
+            DrawPixelSizeNumberBar.Value = (int)DrawPixelSizeNumberBox.Value; // Syncs both NumberBox and NumberBar.
 
             int zoom = (int)DrawPixelSizeNumberBox.Value;
             Images.ChangeDrawingImageZoom(zoom);
 
             SetDrawingBoxSize();
+        }
+
+        /// <summary>
+        /// Updates the Pixel Size value in the DrawPixelSizeNumberBox.
+        /// </summary>
+        private void DrawPixelSizeNumberBar_ValueChanged(object sender, EventArgs e)
+        {
+            DrawPixelSizeNumberBox.Value = DrawPixelSizeNumberBar.Value;
         }
 
         /// <summary>
@@ -826,16 +842,6 @@ namespace PixelArtEditor
                         break;
                 }
             }
-        }
-
-        private void DrawPixelSizeNumberBar_ValueChanged(object sender, EventArgs e)
-        {
-            DrawPixelSizeNumberBox.Value = DrawPixelSizeNumberBar.Value;
-        }
-
-        private void ViewPixelSizeNumberBar_ValueChanged(object sender, EventArgs e)
-        {
-            ViewPixelSizeNumberBox.Value = ViewPixelSizeNumberBar.Value;
         }
     }
 }
