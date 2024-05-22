@@ -82,6 +82,7 @@
             SelectionSizeComboBox = new ComboBox();
             TopBarPanel = new Panel();
             ViewingAreaOptionsPanel = new Panel();
+            ViewPixelSizeNumberBar = new Controls.NumberBar();
             ViewingAreaOptionsLabel = new Label();
             DrawingAreaOptionsPanel = new Panel();
             DrawPixelSizeNumberBar = new Controls.NumberBar();
@@ -92,7 +93,6 @@
             ColorPaletteOptionsLabel = new Label();
             DrawingDivisionPanel = new Panel();
             ViewingDivisionPanel = new Panel();
-            ViewPixelSizeNumberBar = new Controls.NumberBar();
             ((System.ComponentModel.ISupportInitialize)ViewWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewPixelSizeNumberBox).BeginInit();
@@ -764,6 +764,18 @@
             ViewingAreaOptionsPanel.Size = new Size(180, 150);
             ViewingAreaOptionsPanel.TabIndex = 11;
             // 
+            // ViewPixelSizeNumberBar
+            // 
+            ViewPixelSizeNumberBar.Location = new Point(75, 110);
+            ViewPixelSizeNumberBar.MaximumValue = 4;
+            ViewPixelSizeNumberBar.MinimumValue = 1;
+            ViewPixelSizeNumberBar.Name = "ViewPixelSizeNumberBar";
+            ViewPixelSizeNumberBar.Size = new Size(80, 30);
+            ViewPixelSizeNumberBar.TabIndex = 37;
+            ViewPixelSizeNumberBar.Value = 4;
+            ViewPixelSizeNumberBar.ValueChangeAmount = 1;
+            ViewPixelSizeNumberBar.ValueChanged += ViewPixelSizeNumberBar_ValueChanged;
+            // 
             // ViewingAreaOptionsLabel
             // 
             ViewingAreaOptionsLabel.Dock = DockStyle.Top;
@@ -805,6 +817,7 @@
             DrawPixelSizeNumberBar.TabIndex = 32;
             DrawPixelSizeNumberBar.Value = 16;
             DrawPixelSizeNumberBar.ValueChangeAmount = 4;
+            DrawPixelSizeNumberBar.ValueChanged += DrawPixelSizeNumberBar_ValueChanged;
             // 
             // DrawingAreaOptionsLabel
             // 
@@ -891,17 +904,6 @@
             ViewingDivisionPanel.Name = "ViewingDivisionPanel";
             ViewingDivisionPanel.Size = new Size(550, 550);
             ViewingDivisionPanel.TabIndex = 38;
-            // 
-            // ViewPixelSizeNumberBar
-            // 
-            ViewPixelSizeNumberBar.Location = new Point(75, 110);
-            ViewPixelSizeNumberBar.MaximumValue = 4;
-            ViewPixelSizeNumberBar.MinimumValue = 1;
-            ViewPixelSizeNumberBar.Name = "ViewPixelSizeNumberBar";
-            ViewPixelSizeNumberBar.Size = new Size(80, 30);
-            ViewPixelSizeNumberBar.TabIndex = 37;
-            ViewPixelSizeNumberBar.Value = 4;
-            ViewPixelSizeNumberBar.ValueChangeAmount = 1;
             // 
             // PixelArtEditorForm
             // 

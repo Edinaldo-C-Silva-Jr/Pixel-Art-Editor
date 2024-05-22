@@ -141,7 +141,7 @@ namespace PixelArtEditor
         /// </summary>
         private void ViewingZoomNumberBox_ValueChanged(object sender, EventArgs e)
         {
-            //ViewPixelSizeNumberBar.Value = (int)ViewPixelSizeNumberBox.Value;
+            ViewPixelSizeNumberBar.Value = (int)ViewPixelSizeNumberBox.Value;
 
             int zoom = (int)ViewPixelSizeNumberBox.Value;
             Images.ChangeOriginalImageZoom(zoom);
@@ -216,7 +216,7 @@ namespace PixelArtEditor
         /// </summary>
         private void DrawingZoomNumberBox_ValueChanged(object sender, EventArgs e)
         {
-            //DrawPixelSizeNumberBar.Value = (int)DrawPixelSizeNumberBox.Value;
+            DrawPixelSizeNumberBar.Value = (int)DrawPixelSizeNumberBox.Value;
 
             int zoom = (int)DrawPixelSizeNumberBox.Value;
             Images.ChangeDrawingImageZoom(zoom);
@@ -828,12 +828,12 @@ namespace PixelArtEditor
 
         private void DrawPixelSizeNumberBar_ValueChanged(object sender, EventArgs e)
         {
-            //DrawPixelSizeNumberBox.Value = DrawPixelSizeNumberBar.Value;
+            DrawPixelSizeNumberBox.Value = DrawPixelSizeNumberBar.Value;
         }
 
         private void ViewPixelSizeNumberBar_ValueChanged(object sender, EventArgs e)
         {
-            //ViewPixelSizeNumberBox.Value = ViewPixelSizeNumberBar.Value;
+            ViewPixelSizeNumberBox.Value = ViewPixelSizeNumberBar.Value;
         }
     }
 }

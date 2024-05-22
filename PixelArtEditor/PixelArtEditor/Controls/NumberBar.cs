@@ -2,7 +2,16 @@
 {
     public partial class NumberBar : Control
     {
-        public int Value { get; set; } = 1;
+        private int _value = 1;
+        public int Value 
+        { 
+            get { return _value; }
+            set 
+            { 
+                _value = value;
+                OnValueChanged();
+            }
+        }
 
         private int _maximumValue = 10;
         public int MaximumValue
@@ -53,6 +62,13 @@
             }
         }
 
+        public event EventHandler? ValueChanged;
+        private void OnValueChanged()
+        {
+            Invalidate();
+            ValueChanged?.Invoke(this, new EventArgs());
+        }
+
         public NumberBar()
         {
             InitializeComponent();
@@ -95,12 +111,6 @@
         {
             Value = MinimumValue + xLocation / ValueLocationInterval * ValueChangeAmount;
         }
-
-        /*protected override void OnValueChanged(EventArgs e)
-        {
-            Invalidate();
-            base.OnValueChanged(e);
-        }*/
 
         protected override void OnPaint(PaintEventArgs e)
         {
