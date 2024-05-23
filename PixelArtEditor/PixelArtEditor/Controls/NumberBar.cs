@@ -49,16 +49,16 @@
             }
         }
 
-        private int _valueChangeAmount = 1;
+        private int _incrementValue = 1;
         /// <summary>
         /// The amount to change the Value property on each increment of the number bar.
         /// </summary>
         public int IncrementAmount
         {
-            get { return _valueChangeAmount; }
+            get { return _incrementValue; }
             set
             {
-                _valueChangeAmount = value > 0 ? value : 1;
+                _incrementValue = value > 0 ? value : 1;
                 ValidateSize();
             }
         }
@@ -167,9 +167,8 @@
         /// <param name="e"></param>
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && e.X > 0 && e.X < Width)
+            if (e.Button == MouseButtons.Left)
             {
-                CurrentIncrement = e.X / IncrementSize;
                 ChangeValueOnClick();
             }
             base.OnMouseUp(e);

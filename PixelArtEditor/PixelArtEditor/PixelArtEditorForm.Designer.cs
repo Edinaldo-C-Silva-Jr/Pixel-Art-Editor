@@ -636,6 +636,7 @@
             // 
             // DrawPixelSizeNumberBox
             // 
+            DrawPixelSizeNumberBox.Increment = new decimal(new int[] { 4, 0, 0, 0 });
             DrawPixelSizeNumberBox.Location = new Point(45, 115);
             DrawPixelSizeNumberBox.Maximum = new decimal(new int[] { 32, 0, 0, 0 });
             DrawPixelSizeNumberBox.Minimum = new decimal(new int[] { 8, 0, 0, 0 });
@@ -766,6 +767,7 @@
             // 
             // ViewPixelSizeNumberBar
             // 
+            ViewPixelSizeNumberBar.IncrementAmount = 1;
             ViewPixelSizeNumberBar.Location = new Point(75, 110);
             ViewPixelSizeNumberBar.MaximumValue = 4;
             ViewPixelSizeNumberBar.MinimumValue = 1;
@@ -773,7 +775,6 @@
             ViewPixelSizeNumberBar.Size = new Size(80, 30);
             ViewPixelSizeNumberBar.TabIndex = 37;
             ViewPixelSizeNumberBar.Value = 1;
-            ViewPixelSizeNumberBar.IncrementAmount = 1;
             ViewPixelSizeNumberBar.ValueChanged += ViewPixelSizeNumberBar_ValueChanged;
             // 
             // ViewingAreaOptionsLabel
@@ -809,6 +810,7 @@
             // 
             // DrawPixelSizeNumberBar
             // 
+            DrawPixelSizeNumberBar.IncrementAmount = 4;
             DrawPixelSizeNumberBar.Location = new Point(80, 110);
             DrawPixelSizeNumberBar.MaximumValue = 32;
             DrawPixelSizeNumberBar.MinimumValue = 8;
@@ -816,7 +818,6 @@
             DrawPixelSizeNumberBar.Size = new Size(77, 30);
             DrawPixelSizeNumberBar.TabIndex = 32;
             DrawPixelSizeNumberBar.Value = 8;
-            DrawPixelSizeNumberBar.IncrementAmount = 4;
             DrawPixelSizeNumberBar.ValueChanged += DrawPixelSizeNumberBar_ValueChanged;
             // 
             // DrawingAreaOptionsLabel

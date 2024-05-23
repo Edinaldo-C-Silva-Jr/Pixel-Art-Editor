@@ -19,5 +19,21 @@
             // Resizes the Textbox to fit the whole control, including the space the arrows were originally in.
             Controls[1].Width = Width - 4;
         }
+
+        protected override void OnValueChanged(EventArgs e)
+        {
+            Value = Math.Truncate(Value);
+
+            if (Value % Increment > Increment / 2)
+            {
+                Value += Increment - Value % Increment;
+            }
+            else
+            {
+                Value -= Value % Increment;
+            }
+
+            base.OnValueChanged(e);
+        }
     }
 }
