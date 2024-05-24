@@ -35,5 +35,14 @@
 
             base.OnValueChanged(e);
         }
+
+        protected override void OnEnter(EventArgs e)
+        {
+            base.OnEnter(e);
+            if (Controls[1] is TextBox box)
+            {
+                box.BeginInvoke(new Action(box.SelectAll));
+            }
+        }
     }
 }
