@@ -788,7 +788,7 @@ namespace PixelArtEditor
         /// </summary>
         private void SaveImageButton_Click(object sender, EventArgs e)
         {
-            SaveFileForm saveForm = new();
+            SaveFileForm saveForm = new(Images.OriginalImage, Images.OriginalDimensions);
             saveForm.ShowDialog();
 
             FileSaverLoader.SaveImage(Images.OriginalImage);

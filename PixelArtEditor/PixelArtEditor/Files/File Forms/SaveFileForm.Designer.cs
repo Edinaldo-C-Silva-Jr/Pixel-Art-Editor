@@ -34,15 +34,17 @@
             FullImageZoomNumberBox = new Controls.NumberBox();
             FullImageZoomNumberBar = new Controls.NumberBar();
             FullImageZoomLabel = new Label();
+            FullImageBackgroundPanel = new Controls.BackgroundPanel();
             ((System.ComponentModel.ISupportInitialize)FullImagePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)FullImageZoomNumberBox).BeginInit();
+            FullImageBackgroundPanel.SuspendLayout();
             SuspendLayout();
             // 
             // FullImagePictureBox
             // 
-            FullImagePictureBox.Location = new Point(5, 60);
+            FullImagePictureBox.Location = new Point(1, 1);
             FullImagePictureBox.Name = "FullImagePictureBox";
-            FullImagePictureBox.Size = new Size(256, 256);
+            FullImagePictureBox.Size = new Size(20, 20);
             FullImagePictureBox.TabIndex = 0;
             FullImagePictureBox.TabStop = false;
             // 
@@ -73,6 +75,7 @@
             FullImageZoomNumberBox.Size = new Size(30, 23);
             FullImageZoomNumberBox.TabIndex = 3;
             FullImageZoomNumberBox.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            FullImageZoomNumberBox.ValueChanged += FullImageZoomNumberBox_ValueChanged;
             // 
             // FullImageZoomNumberBar
             // 
@@ -84,6 +87,7 @@
             FullImageZoomNumberBar.Size = new Size(128, 30);
             FullImageZoomNumberBar.TabIndex = 4;
             FullImageZoomNumberBar.Value = 1;
+            FullImageZoomNumberBar.ValueChanged += FullImageZoomNumberBar_ValueChanged;
             // 
             // FullImageZoomLabel
             // 
@@ -94,6 +98,19 @@
             FullImageZoomLabel.TabIndex = 5;
             FullImageZoomLabel.Text = "Zoom";
             // 
+            // FullImageBackgroundPanel
+            // 
+            FullImageBackgroundPanel.AutoScroll = true;
+            FullImageBackgroundPanel.AutoScrollMargin = new Size(1, 1);
+            FullImageBackgroundPanel.BackColor = Color.Black;
+            FullImageBackgroundPanel.Controls.Add(FullImagePictureBox);
+            FullImageBackgroundPanel.Location = new Point(4, 59);
+            FullImageBackgroundPanel.MaximumHeight = 514;
+            FullImageBackgroundPanel.MaximumWidth = 514;
+            FullImageBackgroundPanel.Name = "FullImageBackgroundPanel";
+            FullImageBackgroundPanel.Size = new Size(40, 40);
+            FullImageBackgroundPanel.TabIndex = 6;
+            // 
             // SaveFileForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -101,16 +118,17 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(584, 461);
+            Controls.Add(FullImageBackgroundPanel);
             Controls.Add(FullImageZoomLabel);
             Controls.Add(FullImageZoomNumberBar);
             Controls.Add(FullImageZoomNumberBox);
             Controls.Add(CancelSaveButton);
             Controls.Add(SaveFullImageButton);
-            Controls.Add(FullImagePictureBox);
             Name = "SaveFileForm";
             Text = "SaveFileForm";
             ((System.ComponentModel.ISupportInitialize)FullImagePictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)FullImageZoomNumberBox).EndInit();
+            FullImageBackgroundPanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -123,5 +141,6 @@
         private Controls.NumberBox FullImageZoomNumberBox;
         private Controls.NumberBar FullImageZoomNumberBar;
         private Label FullImageZoomLabel;
+        private Controls.BackgroundPanel FullImageBackgroundPanel;
     }
 }
