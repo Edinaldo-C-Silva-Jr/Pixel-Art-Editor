@@ -81,7 +81,14 @@
         {
             get
             {
-                return Width / AmountOfIncrements;
+                if (AmountOfIncrements > Width)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return Width / AmountOfIncrements;
+                }
             }
         }
 
@@ -191,17 +198,40 @@
             e.Graphics.DrawRectangle(Pens.Black, 0, 0, Width - 1, Height - 1);
             
             // Number selection bar.
-            e.Graphics.FillRectangle(Brushes.Black, 3, 18, Width - 6, 6);
-            e.Graphics.FillRectangle(Brushes.White, 4, 19, Width - 8, 4);
+            e.Graphics.FillRectangle(Brushes.Black, 2, 18, Width - 4, 6);
+            e.Graphics.FillRectangle(Brushes.White, 3, 19, Width - 6, 4);
 
-            // Number selection cursor. The size increase is reduced a little to keep the cursor within the control.
-            e.Graphics.FillRectangle(Brushes.Black, 3 + CurrentIncrement * (IncrementSize - 1), 16, 10, 10);
-            e.Graphics.FillRectangle(Brushes.White, 4 + CurrentIncrement * (IncrementSize - 1), 17, 8, 8);
+            // Number selection cursor. The cursor width adapts to the increment size.
+            // The cursor has a minimum size of 4 pixels so it can still be drawn correctly.
+            if (IncrementSize < 4)
+            {
+                // Gets an offset to prevent the cursor from going off the right side of the control.
+                int cursorOffset = CurrentIncrement / (MaximumValue / (4 - IncrementSize));
+                e.Graphics.FillRectangle(Brushes.Black, CurrentIncrement * IncrementSize - cursorOffset, 16, 3, 10);
+                e.Graphics.FillRectangle(Brushes.White, 1 + CurrentIncrement * IncrementSize - cursorOffset, 17, 1, 8);
+            }
+            else
+            {
+                e.Graphics.FillRectangle(Brushes.Black, CurrentIncrement * IncrementSize, 16, IncrementSize - 1, 10);
+                e.Graphics.FillRectangle(Brushes.White, 1 + CurrentIncrement * IncrementSize, 17, IncrementSize - 3, 8);
+            }
 
-            // String showing the chosen value.
+            // Gets the value and adds a 0 to it in case of a single digit value.
             int newDrawnValue = MinimumValue + CurrentIncrement * IncrementAmount;
-            string textValue = newDrawnValue > 10 ? $"{newDrawnValue}" : $"0{newDrawnValue}";
-            e.Graphics.DrawString(textValue, new("Segoe UI", 8), Brushes.Black, CurrentIncrement * (IncrementSize - 1), 0);
+            string textValue = newDrawnValue > 9 ? $"{newDrawnValue}" : $"0{newDrawnValue}";
+
+            // Displays the value as a string.
+            int stringWidth = (int)e.Graphics.MeasureString(textValue, Font).Width;
+            if (IncrementSize < stringWidth)
+            {
+                // Gets an offset to prevent the string from going off the right side of the control.
+                int stringOffset = newDrawnValue / (MaximumValue / (stringWidth - IncrementSize));
+                e.Graphics.DrawString(textValue, new("Segoe UI", 8), Brushes.Black, CurrentIncrement * IncrementSize - stringOffset, 0);
+            }
+            else
+            {
+                e.Graphics.DrawString(textValue, new("Segoe UI", 8), Brushes.Black, CurrentIncrement * IncrementSize, 0);
+            }
         }
     }
 }
