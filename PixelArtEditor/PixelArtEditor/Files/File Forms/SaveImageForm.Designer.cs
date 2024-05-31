@@ -1,6 +1,6 @@
 ﻿namespace PixelArtEditor.Files.File_Forms
 {
-    partial class SaveFileForm
+    partial class SaveImageForm
     {
         /// <summary>
         /// Required designer variable.
@@ -35,6 +35,8 @@
             FullImageZoomNumberBar = new Controls.NumberBar();
             FullImageZoomLabel = new Label();
             FullImageBackgroundPanel = new Controls.BackgroundPanel();
+            FullImageWidthLabel = new Label();
+            FullImageHeightLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)FullImagePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)FullImageZoomNumberBox).BeginInit();
             FullImageBackgroundPanel.SuspendLayout();
@@ -50,7 +52,7 @@
             // 
             // SaveFullImageButton
             // 
-            SaveFullImageButton.Location = new Point(10, 10);
+            SaveFullImageButton.Location = new Point(130, 10);
             SaveFullImageButton.Name = "SaveFullImageButton";
             SaveFullImageButton.Size = new Size(80, 40);
             SaveFullImageButton.TabIndex = 1;
@@ -59,7 +61,7 @@
             // 
             // CancelSaveButton
             // 
-            CancelSaveButton.Location = new Point(100, 10);
+            CancelSaveButton.Location = new Point(220, 10);
             CancelSaveButton.Name = "CancelSaveButton";
             CancelSaveButton.Size = new Size(80, 40);
             CancelSaveButton.TabIndex = 2;
@@ -68,7 +70,7 @@
             // 
             // FullImageZoomNumberBox
             // 
-            FullImageZoomNumberBox.Location = new Point(240, 20);
+            FullImageZoomNumberBox.Location = new Point(360, 20);
             FullImageZoomNumberBox.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
             FullImageZoomNumberBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             FullImageZoomNumberBox.Name = "FullImageZoomNumberBox";
@@ -80,7 +82,7 @@
             // FullImageZoomNumberBar
             // 
             FullImageZoomNumberBar.IncrementAmount = 1;
-            FullImageZoomNumberBar.Location = new Point(275, 15);
+            FullImageZoomNumberBar.Location = new Point(395, 15);
             FullImageZoomNumberBar.MaximumValue = 64;
             FullImageZoomNumberBar.MinimumValue = 1;
             FullImageZoomNumberBar.Name = "FullImageZoomNumberBar";
@@ -92,7 +94,7 @@
             // FullImageZoomLabel
             // 
             FullImageZoomLabel.AutoSize = true;
-            FullImageZoomLabel.Location = new Point(200, 25);
+            FullImageZoomLabel.Location = new Point(320, 25);
             FullImageZoomLabel.Name = "FullImageZoomLabel";
             FullImageZoomLabel.Size = new Size(39, 15);
             FullImageZoomLabel.TabIndex = 5;
@@ -111,21 +113,41 @@
             FullImageBackgroundPanel.Size = new Size(40, 40);
             FullImageBackgroundPanel.TabIndex = 6;
             // 
-            // SaveFileForm
+            // FullImageWidthLabel
+            // 
+            FullImageWidthLabel.AutoSize = true;
+            FullImageWidthLabel.Location = new Point(10, 10);
+            FullImageWidthLabel.Name = "FullImageWidthLabel";
+            FullImageWidthLabel.Size = new Size(45, 15);
+            FullImageWidthLabel.TabIndex = 7;
+            FullImageWidthLabel.Text = "Width: ";
+            // 
+            // FullImageHeightLabel
+            // 
+            FullImageHeightLabel.AutoSize = true;
+            FullImageHeightLabel.Location = new Point(10, 30);
+            FullImageHeightLabel.Name = "FullImageHeightLabel";
+            FullImageHeightLabel.Size = new Size(49, 15);
+            FullImageHeightLabel.TabIndex = 8;
+            FullImageHeightLabel.Text = "Height: ";
+            // 
+            // SaveImageForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(584, 461);
+            Controls.Add(FullImageHeightLabel);
+            Controls.Add(FullImageWidthLabel);
             Controls.Add(FullImageBackgroundPanel);
             Controls.Add(FullImageZoomLabel);
             Controls.Add(FullImageZoomNumberBar);
             Controls.Add(FullImageZoomNumberBox);
             Controls.Add(CancelSaveButton);
             Controls.Add(SaveFullImageButton);
-            Name = "SaveFileForm";
-            Text = "SaveFileForm";
+            Name = "SaveImageForm";
+            Text = "Save Image";
             ((System.ComponentModel.ISupportInitialize)FullImagePictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)FullImageZoomNumberBox).EndInit();
             FullImageBackgroundPanel.ResumeLayout(false);
@@ -142,5 +164,7 @@
         private Controls.NumberBar FullImageZoomNumberBar;
         private Label FullImageZoomLabel;
         private Controls.BackgroundPanel FullImageBackgroundPanel;
+        private Label FullImageWidthLabel;
+        private Label FullImageHeightLabel;
     }
 }

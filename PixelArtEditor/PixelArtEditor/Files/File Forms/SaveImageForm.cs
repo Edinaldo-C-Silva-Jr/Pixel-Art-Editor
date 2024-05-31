@@ -2,12 +2,12 @@
 
 namespace PixelArtEditor.Files.File_Forms
 {
-    public partial class SaveFileForm : Form
+    public partial class SaveImageForm : Form
     {
         private int OriginalImageWidth { get; set; }
         private int OriginalImageHeight { get; set; }
 
-        public SaveFileForm(Bitmap originalImage, Size originalSize)
+        public SaveImageForm(Bitmap originalImage, Size originalSize)
         {
             InitializeComponent();
 
@@ -15,7 +15,24 @@ namespace PixelArtEditor.Files.File_Forms
             OriginalImageWidth = originalSize.Width;
             OriginalImageHeight = originalSize.Height;
 
+            ValidateZoomAllowed();
             ZoomImage();
+        }
+
+        private void ValidateZoomAllowed()
+        {
+            const int maximumBitmapPixelAmount = 536870912; // Maximum pixel amount a Bitmap object can hold.
+            int totalImagePixelAmount = OriginalImageHeight * OriginalImageWidth;
+
+            int maximumAllowedZoom = (int)Math.Sqrt(maximumBitmapPixelAmount / totalImagePixelAmount);
+
+            if (maximumAllowedZoom > 64)
+            {
+                maximumAllowedZoom = 64;
+            }
+
+            FullImageZoomNumberBox.Maximum = maximumAllowedZoom;
+            FullImageZoomNumberBar.MaximumValue = maximumAllowedZoom;
         }
 
         private void FullImageZoomNumberBox_ValueChanged(object sender, EventArgs e)
@@ -39,6 +56,9 @@ namespace PixelArtEditor.Files.File_Forms
 
             FullImagePictureBox.Size = FullImagePictureBox.Image.Size;
             FullImageBackgroundPanel.ResizePanelToFitControls();
+
+            FullImageWidthLabel.Text = $"Width: {zoomWidth}";
+            FullImageHeightLabel.Text = $"Height: {zoomHeight}";
         }
 
         private static Bitmap ApplyZoom(Bitmap originalImage, int zoomWidth, int zoomHeight)
