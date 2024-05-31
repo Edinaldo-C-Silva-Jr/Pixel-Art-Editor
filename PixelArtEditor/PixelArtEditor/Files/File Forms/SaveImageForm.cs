@@ -57,8 +57,8 @@ namespace PixelArtEditor.Files.File_Forms
             FullImagePictureBox.Size = FullImagePictureBox.Image.Size;
             FullImageBackgroundPanel.ResizePanelToFitControls();
 
-            FullImageWidthLabel.Text = $"Width: {zoomWidth}";
-            FullImageHeightLabel.Text = $"Height: {zoomHeight}";
+            FullImageWidthLabel.Text = $"Width: {zoomWidth} ({OriginalImageWidth})";
+            FullImageHeightLabel.Text = $"Height: {zoomHeight} ({OriginalImageHeight})";
         }
 
         private static Bitmap ApplyZoom(Bitmap originalImage, int zoomWidth, int zoomHeight)

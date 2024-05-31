@@ -49,16 +49,16 @@
             }
         }
 
-        private int _incrementValue = 1;
+        private int _incrementAmount = 1;
         /// <summary>
         /// The amount to change the Value property on each increment of the number bar.
         /// </summary>
         public int IncrementAmount
         {
-            get { return _incrementValue; }
+            get { return _incrementAmount; }
             set
             {
-                _incrementValue = value > 0 ? value : 1;
+                _incrementAmount = value > 0 ? value : 1;
                 ValidateSize();
             }
         }
@@ -130,7 +130,7 @@
         /// </summary>
         private void ValidateSize()
         {
-            if (IncrementSize != 0 && Width % IncrementSize != 0)
+            if (IncrementSize != 0 && Width > IncrementSize * AmountOfIncrements)
             {
                 Width = IncrementSize * AmountOfIncrements;
             }
