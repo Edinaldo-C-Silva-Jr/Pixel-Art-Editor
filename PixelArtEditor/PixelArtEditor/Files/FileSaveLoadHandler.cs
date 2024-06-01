@@ -1,4 +1,5 @@
-﻿using System.Drawing.Imaging;
+﻿using PixelArtEditor.Files.File_Forms;
+using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Files
 {
@@ -22,8 +23,10 @@ namespace PixelArtEditor.Files
         /// </summary>
         public FileSaveLoadHandler()
         {
-            DialogForSavingFiles = new SaveFileDialog();
-            DialogForSavingFiles.AddExtension = true;
+            DialogForSavingFiles = new SaveFileDialog
+            {
+                AddExtension = true
+            };
 
             DialogForOpeningFiles = new OpenFileDialog();
         }
@@ -49,22 +52,17 @@ namespace PixelArtEditor.Files
         /// It sets the default directory for images saved by the program and the default filename and extension for the image.
         /// </summary>
         /// <param name="originalImage">The image to be saved as a file.</param>
-        public void SaveImage(Bitmap originalImage)
+        public void SaveImage(Bitmap originalImage, Size originalDimensions)
         {
             string directory = DefineFileDirectory("SavedImages");
 
             DialogForSavingFiles.InitialDirectory = directory;
-            DialogForSavingFiles.FileName = "PixelImage_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".png";
             DialogForSavingFiles.Filter = "PNG Image|*.png";
             DialogForSavingFiles.DefaultExt = "png";
             DialogForSavingFiles.Title = "Save the current image";
-            DialogResult result = DialogForSavingFiles.ShowDialog();
 
-            if (result == DialogResult.OK)
-            {
-                string nameOfFile = DialogForSavingFiles.FileName;
-                originalImage.Save(nameOfFile, ImageFormat.Png);
-            }
+            SaveImageForm saveImageForm = new(originalImage, originalDimensions,DialogForSavingFiles);
+            saveImageForm.ShowDialog();
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Files.File_Forms
 {
@@ -7,10 +8,13 @@ namespace PixelArtEditor.Files.File_Forms
         private int OriginalImageWidth { get; set; }
         private int OriginalImageHeight { get; set; }
 
-        public SaveImageForm(Bitmap originalImage, Size originalSize)
+        private SaveFileDialog DialogForSavingImages { get; set; }
+
+        public SaveImageForm(Bitmap originalImage, Size originalSize, SaveFileDialog dialogForSavingImages)
         {
             InitializeComponent();
 
+            DialogForSavingImages = dialogForSavingImages;
             FullImagePictureBox.Image = new Bitmap(originalImage);
             OriginalImageWidth = originalSize.Width;
             OriginalImageHeight = originalSize.Height;
@@ -74,6 +78,29 @@ namespace PixelArtEditor.Files.File_Forms
             // Draws the original image onto the zoomed image, using the new size and interpolation mode defined.
             zoomGraphics.DrawImage(originalImage, 0, 0, zoomWidth, zoomHeight);
             return zoomedImage;
+        }
+
+        private void SaveFullImage()
+        {
+            DialogForSavingImages.FileName = "PixelImage_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".png";
+            DialogResult result = DialogForSavingImages.ShowDialog();
+
+            if (result == DialogResult.OK && DialogForSavingImages.FileName != string.Empty)
+            {
+                FileStream imageStream = (FileStream)DialogForSavingImages.OpenFile();
+                FullImagePictureBox.Image.Save(imageStream, ImageFormat.Png);
+                imageStream.Close();
+            }
+        }
+
+        private void SaveFullImageButton_Click(object sender, EventArgs e)
+        {
+            SaveFullImage();
+        }
+
+        private void CancelSaveButton_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

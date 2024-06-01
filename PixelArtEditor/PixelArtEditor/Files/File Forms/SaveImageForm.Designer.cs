@@ -58,6 +58,7 @@
             SaveFullImageButton.TabIndex = 1;
             SaveFullImageButton.Text = "Save Image";
             SaveFullImageButton.UseVisualStyleBackColor = true;
+            SaveFullImageButton.Click += SaveFullImageButton_Click;
             // 
             // CancelSaveButton
             // 
@@ -67,6 +68,7 @@
             CancelSaveButton.TabIndex = 2;
             CancelSaveButton.Text = "Cancel";
             CancelSaveButton.UseVisualStyleBackColor = true;
+            CancelSaveButton.Click += CancelSaveButton_Click;
             // 
             // FullImageZoomNumberBox
             // 
