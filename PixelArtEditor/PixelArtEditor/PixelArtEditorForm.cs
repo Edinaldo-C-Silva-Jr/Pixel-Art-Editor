@@ -796,6 +796,9 @@ namespace PixelArtEditor
         /// </summary>
         private void LoadImageButton_Click(object sender, EventArgs e)
         {
+            LoadImageForm load = new();
+            load.ShowDialog();
+
             using Bitmap imageLoaded = FileSaverLoader.LoadImage();
             if (imageLoaded != null) // Null check in case no image is loaded.
             {

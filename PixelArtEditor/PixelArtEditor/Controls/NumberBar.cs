@@ -216,9 +216,9 @@
                 e.Graphics.FillRectangle(Brushes.White, 1 + CurrentIncrement * IncrementSize, 17, IncrementSize - 3, 8);
             }
 
-            // Gets the value and adds a 0 to it in case of a single digit value.
+            // Gets the value and its string representation.
             int newDrawnValue = MinimumValue + CurrentIncrement * IncrementAmount;
-            string textValue = newDrawnValue > 9 ? $"{newDrawnValue}" : $"0{newDrawnValue}";
+            string textValue = newDrawnValue.ToString();
 
             // Displays the value as a string.
             int stringWidth = (int)e.Graphics.MeasureString(textValue, Font).Width;

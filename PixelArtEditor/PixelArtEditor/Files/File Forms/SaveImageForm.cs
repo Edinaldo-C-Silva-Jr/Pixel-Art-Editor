@@ -15,7 +15,7 @@ namespace PixelArtEditor.Files.File_Forms
             InitializeComponent();
 
             DialogForSavingImages = dialogForSavingImages;
-            FullImagePictureBox.Image = new Bitmap(originalImage);
+            SaveImagePictureBox.Image = new Bitmap(originalImage);
             OriginalImageWidth = originalSize.Width;
             OriginalImageHeight = originalSize.Height;
 
@@ -35,34 +35,34 @@ namespace PixelArtEditor.Files.File_Forms
                 maximumAllowedZoom = 64;
             }
 
-            FullImageZoomNumberBox.Maximum = maximumAllowedZoom;
-            FullImageZoomNumberBar.MaximumValue = maximumAllowedZoom;
+            SaveImageZoomNumberBox.Maximum = maximumAllowedZoom;
+            SaveImageZoomNumberBar.MaximumValue = maximumAllowedZoom;
         }
 
         private void FullImageZoomNumberBox_ValueChanged(object sender, EventArgs e)
         {
-            FullImageZoomNumberBar.Value = (int)FullImageZoomNumberBox.Value; // Syncs both NumberBox and NumberBar.
+            SaveImageZoomNumberBar.Value = (int)SaveImageZoomNumberBox.Value; // Syncs both NumberBox and NumberBar.
 
             ZoomImage();
         }
 
         private void FullImageZoomNumberBar_ValueChanged(object sender, EventArgs e)
         {
-            FullImageZoomNumberBox.Value = FullImageZoomNumberBar.Value;
+            SaveImageZoomNumberBox.Value = SaveImageZoomNumberBar.Value;
         }
 
         private void ZoomImage()
         {
-            int zoom = (int)FullImageZoomNumberBox.Value;
+            int zoom = (int)SaveImageZoomNumberBox.Value;
             int zoomWidth = OriginalImageWidth * zoom;
             int zoomHeight = OriginalImageHeight * zoom;
-            FullImagePictureBox.Image = ApplyZoom((Bitmap)FullImagePictureBox.Image, zoomWidth, zoomHeight);
+            SaveImagePictureBox.Image = ApplyZoom((Bitmap)SaveImagePictureBox.Image, zoomWidth, zoomHeight);
 
-            FullImagePictureBox.Size = FullImagePictureBox.Image.Size;
-            FullImageBackgroundPanel.ResizePanelToFitControls();
+            SaveImagePictureBox.Size = SaveImagePictureBox.Image.Size;
+            SaveImageBackgroundPanel.ResizePanelToFitControls();
 
-            FullImageWidthLabel.Text = $"Width: {zoomWidth} ({OriginalImageWidth})";
-            FullImageHeightLabel.Text = $"Height: {zoomHeight} ({OriginalImageHeight})";
+            SaveImageWidthLabel.Text = $"Width: {zoomWidth} ({OriginalImageWidth})";
+            SaveImageHeightLabel.Text = $"Height: {zoomHeight} ({OriginalImageHeight})";
         }
 
         private static Bitmap ApplyZoom(Bitmap originalImage, int zoomWidth, int zoomHeight)
@@ -88,7 +88,7 @@ namespace PixelArtEditor.Files.File_Forms
             if (result == DialogResult.OK && DialogForSavingImages.FileName != string.Empty)
             {
                 FileStream imageStream = (FileStream)DialogForSavingImages.OpenFile();
-                FullImagePictureBox.Image.Save(imageStream, ImageFormat.Png);
+                SaveImagePictureBox.Image.Save(imageStream, ImageFormat.Png);
                 imageStream.Close();
             }
         }
