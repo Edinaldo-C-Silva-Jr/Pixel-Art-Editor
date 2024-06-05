@@ -64,6 +64,12 @@
         }
 
         /// <summary>
+        /// The default width value the control will reset to before validating its size.
+        /// This prevents it from shrinking indefinitely after multiple validations.
+        /// </summary>
+        public int DefaultWidth { get; set; } = 150;
+
+        /// <summary>
         /// The amount of different increments that can be selected in the NumberBar, where each increment represents a value.
         /// </summary>
         private int AmountOfIncrements
@@ -130,10 +136,12 @@
         /// </summary>
         private void ValidateSize()
         {
+            Width = DefaultWidth;
             if (IncrementSize != 0 && Width > IncrementSize * AmountOfIncrements)
             {
                 Width = IncrementSize * AmountOfIncrements;
             }
+            Invalidate();
         }
 
         /// <summary>

@@ -105,14 +105,15 @@
             // LoadImageZoomedLabel
             // 
             LoadImageZoomedLabel.AutoSize = true;
-            LoadImageZoomedLabel.Location = new Point(180, 10);
+            LoadImageZoomedLabel.Location = new Point(175, 10);
             LoadImageZoomedLabel.Name = "LoadImageZoomedLabel";
-            LoadImageZoomedLabel.Size = new Size(155, 15);
+            LoadImageZoomedLabel.Size = new Size(167, 15);
             LoadImageZoomedLabel.TabIndex = 5;
-            LoadImageZoomedLabel.Text = "Does the image have zoom?";
+            LoadImageZoomedLabel.Text = "Do you wish to remove zoom?";
             // 
             // LoadImageZoomNumberBar
             // 
+            LoadImageZoomNumberBar.DefaultWidth = 128;
             LoadImageZoomNumberBar.IncrementAmount = 1;
             LoadImageZoomNumberBar.Location = new Point(210, 35);
             LoadImageZoomNumberBar.MaximumValue = 64;
@@ -121,6 +122,7 @@
             LoadImageZoomNumberBar.Size = new Size(128, 30);
             LoadImageZoomNumberBar.TabIndex = 7;
             LoadImageZoomNumberBar.Value = 1;
+            LoadImageZoomNumberBar.ValueChanged += LoadImageZoomNumberBar_ValueChanged;
             // 
             // LoadImageZoomNumberBox
             // 
@@ -131,6 +133,7 @@
             LoadImageZoomNumberBox.Size = new Size(30, 23);
             LoadImageZoomNumberBox.TabIndex = 6;
             LoadImageZoomNumberBox.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            LoadImageZoomNumberBox.ValueChanged += LoadImageZoomNumberBox_ValueChanged;
             // 
             // LoadPixelHeightLabel
             // 

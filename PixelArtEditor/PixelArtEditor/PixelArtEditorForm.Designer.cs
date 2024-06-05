@@ -765,6 +765,7 @@
             // 
             // ViewPixelSizeNumberBar
             // 
+            ViewPixelSizeNumberBar.DefaultWidth = 80;
             ViewPixelSizeNumberBar.IncrementAmount = 1;
             ViewPixelSizeNumberBar.Location = new Point(75, 110);
             ViewPixelSizeNumberBar.MaximumValue = 4;
@@ -808,6 +809,7 @@
             // 
             // DrawPixelSizeNumberBar
             // 
+            DrawPixelSizeNumberBar.DefaultWidth = 80;
             DrawPixelSizeNumberBar.IncrementAmount = 4;
             DrawPixelSizeNumberBar.Location = new Point(80, 110);
             DrawPixelSizeNumberBar.MaximumValue = 32;

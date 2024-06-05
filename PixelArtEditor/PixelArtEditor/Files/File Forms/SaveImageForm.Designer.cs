@@ -83,6 +83,7 @@
             // 
             // SaveImageZoomNumberBar
             // 
+            SaveImageZoomNumberBar.DefaultWidth = 128;
             SaveImageZoomNumberBar.IncrementAmount = 1;
             SaveImageZoomNumberBar.Location = new Point(395, 15);
             SaveImageZoomNumberBar.MaximumValue = 64;
