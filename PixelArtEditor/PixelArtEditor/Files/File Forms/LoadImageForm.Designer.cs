@@ -56,7 +56,8 @@
             // 
             // LoadImageBackgroundPanel
             // 
-            LoadImageBackgroundPanel.AutoSize = true;
+            LoadImageBackgroundPanel.AutoScroll = true;
+            LoadImageBackgroundPanel.AutoScrollMargin = new Size(1, 1);
             LoadImageBackgroundPanel.BackColor = Color.Black;
             LoadImageBackgroundPanel.Controls.Add(LoadImagePictureBox);
             LoadImageBackgroundPanel.Location = new Point(4, 79);
@@ -157,11 +158,14 @@
             OpenImageButton.TabIndex = 10;
             OpenImageButton.Text = "Open Image";
             OpenImageButton.UseVisualStyleBackColor = true;
+            OpenImageButton.Click += OpenImageButton_Click;
             // 
             // LoadImageForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(584, 461);
             Controls.Add(OpenImageButton);
             Controls.Add(LoadPixelHeightLabel);

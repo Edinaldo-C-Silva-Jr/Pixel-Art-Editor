@@ -99,6 +99,10 @@ namespace PixelArtEditor.Files
 
             DialogForOpeningFiles.InitialDirectory = directory;
             DialogForOpeningFiles.Title = "Load an image into the editor";
+
+            LoadImageForm loadImageForm = new(DialogForOpeningFiles);
+            loadImageForm.ShowDialog();
+
             DialogResult result = DialogForOpeningFiles.ShowDialog();
 
             Bitmap? imageLoaded = null;

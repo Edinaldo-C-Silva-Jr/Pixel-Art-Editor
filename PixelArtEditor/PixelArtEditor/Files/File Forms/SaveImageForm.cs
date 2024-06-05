@@ -87,7 +87,7 @@ namespace PixelArtEditor.Files.File_Forms
 
             if (result == DialogResult.OK && DialogForSavingImages.FileName != string.Empty)
             {
-                FileStream imageStream = (FileStream)DialogForSavingImages.OpenFile();
+                using FileStream imageStream = (FileStream)DialogForSavingImages.OpenFile();
                 SaveImagePictureBox.Image.Save(imageStream, ImageFormat.Png);
                 imageStream.Close();
             }

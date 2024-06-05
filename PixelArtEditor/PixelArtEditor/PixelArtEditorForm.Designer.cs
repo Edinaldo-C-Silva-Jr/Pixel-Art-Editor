@@ -51,10 +51,8 @@
             SavePaletteButton = new Button();
             TransparencyCheckBox = new CheckBox();
             LoadImageButton = new Button();
-            DialogForLoadingFiles = new OpenFileDialog();
             CopyButton = new Button();
             PasteButton = new Button();
-            DialogForSavingFiles = new SaveFileDialog();
             FullMirrorPenButton = new Controls.ToolButton();
             DrawingToolButtonPanel = new Controls.ToolButtonPanel();
             DrawingToolsLabel = new Label();
@@ -967,12 +965,10 @@
         private CheckBox TransparencyCheckBox;
         private CheckBox ColorChangeCheckBox;
         private Button LoadImageButton;
-        private OpenFileDialog DialogForLoadingFiles;
         private Button CopyButton;
         private Button PasteButton;
         private Button LoadPaletteButton;
         private Button SavePaletteButton;
-        private SaveFileDialog DialogForSavingFiles;
         private Controls.ToolButton FullMirrorPenButton;
         private Controls.ToolButtonPanel DrawingToolButtonPanel;
         private Controls.ToolButton PixelPenButton;
