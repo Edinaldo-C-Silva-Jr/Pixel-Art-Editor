@@ -9,8 +9,50 @@
             InitializeComponent();
 
             DialogForOpeningImages = dialogForOpeningImages;
-            LoadImagePictureBox.Size = new Size(0, 0);
-            LoadImageBackgroundPanel.Size = new Size(0, 0);
+
+            // Single time control setup for when the form opens.
+            LoadImagePictureBox.Size = new(0, 0);
+            LoadImageBackgroundPanel.Size = new(0, 0);
+            LoadImageZoomPanel.Location = new(170, 0);
+            LoadImageZoomPanel.Visible = false;
+            LoadImageRemoveZoomButton.Visible = false;
+            LoadImageAddZoomButton.Visible = false;
+        }
+
+        private void LoadImageRemoveZoomButton_Click(object sender, EventArgs e)
+        {
+            EnableZoomPanel("How much zoom to remove?");
+        }
+
+        private void LoadImageAddZoomButton_Click(object sender, EventArgs e)
+        {
+            EnableZoomPanel("How much zoom to add?");
+        }
+
+        private void EnableZoomPanel(string labelText)
+        {
+            LoadImageRemoveZoomButton.Visible = false;
+            LoadImageAddZoomButton.Visible = false;
+            LoadImageZoomPanel.Visible = true;
+            LoadImageZoomedLabel.Text = labelText;
+        }
+
+        private void DisableZoomPanel()
+        {
+            LoadImageRemoveZoomButton.Visible = true;
+            LoadImageAddZoomButton.Visible = true;
+            LoadImageZoomPanel.Visible = false;
+            LoadImageZoomNumberBox.Value = 1;
+        }
+
+        private void LoadImageAcceptZoomButton_Click(object sender, EventArgs e)
+        {
+            DisableZoomPanel();
+        }
+
+        private void LoadImageCancelZoomButton_Click(object sender, EventArgs e)
+        {
+            DisableZoomPanel();
         }
 
         private void OpenImageButton_Click(object sender, EventArgs e)
@@ -18,6 +60,8 @@
             DialogResult result = DialogForOpeningImages.ShowDialog();
             if (result == DialogResult.OK)
             {
+                DisableZoomPanel();
+
                 LoadImagePictureBox.Image = new Bitmap(DialogForOpeningImages.FileName);
                 LoadImagePictureBox.Size = LoadImagePictureBox.Image.Size;
                 LoadImageBackgroundPanel.ResizePanelToFitControls();
@@ -78,7 +122,7 @@
                     LoadPixelWidthLabel.ForeColor = Color.Black;
                 }
 
-                if (pixelHeight> 1024)
+                if (pixelHeight > 1024)
                 {
                     LoadPixelHeightLabel.ForeColor = Color.Red;
                 }

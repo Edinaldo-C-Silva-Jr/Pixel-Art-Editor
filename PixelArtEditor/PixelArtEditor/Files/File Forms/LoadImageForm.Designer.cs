@@ -40,9 +40,15 @@
             LoadPixelHeightLabel = new Label();
             LoadPixelWidthLabel = new Label();
             OpenImageButton = new Button();
+            LoadImageZoomPanel = new Panel();
+            LoadImageCancelZoomButton = new Button();
+            LoadImageAcceptZoomButton = new Button();
+            LoadImageRemoveZoomButton = new Button();
+            LoadImageAddZoomButton = new Button();
             LoadImageBackgroundPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)LoadImagePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)LoadImageZoomNumberBox).BeginInit();
+            LoadImageZoomPanel.SuspendLayout();
             SuspendLayout();
             // 
             // LoadImageWidthLabel
@@ -86,7 +92,7 @@
             // 
             // ConfirmLoadButton
             // 
-            ConfirmLoadButton.Location = new Point(490, 5);
+            ConfirmLoadButton.Location = new Point(540, 5);
             ConfirmLoadButton.Name = "ConfirmLoadButton";
             ConfirmLoadButton.Size = new Size(80, 30);
             ConfirmLoadButton.TabIndex = 3;
@@ -95,7 +101,7 @@
             // 
             // CancelLoadButton
             // 
-            CancelLoadButton.Location = new Point(490, 40);
+            CancelLoadButton.Location = new Point(540, 40);
             CancelLoadButton.Name = "CancelLoadButton";
             CancelLoadButton.Size = new Size(80, 30);
             CancelLoadButton.TabIndex = 4;
@@ -105,17 +111,17 @@
             // LoadImageZoomedLabel
             // 
             LoadImageZoomedLabel.AutoSize = true;
-            LoadImageZoomedLabel.Location = new Point(175, 10);
+            LoadImageZoomedLabel.Location = new Point(5, 5);
             LoadImageZoomedLabel.Name = "LoadImageZoomedLabel";
-            LoadImageZoomedLabel.Size = new Size(167, 15);
+            LoadImageZoomedLabel.Size = new Size(71, 15);
             LoadImageZoomedLabel.TabIndex = 5;
-            LoadImageZoomedLabel.Text = "Do you wish to remove zoom?";
+            LoadImageZoomedLabel.Text = "Zoom Panel";
             // 
             // LoadImageZoomNumberBar
             // 
             LoadImageZoomNumberBar.DefaultWidth = 128;
             LoadImageZoomNumberBar.IncrementAmount = 1;
-            LoadImageZoomNumberBar.Location = new Point(210, 35);
+            LoadImageZoomNumberBar.Location = new Point(40, 30);
             LoadImageZoomNumberBar.MaximumValue = 64;
             LoadImageZoomNumberBar.MinimumValue = 1;
             LoadImageZoomNumberBar.Name = "LoadImageZoomNumberBar";
@@ -126,7 +132,7 @@
             // 
             // LoadImageZoomNumberBox
             // 
-            LoadImageZoomNumberBox.Location = new Point(175, 40);
+            LoadImageZoomNumberBox.Location = new Point(5, 35);
             LoadImageZoomNumberBox.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
             LoadImageZoomNumberBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             LoadImageZoomNumberBox.Name = "LoadImageZoomNumberBox";
@@ -138,7 +144,7 @@
             // LoadPixelHeightLabel
             // 
             LoadPixelHeightLabel.AutoSize = true;
-            LoadPixelHeightLabel.Location = new Point(350, 40);
+            LoadPixelHeightLabel.Location = new Point(430, 40);
             LoadPixelHeightLabel.Name = "LoadPixelHeightLabel";
             LoadPixelHeightLabel.Size = new Size(77, 15);
             LoadPixelHeightLabel.TabIndex = 9;
@@ -147,7 +153,7 @@
             // LoadPixelWidthLabel
             // 
             LoadPixelWidthLabel.AutoSize = true;
-            LoadPixelWidthLabel.Location = new Point(350, 20);
+            LoadPixelWidthLabel.Location = new Point(430, 20);
             LoadPixelWidthLabel.Name = "LoadPixelWidthLabel";
             LoadPixelWidthLabel.Size = new Size(73, 15);
             LoadPixelWidthLabel.TabIndex = 8;
@@ -163,19 +169,71 @@
             OpenImageButton.UseVisualStyleBackColor = true;
             OpenImageButton.Click += OpenImageButton_Click;
             // 
+            // LoadImageZoomPanel
+            // 
+            LoadImageZoomPanel.Controls.Add(LoadImageCancelZoomButton);
+            LoadImageZoomPanel.Controls.Add(LoadImageAcceptZoomButton);
+            LoadImageZoomPanel.Controls.Add(LoadImageZoomNumberBar);
+            LoadImageZoomPanel.Controls.Add(LoadImageZoomedLabel);
+            LoadImageZoomPanel.Controls.Add(LoadImageZoomNumberBox);
+            LoadImageZoomPanel.Location = new Point(170, 100);
+            LoadImageZoomPanel.Name = "LoadImageZoomPanel";
+            LoadImageZoomPanel.Size = new Size(250, 70);
+            LoadImageZoomPanel.TabIndex = 11;
+            // 
+            // LoadImageCancelZoomButton
+            // 
+            LoadImageCancelZoomButton.Location = new Point(180, 40);
+            LoadImageCancelZoomButton.Name = "LoadImageCancelZoomButton";
+            LoadImageCancelZoomButton.Size = new Size(60, 25);
+            LoadImageCancelZoomButton.TabIndex = 9;
+            LoadImageCancelZoomButton.Text = "Cancel";
+            LoadImageCancelZoomButton.UseVisualStyleBackColor = true;
+            LoadImageCancelZoomButton.Click += LoadImageCancelZoomButton_Click;
+            // 
+            // LoadImageAcceptZoomButton
+            // 
+            LoadImageAcceptZoomButton.Location = new Point(180, 5);
+            LoadImageAcceptZoomButton.Name = "LoadImageAcceptZoomButton";
+            LoadImageAcceptZoomButton.Size = new Size(60, 25);
+            LoadImageAcceptZoomButton.TabIndex = 8;
+            LoadImageAcceptZoomButton.Text = "Accept";
+            LoadImageAcceptZoomButton.UseVisualStyleBackColor = true;
+            LoadImageAcceptZoomButton.Click += LoadImageAcceptZoomButton_Click;
+            // 
+            // LoadImageRemoveZoomButton
+            // 
+            LoadImageRemoveZoomButton.Location = new Point(180, 20);
+            LoadImageRemoveZoomButton.Name = "LoadImageRemoveZoomButton";
+            LoadImageRemoveZoomButton.Size = new Size(60, 40);
+            LoadImageRemoveZoomButton.TabIndex = 12;
+            LoadImageRemoveZoomButton.Text = "Remove Zoom";
+            LoadImageRemoveZoomButton.UseVisualStyleBackColor = true;
+            LoadImageRemoveZoomButton.Click += LoadImageRemoveZoomButton_Click;
+            // 
+            // LoadImageAddZoomButton
+            // 
+            LoadImageAddZoomButton.Location = new Point(270, 20);
+            LoadImageAddZoomButton.Name = "LoadImageAddZoomButton";
+            LoadImageAddZoomButton.Size = new Size(60, 40);
+            LoadImageAddZoomButton.TabIndex = 13;
+            LoadImageAddZoomButton.Text = "Add Zoom";
+            LoadImageAddZoomButton.UseVisualStyleBackColor = true;
+            LoadImageAddZoomButton.Click += LoadImageAddZoomButton_Click;
+            // 
             // LoadImageForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(584, 461);
+            ClientSize = new Size(634, 461);
+            Controls.Add(LoadImageAddZoomButton);
+            Controls.Add(LoadImageRemoveZoomButton);
+            Controls.Add(LoadImageZoomPanel);
             Controls.Add(OpenImageButton);
             Controls.Add(LoadPixelHeightLabel);
             Controls.Add(LoadPixelWidthLabel);
-            Controls.Add(LoadImageZoomNumberBar);
-            Controls.Add(LoadImageZoomNumberBox);
-            Controls.Add(LoadImageZoomedLabel);
             Controls.Add(CancelLoadButton);
             Controls.Add(ConfirmLoadButton);
             Controls.Add(LoadImageHeightLabel);
@@ -186,6 +244,8 @@
             LoadImageBackgroundPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)LoadImagePictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)LoadImageZoomNumberBox).EndInit();
+            LoadImageZoomPanel.ResumeLayout(false);
+            LoadImageZoomPanel.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -204,5 +264,10 @@
         private Label LoadPixelHeightLabel;
         private Label LoadPixelWidthLabel;
         private Button OpenImageButton;
+        private Panel LoadImageZoomPanel;
+        private Button LoadImageCancelZoomButton;
+        private Button LoadImageAcceptZoomButton;
+        private Button LoadImageRemoveZoomButton;
+        private Button LoadImageAddZoomButton;
     }
 }
