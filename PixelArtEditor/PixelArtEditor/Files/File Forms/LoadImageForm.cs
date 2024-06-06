@@ -9,6 +9,8 @@
             InitializeComponent();
 
             DialogForOpeningImages = dialogForOpeningImages;
+            LoadImagePictureBox.Size = new Size(0, 0);
+            LoadImageBackgroundPanel.Size = new Size(0, 0);
         }
 
         private void OpenImageButton_Click(object sender, EventArgs e)
@@ -22,10 +24,10 @@
 
                 LoadImageWidthLabel.Text = $"Width: {LoadImagePictureBox.Image.Width}";
                 LoadImageHeightLabel.Text = $"Height: {LoadImagePictureBox.Image.Height}";
-                LoadPixelWidthLabel.Text = $"Pixel Width: {LoadImagePictureBox.Image.Width}";
-                LoadPixelHeightLabel.Text = $"Pixel Height: {LoadImagePictureBox.Image.Height}";
 
                 LoadImageZoomNumberBox.Maximum = LoadImageZoomNumberBar.MaximumValue = CalculateMaximumZoom();
+
+                SetPixelDimensions();
             }
         }
 
@@ -49,11 +51,42 @@
         private void LoadImageZoomNumberBox_ValueChanged(object sender, EventArgs e)
         {
             LoadImageZoomNumberBar.Value = (int)LoadImageZoomNumberBox.Value;
+            SetPixelDimensions();
         }
 
         private void LoadImageZoomNumberBar_ValueChanged(object sender, EventArgs e)
         {
             LoadImageZoomNumberBox.Value = LoadImageZoomNumberBar.Value;
+        }
+
+        private void SetPixelDimensions()
+        {
+            if (LoadImagePictureBox.Image != null)
+            {
+                int pixelWidth = LoadImagePictureBox.Image.Width / (int)LoadImageZoomNumberBox.Value;
+                int pixelHeight = LoadImagePictureBox.Image.Height / (int)LoadImageZoomNumberBox.Value;
+
+                LoadPixelWidthLabel.Text = $"Pixel Width: {pixelWidth}";
+                LoadPixelHeightLabel.Text = $"Pixel Height: {pixelHeight}";
+
+                if (pixelWidth > 1024)
+                {
+                    LoadPixelWidthLabel.ForeColor = Color.Red;
+                }
+                else
+                {
+                    LoadPixelWidthLabel.ForeColor = Color.Black;
+                }
+
+                if (pixelHeight> 1024)
+                {
+                    LoadPixelHeightLabel.ForeColor = Color.Red;
+                }
+                else
+                {
+                    LoadPixelHeightLabel.ForeColor = Color.Black;
+                }
+            }
         }
     }
 }
