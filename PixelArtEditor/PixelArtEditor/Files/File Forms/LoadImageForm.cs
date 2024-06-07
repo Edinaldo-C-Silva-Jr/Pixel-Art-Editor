@@ -4,6 +4,8 @@
     {
         private OpenFileDialog DialogForOpeningImages { get; set; }
 
+        private ZoomType TypeOfZoom { get; set; } = ZoomType.None;
+
         public LoadImageForm(OpenFileDialog dialogForOpeningImages)
         {
             InitializeComponent();
@@ -17,16 +19,66 @@
             LoadImageZoomPanel.Visible = false;
             LoadImageRemoveZoomButton.Visible = false;
             LoadImageAddZoomButton.Visible = false;
+            ConfirmLoadButton.Enabled = false;
+        }
+
+        private void OpenImageButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = DialogForOpeningImages.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                DisableZoomPanel();
+
+                LoadImagePictureBox.Image = new Bitmap(DialogForOpeningImages.FileName);
+                LoadImagePictureBox.Size = LoadImagePictureBox.Image.Size;
+                LoadImageBackgroundPanel.ResizePanelToFitControls();
+
+                LoadImageWidthLabel.Text = $"Width: {LoadImagePictureBox.Image.Width}";
+                LoadImageHeightLabel.Text = $"Height: {LoadImagePictureBox.Image.Height}";
+
+                SetPixelDimensions();
+            }
         }
 
         private void LoadImageRemoveZoomButton_Click(object sender, EventArgs e)
         {
             EnableZoomPanel("How much zoom to remove?");
+            LoadImageZoomNumberBox.Maximum = LoadImageZoomNumberBar.MaximumValue = CalculateMaximumShrink();
+            TypeOfZoom = ZoomType.Shrink;
+        }
+
+        private int CalculateMaximumShrink()
+        {
+            int imageWidth = LoadImagePictureBox.Image.Width;
+            int imageHeight = LoadImagePictureBox.Image.Height;
+
+            int smallerDimension = imageWidth < imageHeight ? imageWidth : imageHeight;
+
+            if (smallerDimension >= 320)
+            {
+                return 64;
+            }
+            else
+            {
+                return smallerDimension / 5;
+            }
         }
 
         private void LoadImageAddZoomButton_Click(object sender, EventArgs e)
         {
             EnableZoomPanel("How much zoom to add?");
+            LoadImageZoomNumberBox.Maximum = LoadImageZoomNumberBar.MaximumValue = CalculateMaximumEnlarge();
+            TypeOfZoom = ZoomType.Enlarge;
+        }
+
+        private int CalculateMaximumEnlarge()
+        {
+            int imageWidth = LoadImagePictureBox.Image.Width;
+            int imageHeight = LoadImagePictureBox.Image.Height;
+
+            int biggerDimension = imageWidth > imageHeight ? imageWidth : imageHeight;
+
+            return 1024 / biggerDimension;
         }
 
         private void EnableZoomPanel(string labelText)
@@ -47,6 +99,7 @@
 
         private void LoadImageAcceptZoomButton_Click(object sender, EventArgs e)
         {
+            SetPixelDimensions();
             DisableZoomPanel();
         }
 
@@ -55,47 +108,10 @@
             DisableZoomPanel();
         }
 
-        private void OpenImageButton_Click(object sender, EventArgs e)
-        {
-            DialogResult result = DialogForOpeningImages.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                DisableZoomPanel();
-
-                LoadImagePictureBox.Image = new Bitmap(DialogForOpeningImages.FileName);
-                LoadImagePictureBox.Size = LoadImagePictureBox.Image.Size;
-                LoadImageBackgroundPanel.ResizePanelToFitControls();
-
-                LoadImageWidthLabel.Text = $"Width: {LoadImagePictureBox.Image.Width}";
-                LoadImageHeightLabel.Text = $"Height: {LoadImagePictureBox.Image.Height}";
-
-                LoadImageZoomNumberBox.Maximum = LoadImageZoomNumberBar.MaximumValue = CalculateMaximumZoom();
-
-                SetPixelDimensions();
-            }
-        }
-
-        private int CalculateMaximumZoom()
-        {
-            int imageWidth = LoadImagePictureBox.Image.Width;
-            int imageHeight = LoadImagePictureBox.Image.Height;
-
-            int smallerDimension = imageWidth < imageHeight ? imageWidth : imageHeight;
-
-            if (smallerDimension >= 320)
-            {
-                return 64;
-            }
-            else
-            {
-                return smallerDimension / 5;
-            }
-        }
-
         private void LoadImageZoomNumberBox_ValueChanged(object sender, EventArgs e)
         {
             LoadImageZoomNumberBar.Value = (int)LoadImageZoomNumberBox.Value;
-            SetPixelDimensions();
+            
         }
 
         private void LoadImageZoomNumberBar_ValueChanged(object sender, EventArgs e)
@@ -105,32 +121,49 @@
 
         private void SetPixelDimensions()
         {
-            if (LoadImagePictureBox.Image != null)
+            int pixelWidth = TypeOfZoom switch
             {
-                int pixelWidth = LoadImagePictureBox.Image.Width / (int)LoadImageZoomNumberBox.Value;
-                int pixelHeight = LoadImagePictureBox.Image.Height / (int)LoadImageZoomNumberBox.Value;
+                ZoomType.Shrink => LoadImagePictureBox.Image.Width / (int)LoadImageZoomNumberBox.Value,
+                ZoomType.Enlarge => LoadImagePictureBox.Image.Width * (int)LoadImageZoomNumberBox.Value,
+                _ => LoadImagePictureBox.Image.Width
+            };
 
-                LoadPixelWidthLabel.Text = $"Pixel Width: {pixelWidth}";
-                LoadPixelHeightLabel.Text = $"Pixel Height: {pixelHeight}";
+            int pixelHeight = TypeOfZoom switch
+            {
+                ZoomType.Shrink => LoadImagePictureBox.Image.Height / (int)LoadImageZoomNumberBox.Value,
+                ZoomType.Enlarge => LoadImagePictureBox.Image.Height * (int)LoadImageZoomNumberBox.Value,
+                _ => LoadImagePictureBox.Image.Height
+            };
 
-                if (pixelWidth > 1024)
-                {
-                    LoadPixelWidthLabel.ForeColor = Color.Red;
-                }
-                else
-                {
-                    LoadPixelWidthLabel.ForeColor = Color.Black;
-                }
+            LoadPixelWidthLabel.Text = $"Pixel Width: {pixelWidth}";
+            LoadPixelHeightLabel.Text = $"Pixel Height: {pixelHeight}";
 
-                if (pixelHeight > 1024)
-                {
-                    LoadPixelHeightLabel.ForeColor = Color.Red;
-                }
-                else
-                {
-                    LoadPixelHeightLabel.ForeColor = Color.Black;
-                }
+            ValidatePixelDimensions(pixelWidth, pixelHeight);
+        }
+
+        private void ValidatePixelDimensions(int pixelWidth, int pixelHeight)
+        {
+            bool valid = true;
+            if (pixelWidth > 1024)
+            {
+                LoadPixelWidthLabel.ForeColor = Color.Red;
+                valid = false;
             }
+            else
+            {
+                LoadPixelWidthLabel.ForeColor = Color.Black;
+            }
+
+            if (pixelHeight > 1024)
+            {
+                LoadPixelHeightLabel.ForeColor = Color.Red;
+                valid = false;
+            }
+            else
+            {
+                LoadPixelHeightLabel.ForeColor = Color.Black;
+            }
+            ConfirmLoadButton.Enabled = valid;
         }
     }
 }
