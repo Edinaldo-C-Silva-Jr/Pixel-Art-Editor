@@ -75,6 +75,7 @@
             // 
             // LoadImagePictureBox
             // 
+            LoadImagePictureBox.BackColor = SystemColors.Control;
             LoadImagePictureBox.Location = new Point(1, 1);
             LoadImagePictureBox.Name = "LoadImagePictureBox";
             LoadImagePictureBox.Size = new Size(20, 20);

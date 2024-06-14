@@ -44,6 +44,7 @@
             // 
             // SaveImagePictureBox
             // 
+            SaveImagePictureBox.BackColor = SystemColors.Control;
             SaveImagePictureBox.Location = new Point(1, 1);
             SaveImagePictureBox.Name = "SaveImagePictureBox";
             SaveImagePictureBox.Size = new Size(20, 20);
