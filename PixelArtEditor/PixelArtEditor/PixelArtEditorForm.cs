@@ -799,7 +799,12 @@ namespace PixelArtEditor
             using Bitmap imageLoaded = FileSaverLoader.LoadImage();
             if (imageLoaded != null) // Null check in case no image is loaded.
             {
+                int currentPixelSize = (int)ViewPixelSizeNumberBox.Value;
+                ViewPixelSizeNumberBox.Value = 1;
+
                 Images.ReplaceOriginalImage(imageLoaded);
+
+                ViewPixelSizeNumberBox.Value = currentPixelSize;
             }
 
             ViewingBox.SetNewImage(Images.OriginalImage);

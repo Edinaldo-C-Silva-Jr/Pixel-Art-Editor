@@ -1,4 +1,6 @@
-﻿namespace PixelArtEditor.Files.File_Forms
+﻿using System.Drawing.Drawing2D;
+
+namespace PixelArtEditor.Files.File_Forms
 {
     public partial class LoadImageForm : Form
     {
@@ -8,9 +10,13 @@
 
         private bool ShowZoom { get; set; }
 
+        private bool ImageIsValid { get; set; } = false;
+
         private Size InitialImageSize { get; set; }
 
         public Size ImageLoadedSize { get; set; }
+
+        public Bitmap? ImageLoaded { get; set; }
 
         public LoadImageForm(OpenFileDialog dialogForOpeningImages)
         {
@@ -200,7 +206,42 @@
                 LoadPixelHeightLabel.ForeColor = Color.Green;
             }
 
+            ImageIsValid = valid;
             ConfirmLoadButton.Enabled = valid;
+        }
+
+        private void ConfirmLoadButton_Click(object sender, EventArgs e)
+        {
+            if (ImageIsValid)
+            {
+                ImageLoaded = ApplyZoom((Bitmap)LoadImagePictureBox.Image, ImageLoadedSize.Width, ImageLoadedSize.Height);
+            }
+            else
+            {
+                ImageLoaded = null;
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+
+        private static Bitmap ApplyZoom(Bitmap originalImage, int zoomWidth, int zoomHeight)
+        {
+            // Creates an image with the newly desired size.
+            Bitmap zoomedImage = new(zoomWidth, zoomHeight);
+            using Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
+
+            // Sets the Interpolation mode and Pixel Offset to use for the editor. Uses Nearest Neighbor to preserve the pixels.
+            zoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            zoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+            // Draws the original image onto the zoomed image, using the new size and interpolation mode defined.
+            zoomGraphics.DrawImage(originalImage, 0, 0, zoomWidth, zoomHeight);
+            return zoomedImage;
+        }
+
+        private void CancelLoadButton_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
         }
     }
 }

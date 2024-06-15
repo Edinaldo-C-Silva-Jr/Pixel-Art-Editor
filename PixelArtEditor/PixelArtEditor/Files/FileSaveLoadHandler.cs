@@ -101,14 +101,12 @@ namespace PixelArtEditor.Files
             DialogForOpeningFiles.Title = "Load an image into the editor";
 
             LoadImageForm loadImageForm = new(DialogForOpeningFiles);
-            loadImageForm.ShowDialog();
-
-            DialogResult result = DialogForOpeningFiles.ShowDialog();
+            DialogResult result = loadImageForm.ShowDialog();
 
             Bitmap? imageLoaded = null;
             if (result == DialogResult.OK)
             {
-                imageLoaded = new(DialogForOpeningFiles.FileName);
+                imageLoaded = loadImageForm.ImageLoaded;
             }
             return imageLoaded!;
         }

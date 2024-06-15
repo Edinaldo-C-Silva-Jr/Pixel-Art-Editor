@@ -99,6 +99,7 @@
             ConfirmLoadButton.TabIndex = 3;
             ConfirmLoadButton.Text = "Confirm";
             ConfirmLoadButton.UseVisualStyleBackColor = true;
+            ConfirmLoadButton.Click += ConfirmLoadButton_Click;
             // 
             // CancelLoadButton
             // 
@@ -108,6 +109,7 @@
             CancelLoadButton.TabIndex = 4;
             CancelLoadButton.Text = "Cancel";
             CancelLoadButton.UseVisualStyleBackColor = true;
+            CancelLoadButton.Click += CancelLoadButton_Click;
             // 
             // LoadImageZoomedLabel
             // 
