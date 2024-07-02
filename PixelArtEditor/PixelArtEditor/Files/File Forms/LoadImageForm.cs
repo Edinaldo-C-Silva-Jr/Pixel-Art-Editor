@@ -27,10 +27,15 @@ namespace PixelArtEditor.Files.File_Forms
             // Single time control setup for when the form opens.
             LoadImagePictureBox.Size = new(0, 0);
             LoadImageBackgroundPanel.Size = new(0, 0);
+            LoadImageZoomedPictureBox.Size = new(0, 0);
+            LoadImageZoomedBackgroundPanel.Size = new(0, 0);
             LoadImageZoomPanel.Location = new(170, 0);
+
+            ImageLoadedOriginalSizeLabel.Visible = false;
             LoadImageZoomPanel.Visible = false;
             LoadImageRemoveZoomButton.Visible = false;
             LoadImageAddZoomButton.Visible = false;
+            LoadedImageZoomedSizeLabel.Visible = false;
             ConfirmLoadButton.Enabled = false;
         }
 
@@ -44,6 +49,7 @@ namespace PixelArtEditor.Files.File_Forms
                 LoadImagePictureBox.Image = new Bitmap(DialogForOpeningImages.FileName);
                 LoadImagePictureBox.Size = LoadImagePictureBox.Image.Size;
                 LoadImageBackgroundPanel.ResizePanelToFitControls();
+                ImageLoadedOriginalSizeLabel.Visible = true;
 
                 ImageLoadedSize = InitialImageSize = LoadImagePictureBox.Size;
                 LoadImageWidthLabel.Text = $"Width: {InitialImageSize.Width}";
@@ -208,6 +214,26 @@ namespace PixelArtEditor.Files.File_Forms
 
             ImageIsValid = valid;
             ConfirmLoadButton.Enabled = valid;
+
+            ShowImageIfValid(valid);
+        }
+
+        private void ShowImageIfValid(bool valid)
+        {
+            LoadImageZoomedBackgroundPanel.Visible = valid;
+            LoadedImageZoomedSizeLabel.Visible = valid;
+
+            if (valid)
+            {
+                LoadImageZoomedPictureBox.Image = ApplyZoom((Bitmap)LoadImagePictureBox.Image, ImageLoadedSize.Width, ImageLoadedSize.Height);
+            }
+            else
+            {
+                LoadImageZoomedPictureBox.Image = new Bitmap(1,1);
+            }
+
+            LoadImageZoomedPictureBox.Size = LoadImageZoomedPictureBox.Image.Size;
+            LoadImageZoomedBackgroundPanel.ResizePanelToFitControls();
         }
 
         private void ConfirmLoadButton_Click(object sender, EventArgs e)

@@ -45,10 +45,16 @@
             LoadImageAcceptZoomButton = new Button();
             LoadImageRemoveZoomButton = new Button();
             LoadImageAddZoomButton = new Button();
+            LoadImageZoomedBackgroundPanel = new Controls.BackgroundPanel();
+            LoadImageZoomedPictureBox = new PictureBox();
+            ImageLoadedOriginalSizeLabel = new Label();
+            LoadedImageZoomedSizeLabel = new Label();
             LoadImageBackgroundPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)LoadImagePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)LoadImageZoomNumberBox).BeginInit();
             LoadImageZoomPanel.SuspendLayout();
+            LoadImageZoomedBackgroundPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)LoadImageZoomedPictureBox).BeginInit();
             SuspendLayout();
             // 
             // LoadImageWidthLabel
@@ -66,7 +72,7 @@
             LoadImageBackgroundPanel.AutoScrollMargin = new Size(1, 1);
             LoadImageBackgroundPanel.BackColor = Color.Black;
             LoadImageBackgroundPanel.Controls.Add(LoadImagePictureBox);
-            LoadImageBackgroundPanel.Location = new Point(4, 79);
+            LoadImageBackgroundPanel.Location = new Point(4, 109);
             LoadImageBackgroundPanel.MaximumHeight = 514;
             LoadImageBackgroundPanel.MaximumWidth = 514;
             LoadImageBackgroundPanel.Name = "LoadImageBackgroundPanel";
@@ -224,6 +230,46 @@
             LoadImageAddZoomButton.UseVisualStyleBackColor = true;
             LoadImageAddZoomButton.Click += LoadImageAddZoomButton_Click;
             // 
+            // LoadImageZoomedBackgroundPanel
+            // 
+            LoadImageZoomedBackgroundPanel.AutoScroll = true;
+            LoadImageZoomedBackgroundPanel.AutoScrollMargin = new Size(1, 1);
+            LoadImageZoomedBackgroundPanel.BackColor = Color.Black;
+            LoadImageZoomedBackgroundPanel.Controls.Add(LoadImageZoomedPictureBox);
+            LoadImageZoomedBackgroundPanel.Location = new Point(524, 109);
+            LoadImageZoomedBackgroundPanel.MaximumHeight = 514;
+            LoadImageZoomedBackgroundPanel.MaximumWidth = 514;
+            LoadImageZoomedBackgroundPanel.Name = "LoadImageZoomedBackgroundPanel";
+            LoadImageZoomedBackgroundPanel.Size = new Size(40, 40);
+            LoadImageZoomedBackgroundPanel.TabIndex = 2;
+            // 
+            // LoadImageZoomedPictureBox
+            // 
+            LoadImageZoomedPictureBox.BackColor = SystemColors.Control;
+            LoadImageZoomedPictureBox.Location = new Point(1, 1);
+            LoadImageZoomedPictureBox.Name = "LoadImageZoomedPictureBox";
+            LoadImageZoomedPictureBox.Size = new Size(20, 20);
+            LoadImageZoomedPictureBox.TabIndex = 0;
+            LoadImageZoomedPictureBox.TabStop = false;
+            // 
+            // ImageLoadedOriginalSizeLabel
+            // 
+            ImageLoadedOriginalSizeLabel.AutoSize = true;
+            ImageLoadedOriginalSizeLabel.Location = new Point(4, 80);
+            ImageLoadedOriginalSizeLabel.Name = "ImageLoadedOriginalSizeLabel";
+            ImageLoadedOriginalSizeLabel.Size = new Size(108, 15);
+            ImageLoadedOriginalSizeLabel.TabIndex = 14;
+            ImageLoadedOriginalSizeLabel.Text = "Original Image Size";
+            // 
+            // LoadedImageZoomedSizeLabel
+            // 
+            LoadedImageZoomedSizeLabel.AutoSize = true;
+            LoadedImageZoomedSizeLabel.Location = new Point(524, 80);
+            LoadedImageZoomedSizeLabel.Name = "LoadedImageZoomedSizeLabel";
+            LoadedImageZoomedSizeLabel.Size = new Size(111, 15);
+            LoadedImageZoomedSizeLabel.TabIndex = 15;
+            LoadedImageZoomedSizeLabel.Text = "Zoomed Image Size";
+            // 
             // LoadImageForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -231,6 +277,9 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(634, 461);
+            Controls.Add(LoadedImageZoomedSizeLabel);
+            Controls.Add(ImageLoadedOriginalSizeLabel);
+            Controls.Add(LoadImageZoomedBackgroundPanel);
             Controls.Add(LoadImageAddZoomButton);
             Controls.Add(LoadImageRemoveZoomButton);
             Controls.Add(LoadImageZoomPanel);
@@ -249,6 +298,8 @@
             ((System.ComponentModel.ISupportInitialize)LoadImageZoomNumberBox).EndInit();
             LoadImageZoomPanel.ResumeLayout(false);
             LoadImageZoomPanel.PerformLayout();
+            LoadImageZoomedBackgroundPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)LoadImageZoomedPictureBox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -272,5 +323,9 @@
         private Button LoadImageAcceptZoomButton;
         private Button LoadImageRemoveZoomButton;
         private Button LoadImageAddZoomButton;
+        private Controls.BackgroundPanel LoadImageZoomedBackgroundPanel;
+        private PictureBox LoadImageZoomedPictureBox;
+        private Label ImageLoadedOriginalSizeLabel;
+        private Label LoadedImageZoomedSizeLabel;
     }
 }
