@@ -1,4 +1,5 @@
-﻿using System.Drawing.Drawing2D;
+﻿using System;
+using System.Drawing.Drawing2D;
 
 namespace PixelArtEditor.Files.File_Forms
 {
@@ -14,7 +15,11 @@ namespace PixelArtEditor.Files.File_Forms
 
         private Size InitialImageSize { get; set; }
 
-        public Size ImageLoadedSize { get; set; }
+        private Size ImageLoadedSize { get; set; }
+
+        private int AppliedZoom { get; set; }
+
+        private ZoomType AppliedZoomType { get; set; }
 
         public Bitmap? ImageLoaded { get; set; }
 
@@ -51,11 +56,13 @@ namespace PixelArtEditor.Files.File_Forms
                 LoadImageBackgroundPanel.ResizePanelToFitControls();
                 ImageLoadedOriginalSizeLabel.Visible = true;
 
+                AppliedZoom = 1;
                 ImageLoadedSize = InitialImageSize = LoadImagePictureBox.Size;
                 LoadImageWidthLabel.Text = $"Width: {InitialImageSize.Width}";
                 LoadImageHeightLabel.Text = $"Height: {InitialImageSize.Height}";
 
                 AcceptPixelDimensions();
+                ShowImageIfValid();
             }
         }
 
@@ -113,6 +120,8 @@ namespace PixelArtEditor.Files.File_Forms
             LoadImageAddZoomButton.Visible = false;
             LoadImageZoomPanel.Visible = true;
             LoadImageZoomedLabel.Text = labelText;
+            LoadImageZoomNumberBox.Value = 1;
+            ShowZoom = true;
         }
 
         private void DisableZoomPanel()
@@ -120,8 +129,8 @@ namespace PixelArtEditor.Files.File_Forms
             LoadImageRemoveZoomButton.Visible = true;
             LoadImageAddZoomButton.Visible = true;
             LoadImageZoomPanel.Visible = false;
-            LoadImageZoomNumberBox.Value = 1;
-            ShowZoom = true;
+            ShowZoom = false;
+            AcceptPixelDimensions();
         }
 
         private void LoadImageZoomNumberBox_ValueChanged(object sender, EventArgs e)
@@ -140,9 +149,10 @@ namespace PixelArtEditor.Files.File_Forms
 
         private void LoadImageAcceptZoomButton_Click(object sender, EventArgs e)
         {
-            AcceptPixelDimensions();
-            ShowZoom = false;
+            AppliedZoom = (int)LoadImageZoomNumberBox.Value;
+            AppliedZoomType = TypeOfZoom;
             DisableZoomPanel();
+            ShowImageIfValid();
         }
 
         private void LoadImageCancelZoomButton_Click(object sender, EventArgs e)
@@ -150,19 +160,19 @@ namespace PixelArtEditor.Files.File_Forms
             DisableZoomPanel();
         }
 
-        private Size CalculatePixelDimensions()
+        private Size CalculatePixelDimensions(int zoom, ZoomType type)
         {
-            int pixelWidth = TypeOfZoom switch
+            int pixelWidth = type switch
             {
-                ZoomType.Shrink => InitialImageSize.Width / (int)LoadImageZoomNumberBox.Value,
-                ZoomType.Enlarge => InitialImageSize.Width * (int)LoadImageZoomNumberBox.Value,
+                ZoomType.Shrink => InitialImageSize.Width / zoom,
+                ZoomType.Enlarge => InitialImageSize.Width * zoom,
                 _ => InitialImageSize.Width
             };
 
-            int pixelHeight = TypeOfZoom switch
+            int pixelHeight = type switch
             {
-                ZoomType.Shrink => InitialImageSize.Height / (int)LoadImageZoomNumberBox.Value,
-                ZoomType.Enlarge => InitialImageSize.Height * (int)LoadImageZoomNumberBox.Value,
+                ZoomType.Shrink => InitialImageSize.Height / zoom,
+                ZoomType.Enlarge => InitialImageSize.Height * zoom,
                 _ => InitialImageSize.Height
             };
 
@@ -171,7 +181,7 @@ namespace PixelArtEditor.Files.File_Forms
 
         private void ShowPixelDimensions()
         {
-            Size pixelDimensions = CalculatePixelDimensions();
+            Size pixelDimensions = CalculatePixelDimensions((int)LoadImageZoomNumberBox.Value, TypeOfZoom);
 
             LoadPixelWidthLabel.ForeColor = Color.Black;
             LoadPixelHeightLabel.ForeColor = Color.Black;
@@ -181,7 +191,7 @@ namespace PixelArtEditor.Files.File_Forms
 
         private void AcceptPixelDimensions()
         {
-            Size pixelDimensions = CalculatePixelDimensions();
+            Size pixelDimensions = CalculatePixelDimensions(AppliedZoom, AppliedZoomType);
             ImageLoadedSize = pixelDimensions;
 
             ValidatePixelDimensions(pixelDimensions);
@@ -214,16 +224,14 @@ namespace PixelArtEditor.Files.File_Forms
 
             ImageIsValid = valid;
             ConfirmLoadButton.Enabled = valid;
-
-            ShowImageIfValid(valid);
         }
 
-        private void ShowImageIfValid(bool valid)
+        private void ShowImageIfValid()
         {
-            LoadImageZoomedBackgroundPanel.Visible = valid;
-            LoadedImageZoomedSizeLabel.Visible = valid;
+            LoadImageZoomedBackgroundPanel.Visible = ImageIsValid;
+            LoadedImageZoomedSizeLabel.Visible = ImageIsValid;
 
-            if (valid)
+            if (ImageIsValid)
             {
                 LoadImageZoomedPictureBox.Image = ApplyZoom((Bitmap)LoadImagePictureBox.Image, ImageLoadedSize.Width, ImageLoadedSize.Height);
             }
