@@ -1,4 +1,4 @@
-﻿using System;
+﻿using PixelArtEditor.Grids.Implementations;
 using System.Drawing.Drawing2D;
 
 namespace PixelArtEditor.Files.File_Forms
@@ -21,6 +21,8 @@ namespace PixelArtEditor.Files.File_Forms
 
         private ZoomType AppliedZoomType { get; set; }
 
+        private LineGrid ZoomedGrid { get; set; }
+
         public Bitmap? ImageLoaded { get; set; }
 
         public LoadImageForm(OpenFileDialog dialogForOpeningImages)
@@ -28,6 +30,7 @@ namespace PixelArtEditor.Files.File_Forms
             InitializeComponent();
 
             DialogForOpeningImages = dialogForOpeningImages;
+            ZoomedGrid = new();
 
             // Single time control setup for when the form opens.
             LoadImagePictureBox.Size = new(0, 0);
@@ -153,6 +156,12 @@ namespace PixelArtEditor.Files.File_Forms
             AppliedZoomType = TypeOfZoom;
             DisableZoomPanel();
             ShowImageIfValid();
+            
+            if (AppliedZoomType == ZoomType.Shrink)
+            {
+                ZoomedGrid.GenerateGrid(InitialImageSize.Width, InitialImageSize.Height, AppliedZoom, Color.Gray);
+                LoadImagePictureBox.Invalidate();
+            }
         }
 
         private void LoadImageCancelZoomButton_Click(object sender, EventArgs e)
@@ -237,7 +246,7 @@ namespace PixelArtEditor.Files.File_Forms
             }
             else
             {
-                LoadImageZoomedPictureBox.Image = new Bitmap(1,1);
+                LoadImageZoomedPictureBox.Image = new Bitmap(1, 1);
             }
 
             LoadImageZoomedPictureBox.Size = LoadImageZoomedPictureBox.Image.Size;
@@ -276,6 +285,11 @@ namespace PixelArtEditor.Files.File_Forms
         private void CancelLoadButton_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
+        }
+
+        private void LoadImagePictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            ZoomedGrid.ApplyGrid(e.Graphics, InitialImageSize.Width, InitialImageSize.Height);
         }
     }
 }

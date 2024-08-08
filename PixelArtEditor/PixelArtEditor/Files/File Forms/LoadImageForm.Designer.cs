@@ -87,6 +87,7 @@
             LoadImagePictureBox.Size = new Size(20, 20);
             LoadImagePictureBox.TabIndex = 0;
             LoadImagePictureBox.TabStop = false;
+            LoadImagePictureBox.Paint += LoadImagePictureBox_Paint;
             // 
             // LoadImageHeightLabel
             // 
