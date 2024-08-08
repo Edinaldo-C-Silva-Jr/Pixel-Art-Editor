@@ -88,6 +88,7 @@
             ImageOptionsPanel = new Panel();
             ImageOptionsLabel = new Label();
             ColorPalettePanel = new Panel();
+            ColorValueLabel = new Label();
             ColorPaletteOptionsLabel = new Label();
             DrawingDivisionPanel = new Panel();
             ViewingDivisionPanel = new Panel();
@@ -262,7 +263,7 @@
             BackgroundColorTable.ColumnCount = 1;
             BackgroundColorTable.ColumnStyles.Add(new ColumnStyle());
             BackgroundColorTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            BackgroundColorTable.Location = new Point(160, 60);
+            BackgroundColorTable.Location = new Point(150, 60);
             BackgroundColorTable.MaximumCellAmount = 1;
             BackgroundColorTable.Name = "BackgroundColorTable";
             BackgroundColorTable.RowCount = 1;
@@ -282,7 +283,7 @@
             // 
             // BackgroundColorLabel
             // 
-            BackgroundColorLabel.Location = new Point(80, 60);
+            BackgroundColorLabel.Location = new Point(70, 60);
             BackgroundColorLabel.Name = "BackgroundColorLabel";
             BackgroundColorLabel.Size = new Size(80, 20);
             BackgroundColorLabel.TabIndex = 15;
@@ -862,6 +863,7 @@
             // 
             ColorPalettePanel.BackColor = Color.Gainsboro;
             ColorPalettePanel.BorderStyle = BorderStyle.FixedSingle;
+            ColorPalettePanel.Controls.Add(ColorValueLabel);
             ColorPalettePanel.Controls.Add(ColorPaletteOptionsLabel);
             ColorPalettePanel.Controls.Add(PaletteColorTable);
             ColorPalettePanel.Controls.Add(SavePaletteButton);
@@ -876,6 +878,15 @@
             ColorPalettePanel.Name = "ColorPalettePanel";
             ColorPalettePanel.Size = new Size(280, 150);
             ColorPalettePanel.TabIndex = 11;
+            // 
+            // ColorValueLabel
+            // 
+            ColorValueLabel.AutoSize = true;
+            ColorValueLabel.Location = new Point(180, 60);
+            ColorValueLabel.Name = "ColorValueLabel";
+            ColorValueLabel.Size = new Size(67, 15);
+            ColorValueLabel.TabIndex = 38;
+            ColorValueLabel.Text = "Color Value";
             // 
             // ColorPaletteOptionsLabel
             // 
@@ -939,6 +950,7 @@
             DrawingAreaOptionsPanel.ResumeLayout(false);
             ImageOptionsPanel.ResumeLayout(false);
             ColorPalettePanel.ResumeLayout(false);
+            ColorPalettePanel.PerformLayout();
             DrawingDivisionPanel.ResumeLayout(false);
             ViewingDivisionPanel.ResumeLayout(false);
             ResumeLayout(false);
@@ -1009,5 +1021,6 @@
         private Label DrawingToolsLabel;
         private Controls.NumberBar DrawPixelSizeNumberBar;
         private Controls.NumberBar ViewPixelSizeNumberBar;
+        private Label ColorValueLabel;
     }
 }

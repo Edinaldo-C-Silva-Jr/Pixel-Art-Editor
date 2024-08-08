@@ -728,6 +728,7 @@ namespace PixelArtEditor
             }
 
             cellParent.ChangeCurrentCell(cell);
+            ColorValueLabel.Text = $"R:{cell.BackColor.R} G:{cell.BackColor.G} B:{cell.BackColor.B}";
         }
 
         /// <summary>
