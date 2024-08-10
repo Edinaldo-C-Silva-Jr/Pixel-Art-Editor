@@ -61,7 +61,7 @@ namespace PixelArtEditor.Files
             DialogForSavingFiles.DefaultExt = "png";
             DialogForSavingFiles.Title = "Save the current image";
 
-            SaveImageForm saveImageForm = new(originalImage, originalDimensions,DialogForSavingFiles);
+            SaveImageForm saveImageForm = new(originalImage, originalDimensions, DialogForSavingFiles);
             saveImageForm.ShowDialog();
         }
 
