@@ -1,7 +1,6 @@
 using PixelArtEditor.Controls;
 using PixelArtEditor.Drawing_Tools;
 using PixelArtEditor.Files;
-using PixelArtEditor.Files.File_Forms;
 using PixelArtEditor.Grids;
 
 namespace PixelArtEditor

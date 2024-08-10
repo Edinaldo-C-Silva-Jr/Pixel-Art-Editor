@@ -43,8 +43,8 @@
             LoadImageZoomPanel = new Panel();
             LoadImageCancelZoomButton = new Button();
             LoadImageAcceptZoomButton = new Button();
-            LoadImageRemoveZoomButton = new Button();
-            LoadImageAddZoomButton = new Button();
+            LoadImageShrinkImageButton = new Button();
+            LoadImageEnlargeImageButton = new Button();
             LoadImageZoomedBackgroundPanel = new Controls.BackgroundPanel();
             LoadImageZoomedPictureBox = new PictureBox();
             ImageLoadedOriginalSizeLabel = new Label();
@@ -211,25 +211,25 @@
             LoadImageAcceptZoomButton.UseVisualStyleBackColor = true;
             LoadImageAcceptZoomButton.Click += LoadImageAcceptZoomButton_Click;
             // 
-            // LoadImageRemoveZoomButton
+            // LoadImageShrinkImageButton
             // 
-            LoadImageRemoveZoomButton.Location = new Point(180, 20);
-            LoadImageRemoveZoomButton.Name = "LoadImageRemoveZoomButton";
-            LoadImageRemoveZoomButton.Size = new Size(60, 40);
-            LoadImageRemoveZoomButton.TabIndex = 12;
-            LoadImageRemoveZoomButton.Text = "Remove Zoom";
-            LoadImageRemoveZoomButton.UseVisualStyleBackColor = true;
-            LoadImageRemoveZoomButton.Click += LoadImageRemoveZoomButton_Click;
+            LoadImageShrinkImageButton.Location = new Point(180, 20);
+            LoadImageShrinkImageButton.Name = "LoadImageShrinkImageButton";
+            LoadImageShrinkImageButton.Size = new Size(60, 40);
+            LoadImageShrinkImageButton.TabIndex = 12;
+            LoadImageShrinkImageButton.Text = "Shrink Image";
+            LoadImageShrinkImageButton.UseVisualStyleBackColor = true;
+            LoadImageShrinkImageButton.Click += LoadImageShrinkImageButton_Click;
             // 
-            // LoadImageAddZoomButton
+            // LoadImageEnlargeImageButton
             // 
-            LoadImageAddZoomButton.Location = new Point(270, 20);
-            LoadImageAddZoomButton.Name = "LoadImageAddZoomButton";
-            LoadImageAddZoomButton.Size = new Size(60, 40);
-            LoadImageAddZoomButton.TabIndex = 13;
-            LoadImageAddZoomButton.Text = "Add Zoom";
-            LoadImageAddZoomButton.UseVisualStyleBackColor = true;
-            LoadImageAddZoomButton.Click += LoadImageAddZoomButton_Click;
+            LoadImageEnlargeImageButton.Location = new Point(270, 20);
+            LoadImageEnlargeImageButton.Name = "LoadImageEnlargeImageButton";
+            LoadImageEnlargeImageButton.Size = new Size(60, 40);
+            LoadImageEnlargeImageButton.TabIndex = 13;
+            LoadImageEnlargeImageButton.Text = "Enlarge Image";
+            LoadImageEnlargeImageButton.UseVisualStyleBackColor = true;
+            LoadImageEnlargeImageButton.Click += LoadImageEnlargeImageButton_Click;
             // 
             // LoadImageZoomedBackgroundPanel
             // 
@@ -281,8 +281,8 @@
             Controls.Add(LoadedImageZoomedSizeLabel);
             Controls.Add(ImageLoadedOriginalSizeLabel);
             Controls.Add(LoadImageZoomedBackgroundPanel);
-            Controls.Add(LoadImageAddZoomButton);
-            Controls.Add(LoadImageRemoveZoomButton);
+            Controls.Add(LoadImageEnlargeImageButton);
+            Controls.Add(LoadImageShrinkImageButton);
             Controls.Add(LoadImageZoomPanel);
             Controls.Add(OpenImageButton);
             Controls.Add(LoadPixelHeightLabel);
@@ -322,8 +322,8 @@
         private Panel LoadImageZoomPanel;
         private Button LoadImageCancelZoomButton;
         private Button LoadImageAcceptZoomButton;
-        private Button LoadImageRemoveZoomButton;
-        private Button LoadImageAddZoomButton;
+        private Button LoadImageShrinkImageButton;
+        private Button LoadImageEnlargeImageButton;
         private Controls.BackgroundPanel LoadImageZoomedBackgroundPanel;
         private PictureBox LoadImageZoomedPictureBox;
         private Label ImageLoadedOriginalSizeLabel;

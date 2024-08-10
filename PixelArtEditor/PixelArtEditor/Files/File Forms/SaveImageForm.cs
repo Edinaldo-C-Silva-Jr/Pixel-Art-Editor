@@ -3,6 +3,10 @@ using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Files.File_Forms
 {
+    /// <summary>
+    /// A form used to save images to a file.
+    /// It allows changing the size of the image and picking the directory to save it to.
+    /// </summary>
     public partial class SaveImageForm : Form
     {
         #region Properties
