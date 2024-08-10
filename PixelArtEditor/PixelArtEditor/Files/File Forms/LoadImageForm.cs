@@ -100,6 +100,11 @@ namespace PixelArtEditor.Files.File_Forms
         }
         #endregion
 
+        #region Open, Confirm and Cancel Buttons
+        /// <summary>
+        /// Utilizes the OpenFileDialog to load an image from a file into the PictureBox.
+        /// Then checks if the image size is valid and loads the size values into the labels.
+        /// </summary>
         private void OpenImageButton_Click(object sender, EventArgs e)
         {
             DialogResult result = DialogForOpeningImages.ShowDialog();
@@ -122,6 +127,32 @@ namespace PixelArtEditor.Files.File_Forms
                 ShowImageIfValid();
             }
         }
+
+        /// <summary>
+        /// Confirms loading the image, setting the DialogResilt to OK and applying the image into the ImageLoaded property.
+        /// </summary>
+        private void ConfirmLoadButton_Click(object sender, EventArgs e)
+        {
+            if (ImageIsValid)
+            {
+                ImageLoaded = ApplyZoom((Bitmap)LoadImagePictureBox.Image, ImageLoadedSize.Width, ImageLoadedSize.Height);
+            }
+            else
+            {
+                ImageLoaded = null;
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Cancels loading the image, setting the DialogResult to Cancel.
+        /// </summary>
+        private void CancelLoadButton_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
+        #endregion
 
         #region Enlarge / Shrink Buttons and Setup
         /// <summary>
@@ -201,11 +232,12 @@ namespace PixelArtEditor.Files.File_Forms
             LoadImageZoomPanel.Visible = true;
             LoadImageZoomedLabel.Text = labelText;
             LoadImageZoomNumberBox.Value = 1;
+            ConfirmLoadButton.Enabled = false;
             PreviewZoom = true;
         }
         #endregion
 
-        #region Zoom Panel Buttons / Zoom Accept and Preview
+        #region Zoom Panel Buttons / Zoom Calculations, Validation and Application
         /// <summary>
         /// Accepts the current zoom, disables the zoom panel and shows the image.
         /// If the image was reduced, also generates a grid to show how much of the image corresponds to a pixel in the editor.
@@ -221,8 +253,8 @@ namespace PixelArtEditor.Files.File_Forms
             if (AppliedZoomType == ZoomType.Shrink)
             {
                 ZoomedGrid.GenerateGrid(InitialImageSize.Width, InitialImageSize.Height, AppliedZoom, Color.Gray);
-                LoadImagePictureBox.Invalidate();
             }
+            LoadImagePictureBox.Invalidate();
         }
 
         /// <summary>
@@ -317,6 +349,14 @@ namespace PixelArtEditor.Files.File_Forms
         }
 
         /// <summary>
+        /// Applies the grid to the PictureBox.
+        /// </summary>
+        private void LoadImagePictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            ZoomedGrid.ApplyGrid(e.Graphics, InitialImageSize.Width, InitialImageSize.Height);
+        }
+
+        /// <summary>
         /// Shows the image in the Zoomed Image picture box, but only if the image size is valid.
         /// </summary>
         private void ShowImageIfValid()
@@ -335,6 +375,28 @@ namespace PixelArtEditor.Files.File_Forms
 
             LoadImageZoomedPictureBox.Size = LoadImageZoomedPictureBox.Image.Size;
             LoadImageZoomedBackgroundPanel.ResizePanelToFitControls();
+        }
+
+        /// <summary>
+        /// Applies the zoom to an image.
+        /// </summary>
+        /// <param name="originalImage">The image to apply the zoom to.</param>
+        /// <param name="zoomWidth">The width of the newly zoomed image.</param>
+        /// <param name="zoomHeight">The height of the newly zoomed image.</param>
+        /// <returns>A new image with the zoom applied.</returns>
+        private static Bitmap ApplyZoom(Bitmap originalImage, int zoomWidth, int zoomHeight)
+        {
+            // Creates an image with the newly desired size.
+            Bitmap zoomedImage = new(zoomWidth, zoomHeight);
+            using Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
+
+            // Sets the Interpolation mode and Pixel Offset to use for the editor. Uses Nearest Neighbor to preserve the pixels.
+            zoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            zoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+            // Draws the original image onto the zoomed image, using the new size and interpolation mode defined.
+            zoomGraphics.DrawImage(originalImage, 0, 0, zoomWidth, zoomHeight);
+            return zoomedImage;
         }
         #endregion
 
@@ -372,45 +434,5 @@ namespace PixelArtEditor.Files.File_Forms
             }
         }
         #endregion
-
-
-        private void ConfirmLoadButton_Click(object sender, EventArgs e)
-        {
-            if (ImageIsValid)
-            {
-                ImageLoaded = ApplyZoom((Bitmap)LoadImagePictureBox.Image, ImageLoadedSize.Width, ImageLoadedSize.Height);
-            }
-            else
-            {
-                ImageLoaded = null;
-            }
-
-            DialogResult = DialogResult.OK;
-        }
-
-        private static Bitmap ApplyZoom(Bitmap originalImage, int zoomWidth, int zoomHeight)
-        {
-            // Creates an image with the newly desired size.
-            Bitmap zoomedImage = new(zoomWidth, zoomHeight);
-            using Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
-
-            // Sets the Interpolation mode and Pixel Offset to use for the editor. Uses Nearest Neighbor to preserve the pixels.
-            zoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-            zoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-            // Draws the original image onto the zoomed image, using the new size and interpolation mode defined.
-            zoomGraphics.DrawImage(originalImage, 0, 0, zoomWidth, zoomHeight);
-            return zoomedImage;
-        }
-
-        private void CancelLoadButton_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-        }
-
-        private void LoadImagePictureBox_Paint(object sender, PaintEventArgs e)
-        {
-            ZoomedGrid.ApplyGrid(e.Graphics, InitialImageSize.Width, InitialImageSize.Height);
-        }
     }
 }

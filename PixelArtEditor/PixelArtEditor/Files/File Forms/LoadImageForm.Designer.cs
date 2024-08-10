@@ -258,18 +258,18 @@
             ImageLoadedOriginalSizeLabel.AutoSize = true;
             ImageLoadedOriginalSizeLabel.Location = new Point(4, 80);
             ImageLoadedOriginalSizeLabel.Name = "ImageLoadedOriginalSizeLabel";
-            ImageLoadedOriginalSizeLabel.Size = new Size(108, 15);
+            ImageLoadedOriginalSizeLabel.Size = new Size(85, 15);
             ImageLoadedOriginalSizeLabel.TabIndex = 14;
-            ImageLoadedOriginalSizeLabel.Text = "Original Image Size";
+            ImageLoadedOriginalSizeLabel.Text = "Original Image";
             // 
             // LoadedImageZoomedSizeLabel
             // 
             LoadedImageZoomedSizeLabel.AutoSize = true;
             LoadedImageZoomedSizeLabel.Location = new Point(524, 80);
             LoadedImageZoomedSizeLabel.Name = "LoadedImageZoomedSizeLabel";
-            LoadedImageZoomedSizeLabel.Size = new Size(111, 15);
+            LoadedImageZoomedSizeLabel.Size = new Size(112, 15);
             LoadedImageZoomedSizeLabel.TabIndex = 15;
-            LoadedImageZoomedSizeLabel.Text = "Zoomed Image Size";
+            LoadedImageZoomedSizeLabel.Text = "Image to be Loaded";
             // 
             // LoadImageForm
             // 
