@@ -17,11 +17,6 @@
             {
                 components.Dispose();
             }
-
-            ImageGraphics?.Dispose();
-            ColorBrush?.Dispose();
-            GridGenerator?.Dispose();
-
             base.Dispose(disposing);
         }
 

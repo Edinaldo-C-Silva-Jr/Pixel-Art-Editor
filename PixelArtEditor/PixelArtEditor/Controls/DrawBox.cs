@@ -8,19 +8,16 @@ namespace PixelArtEditor.Controls
     /// </summary>
     public partial class DrawBox : PictureBox, IDisposable
     {
-        // Disposed in the Designer file.
         /// <summary>
         /// The graphics used to draw into the image.
         /// </summary>
         private Graphics? ImageGraphics { get; set; }
 
-        // Disposed in the Designer file.
         /// <summary>
         /// The brush used to draw into the image.
         /// </summary>
         private SolidBrush? ColorBrush { get; set; }
 
-        // Disposed in the Designer file.
         /// <summary>
         /// The grid generator used to create the background grid of the Drawing Box.
         /// </summary>
@@ -37,6 +34,7 @@ namespace PixelArtEditor.Controls
             MouseClicked = false;
             DoubleBuffered = true;
             InitializeComponent();
+            Disposed += OnDispose;
         }
 
         /// <summary>
@@ -150,6 +148,13 @@ namespace PixelArtEditor.Controls
             tool.PreviewTool(paintGraphics, ColorBrush, toolParameters);
 
             paintGraphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+        }
+
+        private void OnDispose(object? sender, EventArgs e)
+        {
+            ImageGraphics?.Dispose();
+            ColorBrush?.Dispose();
+            GridGenerator?.Dispose();
         }
     }
 }

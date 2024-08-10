@@ -7,7 +7,6 @@ namespace PixelArtEditor.Controls
     /// </summary>
     public partial class ViewBox : PictureBox
     {
-        // Disposed in the Designer file.
         /// <summary>
         /// The grid generator used to create the background grid of the Viewing Box.
         /// </summary>
@@ -18,6 +17,7 @@ namespace PixelArtEditor.Controls
             GridGenerator = new BackgroundGrid();
             DoubleBuffered = true;
             InitializeComponent();
+            Disposed += OnDispose;
         }
 
         /// <summary>
@@ -73,6 +73,11 @@ namespace PixelArtEditor.Controls
             // Draws two different color rectangles so they're visible regardless of the image's current colors.
             paintGraphics.DrawRectangle(blackPen, location.X, location.Y, boxSize.Width, boxSize.Height);
             paintGraphics.DrawRectangle(whitePen, location.X + 1, location.Y + 1, boxSize.Width - 2, boxSize.Height - 2);
+        }
+
+        private void OnDispose(object? sender, EventArgs e)
+        {
+            GridGenerator?.Dispose();
         }
     }
 }
