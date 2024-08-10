@@ -359,8 +359,7 @@ namespace PixelArtEditor
             }
 
             // Applies the grid on top of the Drawing Box.
-            IGridGenerator gridGenerator = GridFactory.GetGrid();
-            gridGenerator.ApplyGrid(e.Graphics, Images.DrawingImage.Width, Images.DrawingImage.Height);
+            GridFactory.GetGrid().ApplyGrid(e.Graphics, Images.DrawingImage.Width, Images.DrawingImage.Height);
         }
 
         /// <summary>

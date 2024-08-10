@@ -61,7 +61,7 @@ namespace PixelArtEditor.Files
             DialogForSavingFiles.DefaultExt = "png";
             DialogForSavingFiles.Title = "Save the current image";
 
-            SaveImageForm saveImageForm = new(originalImage, originalDimensions, DialogForSavingFiles);
+            using SaveImageForm saveImageForm = new(originalImage, originalDimensions, DialogForSavingFiles);
             saveImageForm.ShowDialog();
         }
 
@@ -100,13 +100,13 @@ namespace PixelArtEditor.Files
             DialogForOpeningFiles.InitialDirectory = directory;
             DialogForOpeningFiles.Title = "Load an image into the editor";
 
-            LoadImageForm loadImageForm = new(DialogForOpeningFiles);
+            using LoadImageForm loadImageForm = new(DialogForOpeningFiles);
             DialogResult result = loadImageForm.ShowDialog();
 
             Bitmap? imageLoaded = null;
             if (result == DialogResult.OK)
             {
-                imageLoaded = loadImageForm.ImageLoaded;
+                imageLoaded = new(loadImageForm.ImageLoaded!);
             }
             return imageLoaded!;
         }

@@ -1,4 +1,4 @@
-﻿using PixelArtEditor.Grids.Implementations;
+﻿using PixelArtEditor.Grids;
 using System.Drawing.Drawing2D;
 
 namespace PixelArtEditor.Files.File_Forms
@@ -52,10 +52,10 @@ namespace PixelArtEditor.Files.File_Forms
         private int AppliedZoom { get; set; }
 
         /// <summary>
-        /// The grid generator used to apply a grid to the original image.
+        /// The factory that generates the grid applied to the original image..
         /// This grid shows how much of the image will correspond to a single pixel in the editor.
         /// </summary>
-        private LineGrid ZoomedGrid { get; set; }
+        private GridGeneratorFactory ZoomedGrid { get; set; }
 
         /// <summary>
         /// The image after being loaded and zoom applied, which will be returned to the editor.
@@ -63,7 +63,7 @@ namespace PixelArtEditor.Files.File_Forms
         public Bitmap? ImageLoaded { get; set; }
         #endregion
 
-        #region Form Load and Initial Setup
+        #region Form Load and Initial Setup / Disposing
         /// <summary>
         /// Default constructor. Does the initial setup for all the controls necessary.
         /// </summary>
@@ -74,6 +74,7 @@ namespace PixelArtEditor.Files.File_Forms
 
             DialogForOpeningImages = dialogForOpeningImages;
             ZoomedGrid = new();
+            Disposed += OnDispose;
 
             InitialControlSetup();
         }
@@ -97,6 +98,15 @@ namespace PixelArtEditor.Files.File_Forms
             LoadImageEnlargeImageButton.Visible = false;
             LoadedImageZoomedSizeLabel.Visible = false;
             ConfirmLoadButton.Enabled = false;
+        }
+
+        /// <summary>
+        /// Releases unmanaged resources.
+        /// </summary>
+        private void OnDispose(object? sender, EventArgs e)
+        {
+            ZoomedGrid?.Dispose();
+            ImageLoaded?.Dispose();
         }
         #endregion
 
@@ -249,10 +259,13 @@ namespace PixelArtEditor.Files.File_Forms
             AcceptZoomAndImageDimensions();
             ShowImageIfValid();
 
-            // If the image was reduced, generates a grid.
-            if (AppliedZoomType == ZoomType.Shrink)
+            if (AppliedZoomType == ZoomType.Shrink) // If the image was reduced, generates a grid.
             {
-                ZoomedGrid.GenerateGrid(InitialImageSize.Width, InitialImageSize.Height, AppliedZoom, Color.Gray);
+                ZoomedGrid.ChangeCurrentGrid(GridType.Line, InitialImageSize.Width, InitialImageSize.Height, AppliedZoom, Color.Gray);
+            }
+            else // Otherwise, sets the grid to None.
+            {
+                ZoomedGrid.ChangeCurrentGrid(GridType.None, 0, 0, 0, Color.Gray);
             }
             LoadImagePictureBox.Invalidate();
         }
@@ -271,9 +284,9 @@ namespace PixelArtEditor.Files.File_Forms
         /// </summary>
         private void DisableZoomPanel()
         {
+            LoadImageZoomPanel.Visible = false;
             LoadImageShrinkImageButton.Visible = true;
             LoadImageEnlargeImageButton.Visible = true;
-            LoadImageZoomPanel.Visible = false;
             PreviewZoom = false;
         }
 
@@ -353,7 +366,7 @@ namespace PixelArtEditor.Files.File_Forms
         /// </summary>
         private void LoadImagePictureBox_Paint(object sender, PaintEventArgs e)
         {
-            ZoomedGrid.ApplyGrid(e.Graphics, InitialImageSize.Width, InitialImageSize.Height);
+            ZoomedGrid.GetGrid().ApplyGrid(e.Graphics, InitialImageSize.Width, InitialImageSize.Height);
         }
 
         /// <summary>
@@ -373,8 +386,12 @@ namespace PixelArtEditor.Files.File_Forms
                 LoadImageZoomedPictureBox.Image = new Bitmap(1, 1);
             }
 
+            SuspendLayout();
+
             LoadImageZoomedPictureBox.Size = LoadImageZoomedPictureBox.Image.Size;
             LoadImageZoomedBackgroundPanel.ResizePanelToFitControls();
+
+            ResumeLayout();
         }
 
         /// <summary>
