@@ -92,6 +92,8 @@
             ColorPaletteOptionsLabel = new Label();
             DrawingDivisionPanel = new Panel();
             ViewingDivisionPanel = new Panel();
+            UndoButton = new Button();
+            RedoButton = new Button();
             ((System.ComponentModel.ISupportInitialize)ViewWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewPixelSizeNumberBox).BeginInit();
@@ -836,6 +838,8 @@
             // 
             ImageOptionsPanel.BackColor = Color.Gainsboro;
             ImageOptionsPanel.BorderStyle = BorderStyle.FixedSingle;
+            ImageOptionsPanel.Controls.Add(RedoButton);
+            ImageOptionsPanel.Controls.Add(UndoButton);
             ImageOptionsPanel.Controls.Add(ImageOptionsLabel);
             ImageOptionsPanel.Controls.Add(NewImageButton);
             ImageOptionsPanel.Controls.Add(PasteButton);
@@ -916,6 +920,24 @@
             ViewingDivisionPanel.Name = "ViewingDivisionPanel";
             ViewingDivisionPanel.Size = new Size(550, 550);
             ViewingDivisionPanel.TabIndex = 38;
+            // 
+            // UndoButton
+            // 
+            UndoButton.Location = new Point(60, 85);
+            UndoButton.Name = "UndoButton";
+            UndoButton.Size = new Size(50, 30);
+            UndoButton.TabIndex = 33;
+            UndoButton.Text = "Undo";
+            UndoButton.UseVisualStyleBackColor = true;
+            // 
+            // RedoButton
+            // 
+            RedoButton.Location = new Point(60, 115);
+            RedoButton.Name = "RedoButton";
+            RedoButton.Size = new Size(50, 30);
+            RedoButton.TabIndex = 34;
+            RedoButton.Text = "Redo";
+            RedoButton.UseVisualStyleBackColor = true;
             // 
             // PixelArtEditorForm
             // 
@@ -1022,5 +1044,7 @@
         private Controls.NumberBar DrawPixelSizeNumberBar;
         private Controls.NumberBar ViewPixelSizeNumberBar;
         private Label ColorValueLabel;
+        private Button RedoButton;
+        private Button UndoButton;
     }
 }
