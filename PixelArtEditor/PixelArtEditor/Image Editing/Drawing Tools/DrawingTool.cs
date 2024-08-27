@@ -8,19 +8,6 @@ namespace PixelArtEditor.Drawing_Tools
     abstract public class DrawingTool : IDrawingTool
     {
         /// <summary>
-        /// Draws a single pixel with the current pixel size, filling the pixel where the mouse clicked.
-        /// </summary>
-        /// <param name="drawGraphics">The graphics for the image being drawn.</param>
-        /// <param name="drawBrush">The brush with the currently selected color.</param>
-        /// <param name="location">The location of the mouse click inside the Drawing Box.</param>
-        /// <param name="pixelSize">The size of each pixel in the image.</param>
-        protected static void DrawPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, int pixelSize)
-        {
-            Point pixelLocation = DrawingCalculations.SnapPixelTopLeft(location, pixelSize);
-            drawGraphics.FillRectangle(drawBrush, pixelLocation.X, pixelLocation.Y, pixelSize, pixelSize);
-        }
-
-        /// <summary>
         /// Draws a single pixel with the current pixel size, at the exact location of the mouse click.
         /// </summary>
         /// <param name="drawGraphics">The graphics for the image being drawn.</param>
@@ -82,12 +69,12 @@ namespace PixelArtEditor.Drawing_Tools
             return colorBrush;
         }
 
-        abstract public void UseToolClick(Graphics imageGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters);
-
-        abstract public void UseToolHold(Graphics imageGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters);
-
         abstract public void PreviewTool(Graphics paintGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters);
 
-        abstract public void UseToolRelease(Graphics imageGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters);
+        abstract public void UseToolClick(Bitmap drawingImage, SolidBrush colorBrush, OptionalToolParameters toolParameters);
+
+        abstract public void UseToolHold(OptionalToolParameters toolParameters);
+
+        abstract public void UseToolRelease(OptionalToolParameters toolParameters);
     }
 }

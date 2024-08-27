@@ -30,9 +30,9 @@ namespace PixelArtEditor.Drawing_Tools
         }
 
         /// <summary>
-        /// Generates a new Drawing Tool based on the value of the Tool Button selected.
+        /// Generates a new Drawing Tool based on the value passed.
         /// </summary>
-        /// <param name="toolValue">The value of the tool button, which defines the tool to be used.</param>
+        /// <param name="toolValue">The value of the tool to be used.</param>
         /// <returns>A new instance of the tool that corresponds to the tool value.</returns>
         public IDrawingTool ChangeCurrentTool(int toolValue)
         {
