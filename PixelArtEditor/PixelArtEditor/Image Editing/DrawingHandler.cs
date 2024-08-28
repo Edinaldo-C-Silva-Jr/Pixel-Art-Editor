@@ -1,4 +1,5 @@
 ﻿using PixelArtEditor.Drawing_Tools;
+using PixelArtEditor.Image_Editing.Undo_Redo;
 
 namespace PixelArtEditor.Image_Editing
 {
@@ -76,6 +77,11 @@ namespace PixelArtEditor.Image_Editing
             tool.PreviewTool(paintGraphics, pixelColor, toolParameters);
 
             paintGraphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+        }
+
+        public IUndoRedoCommand CreateUndoStepFromTool(IUndoRedoCreator tool, Point drawingImageLocation)
+        {
+            return tool.CreateUndoStep(drawingImageLocation);
         }
     }
 }

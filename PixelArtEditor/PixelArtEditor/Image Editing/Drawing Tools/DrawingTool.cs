@@ -1,11 +1,12 @@
 ﻿using PixelArtEditor.Image_Editing;
+using PixelArtEditor.Image_Editing.Undo_Redo;
 
 namespace PixelArtEditor.Drawing_Tools
 {
     /// <summary>
     /// A base implementation of a Drawing Tool, that has some of the common methods used by most other tools.
     /// </summary>
-    abstract public class DrawingTool : IDrawingTool
+    abstract public class DrawingTool : IDrawingTool, IUndoRedoCreator
     {
         /// <summary>
         /// Draws a single pixel with the current pixel size, at the exact location of the mouse click.
@@ -75,5 +76,7 @@ namespace PixelArtEditor.Drawing_Tools
         abstract public void UseToolHold(OptionalToolParameters toolParameters);
 
         abstract public void UseToolRelease(OptionalToolParameters toolParameters);
+
+        abstract public IUndoRedoCommand CreateUndoStep(Point drawingImageLocation);
     }
 }

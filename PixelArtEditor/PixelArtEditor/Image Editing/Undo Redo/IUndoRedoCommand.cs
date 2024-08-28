@@ -1,8 +1,8 @@
-﻿namespace PixelArtEditor.ImageEditing
+﻿namespace PixelArtEditor.Image_Editing.Undo_Redo
 {
     public interface IUndoRedoCommand
     {
-        public void ExecuteChange();
-        public void RollbackChange();
+        public void ExecuteChange(Graphics imageGraphics);
+        public void RollbackChange(Graphics imageGraphics);
     }
 }

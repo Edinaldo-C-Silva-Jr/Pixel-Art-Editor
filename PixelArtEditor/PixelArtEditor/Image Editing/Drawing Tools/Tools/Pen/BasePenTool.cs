@@ -1,10 +1,13 @@
 ﻿using PixelArtEditor.Drawing_Tools;
+using PixelArtEditor.Image_Editing.Undo_Redo;
+using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
 {
     public class BasePenTool : DrawingTool
     {
         private Bitmap? UneditedImage { get; set; }
+        private Bitmap? EditedImage { get; set; }
 
         private int LeftBoundary { get; set; }
         private int RightBoundary { get; set; }
@@ -42,6 +45,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
             if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
             {
                 UneditedImage = new(drawingImage);
+                EditedImage = drawingImage;
                 LeftBoundary = RightBoundary = toolParameters.ClickLocation.Value.X;
                 UpperBoundary = LowerBoundary = toolParameters.ClickLocation.Value.Y;
 
@@ -84,15 +88,28 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
             return;
         }
 
-        public void CreateUndoStep()
+        public override IUndoRedoCommand CreateUndoStep(Point drawingImageLocation)
         {
+            Rectangle editedArea = new(LeftBoundary, UpperBoundary, RightBoundary - LeftBoundary, LowerBoundary - UpperBoundary);
+            UneditedImage = UneditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
+
+            EditedImage = EditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
+
+            Point editLocation = new(drawingImageLocation.X + LeftBoundary, drawingImageLocation.Y + UpperBoundary);
+
+            PenCommand UndoStep = new(new Bitmap(UneditedImage), new Bitmap(EditedImage), editLocation);
+
             ClearProperties();
+
+            return UndoStep;
         }
 
         protected void ClearProperties()
         {
             UneditedImage?.Dispose();
             UneditedImage = null;
+            EditedImage?.Dispose();
+            EditedImage = null;
             DrawingCycleGraphics?.Dispose();
             DrawingCycleGraphics = null;
             DrawingBrush?.Dispose();
