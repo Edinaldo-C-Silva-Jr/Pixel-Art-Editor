@@ -9,17 +9,17 @@
         /// Implements the preview of the tool's usage on the Drawing Box.
         /// </summary>
         /// <param name="paintGraphics">The Drawing Box's paint event graphics.</param>
-        /// <param name="colorBrush">The brush with the currently selected color.</param>
+        /// <param name="drawingColor">The color to use to draw on the image.</param>
         /// <param name="toolParameters">The optional parameters used by the current tool.</param>
-        public void PreviewTool(Graphics paintGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters);
+        public void PreviewTool(Graphics paintGraphics, Color pixelColor, OptionalToolParameters toolParameters);
 
         /// <summary>
         /// Implements the function of the tool when the mouse button is pressed.
         /// </summary>
         /// <param name="drawingImage">The image that will be drawn on.</param>
-        /// <param name="colorBrush">The brush with the currently selected color.</param>
+        /// <param name="drawingColor">The color to use to draw on the image.</param>
         /// <param name="toolParameters">The optional parameters used by the current tool.</param>
-        public void UseToolClick(Bitmap drawingImage, SolidBrush colorBrush, OptionalToolParameters toolParameters);
+        public void UseToolClick(Bitmap drawingImage, Color drawingColor, OptionalToolParameters toolParameters);
 
         /// <summary>
         /// Implements the function of the tool when the mouse button is held down.

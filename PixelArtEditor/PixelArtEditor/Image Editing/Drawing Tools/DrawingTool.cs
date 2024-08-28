@@ -40,38 +40,37 @@ namespace PixelArtEditor.Drawing_Tools
         /// </summary>
         /// <param name="colorBrush">The brush with the current color.</param>
         /// <returns>A new brush with a lighter or darker version of the original color.</returns>
-        protected static SolidBrush MakePreviewBrush(SolidBrush colorBrush)
+        protected static SolidBrush MakePreviewBrush(Color brushColor)
         {
             // Formula to get the brightness of a color. Values range from 0 to 255.
             // The green component has the most influence in the color's brightness, and the blue component has the least influence.
-            decimal brightness = 0.2126M * colorBrush.Color.R + 0.7152M * colorBrush.Color.G + 0.0722M * colorBrush.Color.B;
+            decimal brightness = 0.2126M * brushColor.R + 0.7152M * brushColor.G + 0.0722M * brushColor.B;
 
             // Make the color lighter if it's dark, and darker if it's light.
             Color previewColor;
             if (brightness < 64)
             {
-                previewColor = ControlPaint.Light(colorBrush.Color, 1.0f);
+                previewColor = ControlPaint.Light(brushColor, 1.0f);
             } 
             else if (brightness < 128)
             {
-                previewColor = ControlPaint.Light(colorBrush.Color, 0.4f);
+                previewColor = ControlPaint.Light(brushColor, 0.4f);
             } 
             else if(brightness < 196)
             {
-                previewColor = ControlPaint.Dark(colorBrush.Color, 0.05f);
+                previewColor = ControlPaint.Dark(brushColor, 0.05f);
             }
             else
             {
-                previewColor = ControlPaint.Dark(colorBrush.Color, 0.1f);
+                previewColor = ControlPaint.Dark(brushColor, 0.1f);
             }
             
-            colorBrush = new(previewColor);
-            return colorBrush;
+            return new SolidBrush(previewColor);
         }
 
-        abstract public void PreviewTool(Graphics paintGraphics, SolidBrush colorBrush, OptionalToolParameters toolParameters);
+        abstract public void PreviewTool(Graphics paintGraphics, Color drawingColor, OptionalToolParameters toolParameters);
 
-        abstract public void UseToolClick(Bitmap drawingImage, SolidBrush colorBrush, OptionalToolParameters toolParameters);
+        abstract public void UseToolClick(Bitmap drawingImage, Color drawingColor, OptionalToolParameters toolParameters);
 
         abstract public void UseToolHold(OptionalToolParameters toolParameters);
 

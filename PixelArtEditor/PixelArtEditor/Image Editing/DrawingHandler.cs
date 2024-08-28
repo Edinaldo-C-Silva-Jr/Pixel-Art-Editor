@@ -5,16 +5,6 @@ namespace PixelArtEditor.Image_Editing
     public class DrawingHandler
     {
         /// <summary>
-        /// The graphics used to draw into the image.
-        /// </summary>
-        private Graphics? ImageGraphics { get; set; }
-
-        /// <summary>
-        /// The brush used to draw into the image.
-        /// </summary>
-        private SolidBrush? ColorBrush { get; set; }
-
-        /// <summary>
         /// Keeps track of whether the mouse has been clicked in the current drawing cycle or not.
         /// </summary>
         private bool MouseClicked { get; set; }
@@ -30,11 +20,9 @@ namespace PixelArtEditor.Image_Editing
         /// <param name="toolParameters">The parameters to be used by the current tool.</param>
         public void DrawClick(IDrawingTool tool, Bitmap image, Color pixelColor, OptionalToolParameters toolParameters)
         {
-            ImageGraphics = Graphics.FromImage(image);
-            ColorBrush = new(pixelColor);
             MouseClicked = true;
 
-            tool.UseToolClick(ImageGraphics, ColorBrush, toolParameters);
+            tool.UseToolClick(image, pixelColor, toolParameters);
         }
 
         /// <summary>
@@ -51,7 +39,7 @@ namespace PixelArtEditor.Image_Editing
                 return;
             }
 
-            tool.UseToolHold(ImageGraphics!, ColorBrush!, toolParameters);
+            tool.UseToolHold(toolParameters);
         }
 
         /// <summary>
@@ -68,11 +56,8 @@ namespace PixelArtEditor.Image_Editing
                 return;
             }
 
-            tool.UseToolRelease(ImageGraphics!, ColorBrush!, toolParameters);
+            tool.UseToolRelease(toolParameters);
 
-            // Disposes of the graphics and brush used in the current drawing cycle, and sets MouseClicked to false to finish this cycle.
-            ImageGraphics?.Dispose();
-            ColorBrush?.Dispose();
             MouseClicked = false;
         }
 
@@ -85,10 +70,10 @@ namespace PixelArtEditor.Image_Editing
         /// <param name="toolParameters">The parameters to be used by the current tool.</param>
         public void PreviewTool(IDrawingTool tool, Graphics paintGraphics, Color pixelColor, OptionalToolParameters toolParameters)
         {
+            // Changes the CompositingMode to SourceCopy to make the preview brush solid.
             paintGraphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
-            ColorBrush = new(pixelColor);
-
-            tool.PreviewTool(paintGraphics, ColorBrush, toolParameters);
+            
+            tool.PreviewTool(paintGraphics, pixelColor, toolParameters);
 
             paintGraphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
         }
