@@ -59,24 +59,27 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
         {
             if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
             {
-                if (LeftBoundary > toolParameters.ClickLocation.Value.X)
+                int pixelClickedX = toolParameters.ClickLocation.Value.X / toolParameters.PixelSize.Value;
+                int pixelClickedY = toolParameters.ClickLocation.Value.Y / toolParameters.PixelSize.Value;
+
+                if (LeftBoundary > pixelClickedX)
                 {
-                    LeftBoundary = toolParameters.ClickLocation.Value.X;
+                    LeftBoundary = pixelClickedX;
                 }
 
-                if (RightBoundary < toolParameters.ClickLocation.Value.X)
+                if (RightBoundary < pixelClickedX)
                 {
-                    RightBoundary = toolParameters.ClickLocation.Value.X;
+                    RightBoundary = pixelClickedX;
                 }
 
-                if (UpperBoundary > toolParameters.ClickLocation.Value.Y)
+                if (UpperBoundary > pixelClickedY)
                 {
-                    UpperBoundary = toolParameters.ClickLocation.Value.X;
+                    UpperBoundary = pixelClickedY;
                 }
 
-                if (LowerBoundary < toolParameters.ClickLocation.Value.X)
+                if (LowerBoundary < pixelClickedY)
                 {
-                    LowerBoundary = toolParameters.ClickLocation.Value.X;
+                    LowerBoundary = pixelClickedY;
                 }
 
                 DrawPenPixel(DrawingCycleGraphics!, DrawingBrush!, toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);

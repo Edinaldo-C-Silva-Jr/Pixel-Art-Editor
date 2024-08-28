@@ -2,6 +2,8 @@ using PixelArtEditor.Controls;
 using PixelArtEditor.Drawing_Tools;
 using PixelArtEditor.Files;
 using PixelArtEditor.Grids;
+using PixelArtEditor.Image_Editing;
+using PixelArtEditor.Image_Editing.Undo_Redo;
 
 namespace PixelArtEditor
 {
@@ -17,6 +19,10 @@ namespace PixelArtEditor
         /// The class responsible for handling the saving and loading of files in the program.
         /// </summary>
         private FileSaveLoadHandler FileSaverLoader { get; }
+
+        private UndoRedoHandler UndoHandler { get; }
+
+        private DrawingHandler DrawHandler { get; }
 
         /// <summary>
         /// A factory class that handles the creation and recovery of DrawingTools.
@@ -48,9 +54,13 @@ namespace PixelArtEditor
         {
             Images = new();
             FileSaverLoader = new();
+            UndoHandler = new();
+            DrawHandler = new();
+
             ToolFactory = new();
             GridFactory = new();
             Selector = new();
+
             InitializeComponent();
         }
 
@@ -350,7 +360,7 @@ namespace PixelArtEditor
             {
                 OptionalToolParameters toolParameters = GetToolParameters(MouseOnDrawingBox.Value);
 
-                DrawingBox.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
+                DrawHandler.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
             }
 
             if (Selector.CurrentImage == ImageType.DrawingImage)
@@ -457,7 +467,7 @@ namespace PixelArtEditor
 
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                DrawingBox.DrawClick(ToolFactory.GetTool(), Images.DrawingImage, paletteColor, toolParameters);
+                DrawHandler.DrawClick(ToolFactory.GetTool(), Images.DrawingImage, paletteColor, toolParameters);
                 DrawingBox.Image = Images.DrawingImage;
             }
 
@@ -494,7 +504,7 @@ namespace PixelArtEditor
             {
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                DrawingBox.DrawHold(ToolFactory.GetTool(), toolParameters);
+                DrawHandler.DrawHold(ToolFactory.GetTool(), toolParameters);
                 DrawingBox.Image = Images.DrawingImage;
             }
 
@@ -521,9 +531,10 @@ namespace PixelArtEditor
             {
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                DrawingBox.DrawRelease(ToolFactory.GetTool(), toolParameters);
-                DrawingBox.Image = Images.DrawingImage;
+                DrawHandler.DrawRelease(ToolFactory.GetTool(), toolParameters);
+                UndoHandler.TrackChange(DrawHandler.CreateUndoStepFromTool((IUndoRedoCreator)ToolFactory.GetTool(), Images.DrawingLocation));
 
+                DrawingBox.Image = Images.DrawingImage;
                 Images.ApplyDrawnImage();
                 ViewingBox.Image = Images.OriginalImage;
             }
