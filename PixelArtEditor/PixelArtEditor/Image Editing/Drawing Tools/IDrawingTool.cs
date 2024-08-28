@@ -9,7 +9,7 @@
         /// Implements the preview of the tool's usage on the Drawing Box.
         /// </summary>
         /// <param name="paintGraphics">The Drawing Box's paint event graphics.</param>
-        /// <param name="drawingColor">The color to use to draw on the image.</param>
+        /// <param name="pixelColor">The color to use to draw on the image.</param>
         /// <param name="toolParameters">The optional parameters used by the current tool.</param>
         public void PreviewTool(Graphics paintGraphics, Color pixelColor, OptionalToolParameters toolParameters);
 
