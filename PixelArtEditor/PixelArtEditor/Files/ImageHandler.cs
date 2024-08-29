@@ -10,10 +10,15 @@ namespace PixelArtEditor.Files
     internal class ImageHandler : IDisposable
     {
         #region Properties
-        /// <summary>
-        /// The full image being used in the pixel art editor.
-        /// </summary>
-        public Bitmap OriginalImage { get; private set; }
+        public Bitmap EditOriginalImage { get; set; }
+
+        public Bitmap DisplayOriginalImage { get; set; }
+
+        public Size OriginalImageSize { get; set; }
+
+        public int OriginalImageZoom { get; set; }
+
+
 
         /// <summary>
         /// The portion of the original image that is being used in the DrawingBox.
@@ -30,15 +35,7 @@ namespace PixelArtEditor.Files
         /// </summary>
         public Bitmap ClipboardDrawingImage { get; private set; }
 
-        /// <summary>
-        /// The pixel dimensions of the Original Image, without the zoom.
-        /// </summary>
-        public Size OriginalDimensions { get; private set; }
-
-        /// <summary>
-        /// The size of each pixel in the Original Image.
-        /// </summary>
-        public int OriginalPixelSize { get; private set; }
+        
 
         /// <summary>
         /// The pixel dimensions of the Drawing Image, without the zoom.
@@ -61,12 +58,17 @@ namespace PixelArtEditor.Files
         /// </summary>
         public ImageHandler()
         {
-            OriginalImage = new(1, 1);
+            EditOriginalImage = new(1, 1);
+            DisplayOriginalImage = new(1, 1);
+
+            OriginalImageSize = new(1, 1);
+            OriginalImageZoom = 1;
+
+
             DrawingImage = new(1, 1);
             ClipboardOriginalImage = new(1, 1);
             ClipboardDrawingImage = new(1, 1);
 
-            OriginalPixelSize = 1;
             DrawingPixelSize = 1;
         }
 
@@ -74,15 +76,30 @@ namespace PixelArtEditor.Files
         /// <summary>
         /// Changes the size of the Original Image to the values passed as parameters.
         /// </summary>
-        /// <param name="pixelWidth">The width of the image, in pixel sizes.</param>
-        /// <param name="pixelHeight">The height of the image, in pixel sizes.</param>
-        /// <param name="pixelSize">The size of each pixel in the image.</param>
-        public void ChangeOriginalImageSize(int pixelWidth, int pixelHeight, int pixelSize)
+        /// <param name="pixelWidth">The width of the image, in pixels.</param>
+        /// <param name="pixelHeight">The height of the image, in pixels.</param>
+        /// <param name="zoom">The amount of zoom to apply to the image.</param>
+        public void ChangeOriginalImageSize(int pixelWidth, int pixelHeight, int zoom)
         {
-            OriginalDimensions = new Size(pixelWidth, pixelHeight);
-            OriginalPixelSize = pixelSize;
+            OriginalImageSize = new Size(pixelWidth, pixelHeight);
+            OriginalImageZoom = zoom;
 
             ChangeSizeButPreserveOriginalImage();
+        }
+
+        /// <summary>
+        /// Creates a new image to use as the current Original Image, with the currently defined size, while preserving the Original Image.
+        /// </summary>
+        private void ChangeSizeButPreserveOriginalImage()
+        {
+            // Creates a new image with the currently defined size.
+            using Bitmap imageWithNewSize = new(OriginalImageSize.Width, OriginalImageSize.Height);
+            using Graphics newSizeGraphics = Graphics.FromImage(imageWithNewSize);
+
+            // Draws the Original Image on top of the new image, then assigns it to the Original Image.
+            newSizeGraphics.DrawImage(EditOriginalImage, 0, 0);
+            EditOriginalImage?.Dispose();
+            EditOriginalImage = new(imageWithNewSize);
         }
 
         /// <summary>
@@ -92,30 +109,17 @@ namespace PixelArtEditor.Files
         /// <param name="transparent">Defines whether the image will have a transparent background or not.</param>
         public void CreateNewBlankImage(Color backgroundColor, bool transparent)
         {
-            // Creates the image and fills its background with the desired color
-            OriginalImage = new(OriginalDimensions.Width * OriginalPixelSize, OriginalDimensions.Height * OriginalPixelSize);
-            using Graphics imageFiller = Graphics.FromImage(OriginalImage);
+            // Creates the image and fills its background with the desired color.
+            EditOriginalImage?.Dispose();
+            EditOriginalImage = new(OriginalImageSize.Width, OriginalImageSize.Height);
+            using Graphics imageFiller = Graphics.FromImage(EditOriginalImage);
             imageFiller.Clear(backgroundColor);
 
             // Changes transparency, if applicable.
             if (transparent)
             {
-                OriginalImage.MakeTransparent(backgroundColor);
+                EditOriginalImage.MakeTransparent(backgroundColor);
             }
-        }
-
-        /// <summary>
-        /// Creates a new image to use as the current Original Image, with the currently defined size, while preserving the Original Image.
-        /// </summary>
-        private void ChangeSizeButPreserveOriginalImage()
-        {
-            // Creates a new image with the currently defined sizes.
-            using Bitmap imageWithNewSize = new(OriginalDimensions.Width * OriginalPixelSize, OriginalDimensions.Height * OriginalPixelSize);
-            using Graphics newSizeGraphics = Graphics.FromImage(imageWithNewSize);
-
-            // Draws the Original Image on top of the new image.
-            newSizeGraphics.DrawImage(OriginalImage, 0, 0);
-            OriginalImage = new(imageWithNewSize);
         }
 
         /// <summary>
@@ -126,11 +130,13 @@ namespace PixelArtEditor.Files
         {
             CreateNewBlankImage(Color.White, true);
 
-            using Graphics newImageGraphics = Graphics.FromImage(OriginalImage);
-            newImageGraphics.DrawImage(newOriginalImage, 0, 0);
+            using Graphics originalImageGraphics = Graphics.FromImage(EditOriginalImage);
+            originalImageGraphics.DrawImage(newOriginalImage, 0, 0);
         }
         #endregion
 
+        // TODO: Will have to revise several of the calculations that involve the Original Image
+        // Also need to change the Drawing Image eventually.
         #region Drawing Image Size, Creation and Application
         /// <summary>
         /// Changes the size of the Drawing Image to the values passed as parameters.
@@ -446,7 +452,9 @@ namespace PixelArtEditor.Files
 
         public void Dispose()
         {
-            OriginalImage?.Dispose();
+            EditOriginalImage?.Dispose();
+            DisplayOriginalImage?.Dispose();
+
             ClipboardDrawingImage?.Dispose();
             ClipboardOriginalImage?.Dispose();
             DrawingImage?.Dispose();
