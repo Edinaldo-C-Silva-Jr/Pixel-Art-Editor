@@ -1,8 +1,8 @@
 using PixelArtEditor.Controls;
-using PixelArtEditor.Drawing_Tools;
 using PixelArtEditor.Files;
 using PixelArtEditor.Grids;
 using PixelArtEditor.Image_Editing;
+using PixelArtEditor.Image_Editing.Drawing_Tools;
 using PixelArtEditor.Image_Editing.Undo_Redo;
 
 namespace PixelArtEditor
@@ -858,6 +858,18 @@ namespace PixelArtEditor
                         break;
                 }
             }
+        }
+
+        private void UndoButton_Click(object sender, EventArgs e)
+        {
+            UndoHandler.UndoChange(Images.OriginalImage);
+            ViewingBox.SetNewImage(Images.OriginalImage);
+        }
+
+        private void RedoButton_Click(object sender, EventArgs e)
+        {
+            UndoHandler.RedoChange(Images.OriginalImage);
+            ViewingBox.SetNewImage(Images.OriginalImage);
         }
     }
 }

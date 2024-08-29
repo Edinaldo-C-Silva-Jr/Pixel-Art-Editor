@@ -1,4 +1,4 @@
-﻿namespace PixelArtEditor.Drawing_Tools
+﻿namespace PixelArtEditor.Image_Editing.Drawing_Tools
 {
     /// <summary>
     /// An interface that defines the methods used by the Drawing Tools.

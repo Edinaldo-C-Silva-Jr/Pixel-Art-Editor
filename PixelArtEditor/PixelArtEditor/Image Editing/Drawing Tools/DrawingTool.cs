@@ -1,7 +1,6 @@
-﻿using PixelArtEditor.Image_Editing;
-using PixelArtEditor.Image_Editing.Undo_Redo;
+﻿using PixelArtEditor.Image_Editing.Undo_Redo;
 
-namespace PixelArtEditor.Drawing_Tools
+namespace PixelArtEditor.Image_Editing.Drawing_Tools
 {
     /// <summary>
     /// A base implementation of a Drawing Tool, that has some of the common methods used by most other tools.

@@ -1,5 +1,4 @@
-﻿using PixelArtEditor.Drawing_Tools;
-using PixelArtEditor.Image_Editing.Undo_Redo;
+﻿using PixelArtEditor.Image_Editing.Undo_Redo;
 using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
@@ -9,10 +8,10 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
         private Bitmap? UneditedImage { get; set; }
         private Bitmap? EditedImage { get; set; }
 
-        private int LeftBoundary { get; set; }
-        private int RightBoundary { get; set; }
-        private int UpperBoundary { get; set; }
-        private int LowerBoundary { get; set; }
+        private int LeftBoundary { get; set; } = 0;
+        private int RightBoundary { get; set; } = 0;
+        private int UpperBoundary { get; set; } = 0;
+        private int LowerBoundary { get; set; } = 0;
 
         private Graphics? DrawingCycleGraphics { get; set; }
 
@@ -109,6 +108,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
 
         protected void ClearProperties()
         {
+            LeftBoundary = RightBoundary = UpperBoundary = LowerBoundary = 0;
             UneditedImage?.Dispose();
             UneditedImage = null;
             EditedImage?.Dispose();

@@ -1,6 +1,6 @@
-﻿using PixelArtEditor.Drawing_Tools.Tools;
+﻿using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen;
 
-namespace PixelArtEditor.Drawing_Tools
+namespace PixelArtEditor.Image_Editing.Drawing_Tools
 {
     /// <summary>
     /// A Factory that generates Drawing Tools.
@@ -17,7 +17,8 @@ namespace PixelArtEditor.Drawing_Tools
         /// </summary>
         public DrawingToolFactory()
         {
-            Tool = new PixelPenTool();
+            Tool = new BasePenTool();
+            //Tool = new PixelPenTool();
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace PixelArtEditor.Drawing_Tools
         {
             Tool = toolValue switch
             {
-                1 => new HorizontalMirrorPenTool(),
+                /*1 => new HorizontalMirrorPenTool(),
                 2 => new VerticalMirrorPenTool(),
                 3 => new FullMirrorPenTool(),
                 4 => new FourMirrorPenTool(),
@@ -48,7 +49,8 @@ namespace PixelArtEditor.Drawing_Tools
                 8 => new FreeLineTool(),
                 9 => new SolidRectangleTool(),
                 10 => new OutlineRectangleTool(),
-                _ => new PixelPenTool()
+                _ => new PixelPenTool()*/
+                _ => new BasePenTool()
             };
 
             return Tool;

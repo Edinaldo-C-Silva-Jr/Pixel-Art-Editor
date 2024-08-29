@@ -86,14 +86,14 @@
             DrawPixelSizeNumberBar = new Controls.NumberBar();
             DrawingAreaOptionsLabel = new Label();
             ImageOptionsPanel = new Panel();
+            RedoButton = new Button();
+            UndoButton = new Button();
             ImageOptionsLabel = new Label();
             ColorPalettePanel = new Panel();
             ColorValueLabel = new Label();
             ColorPaletteOptionsLabel = new Label();
             DrawingDivisionPanel = new Panel();
             ViewingDivisionPanel = new Panel();
-            UndoButton = new Button();
-            RedoButton = new Button();
             ((System.ComponentModel.ISupportInitialize)ViewWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewPixelSizeNumberBox).BeginInit();
@@ -851,6 +851,26 @@
             ImageOptionsPanel.Size = new Size(120, 150);
             ImageOptionsPanel.TabIndex = 34;
             // 
+            // RedoButton
+            // 
+            RedoButton.Location = new Point(60, 115);
+            RedoButton.Name = "RedoButton";
+            RedoButton.Size = new Size(50, 30);
+            RedoButton.TabIndex = 34;
+            RedoButton.Text = "Redo";
+            RedoButton.UseVisualStyleBackColor = true;
+            RedoButton.Click += RedoButton_Click;
+            // 
+            // UndoButton
+            // 
+            UndoButton.Location = new Point(60, 85);
+            UndoButton.Name = "UndoButton";
+            UndoButton.Size = new Size(50, 30);
+            UndoButton.TabIndex = 33;
+            UndoButton.Text = "Undo";
+            UndoButton.UseVisualStyleBackColor = true;
+            UndoButton.Click += UndoButton_Click;
+            // 
             // ImageOptionsLabel
             // 
             ImageOptionsLabel.BackColor = Color.Gainsboro;
@@ -920,24 +940,6 @@
             ViewingDivisionPanel.Name = "ViewingDivisionPanel";
             ViewingDivisionPanel.Size = new Size(550, 550);
             ViewingDivisionPanel.TabIndex = 38;
-            // 
-            // UndoButton
-            // 
-            UndoButton.Location = new Point(60, 85);
-            UndoButton.Name = "UndoButton";
-            UndoButton.Size = new Size(50, 30);
-            UndoButton.TabIndex = 33;
-            UndoButton.Text = "Undo";
-            UndoButton.UseVisualStyleBackColor = true;
-            // 
-            // RedoButton
-            // 
-            RedoButton.Location = new Point(60, 115);
-            RedoButton.Name = "RedoButton";
-            RedoButton.Size = new Size(50, 30);
-            RedoButton.TabIndex = 34;
-            RedoButton.Text = "Redo";
-            RedoButton.UseVisualStyleBackColor = true;
             // 
             // PixelArtEditorForm
             // 

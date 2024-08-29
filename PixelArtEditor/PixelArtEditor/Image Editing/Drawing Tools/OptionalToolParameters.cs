@@ -1,4 +1,4 @@
-﻿namespace PixelArtEditor.Drawing_Tools
+﻿namespace PixelArtEditor.Image_Editing.Drawing_Tools
 {
     /// <summary>
     /// The optional parameters for Drawing Tools that not all of them will need to use.

@@ -1,4 +1,4 @@
-﻿using PixelArtEditor.Drawing_Tools;
+﻿using PixelArtEditor.Image_Editing.Drawing_Tools;
 using PixelArtEditor.Image_Editing.Undo_Redo;
 
 namespace PixelArtEditor.Image_Editing
