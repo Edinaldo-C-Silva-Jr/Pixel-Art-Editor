@@ -1,5 +1,5 @@
-﻿using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
+using PixelArtEditor.Extension_Methods;
 
 namespace PixelArtEditor.Files
 {
@@ -14,6 +14,11 @@ namespace PixelArtEditor.Files
 
         public Bitmap DisplayOriginalImage { get; set; }
 
+        /// <summary>
+        /// The image that represents the clipboard, used to copy and paste the selected portion of the Original Image.
+        /// </summary>
+        public Bitmap ClipboardOriginalImage { get; private set; }
+
         public Size OriginalImageSize { get; set; }
 
         public int OriginalImageZoom { get; set; }
@@ -25,10 +30,7 @@ namespace PixelArtEditor.Files
         /// </summary>
         public Bitmap DrawingImage { get; private set; }
 
-        /// <summary>
-        /// The image that represents the clipboard, used to copy and paste the selected portion of the Original Image.
-        /// </summary>
-        public Bitmap ClipboardOriginalImage { get; private set; }
+        
 
         /// <summary>
         /// The image that represents the clipboard, used to copy and paste the selected portion of the Drawing Image.
@@ -60,13 +62,12 @@ namespace PixelArtEditor.Files
         {
             EditOriginalImage = new(1, 1);
             DisplayOriginalImage = new(1, 1);
-
+            ClipboardOriginalImage = new(1, 1);
             OriginalImageSize = new(1, 1);
             OriginalImageZoom = 1;
 
 
             DrawingImage = new(1, 1);
-            ClipboardOriginalImage = new(1, 1);
             ClipboardDrawingImage = new(1, 1);
 
             DrawingPixelSize = 1;
@@ -319,43 +320,21 @@ namespace PixelArtEditor.Files
 
         #region Changing and Applying Zoom
         /// <summary>
-        /// Receives an image and zooms it to the sizes passed as parameters.
-        /// </summary>
-        /// <param name="originalImage">The image to apply the zoom to.</param>
-        /// <param name="zoomWidth">The new width to be applied to the image.</param>
-        /// <param name="zoomHeight">The new height to be applied to the image.</param>
-        /// <returns>A new image with the zoom applied.</returns>
-        private static Bitmap ApplyZoom(Bitmap originalImage, int zoomWidth, int zoomHeight)
-        {
-            // Creates an image with the newly desired size.
-            Bitmap zoomedImage = new(zoomWidth, zoomHeight);
-            using Graphics zoomGraphics = Graphics.FromImage(zoomedImage);
-
-            // Sets the Interpolation mode and Pixel Offset to use for the editor. Uses Nearest Neighbor to preserve the pixels.
-            zoomGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-            zoomGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-            // Draws the original image onto the zoomed image, using the new size and interpolation mode defined.
-            zoomGraphics.DrawImage(originalImage, 0, 0, zoomWidth, zoomHeight);
-            return zoomedImage;
-        }
-
-        /// <summary>
         /// Changes only the pixel size value of the Original Image. Also zooms the image to the new pixel size.
         /// </summary>
         /// <param name="pixelSize">The new pixel size to use for the Original Image</param>
         public void ChangeOriginalImageZoom(int pixelSize)
         {
-            OriginalPixelSize = pixelSize;
-            ZoomOriginalImage();
+            OriginalImageZoom = pixelSize;
+            CreateNewDisplayOriginalImage();
         }
 
         /// <summary>
-        /// Zooms the Original Image based on the newly defined pixel size value.
+        /// Creates a new Display Image by zooming the Original Image with the defined zoom value.
         /// </summary>
-        private void ZoomOriginalImage()
+        private void CreateNewDisplayOriginalImage()
         {
-            OriginalImage = ApplyZoom(OriginalImage, OriginalDimensions.Width * OriginalPixelSize, OriginalDimensions.Height * OriginalPixelSize);
+            DisplayOriginalImage = EditOriginalImage.ApplyZoomNearestNeighbor(OriginalImageSize.Width * OriginalImageZoom, OriginalImageSize.Height * OriginalImageZoom);
         }
 
         /// <summary>
@@ -384,7 +363,7 @@ namespace PixelArtEditor.Files
         /// <param name="transparencyColor">The color to be made transparent in the image.</param>
         public void MakeImageTransparent(Color transparencyColor)
         {
-            OriginalImage.MakeTransparent(transparencyColor);
+            EditOriginalImage.MakeTransparent(transparencyColor);
         }
 
         /// <summary>
@@ -394,13 +373,14 @@ namespace PixelArtEditor.Files
         public void MakeImageNotTransparent(Color backgroundColor)
         {
             // Creates a temporary image and applies the background color to it.
-            using Bitmap temporaryImage = new(OriginalImage.Width, OriginalImage.Height);
+            Bitmap temporaryImage = new(OriginalImageSize.Width, OriginalImageSize.Height);
             using Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
             temporaryGraphics.Clear(backgroundColor);
 
             // Then draws the Original Image on top of the solid color image to remove the transparency.
-            temporaryGraphics.DrawImage(OriginalImage, 0, 0);
-            OriginalImage = new(temporaryImage);
+            temporaryGraphics.DrawImage(EditOriginalImage, 0, 0);
+            EditOriginalImage.Dispose();
+            EditOriginalImage = temporaryImage;
         }
         #endregion
 
@@ -417,7 +397,7 @@ namespace PixelArtEditor.Files
             {
                 if (currentImage == ImageType.OriginalImage) // Copies the Original Image.
                 {
-                    ClipboardOriginalImage = OriginalImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
+                    ClipboardOriginalImage = EditOriginalImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
                 }
                 else // Copies the Drawing Image.
                 {
@@ -438,7 +418,7 @@ namespace PixelArtEditor.Files
             {
                 if (currentImage == ImageType.OriginalImage) // Pastes the Clipboard Original Image into the Original Image.
                 {
-                    using Graphics pasteGraphics = Graphics.FromImage(OriginalImage);
+                    using Graphics pasteGraphics = Graphics.FromImage(EditOriginalImage);
                     pasteGraphics.DrawImage(ClipboardOriginalImage, new Point(selectedArea.X, selectedArea.Y));
                 }
                 else // Pastes the Clipboard Drawing Image into the Drawing Image.
@@ -454,9 +434,9 @@ namespace PixelArtEditor.Files
         {
             EditOriginalImage?.Dispose();
             DisplayOriginalImage?.Dispose();
+            ClipboardOriginalImage?.Dispose();
 
             ClipboardDrawingImage?.Dispose();
-            ClipboardOriginalImage?.Dispose();
             DrawingImage?.Dispose();
         }
     }
