@@ -86,6 +86,7 @@ namespace PixelArtEditor.Files
             OriginalImageZoom = zoom;
 
             ChangeSizeButPreserveOriginalImage();
+            CreateNewDisplayOriginalImage();
         }
 
         /// <summary>
@@ -101,6 +102,14 @@ namespace PixelArtEditor.Files
             newSizeGraphics.DrawImage(EditOriginalImage, 0, 0);
             EditOriginalImage?.Dispose();
             EditOriginalImage = new(imageWithNewSize);
+        }
+
+        /// <summary>
+        /// Creates a new Display Image by zooming the Original Image with the defined zoom value.
+        /// </summary>
+        private void CreateNewDisplayOriginalImage()
+        {
+            DisplayOriginalImage = EditOriginalImage.ApplyZoomNearestNeighbor(OriginalImageSize.Width * OriginalImageZoom, OriginalImageSize.Height * OriginalImageZoom);
         }
 
         /// <summary>
@@ -121,6 +130,8 @@ namespace PixelArtEditor.Files
             {
                 EditOriginalImage.MakeTransparent(backgroundColor);
             }
+
+            CreateNewDisplayOriginalImage();
         }
 
         /// <summary>
@@ -129,10 +140,10 @@ namespace PixelArtEditor.Files
         /// <param name="newOriginalImage">The new image that will be set in place of the current Original Image.</param>
         public void ReplaceOriginalImage(Bitmap newOriginalImage)
         {
-            CreateNewBlankImage(Color.White, true);
-
             using Graphics originalImageGraphics = Graphics.FromImage(EditOriginalImage);
             originalImageGraphics.DrawImage(newOriginalImage, 0, 0);
+
+            CreateNewDisplayOriginalImage();
         }
         #endregion
 
@@ -330,14 +341,6 @@ namespace PixelArtEditor.Files
         }
 
         /// <summary>
-        /// Creates a new Display Image by zooming the Original Image with the defined zoom value.
-        /// </summary>
-        private void CreateNewDisplayOriginalImage()
-        {
-            DisplayOriginalImage = EditOriginalImage.ApplyZoomNearestNeighbor(OriginalImageSize.Width * OriginalImageZoom, OriginalImageSize.Height * OriginalImageZoom);
-        }
-
-        /// <summary>
         /// Changes only the pixel size value of the Drawing Image.
         /// </summary>
         /// <param name="pixelSize">The new pixel size to use for the Drawing Image.</param>
@@ -364,6 +367,8 @@ namespace PixelArtEditor.Files
         public void MakeImageTransparent(Color transparencyColor)
         {
             EditOriginalImage.MakeTransparent(transparencyColor);
+
+            CreateNewDisplayOriginalImage();
         }
 
         /// <summary>
@@ -381,6 +386,8 @@ namespace PixelArtEditor.Files
             temporaryGraphics.DrawImage(EditOriginalImage, 0, 0);
             EditOriginalImage.Dispose();
             EditOriginalImage = temporaryImage;
+
+            CreateNewDisplayOriginalImage();
         }
         #endregion
 
@@ -420,6 +427,8 @@ namespace PixelArtEditor.Files
                 {
                     using Graphics pasteGraphics = Graphics.FromImage(EditOriginalImage);
                     pasteGraphics.DrawImage(ClipboardOriginalImage, new Point(selectedArea.X, selectedArea.Y));
+
+                    CreateNewDisplayOriginalImage();
                 }
                 else // Pastes the Clipboard Drawing Image into the Drawing Image.
                 {

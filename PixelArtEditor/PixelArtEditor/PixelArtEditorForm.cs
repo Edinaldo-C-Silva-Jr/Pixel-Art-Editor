@@ -179,8 +179,8 @@ namespace PixelArtEditor
                 Selector.ClearSelection();
             }
 
-            ViewingBox.SetNewSize(Images.OriginalImage.Width, Images.OriginalImage.Height);
-            ViewingBox.SetNewImage(Images.OriginalImage);
+            ViewingBox.SetNewSize(Images.DisplayOriginalImage.Width, Images.DisplayOriginalImage.Height);
+            ViewingBox.SetNewImage(Images.DisplayOriginalImage);
             ChangeViewingBoxGrid();
             ReorganizeControls();
         }
@@ -285,7 +285,7 @@ namespace PixelArtEditor
         /// </summary>
         private void ChangeViewingBoxGrid()
         {
-            ViewingBox.SetBackgroundGrid(Images.OriginalImage.Width, Images.OriginalImage.Height, Images.OriginalPixelSize);
+            ViewingBox.SetBackgroundGrid(Images.DisplayOriginalImage.Width, Images.DisplayOriginalImage.Height, Images.OriginalImageZoom);
         }
 
         /// <summary>
@@ -330,7 +330,7 @@ namespace PixelArtEditor
             bool transparent = TransparencyCheckBox.Checked;
 
             Images.CreateNewBlankImage(backgroundColor, transparent);
-            ViewingBox.SetNewImage(Images.OriginalImage);
+            ViewingBox.SetNewImage(Images.DisplayOriginalImage);
         }
 
         /// <summary>
@@ -383,8 +383,8 @@ namespace PixelArtEditor
             }
 
             // Draws the overlay indicating the Drawing Box position inside the Viewing Box.
-            Point location = new(Images.DrawingLocation.X * Images.OriginalPixelSize, Images.DrawingLocation.Y * Images.OriginalPixelSize);
-            ViewingBox.DrawDrawingBoxOverlay(e.Graphics, location, Images.DrawingDimensions * Images.OriginalPixelSize);
+            Point location = new(Images.DrawingLocation.X * Images.OriginalImageZoom, Images.DrawingLocation.Y * Images.OriginalImageZoom);
+            ViewingBox.DrawDrawingBoxOverlay(e.Graphics, location, Images.DrawingDimensions * Images.OriginalImageZoom);
         }
         #endregion
 
@@ -534,9 +534,9 @@ namespace PixelArtEditor
                 DrawHandler.DrawRelease(ToolFactory.GetTool(), toolParameters);
                 UndoHandler.TrackChange(DrawHandler.CreateUndoStepFromTool((IUndoRedoCreator)ToolFactory.GetTool(), Images.DrawingLocation));
 
-                DrawingBox.Image = Images.DrawingImage;
+                DrawingBox.SetNewImage(Images.DrawingImage);
                 Images.ApplyDrawnImage();
-                ViewingBox.Image = Images.OriginalImage;
+                ViewingBox.SetNewImage(Images.DisplayOriginalImage);
             }
 
             MouseOnDrawingBox = null;
@@ -617,7 +617,7 @@ namespace PixelArtEditor
                     break;
             }
 
-            ViewingBox.SetNewImage(Images.OriginalImage);
+            ViewingBox.SetNewImage(Images.DisplayOriginalImage);
             DrawingBox.SetNewImage(Images.DrawingImage);
         }
 
@@ -721,7 +721,7 @@ namespace PixelArtEditor
                     // Only reload the image if there was a color swap.
                     if (colorWasSwaped)
                     {
-                        ViewingBox.SetNewImage(Images.OriginalImage);
+                        ViewingBox.SetNewImage(Images.DisplayOriginalImage);
                         Images.CreateImageToDraw();
                         DrawingBox.SetNewImage(Images.DrawingImage);
                     }
@@ -759,10 +759,10 @@ namespace PixelArtEditor
             Images.MakeImageTransparent(oldColor);
 
             // Then applies the new color to all transparent pixels.
-            using Bitmap auxiliaryImage = new(Images.OriginalImage);
+            using Bitmap auxiliaryImage = new(Images.EditOriginalImage);
             using Graphics auxiliaryGraphics = Graphics.FromImage(auxiliaryImage);
             auxiliaryGraphics.Clear(newColor);
-            auxiliaryGraphics.DrawImage(Images.OriginalImage, 0, 0);
+            auxiliaryGraphics.DrawImage(Images.EditOriginalImage, 0, 0);
             Images.ReplaceOriginalImage(auxiliaryImage);
 
             // Restored transparency to image if needed.
@@ -787,7 +787,7 @@ namespace PixelArtEditor
                 BackgroundColorLabel.Text = "Background Color";
             }
 
-            ViewingBox.SetNewImage(Images.OriginalImage);
+            ViewingBox.SetNewImage(Images.DisplayOriginalImage);
             Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DrawingImage);
         }
@@ -798,7 +798,7 @@ namespace PixelArtEditor
         /// </summary>
         private void SaveImageButton_Click(object sender, EventArgs e)
         {
-            FileSaverLoader.SaveImage(Images.OriginalImage, Images.OriginalDimensions);
+            FileSaverLoader.SaveImage(Images.EditOriginalImage, Images.OriginalImageSize);
         }
 
         /// <summary>
@@ -817,7 +817,7 @@ namespace PixelArtEditor
                 ViewPixelSizeNumberBox.Value = currentPixelSize;
             }
 
-            ViewingBox.SetNewImage(Images.OriginalImage);
+            ViewingBox.SetNewImage(Images.DisplayOriginalImage);
             Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DrawingImage);
         }
@@ -862,14 +862,14 @@ namespace PixelArtEditor
 
         private void UndoButton_Click(object sender, EventArgs e)
         {
-            UndoHandler.UndoChange(Images.OriginalImage);
-            ViewingBox.SetNewImage(Images.OriginalImage);
+            UndoHandler.UndoChange(Images.EditOriginalImage);
+            ViewingBox.SetNewImage(Images.DisplayOriginalImage);
         }
 
         private void RedoButton_Click(object sender, EventArgs e)
         {
-            UndoHandler.RedoChange(Images.OriginalImage);
-            ViewingBox.SetNewImage(Images.OriginalImage);
+            UndoHandler.RedoChange(Images.EditOriginalImage);
+            ViewingBox.SetNewImage(Images.DisplayOriginalImage);
         }
     }
 }
