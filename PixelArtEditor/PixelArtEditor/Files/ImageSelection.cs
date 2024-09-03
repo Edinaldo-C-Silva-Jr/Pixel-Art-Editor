@@ -1,4 +1,6 @@
-﻿namespace PixelArtEditor.Files
+﻿using PixelArtEditor.Extension_Methods;
+
+namespace PixelArtEditor.Files
 {
     internal class ImageSelection : IDisposable
     {
@@ -18,7 +20,7 @@
         /// </summary>
         public Rectangle SelectedArea { get; private set; }
 
-        public ImageType CurrentImage { get; set; }
+        public ImageType CurrentImage { get; private set; }
         #endregion
 
         /// <summary>
@@ -27,15 +29,17 @@
         public ImageSelection()
         {
             SelectionBrush = new(Color.FromArgb(128, 32, 196, 255));
+            CurrentImage = ImageType.None;
         }
 
         /// <summary>
         /// Defines the start position of the selection.
         /// </summary>
         /// <param name="location">The location of the mouse click, where the selection will start.</param>
-        public void DefineStart(Point location)
+        public void DefineStart(Point location, ImageType type)
         {
             SelectionStart = location;
+            CurrentImage = type;
         }
 
         /// <summary>
@@ -44,36 +48,7 @@
         public void ClearSelection()
         {
             SelectedArea = Rectangle.Empty;
-        }
-
-        /// <summary>
-        /// Ensures the value passed isn't higher than the maximum allowed value. If it is, reduces it to the maximum value.
-        /// </summary>
-        /// <param name="value">The value to compare to the maximum.</param>
-        /// <param name="maximumValue">The maximum allowed value.</param>
-        /// <returns>The value itself, if it's lower than the maximum. Otherwise returns the maximum value.</returns>
-        private static int KeepValueBelowMaximum(int value, int maximumValue)
-        {
-            if (value > maximumValue)
-            {
-                value = maximumValue;
-            }
-            return value;
-        }
-
-        /// <summary>
-        /// Ensures the value passed isn't lower than the minimum allowed value. If it is, increases it to the minimum value.
-        /// </summary>
-        /// <param name="value">The value to compare to the minimum.</param>
-        /// <param name="minimumValue">The minimum allowed value.</param>
-        /// <returns>The value itself, if it's higher than the minimum. Otherwise returns the minimum value.</returns>
-        private static int KeepValueAboveMinimum(int value, int minimumValue)
-        {
-            if (value < minimumValue)
-            {
-                value = minimumValue;
-            }
-            return value;
+            CurrentImage = ImageType.None;
         }
 
         /// <summary>
@@ -97,65 +72,36 @@
         }
 
         /// <summary>
-        /// Changes the selection area based on the initial and final locations.
-        /// Utilizes the image's pixel size along with a multiplier to define the base size of the selection.
+        /// Changes the selection area based on the initial and final locations, along with an optional size multiplier.
         /// </summary>
         /// <param name="selectionEnd">The current click location, which is where the selecion ends.</param>
         /// <param name="boxSize">The size of the current Image's Box.</param>
-        /// <param name="pixelSize">The size of an individual pixel in the image being currently selected.</param>
-        /// <param name="selectionMultiplier">The multiplier to use along with the pixel size to define the selection.</param>
-        public void ChangeSelectionArea(Point selectionEnd, Size boxSize, int pixelSize, Size selectionMultiplier)
+        /// <param name="selectionWidth">The width to increase the selection. If no value is given, it defaults to 1 pixel.</param>
+        /// <param name="selectionHeight">The height to increase the selection. If no value is given, it defaults to 1 pixel.</param>
+        public void ChangeSelectionArea(Point selectionEnd, Size boxSize, int selectionWidth = 1, int selectionHeight = 1)
         {
-            // Defines the selection size to use for the width and height based on the pixel size and the multiplier.
-            int xSelectionSize = pixelSize * selectionMultiplier.Width;
-            int ySelectionSize = pixelSize * selectionMultiplier.Height;
-            ChangeSelectArea(selectionEnd, boxSize, xSelectionSize, ySelectionSize);
-        }
-
-        /// <summary>
-        /// Changes the selection area based on the initial and final locations.
-        /// Utilizes the image's pixel size as the base size for the selection.
-        /// </summary>
-        /// <param name="selectionEnd">The current click location, which is where the selecion ends.</param>
-        /// <param name="boxSize">The size of the current Image's Box.</param>
-        /// <param name="pixelSize">The size of an individual pixel in the image being currently selected.</param>
-        public void ChangeSelectionArea(Point selectionEnd, Size boxSize, int pixelSize)
-        {
-            ChangeSelectArea(selectionEnd, boxSize, pixelSize, pixelSize);
-        }
-
-        /// <summary>
-        /// Changes the selection area based on the initial and final locations.
-        /// Utilizes a separate value for width and height to allow for rectangular selection areas.
-        /// </summary>
-        /// <param name="selectionEnd">The current click location, which is where the selecion ends.</param>
-        /// <param name="boxSize">The size of the current Image's Box.</param>
-        /// <param name="selectionWidth">The width to use for each increment of the selection.</param>
-        /// <param name="selectionHeight">The height to use for each increment of the selection.</param>
-        private void ChangeSelectArea(Point selectionEnd, Size boxSize, int selectionWidth, int selectionHeight)
-        {
-            Point beginSelecion = SelectionStart;
+            Point initialSelecion = SelectionStart;
             Rectangle areaToSelect = new();
 
             // Makes sure the begin and end coordinates are correctly ordered (the end coordinate has to be bigger than the begin coordinate)
-            (beginSelecion.X, selectionEnd.X) = SwapCoordinatesWhenStartIsBigger(beginSelecion.X, selectionEnd.X);
-            (beginSelecion.Y, selectionEnd.Y) = SwapCoordinatesWhenStartIsBigger(beginSelecion.Y, selectionEnd.Y);
+            (initialSelecion.X, selectionEnd.X) = SwapCoordinatesWhenStartIsBigger(initialSelecion.X, selectionEnd.X);
+            (initialSelecion.Y, selectionEnd.Y) = SwapCoordinatesWhenStartIsBigger(initialSelecion.Y, selectionEnd.Y);
 
-            // Snaps the begin point to the top left of its equivalent selection square.
-            areaToSelect.X = beginSelecion.X - beginSelecion.X % selectionWidth;
-            areaToSelect.Y = beginSelecion.Y - beginSelecion.Y % selectionHeight;
+            // Snaps the initial point of the selection to the top left of the selection unit.
+            areaToSelect.X = initialSelecion.X - initialSelecion.X.Modulo(selectionWidth);
+            areaToSelect.Y = initialSelecion.Y - initialSelecion.Y.Modulo(selectionHeight);
 
             // Makes sure the begin coordinates don't go outside the top or left of the box.
-            areaToSelect.X = KeepValueAboveMinimum(areaToSelect.X, 0);
-            areaToSelect.Y = KeepValueAboveMinimum(areaToSelect.Y, 0);
+            areaToSelect.X.ValidateMinimum(0);
+            areaToSelect.Y.ValidateMinimum(0);
 
-            // Snaps the end point to the bottom right of its equivalent selection square.
-            selectionEnd.X = selectionEnd.X - selectionEnd.X % selectionWidth + selectionWidth;
-            selectionEnd.Y = selectionEnd.Y - selectionEnd.Y % selectionHeight + selectionHeight;
+            // Snaps the end point of the selection to the bottom right of the selection unit.
+            selectionEnd.X = selectionEnd.X - selectionEnd.X.Modulo(selectionWidth) + selectionWidth;
+            selectionEnd.Y = selectionEnd.Y - selectionEnd.Y.Modulo(selectionHeight) + selectionHeight;
 
             // Makes sure the end coordinates don't go outside the bottom or right of the box.
-            selectionEnd.X = KeepValueBelowMaximum(selectionEnd.X, boxSize.Width - 1);
-            selectionEnd.Y = KeepValueBelowMaximum(selectionEnd.Y, boxSize.Height - 1);
+            selectionEnd.X.ValidateMaximum(boxSize.Width - 1);
+            selectionEnd.Y.ValidateMaximum(boxSize.Height - 1);
 
             // Defines the Selection Area size with the coordinates.
             areaToSelect.Width = selectionEnd.X - areaToSelect.X;
@@ -163,10 +109,11 @@
             SelectedArea = areaToSelect;
         }
 
+        // TODO: Change the drawing method to zoom the rectangle.
         /// <summary>
-        /// Draws the selection rectangle in the ViewingBox via the Paint Graphics.
+        /// Draws the selection rectangle in the Image boxes via the Paint Graphics.
         /// </summary>
-        /// <param name="paintGraphics">The graphics of the Viewing Box's paint event.</param>
+        /// <param name="paintGraphics">The graphics of the image Box's paint event.</param>
         public void DrawSelection(Graphics paintGraphics)
         {
             if (SelectedArea != Rectangle.Empty)

@@ -473,8 +473,7 @@ namespace PixelArtEditor
 
             if (e.Button == MouseButtons.Right)
             {
-                Selector.DefineStart(e.Location);
-                Selector.CurrentImage = ImageType.DrawingImage;
+                Selector.DefineStart(e.Location, ImageType.DrawingImage);
                 ChangeSelectionOnDrawingImage(e.Location);
                 ViewingBox.Invalidate();
             }
@@ -563,8 +562,7 @@ namespace PixelArtEditor
 
             if (e.Button == MouseButtons.Right)
             {
-                Selector.DefineStart(e.Location);
-                Selector.CurrentImage = ImageType.OriginalImage;
+                Selector.DefineStart(e.Location, ImageType.OriginalImage);
                 ChangeSelectionOnOriginalImage(e.Location);
                 DrawingBox.Invalidate();
             }
