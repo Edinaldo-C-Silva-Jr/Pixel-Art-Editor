@@ -9,45 +9,34 @@ namespace PixelArtEditor.Files
     /// </summary>
     internal class ImageHandler : IDisposable
     {
-        #region Properties
-        public Bitmap EditOriginalImage { get; set; }
+        #region Original Image Properties
+        public Bitmap EditOriginalImage { get; private set; }
 
-        public Bitmap DisplayOriginalImage { get; set; }
+        public Bitmap DisplayOriginalImage { get; private set; }
 
         /// <summary>
         /// The image that represents the clipboard, used to copy and paste the selected portion of the Original Image.
         /// </summary>
         public Bitmap ClipboardOriginalImage { get; private set; }
 
-        public Size OriginalImageSize { get; set; }
+        public Size OriginalImageSize { get; private set; }
 
-        public int OriginalImageZoom { get; set; }
+        public int OriginalImageZoom { get; private set; }
+        #endregion
 
+        #region Drawing Image Properties
+        public Bitmap EditDrawingImage { get; private set; }
 
-
-        /// <summary>
-        /// The portion of the original image that is being used in the DrawingBox.
-        /// </summary>
-        public Bitmap DrawingImage { get; private set; }
-
-        
+        public Bitmap DisplayDrawingImage { get; private set; }
 
         /// <summary>
         /// The image that represents the clipboard, used to copy and paste the selected portion of the Drawing Image.
         /// </summary>
         public Bitmap ClipboardDrawingImage { get; private set; }
 
-        
+        public Size DrawingImageSize { get; private set; }
 
-        /// <summary>
-        /// The pixel dimensions of the Drawing Image, without the zoom.
-        /// </summary>
-        public Size DrawingDimensions { get; private set; }
-
-        /// <summary>
-        /// The size of each pixel in the Drawing image.
-        /// </summary>
-        public int DrawingPixelSize { get; private set; }
+        public int DrawingImageZoom { get; private set; }
 
         /// <summary>
         /// The location from which the Drawing Image was taken in the Original Image.
@@ -66,11 +55,11 @@ namespace PixelArtEditor.Files
             OriginalImageSize = new(1, 1);
             OriginalImageZoom = 1;
 
-
-            DrawingImage = new(1, 1);
+            EditDrawingImage = new(1, 1);
+            DisplayDrawingImage = new(1, 1);
             ClipboardDrawingImage = new(1, 1);
-
-            DrawingPixelSize = 1;
+            DrawingImageSize = new(1, 1);
+            DrawingImageZoom = 1;
         }
 
         #region Original Image Size, Creation and Changing
@@ -109,6 +98,7 @@ namespace PixelArtEditor.Files
         /// </summary>
         private void CreateNewDisplayOriginalImage()
         {
+            DisplayOriginalImage?.Dispose();
             DisplayOriginalImage = EditOriginalImage.ApplyZoomNearestNeighbor(OriginalImageSize.Width * OriginalImageZoom, OriginalImageSize.Height * OriginalImageZoom);
         }
 
@@ -147,87 +137,58 @@ namespace PixelArtEditor.Files
         }
         #endregion
 
-        // TODO: Will have to revise several of the calculations that involve the Original Image
-        // Also need to change the Drawing Image eventually.
         #region Drawing Image Size, Creation and Application
         /// <summary>
         /// Changes the size of the Drawing Image to the values passed as parameters.
         /// </summary>
-        /// <param name="pixelWidth">The width of the image, in pixel sizes.</param>
-        /// <param name="pixelHeight">The height of the image, in pixel sizes.</param>
-        /// <param name="pixelSize">The size of each pixel in the image.</param>
-        public void ChangeDrawingImageSize(int pixelWidth, int pixelHeight, int pixelSize)
+        /// <param name="pixelWidth">The width of the image, in pixels.</param>
+        /// <param name="pixelHeight">The height of the image, in pixels.</param>
+        /// <param name="zoom">The amount of zoom to apply to the image.</param>
+        public void ChangeDrawingImageSize(int pixelWidth, int pixelHeight, int zoom)
         {
             (pixelWidth, pixelHeight) = ValidateDrawingSize(pixelWidth, pixelHeight);
 
-            DrawingDimensions = new Size(pixelWidth, pixelHeight);
-            DrawingPixelSize = pixelSize;
+            DrawingImageSize = new Size(pixelWidth, pixelHeight);
+            DrawingImageZoom = zoom;
 
+            // This also creates a new Drawing Image.
             ChangeDrawingImageLocation();
-
-            CreateImageToDraw();
         }
 
         /// <summary>
         /// Checks if the Drawing Image Dimensions are bigger than the Original Image Dimensions.
-        /// If they are bigger, reduces them to match the Original Image.
+        /// If they are bigger, reduces them to match the Original Image, since the Drawing Image will be a copy of the Original Image.
         /// </summary>
         /// <param name="pixelWidth">The pixel width of the Drawing Image.</param>
         /// <param name="pixelHeight">The pixel height of the Drawing Image.</param>
         /// <returns>A tuple of width and height values.</returns>
         private (int, int) ValidateDrawingSize(int pixelWidth, int pixelHeight)
         {
-            // Makes sure the Drawing Image isn't bigger than the Original Image, since it is supposed to be a copy of a piece the Original Image.
-            if (pixelWidth > OriginalDimensions.Width)
-            {
-                pixelWidth = OriginalDimensions.Width;
-            }
-            if (pixelHeight > OriginalDimensions.Height)
-            {
-                pixelHeight = OriginalDimensions.Height;
-            }
-
+            pixelWidth.ValidateMaximum(OriginalImageSize.Width);
+            pixelHeight.ValidateMaximum(OriginalImageSize.Height);
             return (pixelWidth, pixelHeight);
         }
 
         /// <summary>
-        /// Defines a new location for the Drawing Image to be taken from the Original Image, by receiving the location value as a parameter.
-        /// </summary>
-        /// <param name="location">The new location from which the Drawing Image will be copied in the Original Image.</param>
-        public void ChangeDrawingImageLocation(Point location)
-        {
-            location = RemoveZoomFromLocation(location);
-            location = ValidadeDrawingLocation(location);
-
-            DrawingLocation = location;
-
-            CreateImageToDraw();
-        }
-
-        /// <summary>
-        /// Defines a new location for the Drawing Image to be taken from the Original Image, uses the current Drawing Location.
+        /// Defines a new location for the Drawing Image to be taken from the Original Image.
+        /// Uses the current Drawing Location value.
         /// </summary>
         private void ChangeDrawingImageLocation()
         {
             DrawingLocation = ValidadeDrawingLocation(DrawingLocation);
-
             CreateImageToDraw();
         }
 
         /// <summary>
-        /// Removes the current Pixel Size from the drawing location, to get the raw location value for it.
+        /// Defines a new location for the Drawing Image to be taken from the Original Image.
+        /// Receives the location value as a parameter.
         /// </summary>
-        /// <param name="location">The location value received, which has the zoom applied.</param>
-        /// <returns>The location value without the zoom, which represents the raw pixel location.</returns>
-        private Point RemoveZoomFromLocation(Point location)
+        /// <param name="location">The new location from which the Drawing Image will be copied in the Original Image.</param>
+        public void ChangeDrawingImageLocation(Point location)
         {
-            location.X -= location.X % OriginalPixelSize;
-            location.Y -= location.Y % OriginalPixelSize;
-
-            location.X /= OriginalPixelSize;
-            location.Y /= OriginalPixelSize;
-
-            return location;
+            location = ValidadeDrawingLocation(location);
+            DrawingLocation = location;
+            CreateImageToDraw();
         }
 
         /// <summary>
@@ -238,31 +199,34 @@ namespace PixelArtEditor.Files
         /// <returns>A location value that keeps the Drawing Box inside the Original Image, and snaps the box depending on its size.</returns>
         private Point ValidadeDrawingLocation(Point location)
         {
-            if (location.X < OriginalDimensions.Width - DrawingDimensions.Width)
+            // If the location allows the Drawing Image to stay within the Original Image's boundaries...
+            if (location.X < OriginalImageSize.Width - DrawingImageSize.Width)
             {
-                // Snaps the location to a position interval depending on the Drawing Box's width.
-                location.X -= location.X % GetInterval(DrawingDimensions.Width);
+                // Snaps the location to a position interval depending on the Drawing Image's width.
+                location.X -= location.X % GetInterval(DrawingImageSize.Width);
             }
             else
             {
-                // Changes the location to the last pixel to keep the Drawing Box within the image's boundaries.
-                location.X = OriginalDimensions.Width - DrawingDimensions.Width;
+                // Changes the location to the last pixel to keep the Drawing Image within the image's boundaries.
+                location.X = OriginalImageSize.Width - DrawingImageSize.Width;
             }
 
-            if (location.Y < OriginalDimensions.Height - DrawingDimensions.Height)
+            // If the location allows the Drawing Image to stay within the Original Image's boundaries...
+            if (location.Y < OriginalImageSize.Height - DrawingImageSize.Height)
             {
-                // Snaps the location to a position interval depending on the Drawing Box's height.
-                location.Y -= location.Y % GetInterval(DrawingDimensions.Height);
+                // Snaps the location to a position interval depending on the Drawing Image's height.
+                location.Y -= location.Y % GetInterval(DrawingImageSize.Height);
             }
             else
             {
-                // Changes the location to the last pixel to keep the Drawing Box within the image's boundaries.
-                location.Y = OriginalDimensions.Height - DrawingDimensions.Height;
+                // Changes the location to the last pixel to keep the Drawing Image within the image's boundaries.
+                location.Y = OriginalImageSize.Height - DrawingImageSize.Height;
             }
 
             return location;
         }
 
+        // TODO: Probably make this simpler.
         /// <summary>
         /// Calculates a pixel interval for the Drawing Box. This interval defines how many pixels the Drawing Box will move.
         /// The interval is calculated based on the Drawing Box size.
@@ -297,19 +261,15 @@ namespace PixelArtEditor.Files
 
         /// <summary>
         /// Creates a new Drawing Image, by copying a piece of the Original Image.
-        /// Utilizes previous defined values for the Drawing Image size and the location it will copy from the Original Image.
         /// </summary>
         public void CreateImageToDraw()
         {
             // Defines a rectangle to clone the Drawing Image from the Original Image.
-            // The rectangle will be cloned from the Original Image, so it has to use the Original Image's pixel size.
-            Size drawingImageSize = new(DrawingDimensions.Width * OriginalPixelSize, DrawingDimensions.Height * OriginalPixelSize);
-            Point location = new(DrawingLocation.X * OriginalPixelSize, DrawingLocation.Y * OriginalPixelSize);
-            Rectangle areaToCopyFromOriginalImage = new(location, drawingImageSize);
-            using Bitmap copiedImagePiece = OriginalImage.Clone(areaToCopyFromOriginalImage, PixelFormat.Format32bppArgb);
+            Rectangle areaToCopyFromOriginalImage = new(DrawingLocation, DrawingImageSize);
+            EditDrawingImage?.Dispose();
+            EditDrawingImage = EditOriginalImage.Clone(areaToCopyFromOriginalImage, PixelFormat.Format32bppArgb);
 
-            // Applies the Drawing Image pixel size to the image.
-            DrawingImage = ApplyZoom(copiedImagePiece, DrawingDimensions.Width * DrawingPixelSize, DrawingDimensions.Height * DrawingPixelSize);
+            CreateNewDisplayDrawingImage();
         }
 
         /// <summary>
@@ -317,15 +277,17 @@ namespace PixelArtEditor.Files
         /// </summary>
         public void ApplyDrawnImage()
         {
-            // Applies the Original Image zoom, to ensure the Drawing Image has the same size it had when it was copied.
-            int drawingImageWidth = DrawingDimensions.Width * OriginalPixelSize;
-            int drawingImageHeight = DrawingDimensions.Height * OriginalPixelSize;
-            using Bitmap drawingImageToApply = ApplyZoom(DrawingImage, drawingImageWidth, drawingImageHeight);
+            using Graphics mergeGraphics = Graphics.FromImage(EditOriginalImage);
+            mergeGraphics.DrawImage(EditDrawingImage, DrawingLocation);
+        }
 
-            // Draws the Drawing Image onto the Original Image, in the currently defined location.
-            Point location = new(DrawingLocation.X * OriginalPixelSize, DrawingLocation.Y * OriginalPixelSize);
-            using Graphics mergeGraphics = Graphics.FromImage(OriginalImage);
-            mergeGraphics.DrawImage(drawingImageToApply, location);
+        /// <summary>
+        /// Creates a new Display Image by zooming the Drawing Image with the defined zoom value.
+        /// </summary>
+        private void CreateNewDisplayDrawingImage()
+        {
+            DisplayDrawingImage?.Dispose();
+            DisplayDrawingImage = EditDrawingImage.ApplyZoomNearestNeighbor(DrawingImageSize.Width * DrawingImageZoom, DrawingImageSize.Height * DrawingImageZoom);
         }
         #endregion
 
@@ -333,29 +295,21 @@ namespace PixelArtEditor.Files
         /// <summary>
         /// Changes only the pixel size value of the Original Image. Also zooms the image to the new pixel size.
         /// </summary>
-        /// <param name="pixelSize">The new pixel size to use for the Original Image</param>
-        public void ChangeOriginalImageZoom(int pixelSize)
+        /// <param name="zoom">The new pixel size to use for the Original Image</param>
+        public void ChangeOriginalImageZoom(int zoom)
         {
-            OriginalImageZoom = pixelSize;
+            OriginalImageZoom = zoom;
             CreateNewDisplayOriginalImage();
         }
 
         /// <summary>
         /// Changes only the pixel size value of the Drawing Image.
         /// </summary>
-        /// <param name="pixelSize">The new pixel size to use for the Drawing Image.</param>
-        public void ChangeDrawingImageZoom(int pixelSize)
+        /// <param name="zoom">The new pixel size to use for the Drawing Image.</param>
+        public void ChangeDrawingImageZoom(int zoom)
         {
-            DrawingPixelSize = pixelSize;
-            ZoomDrawingImage();
-        }
-
-        /// <summary>
-        /// Zooms the Drawing Image based on the newly defined pixel size value.
-        /// </summary>
-        private void ZoomDrawingImage()
-        {
-            DrawingImage = ApplyZoom(DrawingImage, DrawingDimensions.Width * DrawingPixelSize, DrawingDimensions.Height * DrawingPixelSize);
+            DrawingImageZoom = zoom;
+            CreateNewDisplayDrawingImage();
         }
         #endregion
 
@@ -404,11 +358,13 @@ namespace PixelArtEditor.Files
             {
                 if (currentImage == ImageType.OriginalImage) // Copies the Original Image.
                 {
+                    ClipboardOriginalImage?.Dispose();
                     ClipboardOriginalImage = EditOriginalImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
                 }
                 else // Copies the Drawing Image.
                 {
-                    ClipboardDrawingImage = DrawingImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
+                    ClipboardDrawingImage?.Dispose();
+                    ClipboardDrawingImage = EditDrawingImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
                 }
             }
         }
@@ -432,8 +388,10 @@ namespace PixelArtEditor.Files
                 }
                 else // Pastes the Clipboard Drawing Image into the Drawing Image.
                 {
-                    using Graphics pasteGraphics = Graphics.FromImage(DrawingImage);
+                    using Graphics pasteGraphics = Graphics.FromImage(EditDrawingImage);
                     pasteGraphics.DrawImage(ClipboardDrawingImage, new Point(selectedArea.X, selectedArea.Y));
+
+                    CreateNewDisplayDrawingImage();
                 }
             }
         }
@@ -445,8 +403,9 @@ namespace PixelArtEditor.Files
             DisplayOriginalImage?.Dispose();
             ClipboardOriginalImage?.Dispose();
 
+            EditDrawingImage?.Dispose();
+            DisplayDrawingImage?.Dispose();
             ClipboardDrawingImage?.Dispose();
-            DrawingImage?.Dispose();
         }
     }
 }

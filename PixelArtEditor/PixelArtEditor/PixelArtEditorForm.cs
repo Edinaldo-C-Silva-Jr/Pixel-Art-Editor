@@ -333,6 +333,7 @@ namespace PixelArtEditor
         /// <param name="drawingImageLocation">The location the Drawing Image will be copied from in the full image.</param>
         private void SetImageOnDrawingBox(Point drawingImageLocation)
         {
+            drawingImageLocation = new(drawingImageLocation.X / Images.OriginalImageZoom, drawingImageLocation.Y / Images.OriginalImageZoom);
             Images.ChangeDrawingImageLocation(drawingImageLocation);
             DrawingBox.SetNewImage(Images.DrawingImage);
         }
