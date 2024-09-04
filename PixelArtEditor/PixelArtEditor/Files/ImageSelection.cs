@@ -20,7 +20,7 @@ namespace PixelArtEditor.Files
         /// </summary>
         public Rectangle SelectedArea { get; private set; }
 
-        public ImageType CurrentImage { get; private set; }
+        public ImageType CurrentImageType { get; private set; }
         #endregion
 
         /// <summary>
@@ -29,26 +29,31 @@ namespace PixelArtEditor.Files
         public ImageSelection()
         {
             SelectionBrush = new(Color.FromArgb(128, 32, 196, 255));
-            CurrentImage = ImageType.None;
+            CurrentImageType = ImageType.None;
         }
 
         /// <summary>
         /// Defines the start position of the selection.
         /// </summary>
-        /// <param name="location">The location of the mouse click, where the selection will start.</param>
+        /// <param name="location">The point to start the selection in the image. (No zoom).</param>
+        /// <param name="type">The type of the image that will be selected.</param>
         public void DefineStart(Point location, ImageType type)
         {
             SelectionStart = location;
-            CurrentImage = type;
+            CurrentImageType = type;
         }
 
         /// <summary>
-        /// Clears the current selection, emptying the rectangle area.
+        /// Clears the current selection if the calling box's image type matches the current selection's image type.
         /// </summary>
-        public void ClearSelection()
+        /// <param name="callingBoxImageType">The image type of the calling image box.</param>
+        public void ClearSelection(ImageType callingBoxImageType)
         {
-            SelectedArea = Rectangle.Empty;
-            CurrentImage = ImageType.None;
+            if (CurrentImageType == callingBoxImageType)
+            {
+                SelectedArea = Rectangle.Empty;
+                CurrentImageType = ImageType.None;
+            }
         }
 
         /// <summary>
@@ -109,16 +114,20 @@ namespace PixelArtEditor.Files
             SelectedArea = areaToSelect;
         }
 
-        // TODO: Change the drawing method to zoom the rectangle.
         /// <summary>
         /// Draws the selection rectangle in the Image boxes via the Paint Graphics.
+        /// Will only draw the rectangle if the calling box's image type matches the current selection's image type.
         /// </summary>
         /// <param name="paintGraphics">The graphics of the image Box's paint event.</param>
-        public void DrawSelection(Graphics paintGraphics)
+        /// <param name="callingBoxImageType">The image type of the calling image box.</param>
+        /// <param name="zoom">The amount of zoom to apply to the rectangle before drawing it.</param>
+        public void DrawSelection(Graphics paintGraphics, ImageType callingBoxImageType, int zoom)
         {
-            if (SelectedArea != Rectangle.Empty)
+            if (SelectedArea != Rectangle.Empty && CurrentImageType == callingBoxImageType)
             {
-                paintGraphics.FillRectangle(SelectionBrush, SelectedArea);
+                Rectangle zoomedSelectionArea = new(SelectedArea.Left * zoom, SelectedArea.Top * zoom, SelectedArea.Width * zoom, SelectedArea.Height * zoom);
+
+                paintGraphics.FillRectangle(SelectionBrush, zoomedSelectionArea);
             }
         }
 
