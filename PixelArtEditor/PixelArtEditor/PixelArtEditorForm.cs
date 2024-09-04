@@ -464,9 +464,9 @@ namespace PixelArtEditor
 
             if (e.Button == MouseButtons.Right)
             {
-                Point selectionLocationNoZoom = new(e.X / Images.DrawingImageZoom, e.Y / Images.DrawingImageZoom);
-                Selector.DefineStart(selectionLocationNoZoom, ImageType.DrawingImage);
-                ChangeSelectionOnDrawingImage(e.Location);
+                Point selectionStartNoZoom = new(e.X / Images.DrawingImageZoom, e.Y / Images.DrawingImageZoom);
+                Selector.DefineStart(selectionStartNoZoom, ImageType.DrawingImage);
+                ChangeSelectionOnDrawingImage(selectionStartNoZoom);
                 ViewingBox.Invalidate();
             }
 
@@ -501,7 +501,8 @@ namespace PixelArtEditor
 
             if (e.Button == MouseButtons.Right)
             {
-                ChangeSelectionOnDrawingImage(e.Location);
+                Point selectionLocationNoZoom = new(e.X / Images.DrawingImageZoom, e.Y / Images.DrawingImageZoom);
+                ChangeSelectionOnDrawingImage(selectionLocationNoZoom);
             }
 
             Dictionary<string, bool> previewProperties = DrawingToolButtonPanel.CheckToolPreviewProperties();
@@ -561,7 +562,7 @@ namespace PixelArtEditor
             {
                 Point selectionStartNoZoom = new(e.X / Images.OriginalImageZoom, e.Y / Images.OriginalImageZoom);
                 Selector.DefineStart(selectionStartNoZoom, ImageType.OriginalImage);
-                ChangeSelectionOnOriginalImage(e.Location);
+                ChangeSelectionOnOriginalImage(selectionStartNoZoom);
                 DrawingBox.Invalidate();
             }
         }
@@ -573,7 +574,8 @@ namespace PixelArtEditor
         {
             if (e.Button == MouseButtons.Right)
             {
-                ChangeSelectionOnOriginalImage(e.Location);
+                Point selectionLocationNoZoom = new(e.X / Images.OriginalImageZoom, e.Y / Images.OriginalImageZoom);
+                ChangeSelectionOnOriginalImage(selectionLocationNoZoom);
             }
         }
         #endregion
@@ -850,12 +852,20 @@ namespace PixelArtEditor
         private void UndoButton_Click(object sender, EventArgs e)
         {
             UndoHandler.UndoChange(Images.EditOriginalImage);
+
+            Images.CreateImageToDraw();
+            DrawingBox.SetNewImage(Images.DisplayDrawingImage);
+            Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
         }
 
         private void RedoButton_Click(object sender, EventArgs e)
         {
             UndoHandler.RedoChange(Images.EditOriginalImage);
+
+            Images.CreateImageToDraw();
+            DrawingBox.SetNewImage(Images.DisplayDrawingImage);
+            Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
         }
     }

@@ -164,8 +164,8 @@ namespace PixelArtEditor.Files
         /// <returns>A tuple of width and height values.</returns>
         private (int, int) ValidateDrawingSize(int pixelWidth, int pixelHeight)
         {
-            pixelWidth.ValidateMaximum(OriginalImageSize.Width);
-            pixelHeight.ValidateMaximum(OriginalImageSize.Height);
+            pixelWidth = pixelWidth.ValidateMaximum(OriginalImageSize.Width);
+            pixelHeight = pixelHeight.ValidateMaximum(OriginalImageSize.Height);
             return (pixelWidth, pixelHeight);
         }
 

@@ -73,17 +73,17 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
                 int pixelClickedX = toolParameters.ClickLocation.Value.X;
                 int pixelClickedY = toolParameters.ClickLocation.Value.Y;
 
-                LeftBoundary.ValidateMaximum(pixelClickedX);
-                LeftBoundary.ValidateMinimum(0);
+                LeftBoundary = LeftBoundary.ValidateMaximum(pixelClickedX);
+                LeftBoundary = LeftBoundary.ValidateMinimum(0);
 
-                RightBoundary.ValidateMinimum(pixelClickedX);
-                RightBoundary.ValidateMaximum(UneditedImage!.Width - 1);
+                RightBoundary = RightBoundary.ValidateMinimum(pixelClickedX);
+                RightBoundary = RightBoundary.ValidateMaximum(UneditedImage!.Width - 1);
 
-                UpperBoundary.ValidateMaximum(pixelClickedY);
-                UpperBoundary.ValidateMinimum(0);
+                UpperBoundary = UpperBoundary.ValidateMaximum(pixelClickedY);
+                UpperBoundary = UpperBoundary.ValidateMinimum(0);
 
-                LowerBoundary.ValidateMinimum(pixelClickedY);
-                LowerBoundary.ValidateMaximum(UneditedImage!.Height - 1);
+                LowerBoundary = LowerBoundary.ValidateMinimum(pixelClickedY);
+                LowerBoundary = LowerBoundary.ValidateMaximum(UneditedImage!.Height - 1);
 
                 DrawPenPixel(DrawingCycleGraphics!, DrawingBrush!, toolParameters.ClickLocation.Value);
             }

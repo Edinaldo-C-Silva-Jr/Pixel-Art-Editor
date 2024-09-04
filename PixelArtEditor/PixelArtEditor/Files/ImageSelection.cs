@@ -97,16 +97,16 @@ namespace PixelArtEditor.Files
             areaToSelect.Y = initialSelecion.Y - initialSelecion.Y.Modulo(selectionHeight);
 
             // Makes sure the begin coordinates don't go outside the top or left of the box.
-            areaToSelect.X.ValidateMinimum(0);
-            areaToSelect.Y.ValidateMinimum(0);
+            areaToSelect.X = areaToSelect.X.ValidateMinimum(0);
+            areaToSelect.Y = areaToSelect.Y.ValidateMinimum(0);
 
             // Snaps the end point of the selection to the bottom right of the selection unit.
             selectionEnd.X = selectionEnd.X - selectionEnd.X.Modulo(selectionWidth) + selectionWidth;
             selectionEnd.Y = selectionEnd.Y - selectionEnd.Y.Modulo(selectionHeight) + selectionHeight;
 
             // Makes sure the end coordinates don't go outside the bottom or right of the box.
-            selectionEnd.X.ValidateMaximum(boxSize.Width - 1);
-            selectionEnd.Y.ValidateMaximum(boxSize.Height - 1);
+            selectionEnd.X = selectionEnd.X.ValidateMaximum(boxSize.Width - 1);
+            selectionEnd.Y = selectionEnd.Y.ValidateMaximum(boxSize.Height - 1);
 
             // Defines the Selection Area size with the coordinates.
             areaToSelect.Width = selectionEnd.X - areaToSelect.X;
