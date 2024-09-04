@@ -384,13 +384,16 @@ namespace PixelArtEditor.Files
                     using Graphics pasteGraphics = Graphics.FromImage(EditOriginalImage);
                     pasteGraphics.DrawImage(ClipboardOriginalImage, new Point(selectedArea.X, selectedArea.Y));
 
+                    CreateImageToDraw();
                     CreateNewDisplayOriginalImage();
                 }
-                else // Pastes the Clipboard Drawing Image into the Drawing Image.
+                
+                if (currentImage == ImageType.DrawingImage) // Pastes the Clipboard Drawing Image into the Drawing Image.
                 {
                     using Graphics pasteGraphics = Graphics.FromImage(EditDrawingImage);
                     pasteGraphics.DrawImage(ClipboardDrawingImage, new Point(selectedArea.X, selectedArea.Y));
 
+                    ApplyDrawnImage();
                     CreateNewDisplayDrawingImage();
                 }
             }
