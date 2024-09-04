@@ -96,7 +96,7 @@ namespace PixelArtEditor.Files
         /// <summary>
         /// Creates a new Display Image by zooming the Original Image with the defined zoom value.
         /// </summary>
-        private void CreateNewDisplayOriginalImage()
+        public void CreateNewDisplayOriginalImage()
         {
             DisplayOriginalImage?.Dispose();
             DisplayOriginalImage = EditOriginalImage.ApplyZoomNearestNeighbor(OriginalImageSize.Width * OriginalImageZoom, OriginalImageSize.Height * OriginalImageZoom);
@@ -284,7 +284,7 @@ namespace PixelArtEditor.Files
         /// <summary>
         /// Creates a new Display Image by zooming the Drawing Image with the defined zoom value.
         /// </summary>
-        private void CreateNewDisplayDrawingImage()
+        public void CreateNewDisplayDrawingImage()
         {
             DisplayDrawingImage?.Dispose();
             DisplayDrawingImage = EditDrawingImage.ApplyZoomNearestNeighbor(DrawingImageSize.Width * DrawingImageZoom, DrawingImageSize.Height * DrawingImageZoom);

@@ -1,4 +1,5 @@
-﻿using PixelArtEditor.Image_Editing.Undo_Redo;
+﻿using PixelArtEditor.Extension_Methods;
+using PixelArtEditor.Image_Editing.Undo_Redo;
 using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
@@ -18,16 +19,27 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
         private SolidBrush? DrawingBrush { get; set; }
 
         /// <summary>
-        /// Draws a single pixel with the current pixel size, filling the pixel where the mouse clicked.
+        /// Draws a single pixel.
         /// </summary>
         /// <param name="drawGraphics">The graphics for the image being drawn.</param>
         /// <param name="drawBrush">The brush with the currently selected color.</param>
         /// <param name="location">The location of the mouse click inside the Drawing Box.</param>
-        /// <param name="pixelSize">The size of each pixel in the image.</param>
-        protected static void DrawPenPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, int pixelSize)
+        protected static void DrawPenPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location)
         {
-            Point pixelLocation = DrawingCalculations.SnapPixelTopLeft(location, pixelSize);
-            drawGraphics.FillRectangle(drawBrush, pixelLocation.X, pixelLocation.Y, pixelSize, pixelSize);
+            drawGraphics.FillRectangle(drawBrush, location.X, location.Y, 1, 1);
+        }
+
+        /// <summary>
+        /// Draws a single pixel while applying zoom, filling the pixel where the mouse clicked.
+        /// </summary>
+        /// <param name="drawGraphics">The graphics for the image being drawn.</param>
+        /// <param name="drawBrush">The brush with the currently selected color.</param>
+        /// <param name="location">The location of the mouse click inside the Drawing Box.</param>
+        /// <param name="zoom">The size of each pixel in the image.</param>
+        protected static void DrawPenPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, int zoom)
+        {
+            location = new(location.X * zoom, location.Y * zoom);
+            drawGraphics.FillRectangle(drawBrush, location.X, location.Y, zoom, zoom);
         }
 
         public override void PreviewTool(Graphics paintGraphics, Color pixelColor, OptionalToolParameters toolParameters)
@@ -50,7 +62,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
 
                 DrawingCycleGraphics = Graphics.FromImage(drawingImage);
                 DrawingBrush = new(drawingColor);
-                DrawPenPixel(DrawingCycleGraphics, DrawingBrush, toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);
+                DrawPenPixel(DrawingCycleGraphics, DrawingBrush, toolParameters.ClickLocation.Value);
             }
         }
 
@@ -61,43 +73,19 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
                 int pixelClickedX = toolParameters.ClickLocation.Value.X;
                 int pixelClickedY = toolParameters.ClickLocation.Value.Y;
 
-                if (LeftBoundary > pixelClickedX)
-                {
-                    LeftBoundary = pixelClickedX;
-                    if (LeftBoundary < 0)
-                    {
-                        LeftBoundary = 0;
-                    }
-                }
+                LeftBoundary.ValidateMaximum(pixelClickedX);
+                LeftBoundary.ValidateMinimum(0);
 
-                if (RightBoundary < pixelClickedX)
-                {
-                    RightBoundary = pixelClickedX;
-                    if (RightBoundary > UneditedImage!.Width)
-                    {
-                        RightBoundary = UneditedImage!.Width;
-                    }
-                }
+                RightBoundary.ValidateMinimum(pixelClickedX);
+                RightBoundary.ValidateMaximum(UneditedImage!.Width - 1);
 
-                if (UpperBoundary > pixelClickedY)
-                {
-                    UpperBoundary = pixelClickedY;
-                    if (UpperBoundary < 0)
-                    {
-                        UpperBoundary = 0;
-                    }
-                }
+                UpperBoundary.ValidateMaximum(pixelClickedY);
+                UpperBoundary.ValidateMinimum(0);
 
-                if (LowerBoundary < pixelClickedY)
-                {
-                    LowerBoundary = pixelClickedY;
-                    if (LowerBoundary > UneditedImage!.Height)
-                    {
-                        LowerBoundary = UneditedImage!.Height;
-                    }
-                }
+                LowerBoundary.ValidateMinimum(pixelClickedY);
+                LowerBoundary.ValidateMaximum(UneditedImage!.Height - 1);
 
-                DrawPenPixel(DrawingCycleGraphics!, DrawingBrush!, toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);
+                DrawPenPixel(DrawingCycleGraphics!, DrawingBrush!, toolParameters.ClickLocation.Value);
             }
         }
 
@@ -108,7 +96,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
 
         public override IUndoRedoCommand CreateUndoStep(Point drawingImageLocation)
         {
-            Rectangle editedArea = new(LeftBoundary, UpperBoundary, RightBoundary - LeftBoundary, LowerBoundary - UpperBoundary);
+            Rectangle editedArea = new(LeftBoundary, UpperBoundary, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
             UneditedImage = UneditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
 
             EditedImage = EditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);

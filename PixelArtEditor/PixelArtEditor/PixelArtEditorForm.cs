@@ -1,6 +1,5 @@
 using PixelArtEditor.Controls;
 using PixelArtEditor.Files;
-using PixelArtEditor.Files.File_Forms;
 using PixelArtEditor.Grids;
 using PixelArtEditor.Image_Editing;
 using PixelArtEditor.Image_Editing.Drawing_Tools;
@@ -256,8 +255,8 @@ namespace PixelArtEditor
         {
             Selector.ClearSelection(ImageType.DrawingImage);
 
-            DrawingBox.SetNewSize(Images.DrawingImageSize.Width, Images.DrawingImageSize.Height);
-            DrawingBox.SetNewImage(Images.EditDrawingImage);
+            DrawingBox.SetNewSize(Images.DisplayDrawingImage.Width, Images.DisplayDrawingImage.Height);
+            DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             ChangeDrawingBoxGrid();
             ReorganizeControls();
         }
@@ -460,7 +459,7 @@ namespace PixelArtEditor
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 DrawHandler.DrawClick(ToolFactory.GetTool(), Images.EditDrawingImage, paletteColor, toolParameters);
-                DrawingBox.Image = Images.EditDrawingImage;
+                DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             }
 
             if (e.Button == MouseButtons.Right)
@@ -497,7 +496,7 @@ namespace PixelArtEditor
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 DrawHandler.DrawHold(ToolFactory.GetTool(), toolParameters);
-                DrawingBox.Image = Images.DisplayDrawingImage;
+                DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             }
 
             if (e.Button == MouseButtons.Right)
@@ -524,10 +523,15 @@ namespace PixelArtEditor
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 DrawHandler.DrawRelease(ToolFactory.GetTool(), toolParameters);
+
                 UndoHandler.TrackChange(DrawHandler.CreateUndoStepFromTool((IUndoRedoCreator)ToolFactory.GetTool(), Images.DrawingLocation));
 
+
+                Images.CreateNewDisplayDrawingImage();
                 DrawingBox.SetNewImage(Images.DisplayDrawingImage);
+
                 Images.ApplyDrawnImage();
+                Images.CreateNewDisplayOriginalImage();
                 ViewingBox.SetNewImage(Images.DisplayOriginalImage);
             }
 

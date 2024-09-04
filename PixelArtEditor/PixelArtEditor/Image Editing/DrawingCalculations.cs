@@ -12,8 +12,8 @@ namespace PixelArtEditor.Image_Editing
         /// <returns>The new location that indicates the top left corner of the current pixel.</returns>
         public static Point SnapPixelTopLeft(Point absoluteLocation, int pixelSize)
         {
-            int xPos = absoluteLocation.X.Modulo(pixelSize);
-            int yPos = absoluteLocation.Y.Modulo(pixelSize);
+            int xPos = absoluteLocation.X - absoluteLocation.X.Modulo(pixelSize);
+            int yPos = absoluteLocation.Y - absoluteLocation.Y.Modulo(pixelSize);
             return new(xPos, yPos);
         }
 
