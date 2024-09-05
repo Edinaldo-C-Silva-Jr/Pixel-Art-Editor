@@ -16,7 +16,7 @@
         }
 
         /// <summary>
-        /// Resizes the Textbox  to fit the entire NumericUpDown control.
+        /// Resizes the Textbox to fit the entire NumericUpDown control.
         /// </summary>
         protected override void OnTextBoxResize(object source, EventArgs e)
         {

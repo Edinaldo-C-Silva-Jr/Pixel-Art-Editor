@@ -1,5 +1,4 @@
 ﻿using PixelArtEditor.Files.File_Forms;
-using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Files
 {

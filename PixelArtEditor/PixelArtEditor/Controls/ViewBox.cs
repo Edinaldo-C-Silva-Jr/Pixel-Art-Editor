@@ -12,6 +12,9 @@ namespace PixelArtEditor.Controls
         /// </summary>
         private BackgroundGrid GridGenerator { get; set; }
 
+        /// <summary>
+        /// Default constructor. Initiates the grid generator and sets double buffering.
+        /// </summary>
         public ViewBox()
         {
             GridGenerator = new BackgroundGrid();
@@ -23,8 +26,8 @@ namespace PixelArtEditor.Controls
         /// <summary>
         /// Sets a new size for the Viewing Box.
         /// </summary>
-        /// <param name="width">The width for the Viewing Box to have.</param>
-        /// <param name="height">The height for the Viewing Box to have.</param>
+        /// <param name="width">The width to set for the Viewing Box.</param>
+        /// <param name="height">The height to set for the Viewing Box.</param>
         public void SetNewSize(int width, int height)
         {
             Width = width;
@@ -53,7 +56,7 @@ namespace PixelArtEditor.Controls
             BackgroundImageLayout = ImageLayout.Stretch; // Changes the layout mode for better performance.
             BackgroundImage = new Bitmap(imageWidth, imageHeight);
 
-            // Generates and applies background grid for the Drawing Box, with the size of the image and the color Light Gray.
+            // Generates and applies a checkered background grid for the Viewing Box, with the size of the image and the color Light Gray.
             GridGenerator.GenerateGrid(imageWidth, imageHeight, cellSize, Color.LightGray);
             using Graphics gridGraphics = Graphics.FromImage(BackgroundImage);
             GridGenerator.ApplyGrid(gridGraphics, imageWidth, imageHeight);
@@ -64,7 +67,7 @@ namespace PixelArtEditor.Controls
         /// </summary>
         /// <param name="paintGraphics">The graphics of the Viewing Box's Paint event.</param>
         /// <param name="location">The location of the Drawing Image in the full image.</param>
-        /// <param name="boxSize">The size of the Drawing Box, with the pixel size equivalent to that of the Viewing Box.</param>
+        /// <param name="boxSize">The size of the Drawing Box, with the zoom equivalent to that of the Viewing Box.</param>
         public void DrawDrawingBoxOverlay(Graphics paintGraphics, Point location, Size boxSize)
         {
             using Pen blackPen = new(Color.Black);
@@ -75,6 +78,9 @@ namespace PixelArtEditor.Controls
             paintGraphics.DrawRectangle(whitePen, location.X + 1, location.Y + 1, boxSize.Width - 2, boxSize.Height - 2);
         }
 
+        /// <summary>
+        /// Disposes of the grid generator when the control is disposed.
+        /// </summary>
         private void OnDispose(object? sender, EventArgs e)
         {
             GridGenerator?.Dispose();

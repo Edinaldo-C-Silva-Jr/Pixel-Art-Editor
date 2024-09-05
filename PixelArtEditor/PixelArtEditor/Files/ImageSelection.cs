@@ -2,7 +2,10 @@
 
 namespace PixelArtEditor.Files
 {
-    internal class ImageSelection : IDisposable
+    /// <summary>
+    /// A class that handles selecting a portion of the image.
+    /// </summary>
+    public class ImageSelection : IDisposable
     {
         #region Properties
         /// <summary>
@@ -20,6 +23,9 @@ namespace PixelArtEditor.Files
         /// </summary>
         public Rectangle SelectedArea { get; private set; }
 
+        /// <summary>
+        /// The type of image currently being used for the selection.
+        /// </summary>
         public ImageType CurrentImageType { get; private set; }
         #endregion
 
@@ -29,13 +35,12 @@ namespace PixelArtEditor.Files
         public ImageSelection()
         {
             SelectionBrush = new(Color.FromArgb(128, 32, 196, 255));
-            CurrentImageType = ImageType.None;
         }
 
         /// <summary>
         /// Defines the start position of the selection.
         /// </summary>
-        /// <param name="location">The point to start the selection in the image. (No zoom).</param>
+        /// <param name="location">The point to start the selection in the image (No zoom).</param>
         /// <param name="type">The type of the image that will be selected.</param>
         public void DefineStart(Point location, ImageType type)
         {
@@ -52,17 +57,16 @@ namespace PixelArtEditor.Files
             if (CurrentImageType == callingBoxImageType)
             {
                 SelectedArea = Rectangle.Empty;
-                CurrentImageType = ImageType.None;
             }
         }
 
         /// <summary>
         /// Receives two coordinates, an initial coordinate and a final one, and compares them.
         /// If the final coordinate is smaller than the initial, they're swapped.
-        /// This method accepts a single coordinate, which can be the X or Y coordinate of a Point.
+        /// This method accepts a single coordinate, so for a Point, it should receive either the X or Y coordinate.
         /// </summary>
-        /// <param name="initialCoordinate">The coordinate from the starting point.</param>
-        /// <param name="finalCoordinate">The coordinate from the end point.</param>
+        /// <param name="initialCoordinate">The coordinate for the starting point.</param>
+        /// <param name="finalCoordinate">The coordinate for the end point.</param>
         /// <returns>A tuple containing both coordinates in the correct order.</returns>
         private static (int, int) SwapCoordinatesWhenStartIsBigger(int initialCoordinate, int finalCoordinate)
         {
@@ -88,11 +92,12 @@ namespace PixelArtEditor.Files
             Point initialSelecion = SelectionStart;
             Rectangle areaToSelect = new();
 
-            // Makes sure the begin and end coordinates are correctly ordered (the end coordinate has to be bigger than the begin coordinate)
+            // Makes sure the initial and end coordinates are correctly ordered (the end coordinate has to be bigger than the initial coordinate)
             (initialSelecion.X, selectionEnd.X) = SwapCoordinatesWhenStartIsBigger(initialSelecion.X, selectionEnd.X);
             (initialSelecion.Y, selectionEnd.Y) = SwapCoordinatesWhenStartIsBigger(initialSelecion.Y, selectionEnd.Y);
 
-            // Snaps the initial point of the selection to the top left of the selection unit.
+            // Snaps the initial point of the selection to the top left of the selection unit
+            // The selection unit is the block made up by the width and height multipliers.
             areaToSelect.X = initialSelecion.X - initialSelecion.X.Modulo(selectionWidth);
             areaToSelect.Y = initialSelecion.Y - initialSelecion.Y.Modulo(selectionHeight);
 

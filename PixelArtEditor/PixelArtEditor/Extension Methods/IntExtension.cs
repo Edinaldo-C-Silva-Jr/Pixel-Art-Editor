@@ -1,7 +1,7 @@
 ﻿namespace PixelArtEditor.Extension_Methods
 {
     /// <summary>
-    /// A class that implements extensions methods for the type Int.
+    /// A class that implements extension methods for the type Int.
     /// </summary>
     public static class IntExtension
     {

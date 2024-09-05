@@ -26,8 +26,8 @@ namespace PixelArtEditor.Controls
         /// <summary>
         /// Sets a new size for the Drawing Box.
         /// </summary>
-        /// <param name="width">The width for the Drawing Box to have.</param>
-        /// <param name="height">The height for the Drawing Box to have.</param>
+        /// <param name="width">The width to set for the Drawing Box.</param>
+        /// <param name="height">The height to set for the Drawing Box.</param>
         public void SetNewSize(int width, int height)
         {
             Width = width;

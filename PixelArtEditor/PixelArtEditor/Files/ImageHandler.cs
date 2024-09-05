@@ -7,11 +7,18 @@ namespace PixelArtEditor.Files
     /// A class responsible for handling the main image used by the application.
     /// It has methods for handling the image creation, image-wide changes, as well as image selection.
     /// </summary>
-    internal class ImageHandler : IDisposable
+    public class ImageHandler : IDisposable
     {
         #region Original Image Properties
+        /// <summary>
+        /// The full image that is being made in the editor. 
+        /// This version is used for editting. It has no zoom.
+        /// </summary>
         public Bitmap EditOriginalImage { get; private set; }
 
+        /// <summary>
+        /// The original image used to be displayed in the editor. It is zoomed.
+        /// </summary>
         public Bitmap DisplayOriginalImage { get; private set; }
 
         /// <summary>
@@ -19,14 +26,27 @@ namespace PixelArtEditor.Files
         /// </summary>
         public Bitmap ClipboardOriginalImage { get; private set; }
 
+        /// <summary>
+        /// The size values of the original image.
+        /// </summary>
         public Size OriginalImageSize { get; private set; }
 
+        /// <summary>
+        /// The zoom to be applied to the original image when making the display version.
+        /// </summary>
         public int OriginalImageZoom { get; private set; }
         #endregion
 
         #region Drawing Image Properties
+        /// <summary>
+        /// A portion of the full image that is currently being drawn in the editor.
+        /// This version is used for editting. It has no zoom.
+        /// </summary>
         public Bitmap EditDrawingImage { get; private set; }
 
+        /// <summary>
+        /// The drawing image used to be displayed in the editor. It is zoomed.
+        /// </summary>
         public Bitmap DisplayDrawingImage { get; private set; }
 
         /// <summary>
@@ -34,8 +54,14 @@ namespace PixelArtEditor.Files
         /// </summary>
         public Bitmap ClipboardDrawingImage { get; private set; }
 
+        /// <summary>
+        /// The size values of the drawing image.
+        /// </summary>
         public Size DrawingImageSize { get; private set; }
 
+        /// <summary>
+        /// The zoom to be applied to the drawing image when making the display version.
+        /// </summary>
         public int DrawingImageZoom { get; private set; }
 
         /// <summary>
@@ -139,7 +165,7 @@ namespace PixelArtEditor.Files
 
         #region Drawing Image Size, Creation and Application
         /// <summary>
-        /// Changes the size of the Drawing Image to the values passed as parameters.
+        /// Changes the size of the Drawing Image to the values passed as parameters, then creates a new Drawing Image.
         /// </summary>
         /// <param name="pixelWidth">The width of the image, in pixels.</param>
         /// <param name="pixelHeight">The height of the image, in pixels.</param>
@@ -151,7 +177,6 @@ namespace PixelArtEditor.Files
             DrawingImageSize = new Size(pixelWidth, pixelHeight);
             DrawingImageZoom = zoom;
 
-            // This also creates a new Drawing Image.
             ChangeDrawingImageLocation();
         }
 
@@ -293,9 +318,9 @@ namespace PixelArtEditor.Files
 
         #region Changing and Applying Zoom
         /// <summary>
-        /// Changes only the pixel size value of the Original Image. Also zooms the image to the new pixel size.
+        /// Changes only the zoom value of the Original Image. Also creates a new display image with the new value.
         /// </summary>
-        /// <param name="zoom">The new pixel size to use for the Original Image</param>
+        /// <param name="zoom">The new zoom value to use for the Original Image</param>
         public void ChangeOriginalImageZoom(int zoom)
         {
             OriginalImageZoom = zoom;
@@ -303,9 +328,9 @@ namespace PixelArtEditor.Files
         }
 
         /// <summary>
-        /// Changes only the pixel size value of the Drawing Image.
+        /// Changes only the zoom value of the Drawing Image. Also creates a new display image with the new value.
         /// </summary>
-        /// <param name="zoom">The new pixel size to use for the Drawing Image.</param>
+        /// <param name="zoom">The new zoom value to use for the Drawing Image.</param>
         public void ChangeDrawingImageZoom(int zoom)
         {
             DrawingImageZoom = zoom;
@@ -373,7 +398,7 @@ namespace PixelArtEditor.Files
         /// Pastes the previously copied portion of the image into the current selection position.
         /// Which image gets pasted depends on the ImageType parameter.
         /// </summary>
-        /// <param name="selectedArea">he rectangle area selected on the image.</param>
+        /// <param name="selectedArea">The rectangle area selected on the image.</param>
         /// <param name="currentImage">Which of the images is currently selected.</param>
         public void PasteSelectionOnImage(Rectangle selectedArea, ImageType currentImage)
         {
@@ -400,6 +425,9 @@ namespace PixelArtEditor.Files
         }
         #endregion
 
+        /// <summary>
+        /// Disposes of all the images used in the class.
+        /// </summary>
         public void Dispose()
         {
             EditOriginalImage?.Dispose();
