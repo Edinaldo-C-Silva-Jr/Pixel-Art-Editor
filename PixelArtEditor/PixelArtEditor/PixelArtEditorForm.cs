@@ -459,6 +459,8 @@ namespace PixelArtEditor
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
                 DrawHandler.DrawClick(ToolFactory.GetTool(), Images.EditDrawingImage, paletteColor, toolParameters);
+                
+                Images.CreateNewDisplayDrawingImage();
                 DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             }
 
@@ -495,7 +497,9 @@ namespace PixelArtEditor
             {
                 OptionalToolParameters toolParameters = GetToolParameters(e.Location);
 
-                DrawHandler.DrawHold(ToolFactory.GetTool(), toolParameters);
+                DrawHandler.DrawHold(ToolFactory.GetTool(), toolParameters); 
+                
+                Images.CreateNewDisplayDrawingImage();
                 DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             }
 
