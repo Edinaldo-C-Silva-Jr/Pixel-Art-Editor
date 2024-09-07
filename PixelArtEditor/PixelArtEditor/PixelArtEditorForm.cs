@@ -590,7 +590,7 @@ namespace PixelArtEditor
         /// </summary>
         private void CopyButton_Click(object sender, EventArgs e)
         {
-            Images.CopySelectionFromImage(Selector.SelectedArea, Selector.CurrentImageType);
+            CopyImage();
         }
 
         /// <summary>
@@ -599,6 +599,14 @@ namespace PixelArtEditor
         private void PasteButton_Click(object sender, EventArgs e)
         {
             PasteImage();
+        }
+
+        /// <summary>
+        /// Copies the selected portion of the image to the clipboard image of its corresponding image type.
+        /// </summary>
+        private void CopyImage()
+        {
+            Images.CopySelectionFromImage(Selector.SelectedArea, Selector.CurrentImageType);
         }
 
         /// <summary>
@@ -849,11 +857,22 @@ namespace PixelArtEditor
                     case Keys.V: // Control V: Paste.
                         PasteImage();
                         break;
+                    case Keys.Z: // Control Z: Undo
+                        UndoAction();
+                        break;
+                    case Keys.Y: // Control Y: Redo
+                        RedoAction();
+                        break;
                 }
             }
         }
 
         private void UndoButton_Click(object sender, EventArgs e)
+        {
+            UndoAction();
+        }
+
+        private void UndoAction()
         {
             UndoHandler.UndoChange(Images.EditOriginalImage);
 
@@ -864,6 +883,11 @@ namespace PixelArtEditor
         }
 
         private void RedoButton_Click(object sender, EventArgs e)
+        {
+            RedoAction();
+        }
+
+        private void RedoAction()
         {
             UndoHandler.RedoChange(Images.EditOriginalImage);
 
