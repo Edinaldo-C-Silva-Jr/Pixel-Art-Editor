@@ -48,6 +48,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools
                 8 => new FreeLineTool(),
                 9 => new SolidRectangleTool(),
                 10 => new OutlineRectangleTool(),*/
+                1 => new DitheringPenTool(),
                 _ => new PixelPenTool()
             };
 

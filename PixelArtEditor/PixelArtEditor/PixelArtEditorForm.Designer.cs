@@ -55,6 +55,7 @@
             PasteButton = new Button();
             FullMirrorPenButton = new Controls.ToolButton();
             DrawingToolButtonPanel = new Controls.ToolButtonPanel();
+            DitheringPenButton = new Controls.ToolButton();
             DrawingToolsLabel = new Label();
             OutlineRectangleButton = new Controls.ToolButton();
             SolidRectangleButton = new Controls.ToolButton();
@@ -381,7 +382,7 @@
             // 
             // FullMirrorPenButton
             // 
-            FullMirrorPenButton.Location = new Point(140, 15);
+            FullMirrorPenButton.Location = new Point(186, 65);
             FullMirrorPenButton.Name = "FullMirrorPenButton";
             FullMirrorPenButton.PreviewOnHold = false;
             FullMirrorPenButton.PreviewOnMove = true;
@@ -401,6 +402,7 @@
             // 
             DrawingToolButtonPanel.BackColor = Color.Gainsboro;
             DrawingToolButtonPanel.BorderStyle = BorderStyle.FixedSingle;
+            DrawingToolButtonPanel.Controls.Add(DitheringPenButton);
             DrawingToolButtonPanel.Controls.Add(DrawingToolsLabel);
             DrawingToolButtonPanel.Controls.Add(OutlineRectangleButton);
             DrawingToolButtonPanel.Controls.Add(SolidRectangleButton);
@@ -418,6 +420,24 @@
             DrawingToolButtonPanel.Size = new Size(275, 150);
             DrawingToolButtonPanel.TabIndex = 22;
             // 
+            // DitheringPenButton
+            // 
+            DitheringPenButton.Location = new Point(45, 15);
+            DitheringPenButton.Name = "DitheringPenButton";
+            DitheringPenButton.PreviewOnHold = false;
+            DitheringPenButton.PreviewOnMove = true;
+            DitheringPenButton.Size = new Size(40, 40);
+            DitheringPenButton.TabIndex = 38;
+            DitheringPenButton.Text = "Dith. Pen";
+            DitheringPenButton.ToolValue = 1;
+            DitheringPenButton.UseBackgroundColor = false;
+            DitheringPenButton.UseClickLocation = true;
+            DitheringPenButton.UseImageSize = false;
+            DitheringPenButton.UsePixelSize = true;
+            DitheringPenButton.UseTransparency = false;
+            DitheringPenButton.UseVisualStyleBackColor = true;
+            DitheringPenButton.Click += ChangeTool_ToolButtonsClick;
+            // 
             // DrawingToolsLabel
             // 
             DrawingToolsLabel.Dock = DockStyle.Top;
@@ -431,7 +451,7 @@
             // 
             // OutlineRectangleButton
             // 
-            OutlineRectangleButton.Location = new Point(50, 105);
+            OutlineRectangleButton.Location = new Point(230, 104);
             OutlineRectangleButton.Name = "OutlineRectangleButton";
             OutlineRectangleButton.PreviewOnHold = true;
             OutlineRectangleButton.PreviewOnMove = false;
@@ -449,7 +469,7 @@
             // 
             // SolidRectangleButton
             // 
-            SolidRectangleButton.Location = new Point(5, 105);
+            SolidRectangleButton.Location = new Point(140, 105);
             SolidRectangleButton.Name = "SolidRectangleButton";
             SolidRectangleButton.PreviewOnHold = true;
             SolidRectangleButton.PreviewOnMove = false;
@@ -467,7 +487,7 @@
             // 
             // FreeLineButton
             // 
-            FreeLineButton.Location = new Point(95, 60);
+            FreeLineButton.Location = new Point(94, 105);
             FreeLineButton.Name = "FreeLineButton";
             FreeLineButton.PreviewOnHold = true;
             FreeLineButton.PreviewOnMove = false;
@@ -485,7 +505,7 @@
             // 
             // OrdinalLineButton
             // 
-            OrdinalLineButton.Location = new Point(50, 60);
+            OrdinalLineButton.Location = new Point(94, 59);
             OrdinalLineButton.Name = "OrdinalLineButton";
             OrdinalLineButton.PreviewOnHold = true;
             OrdinalLineButton.PreviewOnMove = false;
@@ -503,7 +523,7 @@
             // 
             // CardinalLineButton
             // 
-            CardinalLineButton.Location = new Point(5, 60);
+            CardinalLineButton.Location = new Point(234, 18);
             CardinalLineButton.Name = "CardinalLineButton";
             CardinalLineButton.PreviewOnHold = true;
             CardinalLineButton.PreviewOnMove = false;
@@ -521,7 +541,7 @@
             // 
             // EraserButton
             // 
-            EraserButton.Location = new Point(230, 15);
+            EraserButton.Location = new Point(230, 58);
             EraserButton.Name = "EraserButton";
             EraserButton.PreviewOnHold = false;
             EraserButton.PreviewOnMove = true;
@@ -539,7 +559,7 @@
             // 
             // FourMirrorPenButton
             // 
-            FourMirrorPenButton.Location = new Point(185, 15);
+            FourMirrorPenButton.Location = new Point(184, 104);
             FourMirrorPenButton.Name = "FourMirrorPenButton";
             FourMirrorPenButton.PreviewOnHold = false;
             FourMirrorPenButton.PreviewOnMove = true;
@@ -557,7 +577,7 @@
             // 
             // VerticalMirrorPenButton
             // 
-            VerticalMirrorPenButton.Location = new Point(95, 15);
+            VerticalMirrorPenButton.Location = new Point(140, 58);
             VerticalMirrorPenButton.Name = "VerticalMirrorPenButton";
             VerticalMirrorPenButton.PreviewOnHold = false;
             VerticalMirrorPenButton.PreviewOnMove = true;
@@ -575,7 +595,7 @@
             // 
             // HorizontalMirrorPenButton
             // 
-            HorizontalMirrorPenButton.Location = new Point(50, 15);
+            HorizontalMirrorPenButton.Location = new Point(186, 15);
             HorizontalMirrorPenButton.Name = "HorizontalMirrorPenButton";
             HorizontalMirrorPenButton.PreviewOnHold = false;
             HorizontalMirrorPenButton.PreviewOnMove = true;
@@ -1048,5 +1068,6 @@
         private Label ColorValueLabel;
         private Button RedoButton;
         private Button UndoButton;
+        private Controls.ToolButton DitheringPenButton;
     }
 }
