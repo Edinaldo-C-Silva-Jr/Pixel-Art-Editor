@@ -1,4 +1,4 @@
-﻿namespace PixelArtEditor.Drawing_Tools.Tools
+﻿/*namespace PixelArtEditor.Drawing_Tools.Tools
 {
     /// <summary>
     /// a Pen tool that draws two pixels, one in the location clicked, and another on the opposite side diagonally.
@@ -55,3 +55,4 @@
         }
     }
 }
+*/

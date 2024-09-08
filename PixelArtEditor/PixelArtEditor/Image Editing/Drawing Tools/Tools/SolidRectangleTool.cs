@@ -1,4 +1,4 @@
-﻿namespace PixelArtEditor.Drawing_Tools.Tools
+﻿/*namespace PixelArtEditor.Drawing_Tools.Tools
 {
     /// <summary>
     /// A tool that draws a completely solid rectangle using a single color by clicking and dragging.
@@ -66,3 +66,4 @@
         }
     }
 }
+*/

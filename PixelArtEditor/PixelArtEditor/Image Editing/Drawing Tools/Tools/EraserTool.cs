@@ -1,4 +1,4 @@
-﻿namespace PixelArtEditor.Drawing_Tools.Tools
+﻿/*namespace PixelArtEditor.Drawing_Tools.Tools
 {
     /// <summary>
     /// An eraser tool that erases a single pixel in the image. It will either turn that pixel transparent, or restore it to the background color.
@@ -64,4 +64,4 @@
             return;
         }
     }
-}
+}*/

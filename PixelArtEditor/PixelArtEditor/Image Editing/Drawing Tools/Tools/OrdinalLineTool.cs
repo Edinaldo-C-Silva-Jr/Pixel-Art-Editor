@@ -1,4 +1,4 @@
-﻿namespace PixelArtEditor.Drawing_Tools.Tools
+﻿/*namespace PixelArtEditor.Drawing_Tools.Tools
 {
     /// <summary>
     /// A tool that draws a straight line by clicking and dragging.
@@ -151,3 +151,4 @@
         }
     }
 }
+*/

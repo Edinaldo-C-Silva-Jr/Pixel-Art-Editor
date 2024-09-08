@@ -17,8 +17,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools
         /// </summary>
         public DrawingToolFactory()
         {
-            Tool = new BasePenTool();
-            //Tool = new PixelPenTool();
+            Tool = new PixelPenTool();
         }
 
         /// <summary>
@@ -48,9 +47,8 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools
                 7 => new OrdinalLineTool(),
                 8 => new FreeLineTool(),
                 9 => new SolidRectangleTool(),
-                10 => new OutlineRectangleTool(),
-                _ => new PixelPenTool()*/
-                _ => new BasePenTool()
+                10 => new OutlineRectangleTool(),*/
+                _ => new PixelPenTool()
             };
 
             return Tool;

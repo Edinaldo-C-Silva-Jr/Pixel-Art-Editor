@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
 {
-    public class BasePenTool : DrawingTool
+    public abstract class BasePenTool : DrawingTool
     {
         private Bitmap? UneditedImage { get; set; }
         private Bitmap? EditedImage { get; set; }
@@ -24,10 +24,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
         /// <param name="drawGraphics">The graphics for the image being drawn.</param>
         /// <param name="drawBrush">The brush with the currently selected color.</param>
         /// <param name="location">The location of the mouse click inside the Drawing Box.</param>
-        protected static void DrawPenPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location)
-        {
-            drawGraphics.FillRectangle(drawBrush, location.X, location.Y, 1, 1);
-        }
+        protected abstract void DrawPenPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location);
 
         /// <summary>
         /// Draws a single pixel while applying zoom, filling the pixel where the mouse clicked.
@@ -36,11 +33,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
         /// <param name="drawBrush">The brush with the currently selected color.</param>
         /// <param name="location">The location of the mouse click inside the Drawing Box.</param>
         /// <param name="zoom">The size of each pixel in the image.</param>
-        protected static void DrawPenPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, int zoom)
-        {
-            location = new(location.X * zoom, location.Y * zoom);
-            drawGraphics.FillRectangle(drawBrush, location.X, location.Y, zoom, zoom);
-        }
+        protected abstract void DrawPenPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, int zoom);
 
         public override void PreviewTool(Graphics paintGraphics, Color pixelColor, OptionalToolParameters toolParameters)
         {

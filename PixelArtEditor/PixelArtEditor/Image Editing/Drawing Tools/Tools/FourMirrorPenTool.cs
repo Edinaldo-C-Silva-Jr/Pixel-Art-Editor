@@ -1,4 +1,4 @@
-﻿namespace PixelArtEditor.Drawing_Tools.Tools
+﻿/*namespace PixelArtEditor.Drawing_Tools.Tools
 {
     /// <summary>
     /// a Pen tool that draws four pixels, one in the location clicked, and 3 others on the opposite sides horizontally, vertically and diagonally.
@@ -62,4 +62,4 @@
             return;
         }
     }
-}
+}*/
