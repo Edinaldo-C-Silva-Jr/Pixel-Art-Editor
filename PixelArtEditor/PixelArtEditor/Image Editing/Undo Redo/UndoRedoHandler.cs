@@ -44,5 +44,10 @@
             command.ExecuteChange(imageGraphics);
             UndoCommands.Push(command);
         }
+
+        public (bool undoAvailable, bool redoAvailable) UndoRedoAvailable()
+        {
+            return (UndoCommands.Count > 0, RedoCommands.Count > 0);
+        }
     }
 }

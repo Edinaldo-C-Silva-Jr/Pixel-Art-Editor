@@ -115,6 +115,8 @@ namespace PixelArtEditor
             ViewPixelSizeNumberBar.Value = 4;
             DrawPixelSizeNumberBar.Value = 16;
 
+            SetUndoRedoButtonAvailability();
+
             DrawingToolButtonPanel.ReorganizeButtons();
         }
         #endregion
@@ -531,6 +533,7 @@ namespace PixelArtEditor
 
                 UndoHandler.TrackChange(DrawHandler.CreateUndoStepFromTool((IUndoRedoCreator)ToolFactory.GetTool(), Images.DrawingLocation));
 
+                SetUndoRedoButtonAvailability();
 
                 Images.CreateNewDisplayDrawingImage();
                 DrawingBox.SetNewImage(Images.DisplayDrawingImage);
@@ -876,6 +879,8 @@ namespace PixelArtEditor
         {
             UndoHandler.UndoChange(Images.EditOriginalImage);
 
+            SetUndoRedoButtonAvailability();
+
             Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             Images.CreateNewDisplayOriginalImage();
@@ -891,10 +896,19 @@ namespace PixelArtEditor
         {
             UndoHandler.RedoChange(Images.EditOriginalImage);
 
+            SetUndoRedoButtonAvailability();
+
             Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
+        }
+
+        private void SetUndoRedoButtonAvailability()
+        {
+            (bool undoAvailable, bool redoAvailable) = UndoHandler.UndoRedoAvailable();
+            UndoButton.Enabled = undoAvailable;
+            RedoButton.Enabled = redoAvailable;
         }
     }
 }
