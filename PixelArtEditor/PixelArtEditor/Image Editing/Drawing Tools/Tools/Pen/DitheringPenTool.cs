@@ -1,11 +1,17 @@
 ﻿namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
 {
+    /// <summary>
+    /// A pen tool that draws a pixel in the location clicked in the image.
+    /// It then draws in every other pixel as the mouse is dragged around the picture, to implement a simple dithering effect.
+    /// </summary>
     public class DitheringPenTool : BasePenTool
     {
         private byte? Parity { get; set; } = null;
 
         protected override void DrawPenPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location)
         {
+            // Calculates the pixels to draw based on a parity value, which can be 0 or 1.
+            // Draws on every other pixel in the image.
             if (Parity is not null && (location.X % 2 + location.Y % 2) % 2 == Parity.Value)
             {
                 drawGraphics.FillRectangle(drawBrush, location.X, location.Y, 1, 1);
@@ -25,6 +31,7 @@
         {
             if (toolParameters.ClickLocation.HasValue)
             {
+                // Gets the parity value based on the first click in this drawing cycle.
                 Parity = (byte)((toolParameters.ClickLocation.Value.X % 2 + toolParameters.ClickLocation.Value.Y % 2) % 2);
                 base.UseToolClick(drawingImage, drawingColor, toolParameters);
             }

@@ -4,19 +4,50 @@ using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
 {
+    /// <summary>
+    /// A class to serve as a base for the Pen type tools.
+    /// It implements the preview method, all drawing methods and the creation of an undo step.
+    /// </summary>
     public abstract class BasePenTool : DrawingTool
     {
+        #region Properties
+        /// <summary>
+        /// A copy of the Drawing Image before the drawing cycle started.
+        /// </summary>
         private Bitmap? UneditedImage { get; set; }
+
+        /// <summary>
+        /// A copy of the Drawing Image after the drawing cycle finishes.
+        /// </summary>
         private Bitmap? EditedImage { get; set; }
 
+        /// <summary>
+        /// The left boundary of the mouse movement, which is the furthest pixel on the left that was drawn on.
+        /// </summary>
         private int LeftBoundary { get; set; } = 0;
+        /// <summary>
+        /// The right boundary of the mouse movement, which is the furthest pixel on the right that was drawn on.
+        /// </summary>
         private int RightBoundary { get; set; } = 0;
+        /// <summary>
+        /// The upper boundary of the mouse movement, which is the furthest pixel on the top that was drawn on.
+        /// </summary>
         private int UpperBoundary { get; set; } = 0;
+        /// <summary>
+        /// The lower boundary of the mouse movement, which is the furthest pixel on the bottom that was drawn on.
+        /// </summary>
         private int LowerBoundary { get; set; } = 0;
 
+        /// <summary>
+        /// The Graphics object used for a drawing cycle.
+        /// </summary>
         private Graphics? DrawingCycleGraphics { get; set; }
 
+        /// <summary>
+        /// The brush object used for a drawing cycle.
+        /// </summary>
         private SolidBrush? DrawingBrush { get; set; }
+        #endregion
 
         /// <summary>
         /// Draws a single pixel.
@@ -103,6 +134,10 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
             return UndoStep;
         }
 
+        /// <summary>
+        /// Clears the properties used after a drawing cycle.
+        /// This includes the boundaries, the edited and unedited images, the graphics and the brush.
+        /// </summary>
         protected void ClearProperties()
         {
             LeftBoundary = RightBoundary = UpperBoundary = LowerBoundary = 0;
