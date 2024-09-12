@@ -38,7 +38,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools
         /// <summary>
         /// Creates a brush to use in the preview tool methods. This brush will have a darker or lighter version of the color.
         /// </summary>
-        /// <param name="colorBrush">The brush with the current color.</param>
+        /// <param name="brushColor">The color to use in the brush.</param>
         /// <returns>A new brush with a lighter or darker version of the original color.</returns>
         protected static SolidBrush MakePreviewBrush(Color brushColor)
         {

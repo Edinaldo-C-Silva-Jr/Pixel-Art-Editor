@@ -79,13 +79,16 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
         {
             if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
             {
+                // Preparing undo properties.
                 UneditedImage = new(drawingImage);
                 EditedImage = drawingImage;
                 LeftBoundary = RightBoundary = toolParameters.ClickLocation.Value.X;
                 UpperBoundary = LowerBoundary = toolParameters.ClickLocation.Value.Y;
 
+                // Preparing drawing properties.
                 DrawingCycleGraphics = Graphics.FromImage(drawingImage);
                 DrawingBrush = new(drawingColor);
+
                 DrawPenPixel(DrawingCycleGraphics, DrawingBrush, toolParameters.ClickLocation.Value);
             }
         }
@@ -94,18 +97,17 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
         {
             if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
             {
+                // Preparing location data,.
                 int pixelClickedX = toolParameters.ClickLocation.Value.X;
                 int pixelClickedY = toolParameters.ClickLocation.Value.Y;
 
+                // Updating undo location properties.
                 LeftBoundary = LeftBoundary.ValidateMaximum(pixelClickedX);
                 LeftBoundary = LeftBoundary.ValidateMinimum(0);
-
                 RightBoundary = RightBoundary.ValidateMinimum(pixelClickedX);
                 RightBoundary = RightBoundary.ValidateMaximum(UneditedImage!.Width - 1);
-
                 UpperBoundary = UpperBoundary.ValidateMaximum(pixelClickedY);
                 UpperBoundary = UpperBoundary.ValidateMinimum(0);
-
                 LowerBoundary = LowerBoundary.ValidateMinimum(pixelClickedY);
                 LowerBoundary = LowerBoundary.ValidateMaximum(UneditedImage!.Height - 1);
 
@@ -120,17 +122,16 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
 
         public override IUndoRedoCommand CreateUndoStep(Point drawingImageLocation)
         {
+            // Getting only the edited portion of the images.
             Rectangle editedArea = new(LeftBoundary, UpperBoundary, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
             UneditedImage = UneditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
-
             EditedImage = EditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
-
+            
+            // Getting the location where the edits started.
             Point editLocation = new(drawingImageLocation.X + LeftBoundary, drawingImageLocation.Y + UpperBoundary);
 
             PenCommand UndoStep = new(new Bitmap(UneditedImage), new Bitmap(EditedImage), editLocation);
-
             ClearProperties();
-
             return UndoStep;
         }
 
@@ -145,6 +146,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
             UneditedImage = null;
             EditedImage?.Dispose();
             EditedImage = null;
+
             DrawingCycleGraphics?.Dispose();
             DrawingCycleGraphics = null;
             DrawingBrush?.Dispose();
