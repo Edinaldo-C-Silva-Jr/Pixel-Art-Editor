@@ -12,6 +12,7 @@
 
         protected override void DrawPenPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, int zoom)
         {
+            // Changes the location and size of the pixel to match the image box's zoom.
             location = new(location.X * zoom, location.Y * zoom);
             drawGraphics.FillRectangle(drawBrush, location.X, location.Y, zoom, zoom);
         }

@@ -21,12 +21,12 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
         /// <summary>
         /// The point where the line begins, which is where the mouse is first clicked.
         /// </summary>
-        private Point? StartingPoint { get; set; }
+        protected Point? StartingPoint { get; set; }
 
         /// <summary>
         /// The point where the line ends, which is where the mouse is last clicked.
         /// </summary>
-        private Point? EndPoint { get; set; }
+        protected Point? EndPoint { get; set; }
 
         /// <summary>
         /// The Graphics object used for a drawing cycle.
@@ -39,16 +39,16 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
         private SolidBrush? DrawingBrush { get; set; }
         #endregion
 
-        protected abstract void DrawLine(Graphics drawGraphics, SolidBrush drawBrush, Point location);
+        protected abstract void DrawLine(Graphics drawGraphics, SolidBrush drawBrush);
 
-        protected abstract void DrawLine(Graphics drawGraphics, SolidBrush drawBrush, Point location, int pixelSize);
+        protected abstract void DrawLine(Graphics drawGraphics, SolidBrush drawBrush, int pixelSize);
 
         public override void PreviewTool(Graphics paintGraphics, Color drawingColor, OptionalToolParameters toolParameters)
         {
             if (StartingPoint.HasValue && toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
             {
                 using SolidBrush previewBrush = MakePreviewBrush(drawingColor);
-                DrawLine(paintGraphics, previewBrush, toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);
+                DrawLine(paintGraphics, previewBrush, toolParameters.PixelSize.Value);
             }
         }
 
@@ -85,7 +85,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
                 // Preparing drawing properties.
                 EndPoint = toolParameters.ClickLocation.Value;
 
-                DrawLine(DrawingCycleGraphics!, DrawingBrush!, toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);
+                DrawLine(DrawingCycleGraphics!, DrawingBrush!);
             }
         }
 

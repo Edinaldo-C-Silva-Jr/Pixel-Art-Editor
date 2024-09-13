@@ -523,14 +523,14 @@
             // 
             // CardinalLineButton
             // 
-            CardinalLineButton.Location = new Point(234, 18);
+            CardinalLineButton.Location = new Point(5, 60);
             CardinalLineButton.Name = "CardinalLineButton";
             CardinalLineButton.PreviewOnHold = true;
             CardinalLineButton.PreviewOnMove = false;
             CardinalLineButton.Size = new Size(40, 40);
             CardinalLineButton.TabIndex = 28;
             CardinalLineButton.Text = "L R Line";
-            CardinalLineButton.ToolValue = 6;
+            CardinalLineButton.ToolValue = 2;
             CardinalLineButton.UseBackgroundColor = false;
             CardinalLineButton.UseClickLocation = true;
             CardinalLineButton.UseImageSize = false;
