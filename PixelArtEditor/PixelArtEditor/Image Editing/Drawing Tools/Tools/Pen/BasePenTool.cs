@@ -10,7 +10,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
     /// </summary>
     public abstract class BasePenTool : DrawingTool
     {
-        #region Properties
+        #region Undo Properties
         /// <summary>
         /// A copy of the Drawing Image before the drawing cycle started.
         /// </summary>
@@ -37,7 +37,9 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
         /// The lower boundary of the mouse movement, which is the furthest pixel on the bottom that was drawn on.
         /// </summary>
         private int LowerBoundary { get; set; } = 0;
+        #endregion
 
+        #region Drawing Properties
         /// <summary>
         /// The Graphics object used for a drawing cycle.
         /// </summary>
@@ -130,9 +132,9 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
             // Getting the location where the edits started.
             Point editLocation = new(drawingImageLocation.X + LeftBoundary, drawingImageLocation.Y + UpperBoundary);
 
-            PenCommand UndoStep = new(new Bitmap(UneditedImage), new Bitmap(EditedImage), editLocation);
+            PenCommand undoStep = new(new Bitmap(UneditedImage), new Bitmap(EditedImage), editLocation);
             ClearProperties();
-            return UndoStep;
+            return undoStep;
         }
 
         /// <summary>
