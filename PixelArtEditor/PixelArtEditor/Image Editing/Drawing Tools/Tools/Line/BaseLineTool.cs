@@ -91,8 +91,6 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
 
         public override IUndoRedoCommand CreateUndoStep(Point drawingImageLocation)
         {
-            throw new NotImplementedException();
-
             // Validating the line points.
             Point firstPoint = StartingPoint!.Value;
             Point lastPoint = EndPoint!.Value;
@@ -107,9 +105,9 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
             // Getting the location where the edits started.
             Point editLocation = new(drawingImageLocation.X + firstPoint.X, drawingImageLocation.Y + firstPoint.Y);
 
-            //LineCommand UndoStep = new();
-            //ClearProperties();
-            //return undoStep;
+            LineCommand undoStep = new(new Bitmap(UneditedImage), new Bitmap(EditedImage), editLocation);
+            ClearProperties();
+            return undoStep;
         }
 
         protected void ClearProperties()
