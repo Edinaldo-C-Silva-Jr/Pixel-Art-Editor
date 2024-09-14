@@ -39,9 +39,20 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
         private SolidBrush? DrawingBrush { get; set; }
         #endregion
 
+        /// <summary>
+        /// Draws a line between the StartingPoint and Endpoint.
+        /// </summary>
+        /// <param name="drawGraphics">The graphics for the image being drawn.</param>
+        /// <param name="drawBrush">The brush with the currently selected color.</param>
         protected abstract void DrawLine(Graphics drawGraphics, SolidBrush drawBrush);
 
-        protected abstract void DrawLine(Graphics drawGraphics, SolidBrush drawBrush, int pixelSize);
+        /// <summary>
+        /// Draws a line between the StartingPoint and Endpoint while applying zoom.
+        /// </summary>
+        /// <param name="drawGraphics">The graphics for the image being drawn.</param>
+        /// <param name="drawBrush">The brush with the currently selected color.</param>
+        /// <param name="zoom">The size of each pixel in the image.</param>
+        protected abstract void DrawLine(Graphics drawGraphics, SolidBrush drawBrush, int zoom);
 
         public override void PreviewTool(Graphics paintGraphics, Color drawingColor, OptionalToolParameters toolParameters)
         {
@@ -94,11 +105,11 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
             // Validating the line points.
             Point firstPoint = StartingPoint!.Value;
             Point lastPoint = EndPoint!.Value;
-            (firstPoint.X, lastPoint.X) = DrawingCalculations.SwapCoordinatesWhenStartIsBigger(firstPoint.X, lastPoint.X);
-            (firstPoint.Y, lastPoint.Y) = DrawingCalculations.SwapCoordinatesWhenStartIsBigger(firstPoint.Y, lastPoint.Y);
+            (firstPoint.X, lastPoint.X) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.X, lastPoint.X);
+            (firstPoint.Y, lastPoint.Y) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.Y, lastPoint.Y);
 
             // Getting only the edited portion of the images.
-            Rectangle editedArea = new(firstPoint.X, firstPoint.Y, lastPoint.X - firstPoint.X + 1, lastPoint.X - firstPoint.X + 1);
+            Rectangle editedArea = new(firstPoint.X, firstPoint.Y, lastPoint.X - firstPoint.X + 1, lastPoint.Y - firstPoint.Y + 1);
             UneditedImage = UneditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
             EditedImage = EditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
 

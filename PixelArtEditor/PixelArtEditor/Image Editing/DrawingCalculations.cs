@@ -18,22 +18,21 @@ namespace PixelArtEditor.Image_Editing
         }
 
         /// <summary>
-        /// Receives two coordinates, an initial coordinate and a final one, and compares them.
-        /// If the final coordinate is smaller than the initial, they're swapped.
-        /// This method accepts a single coordinate, which can be the X or Y coordinate of a Point.
+        /// Receives two coordinates to compare, and returns them ordered so that the first is the smaller and the second is the bigger.
+        /// This method is intended to compare a coordinate (either X or Y) from two different points.
         /// </summary>
-        /// <param name="initialCoordinate">The coordinate from the starting point.</param>
-        /// <param name="finalCoordinate">The coordinate from the end point.</param>
-        /// <returns>A tuple containing both coordinates in the correct order.</returns>
-        public static (int, int) SwapCoordinatesWhenStartIsBigger(int initialCoordinate, int finalCoordinate)
+        /// <param name="firstCoordinate">The coordinate from the first point.</param>
+        /// <param name="lastCoordinate">The coordinate from the last point.</param>
+        /// <returns>A tuple containing both coordinates ordered so that the first is smaller.</returns>
+        public static (int, int) OrderCoordinatesWithSmallerFirst(int firstCoordinate, int lastCoordinate)
         {
-            if (initialCoordinate > finalCoordinate)
+            if (firstCoordinate > lastCoordinate)
             {
-                return (finalCoordinate, initialCoordinate);
+                return (lastCoordinate, firstCoordinate);
             }
             else
             {
-                return (initialCoordinate, finalCoordinate);
+                return (firstCoordinate, lastCoordinate);
             }
         }
 

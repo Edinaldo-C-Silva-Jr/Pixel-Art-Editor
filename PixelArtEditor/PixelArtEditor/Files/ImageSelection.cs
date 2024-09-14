@@ -1,4 +1,5 @@
 ﻿using PixelArtEditor.Extension_Methods;
+using PixelArtEditor.Image_Editing;
 
 namespace PixelArtEditor.Files
 {
@@ -61,26 +62,6 @@ namespace PixelArtEditor.Files
         }
 
         /// <summary>
-        /// Receives two coordinates, an initial coordinate and a final one, and compares them.
-        /// If the final coordinate is smaller than the initial, they're swapped.
-        /// This method accepts a single coordinate, so for a Point, it should receive either the X or Y coordinate.
-        /// </summary>
-        /// <param name="initialCoordinate">The coordinate for the starting point.</param>
-        /// <param name="finalCoordinate">The coordinate for the end point.</param>
-        /// <returns>A tuple containing both coordinates in the correct order.</returns>
-        private static (int, int) SwapCoordinatesWhenStartIsBigger(int initialCoordinate, int finalCoordinate)
-        {
-            if (initialCoordinate > finalCoordinate)
-            {
-                return (finalCoordinate, initialCoordinate);
-            }
-            else
-            {
-                return (initialCoordinate, finalCoordinate);
-            }
-        }
-
-        /// <summary>
         /// Changes the selection area based on the initial and final locations, along with an optional size multiplier.
         /// </summary>
         /// <param name="selectionEnd">The current click location, which is where the selecion ends.</param>
@@ -93,8 +74,8 @@ namespace PixelArtEditor.Files
             Rectangle areaToSelect = new();
 
             // Makes sure the initial and end coordinates are correctly ordered (the end coordinate has to be bigger than the initial coordinate)
-            (initialSelecion.X, selectionEnd.X) = SwapCoordinatesWhenStartIsBigger(initialSelecion.X, selectionEnd.X);
-            (initialSelecion.Y, selectionEnd.Y) = SwapCoordinatesWhenStartIsBigger(initialSelecion.Y, selectionEnd.Y);
+            (initialSelecion.X, selectionEnd.X) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(initialSelecion.X, selectionEnd.X);
+            (initialSelecion.Y, selectionEnd.Y) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(initialSelecion.Y, selectionEnd.Y);
 
             // Snaps the initial point of the selection to the top left of the selection unit
             // The selection unit is the block made up by the width and height multipliers.
