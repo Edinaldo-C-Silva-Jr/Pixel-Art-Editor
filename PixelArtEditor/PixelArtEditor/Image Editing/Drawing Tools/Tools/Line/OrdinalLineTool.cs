@@ -74,14 +74,14 @@
 
             if (endPoint.Y > beginPoint.Y)
             {
-                for (int i = beginPoint.X; i < endPoint.X; i++)
+                for (int i = 0; i < endPoint.Y - beginPoint.Y; i++)
                 {
                     graphics.FillRectangle(brush, beginPoint.X + i, beginPoint.Y + i, 1, 1);
                 }
             }
             else
             {
-                for (int i = beginPoint.X; i < endPoint.X; i++)
+                for (int i = 0; i < beginPoint.Y - endPoint.Y; i++)
                 {
                     graphics.FillRectangle(brush, beginPoint.X + i, beginPoint.Y - i, 1, 1);
                 }
