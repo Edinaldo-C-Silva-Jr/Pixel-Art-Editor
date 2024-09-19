@@ -18,18 +18,35 @@
                 bool lineIsHorizontal = horizontalDifference > verticalDifference;
                 // The line will be diagonal if the bigger difference is smaller than twice the smaller difference.
                 bool lineIsDiagonal = (lineIsHorizontal && horizontalDifference < 2 * verticalDifference) || (!lineIsHorizontal && verticalDifference < 2 * horizontalDifference);
+                // Defines the directions the line points towards.
+                bool linePointsRight = StartingPoint.Value.X < EndPoint.Value.X;
+                bool linePointsDown = StartingPoint.Value.Y < EndPoint.Value.Y;
 
                 if (lineIsDiagonal)
                 {
-                    if (lineIsHorizontal)
+                    if ((linePointsRight && linePointsDown) || (!linePointsRight && !linePointsDown))
                     {
-                        EndPoint = new(EndPoint.Value.X, StartingPoint.Value.Y + (EndPoint.Value.X - StartingPoint.Value.X));
+                        if (lineIsHorizontal)
+                        {
+                            EndPoint = new(EndPoint.Value.X, StartingPoint.Value.Y + (EndPoint.Value.X - StartingPoint.Value.X));
+                        }
+                        else
+                        {
+                            EndPoint = new(StartingPoint.Value.X + (EndPoint.Value.Y - StartingPoint.Value.Y), EndPoint.Value.Y);
+                        }
                     }
                     else
                     {
-                        EndPoint = new(StartingPoint.Value.X + (EndPoint.Value.Y - StartingPoint.Value.Y), EndPoint.Value.Y);
+                        if (lineIsHorizontal)
+                        {
+                            EndPoint = new(EndPoint.Value.X, StartingPoint.Value.Y - (EndPoint.Value.X - StartingPoint.Value.X));
+                        }
+                        else
+                        {
+                            EndPoint = new(StartingPoint.Value.X - (EndPoint.Value.Y - StartingPoint.Value.Y), EndPoint.Value.Y);
+                        }
                     }
-
+                    
                     DrawDiagonalLine(drawGraphics, drawBrush, StartingPoint.Value, EndPoint.Value, 1);
                 }
                 else
