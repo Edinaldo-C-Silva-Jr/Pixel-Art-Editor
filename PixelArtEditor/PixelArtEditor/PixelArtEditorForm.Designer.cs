@@ -505,14 +505,14 @@
             // 
             // OrdinalLineButton
             // 
-            OrdinalLineButton.Location = new Point(94, 59);
+            OrdinalLineButton.Location = new Point(45, 60);
             OrdinalLineButton.Name = "OrdinalLineButton";
             OrdinalLineButton.PreviewOnHold = true;
             OrdinalLineButton.PreviewOnMove = false;
             OrdinalLineButton.Size = new Size(40, 40);
             OrdinalLineButton.TabIndex = 29;
             OrdinalLineButton.Text = "8 Dir Line";
-            OrdinalLineButton.ToolValue = 7;
+            OrdinalLineButton.ToolValue = 3;
             OrdinalLineButton.UseBackgroundColor = false;
             OrdinalLineButton.UseClickLocation = true;
             OrdinalLineButton.UseImageSize = false;

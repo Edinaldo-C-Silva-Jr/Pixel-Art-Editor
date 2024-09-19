@@ -49,6 +49,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools
                 8 => new FreeLineTool(),
                 9 => new SolidRectangleTool(),
                 10 => new OutlineRectangleTool(),*/
+                3 => new OrdinalLineTool(),
                 2 => new CardinalLineTool(),
                 1 => new DitheringPenTool(),
                 _ => new PixelPenTool()
