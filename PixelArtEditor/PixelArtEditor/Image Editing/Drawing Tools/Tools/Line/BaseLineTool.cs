@@ -1,4 +1,5 @@
-﻿using PixelArtEditor.Image_Editing.Undo_Redo;
+﻿using PixelArtEditor.Extension_Methods;
+using PixelArtEditor.Image_Editing.Undo_Redo;
 using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
@@ -102,9 +103,18 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
 
         public override IUndoRedoCommand CreateUndoStep(Point drawingImageLocation)
         {
-            // Validating the line points.
+            // Validates the EndPoint to make sure it's within the image.
+            int endPointX = EndPoint!.Value.X;
+            endPointX = endPointX.ValidateMaximum(UneditedImage!.Width - 1);
+            endPointX = endPointX.ValidateMinimum(0);
+            int endPointY = EndPoint!.Value.Y;
+            endPointY = endPointY.ValidateMaximum(UneditedImage!.Height - 1);
+            endPointY = endPointY.ValidateMinimum(0);
+
             Point firstPoint = StartingPoint!.Value;
-            Point lastPoint = EndPoint!.Value;
+            Point lastPoint = new(endPointX, endPointY);
+
+            // Makes sure the first point is always smaller than the last point.
             (firstPoint.X, lastPoint.X) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.X, lastPoint.X);
             (firstPoint.Y, lastPoint.Y) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.Y, lastPoint.Y);
 

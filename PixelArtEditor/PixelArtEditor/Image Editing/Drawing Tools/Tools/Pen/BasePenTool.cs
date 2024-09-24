@@ -99,11 +99,11 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
         {
             if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
             {
-                // Preparing location data,.
+                // Preparing location data.
                 int pixelClickedX = toolParameters.ClickLocation.Value.X;
                 int pixelClickedY = toolParameters.ClickLocation.Value.Y;
 
-                // Updating undo location properties.
+                // Validating undo location properties.
                 LeftBoundary = LeftBoundary.ValidateMaximum(pixelClickedX);
                 LeftBoundary = LeftBoundary.ValidateMinimum(0);
                 RightBoundary = RightBoundary.ValidateMinimum(pixelClickedX);
