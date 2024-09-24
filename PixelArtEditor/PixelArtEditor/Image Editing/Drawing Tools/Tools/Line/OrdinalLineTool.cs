@@ -91,23 +91,81 @@
 
             if (endPoint.Y > beginPoint.Y)
             {
-                for (int i = 0; i < endPoint.Y - beginPoint.Y; i++)
+                for (int i = 0; i < endPoint.Y - beginPoint.Y + zoom; i += zoom)
                 {
-                    graphics.FillRectangle(brush, beginPoint.X + i, beginPoint.Y + i, 1, 1);
+                    graphics.FillRectangle(brush, beginPoint.X + i, beginPoint.Y + i, zoom, zoom);
                 }
             }
             else
             {
-                for (int i = 0; i < beginPoint.Y - endPoint.Y; i++)
+                for (int i = 0; i < beginPoint.Y - endPoint.Y + zoom; i += zoom)
                 {
-                    graphics.FillRectangle(brush, beginPoint.X + i, beginPoint.Y - i, 1, 1);
+                    graphics.FillRectangle(brush, beginPoint.X + i, beginPoint.Y - i, zoom, zoom);
                 }
             }
         }
 
         protected override void DrawLine(Graphics drawGraphics, SolidBrush drawBrush, int zoom)
         {
-            return;
+            if (StartingPoint.HasValue && EndPoint.HasValue)
+            {
+                // Calculates how much the mouse moved hozirontally and vertically.
+                int horizontalDifference = Math.Abs(EndPoint.Value.X - StartingPoint.Value.X);
+                int verticalDifference = Math.Abs(EndPoint.Value.Y - StartingPoint.Value.Y);
+
+                // Checks whether the line extends further horizontally or vertically.
+                bool lineIsHorizontal = horizontalDifference > verticalDifference;
+                // The line will be diagonal if the bigger difference is smaller than twice the smaller difference.
+                bool lineIsDiagonal = (lineIsHorizontal && horizontalDifference < 2 * verticalDifference) || (!lineIsHorizontal && verticalDifference < 2 * horizontalDifference);
+                // Defines the directions the line points towards.
+                bool linePointsRight = StartingPoint.Value.X < EndPoint.Value.X;
+                bool linePointsDown = StartingPoint.Value.Y < EndPoint.Value.Y;
+
+                // Creates new points and changes their location to match the zoom.
+                Point firstPoint = new(StartingPoint.Value.X * zoom, StartingPoint.Value.Y * zoom);
+                Point lastPoint = new(EndPoint.Value.X * zoom, EndPoint.Value.Y * zoom);
+
+                if (lineIsDiagonal)
+                {
+                    if ((linePointsRight && linePointsDown) || (!linePointsRight && !linePointsDown))
+                    {
+                        if (lineIsHorizontal)
+                        {
+                            lastPoint = new(lastPoint.X, firstPoint.Y + (lastPoint.X - firstPoint.X));
+                        }
+                        else
+                        {
+                            lastPoint = new(firstPoint.X + (lastPoint.Y - firstPoint.Y), lastPoint.Y);
+                        }
+                    }
+                    else
+                    {
+                        if (lineIsHorizontal)
+                        {
+                            lastPoint = new(lastPoint.X, firstPoint.Y - (lastPoint.X - firstPoint.X));
+                        }
+                        else
+                        {
+                            lastPoint = new(firstPoint.X - (lastPoint.Y - firstPoint.Y), lastPoint.Y);
+                        }
+                    }
+
+                    DrawDiagonalLine(drawGraphics, drawBrush, firstPoint, lastPoint, zoom);
+                }
+                else
+                {
+                    if (horizontalDifference > verticalDifference) // If the mouse moved further horizontally, draw a horizontal line...
+                    {
+                        (firstPoint.X, lastPoint.X) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.X, lastPoint.X);
+                        drawGraphics.FillRectangle(drawBrush, firstPoint.X, firstPoint.Y, lastPoint.X - firstPoint.X + zoom, zoom);
+                    }
+                    else // If it moved further vertically, draw a vertical line.
+                    {
+                        (firstPoint.Y, lastPoint.Y) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.Y, lastPoint.Y);
+                        drawGraphics.FillRectangle(drawBrush, firstPoint.X, firstPoint.Y, zoom, lastPoint.Y - firstPoint.Y + zoom);
+                    }
+                }
+            }
         }
     }
 }
