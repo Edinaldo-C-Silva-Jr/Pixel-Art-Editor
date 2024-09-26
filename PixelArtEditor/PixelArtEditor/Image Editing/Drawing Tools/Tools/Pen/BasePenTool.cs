@@ -104,14 +104,10 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
                 int pixelClickedY = toolParameters.ClickLocation.Value.Y;
 
                 // Validating undo location properties.
-                LeftBoundary = LeftBoundary.ValidateMaximum(pixelClickedX);
-                LeftBoundary = LeftBoundary.ValidateMinimum(0);
-                RightBoundary = RightBoundary.ValidateMinimum(pixelClickedX);
-                RightBoundary = RightBoundary.ValidateMaximum(UneditedImage!.Width - 1);
-                UpperBoundary = UpperBoundary.ValidateMaximum(pixelClickedY);
-                UpperBoundary = UpperBoundary.ValidateMinimum(0);
-                LowerBoundary = LowerBoundary.ValidateMinimum(pixelClickedY);
-                LowerBoundary = LowerBoundary.ValidateMaximum(UneditedImage!.Height - 1);
+                LeftBoundary = LeftBoundary.ValidateMaximum(pixelClickedX).ValidateMinimum(0);
+                RightBoundary = RightBoundary.ValidateMinimum(pixelClickedX).ValidateMaximum(UneditedImage!.Width - 1);
+                UpperBoundary = UpperBoundary.ValidateMaximum(pixelClickedY).ValidateMinimum(0);
+                LowerBoundary = LowerBoundary.ValidateMinimum(pixelClickedY).ValidateMaximum(UneditedImage!.Height - 1);
 
                 DrawPenPixel(DrawingCycleGraphics!, DrawingBrush!, toolParameters.ClickLocation.Value);
             }

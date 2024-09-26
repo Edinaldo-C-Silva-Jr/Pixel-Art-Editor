@@ -10,12 +10,12 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
         /// <summary>
         /// A copy of the Drawing Image before the drawing cycle started.
         /// </summary>
-        private Bitmap? UneditedImage { get; set; }
+        protected Bitmap? UneditedImage { get; private set; }
 
         /// <summary>
         /// A copy of the Drawing Image after the drawing cycle finishes.
         /// </summary>
-        private Bitmap? EditedImage { get; set; }
+        protected Bitmap? EditedImage { get; private set; }
         #endregion
 
         #region Drawing Properties
@@ -105,11 +105,9 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
         {
             // Validates the EndPoint to make sure it's within the image.
             int endPointX = EndPoint!.Value.X;
-            endPointX = endPointX.ValidateMaximum(UneditedImage!.Width - 1);
-            endPointX = endPointX.ValidateMinimum(0);
+            endPointX = endPointX.ValidateMaximum(UneditedImage!.Width - 1).ValidateMinimum(0);
             int endPointY = EndPoint!.Value.Y;
-            endPointY = endPointY.ValidateMaximum(UneditedImage!.Height - 1);
-            endPointY = endPointY.ValidateMinimum(0);
+            endPointY = endPointY.ValidateMaximum(UneditedImage!.Height - 1).ValidateMinimum(0);
 
             Point firstPoint = StartingPoint!.Value;
             Point lastPoint = new(endPointX, endPointY);
