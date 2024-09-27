@@ -487,14 +487,14 @@
             // 
             // FreeLineButton
             // 
-            FreeLineButton.Location = new Point(94, 105);
+            FreeLineButton.Location = new Point(85, 60);
             FreeLineButton.Name = "FreeLineButton";
             FreeLineButton.PreviewOnHold = true;
             FreeLineButton.PreviewOnMove = false;
             FreeLineButton.Size = new Size(40, 40);
             FreeLineButton.TabIndex = 30;
             FreeLineButton.Text = "Free Line";
-            FreeLineButton.ToolValue = 8;
+            FreeLineButton.ToolValue = 4;
             FreeLineButton.UseBackgroundColor = false;
             FreeLineButton.UseClickLocation = true;
             FreeLineButton.UseImageSize = false;
@@ -577,7 +577,7 @@
             // 
             // VerticalMirrorPenButton
             // 
-            VerticalMirrorPenButton.Location = new Point(140, 58);
+            VerticalMirrorPenButton.Location = new Point(230, 20);
             VerticalMirrorPenButton.Name = "VerticalMirrorPenButton";
             VerticalMirrorPenButton.PreviewOnHold = false;
             VerticalMirrorPenButton.PreviewOnMove = true;
