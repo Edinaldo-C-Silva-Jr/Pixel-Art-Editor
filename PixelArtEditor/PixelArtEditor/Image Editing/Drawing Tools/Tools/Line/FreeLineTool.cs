@@ -53,7 +53,7 @@
                 verticalIncrement = zoom;
             }
 
-            for (int i = 0; i < lineLength; i++)
+            for (int i = 0; i < lineLength + 1; i++)
             {
                 graphics.FillRectangle(brush, drawPoint.X, drawPoint.Y, zoom, zoom);
 
@@ -63,14 +63,14 @@
                 if (horizontalSubpixel >= zoom) // If the horizontal subpixel moves into or beyond the end of the current pixel...
                 {
                     // Increases the pixel location to the next one and removes it from the subpixel.
-                    drawPoint.X += xPixelIncrease;
+                    drawPoint.X += xPixelIncrease * zoom;
                     horizontalSubpixel -= zoom;
                 }
 
                 if (verticalSubpixel >= zoom) // If the vertical subpixel moves into or beyond the end of the current pixel...
                 {
                     // Increases the pixel location to the next one and removes it from the subpixel.
-                    drawPoint.Y += yPixelIncrease;
+                    drawPoint.Y += yPixelIncrease * zoom;
                     verticalSubpixel -= zoom;
                 }
             }
@@ -93,12 +93,26 @@
 
                 if (horizontalDistance > verticalDistance)
                 {
-                    ratioBetweenLines = Decimal.Divide(verticalDistance, horizontalDistance); // The ratio will be the smaller line divided by the bigger.
+                    if (horizontalDistance == 0 || verticalDistance == 0)
+                    {
+                        ratioBetweenLines = 0;
+                    }
+                    else
+                    {
+                        ratioBetweenLines = Decimal.Divide(verticalDistance, horizontalDistance); // The ratio will be the smaller line divided by the bigger.
+                    }
                     CalculateAndDrawLine(drawGraphics, drawBrush, StartingPoint.Value, 1, horizontalDistance, ratioBetweenLines, true); // Draws the line based on the bigger length.
                 }
                 else
                 {
-                    ratioBetweenLines = Decimal.Divide(horizontalDistance, verticalDistance);
+                    if (horizontalDistance == 0 || verticalDistance == 0)
+                    {
+                        ratioBetweenLines = 0;
+                    }
+                    else
+                    {
+                        ratioBetweenLines = Decimal.Divide(horizontalDistance, verticalDistance); // The ratio will be the smaller line divided by the bigger.
+                    }
                     CalculateAndDrawLine(drawGraphics, drawBrush, StartingPoint.Value, 1, verticalDistance, ratioBetweenLines, false);
                 }
             }
@@ -106,7 +120,47 @@
 
         protected override void DrawLine(Graphics drawGraphics, SolidBrush drawBrush, int zoom)
         {
-            return;
+            if (StartingPoint.HasValue && EndPoint.HasValue && UneditedImage is not null)
+            {
+                int horizontalDistance = Math.Abs(StartingPoint.Value.X - EndPoint.Value.X);
+                int verticalDistance = Math.Abs(StartingPoint.Value.Y - EndPoint.Value.Y);
+
+                // Defines the directions the line points towards.
+                LinePointsRight = StartingPoint!.Value.X < EndPoint!.Value.X;
+                LinePointsDown = StartingPoint!.Value.Y < EndPoint!.Value.Y;
+
+                // Creates new points and changes their location to match the zoom.
+                Point firstPoint = new(StartingPoint.Value.X * zoom, StartingPoint.Value.Y * zoom);
+
+                // The ratio between the horizontal and vertical distance of the starting and end point.
+                // This will always be a number between 0 and 1.
+                decimal ratioBetweenLines;
+
+                if (horizontalDistance > verticalDistance)
+                {
+                    if (horizontalDistance == 0 || verticalDistance == 0)
+                    {
+                        ratioBetweenLines = 0;
+                    }
+                    else
+                    {
+                        ratioBetweenLines = Decimal.Divide(verticalDistance, horizontalDistance); // The ratio will be the smaller line divided by the bigger.
+                    }
+                    CalculateAndDrawLine(drawGraphics, drawBrush, firstPoint, zoom, horizontalDistance, ratioBetweenLines, true); // Draws the line based on the bigger length.
+                }
+                else
+                {
+                    if (horizontalDistance == 0 || verticalDistance == 0)
+                    {
+                        ratioBetweenLines = 0;
+                    }
+                    else
+                    {
+                        ratioBetweenLines = Decimal.Divide(horizontalDistance, verticalDistance); // The ratio will be the smaller line divided by the bigger.
+                    }
+                    CalculateAndDrawLine(drawGraphics, drawBrush, firstPoint, zoom, verticalDistance, ratioBetweenLines, false);
+                }
+            }
         }
     }
 }
