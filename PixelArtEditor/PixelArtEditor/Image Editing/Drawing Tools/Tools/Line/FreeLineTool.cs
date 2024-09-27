@@ -18,6 +18,80 @@
         private bool LinePointsDown { get; set; }
         #endregion
 
+        protected override void DrawLine(Graphics drawGraphics, SolidBrush drawBrush)
+        {
+            if (StartingPoint.HasValue && EndPoint.HasValue && UneditedImage is not null)
+            {
+                int horizontalDistance = Math.Abs(StartingPoint.Value.X - EndPoint.Value.X);
+                int verticalDistance = Math.Abs(StartingPoint.Value.Y - EndPoint.Value.Y);
+
+                // Defines the directions the line points towards.
+                LinePointsRight = StartingPoint!.Value.X < EndPoint!.Value.X;
+                LinePointsDown = StartingPoint!.Value.Y < EndPoint!.Value.Y;
+
+                // The ratio between the horizontal and vertical distance of the starting and end point.
+                decimal lineDistanceRatio;
+
+                if (horizontalDistance > verticalDistance)
+                {
+                    lineDistanceRatio = GetRatioBetweenLines(verticalDistance, horizontalDistance);
+                    CalculateAndDrawLine(drawGraphics, drawBrush, StartingPoint.Value, 1, horizontalDistance, lineDistanceRatio, true);
+                }
+                else
+                {
+                    lineDistanceRatio = GetRatioBetweenLines(horizontalDistance, verticalDistance);
+                    CalculateAndDrawLine(drawGraphics, drawBrush, StartingPoint.Value, 1, verticalDistance, lineDistanceRatio, false);
+                }
+            }
+        }
+
+        protected override void DrawLine(Graphics drawGraphics, SolidBrush drawBrush, int zoom)
+        {
+            if (StartingPoint.HasValue && EndPoint.HasValue && UneditedImage is not null)
+            {
+                int horizontalDistance = Math.Abs(StartingPoint.Value.X - EndPoint.Value.X);
+                int verticalDistance = Math.Abs(StartingPoint.Value.Y - EndPoint.Value.Y);
+
+                // Defines the directions the line points towards.
+                LinePointsRight = StartingPoint!.Value.X < EndPoint!.Value.X;
+                LinePointsDown = StartingPoint!.Value.Y < EndPoint!.Value.Y;
+
+                // Creates a new point with a location that matches the zoom.
+                Point firstPoint = new(StartingPoint.Value.X * zoom, StartingPoint.Value.Y * zoom);
+
+                // The ratio between the horizontal and vertical distance of the starting and end point.
+                decimal lineDistanceRatio;
+
+                if (horizontalDistance > verticalDistance)
+                {
+                    lineDistanceRatio = GetRatioBetweenLines(verticalDistance, horizontalDistance);
+                    CalculateAndDrawLine(drawGraphics, drawBrush, firstPoint, zoom, horizontalDistance, lineDistanceRatio, true);
+                }
+                else
+                {
+                    lineDistanceRatio = GetRatioBetweenLines(horizontalDistance, verticalDistance);
+                    CalculateAndDrawLine(drawGraphics, drawBrush, firstPoint, zoom, verticalDistance, lineDistanceRatio, false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the ratio between the horizontal and vertical distance of the two points in the line.
+        /// The ratio is the smaller distance divided by the bigger, so the result is always between 0 and 1.
+        /// </summary>
+        /// <param name="smallerDistance">The smaller of the two distances.</param>
+        /// <param name="biggerDistance">The bigger of the two distances.</param>
+        /// <returns></returns>
+        private decimal GetRatioBetweenLines(int smallerDistance, int biggerDistance)
+        {
+            if (smallerDistance == 0 || biggerDistance == 0)
+            {
+                return 0;
+            }
+
+            return Decimal.Divide(smallerDistance + 1, biggerDistance + 1);
+        }
+
         /// <summary>
         /// Draws the line pixel by pixel.
         /// This is done by calculating when to shift the pixel position horizontally or vertically to draw the next pixel.
@@ -76,91 +150,5 @@
             }
         }
 
-        protected override void DrawLine(Graphics drawGraphics, SolidBrush drawBrush)
-        {
-            if (StartingPoint.HasValue && EndPoint.HasValue && UneditedImage is not null)
-            {
-                int horizontalDistance = Math.Abs(StartingPoint.Value.X - EndPoint.Value.X);
-                int verticalDistance = Math.Abs(StartingPoint.Value.Y - EndPoint.Value.Y);
-
-                // Defines the directions the line points towards.
-                LinePointsRight = StartingPoint!.Value.X < EndPoint!.Value.X;
-                LinePointsDown = StartingPoint!.Value.Y < EndPoint!.Value.Y;
-
-                // The ratio between the horizontal and vertical distance of the starting and end point.
-                // This will always be a number between 0 and 1.
-                decimal ratioBetweenLines;
-
-                if (horizontalDistance > verticalDistance)
-                {
-                    if (horizontalDistance == 0 || verticalDistance == 0)
-                    {
-                        ratioBetweenLines = 0;
-                    }
-                    else
-                    {
-                        ratioBetweenLines = Decimal.Divide(verticalDistance, horizontalDistance); // The ratio will be the smaller line divided by the bigger.
-                    }
-                    CalculateAndDrawLine(drawGraphics, drawBrush, StartingPoint.Value, 1, horizontalDistance, ratioBetweenLines, true); // Draws the line based on the bigger length.
-                }
-                else
-                {
-                    if (horizontalDistance == 0 || verticalDistance == 0)
-                    {
-                        ratioBetweenLines = 0;
-                    }
-                    else
-                    {
-                        ratioBetweenLines = Decimal.Divide(horizontalDistance, verticalDistance); // The ratio will be the smaller line divided by the bigger.
-                    }
-                    CalculateAndDrawLine(drawGraphics, drawBrush, StartingPoint.Value, 1, verticalDistance, ratioBetweenLines, false);
-                }
-            }
-        }
-
-        protected override void DrawLine(Graphics drawGraphics, SolidBrush drawBrush, int zoom)
-        {
-            if (StartingPoint.HasValue && EndPoint.HasValue && UneditedImage is not null)
-            {
-                int horizontalDistance = Math.Abs(StartingPoint.Value.X - EndPoint.Value.X);
-                int verticalDistance = Math.Abs(StartingPoint.Value.Y - EndPoint.Value.Y);
-
-                // Defines the directions the line points towards.
-                LinePointsRight = StartingPoint!.Value.X < EndPoint!.Value.X;
-                LinePointsDown = StartingPoint!.Value.Y < EndPoint!.Value.Y;
-
-                // Creates new points and changes their location to match the zoom.
-                Point firstPoint = new(StartingPoint.Value.X * zoom, StartingPoint.Value.Y * zoom);
-
-                // The ratio between the horizontal and vertical distance of the starting and end point.
-                // This will always be a number between 0 and 1.
-                decimal ratioBetweenLines;
-
-                if (horizontalDistance > verticalDistance)
-                {
-                    if (horizontalDistance == 0 || verticalDistance == 0)
-                    {
-                        ratioBetweenLines = 0;
-                    }
-                    else
-                    {
-                        ratioBetweenLines = Decimal.Divide(verticalDistance, horizontalDistance); // The ratio will be the smaller line divided by the bigger.
-                    }
-                    CalculateAndDrawLine(drawGraphics, drawBrush, firstPoint, zoom, horizontalDistance, ratioBetweenLines, true); // Draws the line based on the bigger length.
-                }
-                else
-                {
-                    if (horizontalDistance == 0 || verticalDistance == 0)
-                    {
-                        ratioBetweenLines = 0;
-                    }
-                    else
-                    {
-                        ratioBetweenLines = Decimal.Divide(horizontalDistance, verticalDistance); // The ratio will be the smaller line divided by the bigger.
-                    }
-                    CalculateAndDrawLine(drawGraphics, drawBrush, firstPoint, zoom, verticalDistance, ratioBetweenLines, false);
-                }
-            }
-        }
     }
 }
