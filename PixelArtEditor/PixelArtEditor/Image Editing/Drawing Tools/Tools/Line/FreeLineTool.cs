@@ -130,6 +130,7 @@
             for (int i = 0; i < lineLength + 1; i++)
             {
                 graphics.FillRectangle(brush, drawPoint.X, drawPoint.Y, zoom, zoom);
+                EndPoint = drawPoint;
 
                 horizontalSubpixel += horizontalIncrement;
                 verticalSubpixel += verticalIncrement;
@@ -146,6 +147,12 @@
                     // Increases the pixel location to the next one and removes it from the subpixel.
                     drawPoint.Y += yPixelIncrease * zoom;
                     verticalSubpixel -= zoom;
+                }
+
+                // If the draw point goes past any of the image's borders, stop drawing the line.
+                if (drawPoint.X > UneditedImage!.Width * zoom - 1 || drawPoint.X < 0 || drawPoint.Y > UneditedImage!.Height * zoom - 1 || drawPoint.Y < 0)
+                {
+                    break;
                 }
             }
         }

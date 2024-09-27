@@ -107,7 +107,7 @@
                     EndPoint = new(firstPoint.X + i, firstPoint.Y + i);
 
                     // If the last point reaches the right or bottom of the image, stop drawing the line.
-                    if (firstPoint.X + i == UneditedImage!.Height - 1 || firstPoint.Y + i == UneditedImage!.Width - 1)
+                    if (firstPoint.X + i == UneditedImage!.Width - 1 || firstPoint.Y + i == UneditedImage!.Height - 1)
                     {
                         break;
                     }
@@ -123,7 +123,7 @@
                     EndPoint = new(firstPoint.X + i, firstPoint.Y - i);
 
                     // If the last point reaches the right or top of the image, stop drawing the line.
-                    if (firstPoint.X + i == UneditedImage!.Height - 1 || firstPoint.Y - i == 0)
+                    if (firstPoint.X + i == UneditedImage!.Width - 1 || firstPoint.Y - i == 0)
                     {
                         break;
                     }
@@ -139,7 +139,7 @@
                     EndPoint = new(firstPoint.X - i, firstPoint.Y + i);
 
                     // If the last point reaches the left or bottom of the image, stop drawing the line.
-                    if (firstPoint.X - i == 0 || firstPoint.Y + i == UneditedImage!.Width - 1)
+                    if (firstPoint.X - i == 0 || firstPoint.Y + i == UneditedImage!.Height - 1)
                     {
                         break;
                     }
