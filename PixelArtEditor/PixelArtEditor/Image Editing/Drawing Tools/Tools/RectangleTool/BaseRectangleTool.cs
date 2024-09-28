@@ -1,4 +1,6 @@
-﻿using PixelArtEditor.Image_Editing.Undo_Redo;
+﻿using PixelArtEditor.Extension_Methods;
+using PixelArtEditor.Image_Editing.Undo_Redo;
+using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.RectangleTool
 {
@@ -89,7 +91,30 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.RectangleTool
 
         public override IUndoRedoCommand CreateUndoStep(Point drawingImageLocation)
         {
-            throw new NotImplementedException();
+            // Validates the EndPoint to make sure it's within the image.
+            int endPointX = EndPoint!.Value.X;
+            endPointX = endPointX.ValidateMaximum(UneditedImage!.Width - 1).ValidateMinimum(0);
+            int endPointY = EndPoint!.Value.Y;
+            endPointY = endPointY.ValidateMaximum(UneditedImage!.Height - 1).ValidateMinimum(0);
+
+            Point firstPoint = StartingPoint!.Value;
+            Point lastPoint = new(endPointX, endPointY);
+
+            // Makes sure the first point is always smaller than the last point.
+            (firstPoint.X, lastPoint.X) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.X, lastPoint.X);
+            (firstPoint.Y, lastPoint.Y) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.Y, lastPoint.Y);
+
+            // Getting only the edited portion of the images.
+            Rectangle editedArea = new(firstPoint.X, firstPoint.Y, lastPoint.X - firstPoint.X + 1, lastPoint.Y - firstPoint.Y + 1);
+            UneditedImage = UneditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
+            EditedImage = EditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
+
+            // Getting the location where the edits started.
+            Point editLocation = new(drawingImageLocation.X + firstPoint.X, drawingImageLocation.Y + firstPoint.Y);
+
+            RectangleCommand undoStep = new(new Bitmap(UneditedImage), new Bitmap(EditedImage), editLocation);
+            ClearProperties();
+            return undoStep;
         }
 
         protected void ClearProperties()
