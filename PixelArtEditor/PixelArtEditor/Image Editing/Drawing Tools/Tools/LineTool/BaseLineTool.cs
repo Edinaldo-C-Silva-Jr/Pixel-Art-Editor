@@ -4,6 +4,10 @@ using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool
 {
+    /// <summary>
+    /// A class to serve as a base for the Line type tools.
+    /// It implements the preview method, all drawing methods and the creation of an undo step.
+    /// </summary>
     public abstract class BaseLineTool : DrawingTool
     {
         #region Undo Properties
@@ -128,6 +132,10 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool
             return undoStep;
         }
 
+        /// <summary>
+        /// Clears the properties used after a drawing cycle.
+        /// This includes the starting and end points, the edited and unedited images, the graphics and the brush.
+        /// </summary>
         protected void ClearProperties()
         {
             UneditedImage?.Dispose();

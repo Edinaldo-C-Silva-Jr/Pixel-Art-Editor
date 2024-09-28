@@ -4,6 +4,10 @@ using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.RectangleTool
 {
+    /// <summary>
+    /// A class to serve as a base for the Rectangle type tools.
+    /// It implements the preview method, all drawing methods and the creation of an undo step.
+    /// </summary>
     public abstract class BaseRectangleTool : DrawingTool
     {
         #region Undo Properties
@@ -40,8 +44,21 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.RectangleTool
         private SolidBrush? DrawingBrush { get; set; }
         #endregion
 
+        /// <summary>
+        /// Draws a rectangle between the StartingPoint and Endpoint.
+        /// One point will be the top left vertice while the other will be the bottom right vertice.
+        /// </summary>
+        /// <param name="drawGraphics">The graphics for the image being drawn.</param>
+        /// <param name="drawBrush">The brush with the currently selected color.</param>
         protected abstract void DrawRectangle(Graphics drawGraphics, SolidBrush drawBrush);
 
+        /// <summary>
+        /// Draws a rectangle between the StartingPoint and Endpoint while applying zoom.
+        /// One point will be the top left vertice while the other will be the bottom right vertice.
+        /// </summary>
+        /// <param name="drawGraphics">The graphics for the image being drawn.</param>
+        /// <param name="drawBrush">The brush with the currently selected color.</param>
+        /// <param name="zoom">The size of each pixel in the image.</param>
         protected abstract void DrawRectangle(Graphics drawGraphics, SolidBrush drawBrush, int zoom);
 
         public override void PreviewTool(Graphics paintGraphics, Color drawingColor, OptionalToolParameters toolParameters)
@@ -117,6 +134,10 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.RectangleTool
             return undoStep;
         }
 
+        /// <summary>
+        /// Clears the properties used after a drawing cycle.
+        /// This includes the starting and end points, the edited and unedited images, the graphics and the brush.
+        /// </summary>
         protected void ClearProperties()
         {
             UneditedImage?.Dispose();
