@@ -45,7 +45,7 @@
                 // Gives the EndPoint the same Y position as the StartingPoint, so the line is horizontal.
                 EndPoint = new(EndPoint!.Value.X, StartingPoint!.Value.Y);
 
-                // Gets the coordinates so that the firstPointX is always the smaller value.
+                // Gets the coordinates so that the firstPoint X coordinate is always the smaller value.
                 (firstPoint.X, lastPoint.X) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.X, lastPoint.X);
                 graphics.FillRectangle(brush, firstPoint.X, firstPoint.Y, lastPoint.X - firstPoint.X + zoom, zoom);
             }
@@ -54,7 +54,7 @@
                 // Gives the EndPoint the same Y position as the StartingPoint, so the line is horizontal.
                 EndPoint = new(StartingPoint!.Value.X, EndPoint!.Value.Y);
 
-                // Gets the coordinates so that the firstPointX is always the smaller value.
+                // Gets the coordinates so that the firstPoint Y coordinate is always the smaller value.
                 (firstPoint.Y, lastPoint.Y) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.Y, lastPoint.Y);
                 graphics.FillRectangle(brush, firstPoint.X, firstPoint.Y, zoom, lastPoint.Y - firstPoint.Y + zoom);
             }

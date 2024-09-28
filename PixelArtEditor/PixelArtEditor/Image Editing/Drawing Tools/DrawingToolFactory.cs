@@ -1,5 +1,6 @@
 ﻿using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool;
 using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool;
+using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.RectangleTool;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools
 {
@@ -49,6 +50,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools
                 8 => new FreeLineTool(),
                 9 => new SolidRectangleTool(),
                 10 => new OutlineRectangleTool(),*/
+                5 => new SolidRectangleTool(),
                 4 => new FreeLineTool(),
                 3 => new OrdinalLineTool(),
                 2 => new CardinalLineTool(),

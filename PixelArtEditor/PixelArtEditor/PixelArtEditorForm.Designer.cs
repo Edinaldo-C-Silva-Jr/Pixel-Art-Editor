@@ -469,14 +469,14 @@
             // 
             // SolidRectangleButton
             // 
-            SolidRectangleButton.Location = new Point(140, 105);
+            SolidRectangleButton.Location = new Point(5, 105);
             SolidRectangleButton.Name = "SolidRectangleButton";
             SolidRectangleButton.PreviewOnHold = true;
             SolidRectangleButton.PreviewOnMove = false;
             SolidRectangleButton.Size = new Size(40, 40);
             SolidRectangleButton.TabIndex = 31;
             SolidRectangleButton.Text = "Rect";
-            SolidRectangleButton.ToolValue = 9;
+            SolidRectangleButton.ToolValue = 5;
             SolidRectangleButton.UseBackgroundColor = false;
             SolidRectangleButton.UseClickLocation = true;
             SolidRectangleButton.UseImageSize = false;
