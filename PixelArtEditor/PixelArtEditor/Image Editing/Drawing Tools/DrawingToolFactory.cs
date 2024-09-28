@@ -40,16 +40,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools
         {
             Tool = toolValue switch
             {
-                /*1 => new HorizontalMirrorPenTool(),
-                2 => new VerticalMirrorPenTool(),
-                3 => new FullMirrorPenTool(),
-                4 => new FourMirrorPenTool(),
-                5 => new EraserTool(),
-                6 => new CardinalLineTool(),
-                7 => new OrdinalLineTool(),
-                8 => new FreeLineTool(),
-                9 => new SolidRectangleTool(),
-                10 => new OutlineRectangleTool(),*/
+                6 => new OutlineRectangleTool(),
                 5 => new SolidRectangleTool(),
                 4 => new FreeLineTool(),
                 3 => new OrdinalLineTool(),

@@ -46,7 +46,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.RectangleTool
 
         public override void PreviewTool(Graphics paintGraphics, Color drawingColor, OptionalToolParameters toolParameters)
         {
-            if (StartingPoint.HasValue && toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
+            if (StartingPoint.HasValue && toolParameters.PixelSize.HasValue)
             {
                 using SolidBrush previewBrush = MakePreviewBrush(drawingColor);
                 DrawRectangle(paintGraphics, previewBrush, toolParameters.PixelSize.Value);

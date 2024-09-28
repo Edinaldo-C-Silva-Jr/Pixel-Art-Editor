@@ -418,6 +418,16 @@ namespace PixelArtEditor
 
             if (properties["ClickLocation"])
             {
+                if (mouseLocation.X < 0)
+                {
+                    mouseLocation.X -= Images.DrawingImageZoom;
+                }
+
+                if (mouseLocation.Y < 0)
+                {
+                    mouseLocation.Y -= Images.DrawingImageZoom;
+                }
+
                 Point drawLocation = new(mouseLocation.X / Images.DrawingImageZoom, mouseLocation.Y / Images.DrawingImageZoom);
                 toolParameters.ClickLocation = drawLocation;
             }

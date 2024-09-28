@@ -389,7 +389,7 @@
             FullMirrorPenButton.Size = new Size(40, 40);
             FullMirrorPenButton.TabIndex = 25;
             FullMirrorPenButton.Text = "Mir. Pen";
-            FullMirrorPenButton.ToolValue = 3;
+            FullMirrorPenButton.ToolValue = 9;
             FullMirrorPenButton.UseBackgroundColor = false;
             FullMirrorPenButton.UseClickLocation = true;
             FullMirrorPenButton.UseImageSize = true;
@@ -451,14 +451,14 @@
             // 
             // OutlineRectangleButton
             // 
-            OutlineRectangleButton.Location = new Point(230, 104);
+            OutlineRectangleButton.Location = new Point(45, 105);
             OutlineRectangleButton.Name = "OutlineRectangleButton";
             OutlineRectangleButton.PreviewOnHold = true;
             OutlineRectangleButton.PreviewOnMove = false;
             OutlineRectangleButton.Size = new Size(40, 40);
             OutlineRectangleButton.TabIndex = 32;
             OutlineRectangleButton.Text = "Out. Rect.";
-            OutlineRectangleButton.ToolValue = 10;
+            OutlineRectangleButton.ToolValue = 6;
             OutlineRectangleButton.UseBackgroundColor = false;
             OutlineRectangleButton.UseClickLocation = true;
             OutlineRectangleButton.UseImageSize = false;
@@ -548,7 +548,7 @@
             EraserButton.Size = new Size(40, 40);
             EraserButton.TabIndex = 27;
             EraserButton.Text = "Eraser";
-            EraserButton.ToolValue = 5;
+            EraserButton.ToolValue = 11;
             EraserButton.UseBackgroundColor = true;
             EraserButton.UseClickLocation = true;
             EraserButton.UseImageSize = false;
@@ -566,7 +566,7 @@
             FourMirrorPenButton.Size = new Size(40, 40);
             FourMirrorPenButton.TabIndex = 26;
             FourMirrorPenButton.Text = "4x Pen";
-            FourMirrorPenButton.ToolValue = 4;
+            FourMirrorPenButton.ToolValue = 10;
             FourMirrorPenButton.UseBackgroundColor = false;
             FourMirrorPenButton.UseClickLocation = true;
             FourMirrorPenButton.UseImageSize = true;
@@ -584,7 +584,7 @@
             VerticalMirrorPenButton.Size = new Size(40, 40);
             VerticalMirrorPenButton.TabIndex = 24;
             VerticalMirrorPenButton.Text = "U D Pen";
-            VerticalMirrorPenButton.ToolValue = 2;
+            VerticalMirrorPenButton.ToolValue = 8;
             VerticalMirrorPenButton.UseBackgroundColor = false;
             VerticalMirrorPenButton.UseClickLocation = true;
             VerticalMirrorPenButton.UseImageSize = true;
@@ -602,7 +602,7 @@
             HorizontalMirrorPenButton.Size = new Size(40, 40);
             HorizontalMirrorPenButton.TabIndex = 23;
             HorizontalMirrorPenButton.Text = "L R Pen";
-            HorizontalMirrorPenButton.ToolValue = 1;
+            HorizontalMirrorPenButton.ToolValue = 7;
             HorizontalMirrorPenButton.UseBackgroundColor = false;
             HorizontalMirrorPenButton.UseClickLocation = true;
             HorizontalMirrorPenButton.UseImageSize = true;
