@@ -2,7 +2,7 @@
 using PixelArtEditor.Image_Editing.Undo_Redo;
 using System.Drawing.Imaging;
 
-namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
+namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
 {
     /// <summary>
     /// A class to serve as a base for the Pen type tools.
@@ -79,7 +79,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
 
         public override void UseToolClick(Bitmap drawingImage, Color drawingColor, OptionalToolParameters toolParameters)
         {
-            if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
+            if (toolParameters.ClickLocation.HasValue)
             {
                 // Preparing undo properties.
                 UneditedImage = new(drawingImage);
@@ -97,7 +97,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
 
         public override void UseToolHold(OptionalToolParameters toolParameters)
         {
-            if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
+            if (toolParameters.ClickLocation.HasValue)
             {
                 // Preparing location data.
                 int pixelClickedX = toolParameters.ClickLocation.Value.X;

@@ -1,4 +1,4 @@
-﻿namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
+﻿namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool
 {
     /// <summary>
     /// A tool that freely draws a straight line by clicking and dragging.
@@ -156,6 +156,5 @@
                 }
             }
         }
-
     }
 }

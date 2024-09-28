@@ -1,6 +1,6 @@
 ﻿using PixelArtEditor.Image_Editing.Undo_Redo;
 
-namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
+namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool
 {
     /// <summary>
     /// A command that has the data and methods necessary to undo and redo actions made by Line type tools.

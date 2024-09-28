@@ -1,4 +1,4 @@
-﻿namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
+﻿namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
 {
     /// <summary>
     /// A Pen tool that draws a pixel in the location clicked on the image.

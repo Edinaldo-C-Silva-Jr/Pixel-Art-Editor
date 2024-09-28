@@ -1,5 +1,5 @@
-﻿using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen;
-using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line;
+﻿using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool;
+using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools
 {

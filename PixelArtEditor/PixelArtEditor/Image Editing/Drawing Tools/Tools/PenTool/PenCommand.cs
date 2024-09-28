@@ -1,6 +1,6 @@
 ﻿using PixelArtEditor.Image_Editing.Undo_Redo;
 
-namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Pen
+namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
 {
     /// <summary>
     /// A command that has the data and methods necessary to undo and redo actions made by Pen type tools.

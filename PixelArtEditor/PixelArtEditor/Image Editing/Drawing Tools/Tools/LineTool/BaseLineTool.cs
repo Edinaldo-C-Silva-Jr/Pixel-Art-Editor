@@ -2,7 +2,7 @@
 using PixelArtEditor.Image_Editing.Undo_Redo;
 using System.Drawing.Imaging;
 
-namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
+namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool
 {
     public abstract class BaseLineTool : DrawingTool
     {
@@ -57,7 +57,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
 
         public override void PreviewTool(Graphics paintGraphics, Color drawingColor, OptionalToolParameters toolParameters)
         {
-            if (StartingPoint.HasValue && toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
+            if (StartingPoint.HasValue && toolParameters.PixelSize.HasValue)
             {
                 using SolidBrush previewBrush = MakePreviewBrush(drawingColor);
                 DrawLine(paintGraphics, previewBrush, toolParameters.PixelSize.Value);
@@ -82,17 +82,16 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
 
         public override void UseToolHold(OptionalToolParameters toolParameters)
         {
-            if (StartingPoint.HasValue && toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
+            if (StartingPoint.HasValue && toolParameters.ClickLocation.HasValue)
             {
                 // Preparing drawing properties.
                 EndPoint = toolParameters.ClickLocation.Value;
             }
-            return;
         }
 
         public override void UseToolRelease(OptionalToolParameters toolParameters)
         {
-            if (StartingPoint.HasValue && toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
+            if (StartingPoint.HasValue && toolParameters.ClickLocation.HasValue)
             {
                 // Preparing drawing properties.
                 EndPoint = toolParameters.ClickLocation.Value;
@@ -131,6 +130,11 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.Line
 
         protected void ClearProperties()
         {
+            UneditedImage?.Dispose();
+            UneditedImage = null;
+            EditedImage?.Dispose();
+            EditedImage = null;
+
             StartingPoint = EndPoint = null;
 
             DrawingCycleGraphics?.Dispose();
