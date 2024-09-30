@@ -40,6 +40,8 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
         #endregion
 
         #region Drawing Properties
+        Point? PreviousPoint { get; set; }
+
         /// <summary>
         /// The Graphics object used for a drawing cycle.
         /// </summary>
@@ -68,6 +70,89 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
         /// <param name="zoom">The size of each pixel in the image.</param>
         protected abstract void DrawPenPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, int zoom);
 
+        protected void DrawLineBetweenPixels(Graphics drawGraphics, SolidBrush drawBrush, Point location)
+        {
+            if (PreviousPoint.HasValue && PreviousPoint != location)
+            {
+                int horizontalDistance = Math.Abs(PreviousPoint.Value.X - location.X);
+                int verticalDistance = Math.Abs(PreviousPoint.Value.Y - location.Y);
+
+                // Defines the directions the line points towards.
+                bool linePointsRight = PreviousPoint.Value.X < location.X;
+                bool linePointsDown = PreviousPoint.Value.Y < location.Y;
+
+                // The ratio between the horizontal and vertical distance of the starting and end point.
+                decimal lineDistanceRatio;
+
+                if (horizontalDistance > verticalDistance)
+                {
+                    lineDistanceRatio = DrawingCalculations.GetRatioBetweenDistances(verticalDistance, horizontalDistance);
+                    CalculateAndDrawLine(drawGraphics, drawBrush, horizontalDistance, lineDistanceRatio, true, linePointsRight, linePointsDown);
+                }
+                else
+                {
+                    lineDistanceRatio = DrawingCalculations.GetRatioBetweenDistances(horizontalDistance, verticalDistance);
+                    CalculateAndDrawLine(drawGraphics, drawBrush, verticalDistance, lineDistanceRatio, false, linePointsRight, linePointsDown);
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Draws the line pixel by pixel.
+        /// This is done by calculating when to shift the pixel position horizontally or vertically to draw the next pixel.
+        /// </summary>
+        /// <param name="graphics">The graphics to draw the pixel on.</param>
+        /// <param name="brush">The brush to use when drawing the pixel.</param>
+        /// <param name="drawPoint">The point where the next pixel will be drawn.</param>
+        /// <param name="zoom">The size of each pixel in the image.</param>
+        /// <param name="lineLength">The length of the line to be drawn. This should be the bigger distance between horizontal or vertical.</param>
+        /// <param name="lineRatio">The ratio between the horizontal and vertical distances of the line.</param>
+        /// <param name="horizontalLine">Whether the line will be predominantly horizontal or vertical.</param>
+        private void CalculateAndDrawLine(Graphics graphics, SolidBrush brush, int lineLength, decimal lineRatio, bool horizontalLine, bool rightLine, bool downLine)
+        {
+            // The line's current position inside each pixel. Defines when to shift to the next pixel.
+            decimal horizontalSubpixel = 0, verticalSubpixel = 0;
+
+            // Defines the amount of subpixels to increment in each iteration.
+            decimal horizontalIncrement = horizontalLine ? 1 : lineRatio; 
+            decimal verticalIncrement = horizontalLine ? lineRatio : 1;
+
+            // Defines whether each iteration will increase (+1) or decrease (-1) the point position, based on the line direction.
+            int xPixelIncrease = rightLine ? 1 : -1;
+            int yPixelIncrease = downLine ? 1 : -1;
+
+            Point drawPoint = PreviousPoint!.Value;
+
+            for (int i = 0; i < lineLength + 1; i++)
+            {
+                DrawPenPixel(graphics, brush, drawPoint);
+
+                horizontalSubpixel += horizontalIncrement;
+                verticalSubpixel += verticalIncrement;
+
+                if (horizontalSubpixel >= 1) // If the horizontal subpixel moves into or beyond the end of the current pixel...
+                {
+                    // Increases the pixel location to the next one and removes it from the subpixel.
+                    drawPoint.X += xPixelIncrease;
+                    horizontalSubpixel -= 1;
+                }
+
+                if (verticalSubpixel >= 1) // If the vertical subpixel moves into or beyond the end of the current pixel...
+                {
+                    // Increases the pixel location to the next one and removes it from the subpixel.
+                    drawPoint.Y += yPixelIncrease;
+                    verticalSubpixel -= 1;
+                }
+
+                // If the draw point goes past any of the image's borders, stop drawing the line.
+                if (drawPoint.X > UneditedImage!.Width - 1 || drawPoint.X < 0 || drawPoint.Y > UneditedImage!.Height - 1 || drawPoint.Y < 0)
+                {
+                    break;
+                }
+            }
+        }
+
         public override void PreviewTool(Graphics paintGraphics, Color pixelColor, OptionalToolParameters toolParameters)
         {
             if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
@@ -92,6 +177,8 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
                 DrawingBrush = new(drawingColor);
 
                 DrawPenPixel(DrawingCycleGraphics, DrawingBrush, toolParameters.ClickLocation.Value);
+
+                PreviousPoint = toolParameters.ClickLocation.Value;
             }
         }
 
@@ -109,7 +196,9 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
                 UpperBoundary = UpperBoundary.ValidateMaximum(pixelClickedY).ValidateMinimum(0);
                 LowerBoundary = LowerBoundary.ValidateMinimum(pixelClickedY).ValidateMaximum(UneditedImage!.Height - 1);
 
-                DrawPenPixel(DrawingCycleGraphics!, DrawingBrush!, toolParameters.ClickLocation.Value);
+                DrawLineBetweenPixels(DrawingCycleGraphics!, DrawingBrush!, toolParameters.ClickLocation.Value);
+
+                PreviousPoint = toolParameters.ClickLocation.Value;
             }
         }
 
@@ -124,7 +213,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
             Rectangle editedArea = new(LeftBoundary, UpperBoundary, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
             UneditedImage = UneditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
             EditedImage = EditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
-            
+
             // Getting the location where the edits started.
             Point editLocation = new(drawingImageLocation.X + LeftBoundary, drawingImageLocation.Y + UpperBoundary);
 
