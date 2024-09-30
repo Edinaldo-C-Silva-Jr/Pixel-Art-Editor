@@ -34,12 +34,12 @@
 
                 if (horizontalDistance > verticalDistance)
                 {
-                    lineDistanceRatio = GetRatioBetweenLines(verticalDistance, horizontalDistance);
+                    lineDistanceRatio = DrawingCalculations.GetRatioBetweenDistances(verticalDistance, horizontalDistance);
                     CalculateAndDrawLine(drawGraphics, drawBrush, StartingPoint.Value, 1, horizontalDistance, lineDistanceRatio, true);
                 }
                 else
                 {
-                    lineDistanceRatio = GetRatioBetweenLines(horizontalDistance, verticalDistance);
+                    lineDistanceRatio = DrawingCalculations.GetRatioBetweenDistances(horizontalDistance, verticalDistance);
                     CalculateAndDrawLine(drawGraphics, drawBrush, StartingPoint.Value, 1, verticalDistance, lineDistanceRatio, false);
                 }
             }
@@ -64,32 +64,15 @@
 
                 if (horizontalDistance > verticalDistance)
                 {
-                    lineDistanceRatio = GetRatioBetweenLines(verticalDistance, horizontalDistance);
+                    lineDistanceRatio = DrawingCalculations.GetRatioBetweenDistances(verticalDistance, horizontalDistance);
                     CalculateAndDrawLine(drawGraphics, drawBrush, firstPoint, zoom, horizontalDistance, lineDistanceRatio, true);
                 }
                 else
                 {
-                    lineDistanceRatio = GetRatioBetweenLines(horizontalDistance, verticalDistance);
+                    lineDistanceRatio = DrawingCalculations.GetRatioBetweenDistances(horizontalDistance, verticalDistance);
                     CalculateAndDrawLine(drawGraphics, drawBrush, firstPoint, zoom, verticalDistance, lineDistanceRatio, false);
                 }
             }
-        }
-
-        /// <summary>
-        /// Gets the ratio between the horizontal and vertical distance of the two points in the line.
-        /// The ratio is the smaller distance divided by the bigger, so the result is always between 0 and 1.
-        /// </summary>
-        /// <param name="smallerDistance">The smaller of the two distances.</param>
-        /// <param name="biggerDistance">The bigger of the two distances.</param>
-        /// <returns></returns>
-        private decimal GetRatioBetweenLines(int smallerDistance, int biggerDistance)
-        {
-            if (smallerDistance == 0 || biggerDistance == 0)
-            {
-                return 0;
-            }
-
-            return Decimal.Divide(smallerDistance + 1, biggerDistance + 1);
         }
 
         /// <summary>

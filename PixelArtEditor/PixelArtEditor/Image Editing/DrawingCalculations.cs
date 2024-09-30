@@ -37,6 +37,23 @@ namespace PixelArtEditor.Image_Editing
         }
 
         /// <summary>
+        /// Gets the ratio between the horizontal and vertical distance of the two points in the line.
+        /// The ratio is the smaller distance divided by the bigger, so the result is always between 0 and 1.
+        /// </summary>
+        /// <param name="smallerDistance">The smaller of the two distances.</param>
+        /// <param name="biggerDistance">The bigger of the two distances.</param>
+        /// <returns></returns>
+        public static decimal GetRatioBetweenDistances(int smallerDistance, int biggerDistance)
+        {
+            if (smallerDistance == 0 || biggerDistance == 0)
+            {
+                return 0;
+            }
+
+            return Decimal.Divide(smallerDistance + 1, biggerDistance + 1);
+        }
+
+        /// <summary>
         /// Calculates and returns the distance between two points in pixel sizes.
         /// This method accepts a single coordinate, which can be the X or Y coordinate of a Point.
         /// </summary>
