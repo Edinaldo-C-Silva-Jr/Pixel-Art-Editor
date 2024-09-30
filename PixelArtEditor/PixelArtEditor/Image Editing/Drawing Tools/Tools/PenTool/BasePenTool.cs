@@ -40,6 +40,9 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
         #endregion
 
         #region Drawing Properties
+        /// <summary>
+        /// The location of the previous pixel clicked.
+        /// </summary>
         Point? PreviousPoint { get; set; }
 
         /// <summary>
@@ -70,6 +73,12 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
         /// <param name="zoom">The size of each pixel in the image.</param>
         protected abstract void DrawPenPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, int zoom);
 
+        /// <summary>
+        /// Draws a line between the previously clicked point and the currently clicked point.
+        /// </summary>
+        /// <param name="drawGraphics">The graphics for the image being drawn.</param>
+        /// <param name="drawBrush">The brush with the currently selected color.</param>
+        /// <param name="location">The location of the mouse click inside the Drawing Box.</param>
         protected void DrawLineBetweenPixels(Graphics drawGraphics, SolidBrush drawBrush, Point location)
         {
             if (PreviousPoint.HasValue && PreviousPoint != location)
@@ -104,17 +113,18 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
         /// </summary>
         /// <param name="graphics">The graphics to draw the pixel on.</param>
         /// <param name="brush">The brush to use when drawing the pixel.</param>
-        /// <param name="drawPoint">The point where the next pixel will be drawn.</param>
-        /// <param name="zoom">The size of each pixel in the image.</param>
         /// <param name="lineLength">The length of the line to be drawn. This should be the bigger distance between horizontal or vertical.</param>
         /// <param name="lineRatio">The ratio between the horizontal and vertical distances of the line.</param>
         /// <param name="horizontalLine">Whether the line will be predominantly horizontal or vertical.</param>
+        /// <param name="rightLine">Defines if the line is pointing to the right or left.</param>
+        /// <param name="downLine">Defines if the line is pointing down or up.</param>
         private void CalculateAndDrawLine(Graphics graphics, SolidBrush brush, int lineLength, decimal lineRatio, bool horizontalLine, bool rightLine, bool downLine)
         {
             // The line's current position inside each pixel. Defines when to shift to the next pixel.
             decimal horizontalSubpixel = 0, verticalSubpixel = 0;
 
             // Defines the amount of subpixels to increment in each iteration.
+            // The longer direction of the line will increment a full pixel, while the shorter direction will be the line ratio.
             decimal horizontalIncrement = horizontalLine ? 1 : lineRatio; 
             decimal verticalIncrement = horizontalLine ? lineRatio : 1;
 
@@ -234,6 +244,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
             EditedImage?.Dispose();
             EditedImage = null;
 
+            PreviousPoint = null;
             DrawingCycleGraphics?.Dispose();
             DrawingCycleGraphics = null;
             DrawingBrush?.Dispose();

@@ -90,25 +90,15 @@
         {
             // The line's current position inside each pixel. Defines when to shift to the next pixel.
             decimal horizontalSubpixel = 0, verticalSubpixel = 0;
+
             // Defines the amount of subpixels to increment in each iteration.
-            decimal horizontalIncrement, verticalIncrement;
+            // The longer direction of the line will increment a full pixel, while the shorter direction will be the line ratio.
+            decimal horizontalIncrement = horizontalLine ? zoom : lineRatio * zoom;
+            decimal verticalIncrement = horizontalLine ? lineRatio * zoom : zoom;
 
             // Defines whether each iteration will increase (+1) or decrease (-1) the point position, based on the line direction.
             int xPixelIncrease = LinePointsRight ? 1 : -1;
             int yPixelIncrease = LinePointsDown ? 1 : -1;
-
-            if (horizontalLine) // If the line is predominantly horizontal...
-            {
-                // The horizontal pixel will always be full, while the vertical will depend on the ratio.
-                horizontalIncrement = zoom;
-                verticalIncrement = zoom * lineRatio;
-            }
-            else // Otherwise...
-            {
-                // The vertical pixel will always be full, while the horizontal will depend on the ratio.
-                horizontalIncrement = zoom * lineRatio;
-                verticalIncrement = zoom;
-            }
 
             for (int i = 0; i < lineLength + 1; i++)
             {
