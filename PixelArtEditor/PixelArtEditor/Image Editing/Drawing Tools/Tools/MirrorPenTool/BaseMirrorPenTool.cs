@@ -1,14 +1,11 @@
 ﻿using PixelArtEditor.Extension_Methods;
+using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool;
 using PixelArtEditor.Image_Editing.Undo_Redo;
 using System.Drawing.Imaging;
 
-namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
+namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
 {
-    /// <summary>
-    /// A class to serve as a base for the Pen type tools.
-    /// It implements the preview method, all drawing methods and the creation of an undo step.
-    /// </summary>
-    public abstract class BasePenTool : DrawingTool
+    public abstract class BaseMirrorPenTool : DrawingTool
     {
         #region Undo Properties
         /// <summary>
@@ -57,21 +54,25 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
         #endregion
 
         /// <summary>
-        /// Draws a single pixel.
+        /// Draws a mirrored pixel.
+        /// This will be a pixel in the click location, as well as another pixel mirrored in the image.
         /// </summary>
         /// <param name="drawGraphics">The graphics for the image being drawn.</param>
         /// <param name="drawBrush">The brush with the currently selected color.</param>
         /// <param name="location">The location of the mouse click inside the Drawing Box.</param>
-        protected abstract void DrawPenPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location);
+        /// <param name="imageSize">The size of the image being drawn on.</param>
+        protected abstract void DrawMirrorPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, Size imageSize);
 
         /// <summary>
-        /// Draws a single pixel while applying zoom, filling the pixel where the mouse clicked.
+        /// Draws a mirrored pixel while applying zoom, filling the pixel where the mouse clicked.
+        /// This will be a pixel in the click location, as well as another pixel mirrored in the image.
         /// </summary>
         /// <param name="drawGraphics">The graphics for the image being drawn.</param>
         /// <param name="drawBrush">The brush with the currently selected color.</param>
         /// <param name="location">The location of the mouse click inside the Drawing Box.</param>
+        /// <param name="imageSize">The size of the image being drawn on.</param>
         /// <param name="zoom">The size of each pixel in the image.</param>
-        protected abstract void DrawPenPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, int zoom);
+        protected abstract void DrawMirrorPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, Size imageSize, int zoom);
 
         /// <summary>
         /// Draws a line between the previously clicked point and the currently clicked point.
@@ -79,7 +80,8 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
         /// <param name="drawGraphics">The graphics for the image being drawn.</param>
         /// <param name="drawBrush">The brush with the currently selected color.</param>
         /// <param name="location">The location of the mouse click inside the Drawing Box.</param>
-        protected void DrawLineBetweenPixels(Graphics drawGraphics, SolidBrush drawBrush, Point location)
+        /// <param name="imageSize">The size of the image being drawn on.</param>
+        protected void DrawLineBetweenPixels(Graphics drawGraphics, SolidBrush drawBrush, Point location, Size imageSize)
         {
             if (PreviousPoint.HasValue && PreviousPoint != location)
             {
@@ -96,12 +98,12 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
                 if (horizontalDistance > verticalDistance)
                 {
                     lineDistanceRatio = DrawingCalculations.GetRatioBetweenDistances(verticalDistance, horizontalDistance);
-                    CalculateAndDrawLine(drawGraphics, drawBrush, horizontalDistance, lineDistanceRatio, true, linePointsRight, linePointsDown);
+                    CalculateAndDrawLine(drawGraphics, drawBrush, imageSize, horizontalDistance, lineDistanceRatio, true, linePointsRight, linePointsDown);
                 }
                 else
                 {
                     lineDistanceRatio = DrawingCalculations.GetRatioBetweenDistances(horizontalDistance, verticalDistance);
-                    CalculateAndDrawLine(drawGraphics, drawBrush, verticalDistance, lineDistanceRatio, false, linePointsRight, linePointsDown);
+                    CalculateAndDrawLine(drawGraphics, drawBrush, imageSize, verticalDistance, lineDistanceRatio, false, linePointsRight, linePointsDown);
                 }
 
             }
@@ -113,19 +115,20 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
         /// </summary>
         /// <param name="graphics">The graphics to draw the pixel on.</param>
         /// <param name="brush">The brush to use when drawing the pixel.</param>
+        /// <param name="imageSize">The size of the image being drawn on.</param>
         /// <param name="lineLength">The length of the line to be drawn. This should be the bigger distance between horizontal or vertical.</param>
         /// <param name="lineRatio">The ratio between the horizontal and vertical distances of the line.</param>
         /// <param name="horizontalLine">Whether the line will be predominantly horizontal or vertical.</param>
         /// <param name="rightLine">Defines if the line is pointing to the right or left.</param>
         /// <param name="downLine">Defines if the line is pointing down or up.</param>
-        private void CalculateAndDrawLine(Graphics graphics, SolidBrush brush, int lineLength, decimal lineRatio, bool horizontalLine, bool rightLine, bool downLine)
+        private void CalculateAndDrawLine(Graphics graphics, SolidBrush brush, Size imageSize, int lineLength, decimal lineRatio, bool horizontalLine, bool rightLine, bool downLine)
         {
             // The line's current position inside each pixel. Defines when to shift to the next pixel.
             decimal horizontalSubpixel = 0, verticalSubpixel = 0;
 
             // Defines the amount of subpixels to increment in each iteration.
             // The longer direction of the line will increment a full pixel, while the shorter direction will be the line ratio.
-            decimal horizontalIncrement = horizontalLine ? 1 : lineRatio; 
+            decimal horizontalIncrement = horizontalLine ? 1 : lineRatio;
             decimal verticalIncrement = horizontalLine ? lineRatio : 1;
 
             // Defines whether each iteration will increase (+1) or decrease (-1) the point position, based on the line direction.
@@ -136,7 +139,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
 
             for (int i = 0; i < lineLength + 1; i++)
             {
-                DrawPenPixel(graphics, brush, drawPoint);
+                DrawMirrorPixel(graphics, brush, drawPoint, imageSize);
 
                 horizontalSubpixel += horizontalIncrement;
                 verticalSubpixel += verticalIncrement;
@@ -159,16 +162,16 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
 
         public override void PreviewTool(Graphics paintGraphics, Color pixelColor, OptionalToolParameters toolParameters)
         {
-            if (toolParameters.ClickLocation.HasValue && toolParameters.PixelSize.HasValue)
+            if (toolParameters.ClickLocation.HasValue && toolParameters.ImageSize.HasValue && toolParameters.PixelSize.HasValue)
             {
                 using SolidBrush previewBrush = MakePreviewBrush(pixelColor);
-                DrawPenPixel(paintGraphics, previewBrush, toolParameters.ClickLocation.Value, toolParameters.PixelSize.Value);
+                DrawMirrorPixel(paintGraphics, previewBrush, toolParameters.ClickLocation.Value, toolParameters.ImageSize.Value, toolParameters.PixelSize.Value);
             }
         }
 
         public override void UseToolClick(Bitmap drawingImage, Color drawingColor, OptionalToolParameters toolParameters)
         {
-            if (toolParameters.ClickLocation.HasValue)
+            if (toolParameters.ClickLocation.HasValue && toolParameters.ImageSize.HasValue)
             {
                 // Preparing undo properties.
                 UneditedImage = new(drawingImage);
@@ -180,7 +183,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
                 DrawingCycleGraphics = Graphics.FromImage(drawingImage);
                 DrawingBrush = new(drawingColor);
 
-                DrawPenPixel(DrawingCycleGraphics, DrawingBrush, toolParameters.ClickLocation.Value);
+                DrawMirrorPixel(DrawingCycleGraphics, DrawingBrush, toolParameters.ClickLocation.Value, toolParameters.ImageSize.Value);
 
                 PreviousPoint = toolParameters.ClickLocation.Value;
             }
@@ -188,7 +191,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
 
         public override void UseToolHold(OptionalToolParameters toolParameters)
         {
-            if (toolParameters.ClickLocation.HasValue)
+            if (toolParameters.ClickLocation.HasValue && toolParameters.ImageSize.HasValue)
             {
                 // Preparing location data.
                 int pixelClickedX = toolParameters.ClickLocation.Value.X;
@@ -200,7 +203,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
                 UpperBoundary = UpperBoundary.ValidateMaximum(pixelClickedY).ValidateMinimum(0);
                 LowerBoundary = LowerBoundary.ValidateMinimum(pixelClickedY).ValidateMaximum(UneditedImage!.Height - 1);
 
-                DrawLineBetweenPixels(DrawingCycleGraphics!, DrawingBrush!, toolParameters.ClickLocation.Value);
+                DrawLineBetweenPixels(DrawingCycleGraphics!, DrawingBrush!, toolParameters.ClickLocation.Value, toolParameters.ImageSize.Value);
 
                 PreviousPoint = toolParameters.ClickLocation.Value;
             }

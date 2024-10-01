@@ -595,7 +595,7 @@
             // 
             // HorizontalMirrorPenButton
             // 
-            HorizontalMirrorPenButton.Location = new Point(186, 15);
+            HorizontalMirrorPenButton.Location = new Point(85, 15);
             HorizontalMirrorPenButton.Name = "HorizontalMirrorPenButton";
             HorizontalMirrorPenButton.PreviewOnHold = false;
             HorizontalMirrorPenButton.PreviewOnMove = true;

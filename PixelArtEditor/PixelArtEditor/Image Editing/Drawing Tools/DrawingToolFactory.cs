@@ -1,6 +1,7 @@
 ﻿using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool;
 using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool;
 using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.RectangleTool;
+using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools
 {
@@ -40,6 +41,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools
         {
             Tool = toolValue switch
             {
+                7 => new HorizontalMirrorPenTool(),
                 6 => new OutlineRectangleTool(),
                 5 => new SolidRectangleTool(),
                 4 => new FreeLineTool(),
