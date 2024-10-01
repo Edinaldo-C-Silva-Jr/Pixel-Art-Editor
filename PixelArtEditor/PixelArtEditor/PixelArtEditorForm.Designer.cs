@@ -382,7 +382,7 @@
             // 
             // FullMirrorPenButton
             // 
-            FullMirrorPenButton.Location = new Point(186, 65);
+            FullMirrorPenButton.Location = new Point(165, 15);
             FullMirrorPenButton.Name = "FullMirrorPenButton";
             FullMirrorPenButton.PreviewOnHold = false;
             FullMirrorPenButton.PreviewOnMove = true;
@@ -559,7 +559,7 @@
             // 
             // FourMirrorPenButton
             // 
-            FourMirrorPenButton.Location = new Point(184, 104);
+            FourMirrorPenButton.Location = new Point(205, 15);
             FourMirrorPenButton.Name = "FourMirrorPenButton";
             FourMirrorPenButton.PreviewOnHold = false;
             FourMirrorPenButton.PreviewOnMove = true;
@@ -577,7 +577,7 @@
             // 
             // VerticalMirrorPenButton
             // 
-            VerticalMirrorPenButton.Location = new Point(230, 20);
+            VerticalMirrorPenButton.Location = new Point(125, 15);
             VerticalMirrorPenButton.Name = "VerticalMirrorPenButton";
             VerticalMirrorPenButton.PreviewOnHold = false;
             VerticalMirrorPenButton.PreviewOnMove = true;

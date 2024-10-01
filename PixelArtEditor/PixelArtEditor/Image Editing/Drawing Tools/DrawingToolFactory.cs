@@ -8,7 +8,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools
     /// <summary>
     /// A Factory that generates Drawing Tools.
     /// </summary>
-    internal class DrawingToolFactory
+    public class DrawingToolFactory
     {
         /// <summary>
         /// The currently generated tool. It is stored to be reused throughout the application for as long as no new tool is selected.
@@ -41,6 +41,9 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools
         {
             Tool = toolValue switch
             {
+                10 => new FourMirrorPenTool(),
+                9 => new FullMirrorPenTool(),
+                8 => new VerticalMirrorPenTool(),
                 7 => new HorizontalMirrorPenTool(),
                 6 => new OutlineRectangleTool(),
                 5 => new SolidRectangleTool(),
