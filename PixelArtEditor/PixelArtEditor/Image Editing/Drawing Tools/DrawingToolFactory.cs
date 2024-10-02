@@ -2,6 +2,7 @@
 using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool;
 using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.RectangleTool;
 using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool;
+using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.OtherTools;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools
 {
@@ -41,6 +42,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools
         {
             Tool = toolValue switch
             {
+                11 => new EraserTool(),
                 10 => new FourMirrorPenTool(),
                 9 => new FullMirrorPenTool(),
                 8 => new VerticalMirrorPenTool(),

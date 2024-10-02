@@ -541,7 +541,7 @@
             // 
             // EraserButton
             // 
-            EraserButton.Location = new Point(230, 58);
+            EraserButton.Location = new Point(205, 60);
             EraserButton.Name = "EraserButton";
             EraserButton.PreviewOnHold = false;
             EraserButton.PreviewOnMove = true;
