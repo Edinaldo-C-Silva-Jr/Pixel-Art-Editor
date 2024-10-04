@@ -11,29 +11,29 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
         /// <summary>
         /// A copy of the Drawing Image before the drawing cycle started.
         /// </summary>
-        private Bitmap? UneditedImage { get; set; }
+        protected Bitmap? UneditedImage { get; set; }
 
         /// <summary>
         /// A copy of the Drawing Image after the drawing cycle finishes.
         /// </summary>
-        private Bitmap? EditedImage { get; set; }
+        protected Bitmap? EditedImage { get; set; }
 
         /// <summary>
         /// The left boundary of the mouse movement, which is the furthest pixel on the left that was drawn on.
         /// </summary>
-        private int LeftBoundary { get; set; } = 0;
+        protected int LeftBoundary { get; set; } = 0;
         /// <summary>
         /// The right boundary of the mouse movement, which is the furthest pixel on the right that was drawn on.
         /// </summary>
-        private int RightBoundary { get; set; } = 0;
+        protected int RightBoundary { get; set; } = 0;
         /// <summary>
         /// The upper boundary of the mouse movement, which is the furthest pixel on the top that was drawn on.
         /// </summary>
-        private int UpperBoundary { get; set; } = 0;
+        protected int UpperBoundary { get; set; } = 0;
         /// <summary>
         /// The lower boundary of the mouse movement, which is the furthest pixel on the bottom that was drawn on.
         /// </summary>
-        private int LowerBoundary { get; set; } = 0;
+        protected int LowerBoundary { get; set; } = 0;
         #endregion
 
         #region Drawing Properties
@@ -160,6 +160,14 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
             }
         }
 
+        protected virtual void ValidateMirrorLocation(int clickX, int clickY, Size imageSize)
+        {
+            LeftBoundary = LeftBoundary.ValidateMaximum(clickX).ValidateMinimum(0);
+            RightBoundary = RightBoundary.ValidateMinimum(clickX).ValidateMaximum(imageSize.Width - 1);
+            UpperBoundary = UpperBoundary.ValidateMaximum(clickY).ValidateMinimum(0);
+            LowerBoundary = LowerBoundary.ValidateMinimum(clickY).ValidateMaximum(imageSize.Height - 1);
+        }
+
         public override void PreviewTool(Graphics paintGraphics, Color pixelColor, OptionalToolParameters toolParameters)
         {
             if (toolParameters.ClickLocation.HasValue && toolParameters.ImageSize.HasValue && toolParameters.PixelSize.HasValue)
@@ -197,11 +205,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
                 int pixelClickedX = toolParameters.ClickLocation.Value.X;
                 int pixelClickedY = toolParameters.ClickLocation.Value.Y;
 
-                // Validating undo location properties.
-                LeftBoundary = LeftBoundary.ValidateMaximum(pixelClickedX).ValidateMinimum(0);
-                RightBoundary = RightBoundary.ValidateMinimum(pixelClickedX).ValidateMaximum(UneditedImage!.Width - 1);
-                UpperBoundary = UpperBoundary.ValidateMaximum(pixelClickedY).ValidateMinimum(0);
-                LowerBoundary = LowerBoundary.ValidateMinimum(pixelClickedY).ValidateMaximum(UneditedImage!.Height - 1);
+                ValidateMirrorLocation(pixelClickedX, pixelClickedY, toolParameters.ImageSize.Value);
 
                 DrawLineBetweenPixels(DrawingCycleGraphics!, DrawingBrush!, toolParameters.ClickLocation.Value, toolParameters.ImageSize.Value);
 
