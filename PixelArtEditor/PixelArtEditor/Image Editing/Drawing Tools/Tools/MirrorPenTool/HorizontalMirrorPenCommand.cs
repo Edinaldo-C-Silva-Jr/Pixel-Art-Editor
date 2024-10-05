@@ -8,12 +8,12 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
     public class HorizontalMirrorPenCommand : IUndoRedoCommand
     {
         /// <summary>
-        /// The left side portion of the drawing image that was drawn on, before it was edited.
+        /// The left portion of the drawing image that was drawn on, before it was edited.
         /// </summary>
         private Bitmap LeftUneditedImage { get; }
 
         /// <summary>
-        /// The right side portion of the drawing image that was drawn on, before it was edited.
+        /// The right portion of the drawing image that was drawn on, before it was edited.
         /// </summary>
         private Bitmap RightUneditedImage { get; }
 
@@ -33,7 +33,8 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
         /// <param name="leftOldImage">The left part of the image that was drawn on, before it was edited.</param>
         /// <param name="rightOldImage">The right part of the image that was drawn on, before it was edited.</param>
         /// <param name="newImage">The part of the image that was drawn on, after it was edited.</param>
-        /// <param name="locations">The two locations of the original image where the edits were done.</param>
+        /// <param name="leftLocation">The location where the left edit was done.</param>
+        /// <param name="rightLocation">The location where the right edit was done.</param>
         public HorizontalMirrorPenCommand(Bitmap leftOldImage, Bitmap rightOldImage, Bitmap newImage, Point leftLocation, Point rightLocation)
         {
             LeftUneditedImage = leftOldImage;
