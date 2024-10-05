@@ -6,12 +6,22 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
 {
     public class HorizontalMirrorPenTool : BaseMirrorPenTool
     {
+        protected override void ValidateInitialLocation(int clickX, int clickY, Size imageSize)
+        {
+            if (clickX > (imageSize.Width - 1) / 2)
+            {
+                clickX = imageSize.Width - clickX - 1;
+            }
+            base.ValidateInitialLocation(clickX, clickY, imageSize);
+        }
+
         protected override void ValidateMirrorLocation(int clickX, int clickY, Size imageSize)
         {
-            LeftBoundary = LeftBoundary.ValidateMaximum(clickX).ValidateMinimum(0);
-            RightBoundary = RightBoundary.ValidateMinimum(clickX).ValidateMaximum((imageSize.Width - 1) / 2);
-            UpperBoundary = UpperBoundary.ValidateMaximum(clickY).ValidateMinimum(0);
-            LowerBoundary = LowerBoundary.ValidateMinimum(clickY).ValidateMaximum(imageSize.Height - 1);
+            if (clickX > (imageSize.Width - 1) / 2)
+            {
+                clickX = imageSize.Width - clickX - 1;
+            }
+            base.ValidateMirrorLocation(clickX, clickY, imageSize);
         }
 
         protected override void DrawMirrorPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, Size imageSize)
