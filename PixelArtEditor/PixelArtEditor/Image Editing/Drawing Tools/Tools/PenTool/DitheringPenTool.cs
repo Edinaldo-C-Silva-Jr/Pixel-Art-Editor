@@ -27,7 +27,7 @@
             }
         }
 
-        public override void UseToolClick(Bitmap drawingImage, Color drawingColor, OptionalToolParameters toolParameters)
+        public override void UseToolClick(Bitmap drawingImage, Color drawingColor, DrawingToolParameters toolParameters)
         {
             if (toolParameters.ClickLocation.HasValue)
             {
@@ -37,7 +37,7 @@
             }
         }
 
-        public override void UseToolRelease(OptionalToolParameters toolParameters)
+        public override void UseToolRelease(DrawingToolParameters toolParameters)
         {
             Parity = null;
             base.UseToolRelease(toolParameters);

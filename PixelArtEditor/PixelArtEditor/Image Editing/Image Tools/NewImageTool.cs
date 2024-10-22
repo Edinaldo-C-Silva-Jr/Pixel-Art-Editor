@@ -6,13 +6,10 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
     {
         Bitmap? UneditedImage { get; set; }
 
-        Color? BackgroundColor { get; set; }
-
-        public override void UseTool(Bitmap OriginalImage, OptionalImageParameters parameters)
+        public override void UseTool(Bitmap OriginalImage, ImageToolParameters parameters)
         {
             if (parameters.BackgroundColor.HasValue)
             {
-                BackgroundColor = parameters.BackgroundColor.Value;
                 UneditedImage = new(OriginalImage);
 
                 using Graphics imageGraphics = Graphics.FromImage(OriginalImage);
@@ -20,18 +17,24 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
             }
         }
 
-        public override IUndoRedoCommand CreateUndoStep(Point drawingImageLocation)
+        public override IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
         {
-            NewImageCommand command = new(new(UneditedImage!), BackgroundColor!.Value);
-            ClearProperties();
-            return command;
+            if (parameters.BackgroundColor.HasValue)
+            {
+                NewImageCommand command = new(new(UneditedImage!), parameters.BackgroundColor.Value);
+                ClearProperties();
+                return command;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         protected void ClearProperties()
         {
             UneditedImage?.Dispose();
             UneditedImage = null;
-            BackgroundColor = null;
         }
     }
 }

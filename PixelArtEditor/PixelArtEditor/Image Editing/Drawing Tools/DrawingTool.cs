@@ -40,14 +40,14 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools
             return new SolidBrush(previewColor);
         }
 
-        abstract public void PreviewTool(Graphics paintGraphics, Color drawingColor, OptionalToolParameters toolParameters);
+        abstract public void PreviewTool(Graphics paintGraphics, Color drawingColor, DrawingToolParameters parameters);
 
-        abstract public void UseToolClick(Bitmap drawingImage, Color drawingColor, OptionalToolParameters toolParameters);
+        abstract public void UseToolClick(Bitmap drawingImage, Color drawingColor, DrawingToolParameters parameters);
 
-        abstract public void UseToolHold(OptionalToolParameters toolParameters);
+        abstract public void UseToolHold(DrawingToolParameters parameters);
 
-        abstract public void UseToolRelease(OptionalToolParameters toolParameters);
+        abstract public void UseToolRelease(DrawingToolParameters parameters);
 
-        abstract public IUndoRedoCommand CreateUndoStep(Point drawingImageLocation);
+        abstract public IUndoRedoCommand? CreateUndoStep(UndoParameters parameters);
     }
 }

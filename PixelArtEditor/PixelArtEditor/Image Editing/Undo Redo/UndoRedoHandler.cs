@@ -31,10 +31,13 @@
         /// It also clears the stack of Redo commands, since the new change is the latest.
         /// </summary>
         /// <param name="command">The command created for a new change made in the editor.</param>
-        public void TrackChange(IUndoRedoCommand command)
+        public void TrackChange(IUndoRedoCommand? command)
         {
-            UndoCommands.Push(command);
-            RedoCommands.Clear();
+            if (command is not null)
+            {
+                UndoCommands.Push(command);
+                RedoCommands.Clear();
+            }
         }
 
         /// <summary>

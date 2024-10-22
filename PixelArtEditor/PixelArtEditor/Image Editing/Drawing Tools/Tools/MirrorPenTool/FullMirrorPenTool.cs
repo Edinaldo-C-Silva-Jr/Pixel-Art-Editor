@@ -27,26 +27,33 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
             drawGraphics.FillRectangle(drawBrush, pixelPoint.X, pixelPoint.Y, zoom, zoom);
         }
 
-        public override IUndoRedoCommand CreateUndoStep(Point drawingImageLocation)
+        public override IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
         {
-            // Getting only the edited portion of the images.
-            // For a four mirror pen, the Edited Image only considers the top left quarter of the image, since the other quarters are the same image mirrored.
-            Rectangle editedArea = new(LeftBoundary, UpperBoundary, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
-            using Bitmap topLeftUneditedImage = UneditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
-            EditedImage = EditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
+            if (parameters.DrawingImageLocation.HasValue && UneditedImage is not null && EditedImage is not null)
+            {
+                // Getting only the edited portion of the images.
+                // For a four mirror pen, the Edited Image only considers the top left quarter of the image, since the other quarters are the same image mirrored.
+                Rectangle editedArea = new(LeftBoundary, UpperBoundary, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
+                using Bitmap topLeftUneditedImage = UneditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
+                EditedImage = EditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
 
-            // Mirrors the area horizontally and vertically, to get the unedited portion of the image on the bottom right quarter.
-            editedArea = new(UneditedImage.Width - RightBoundary - 1, UneditedImage.Height - LowerBoundary - 1, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
-            using Bitmap lowerRightUneditedImage = UneditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
+                // Mirrors the area horizontally and vertically, to get the unedited portion of the image on the bottom right quarter.
+                editedArea = new(UneditedImage.Width - RightBoundary - 1, UneditedImage.Height - LowerBoundary - 1, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
+                using Bitmap lowerRightUneditedImage = UneditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
 
-            // Getting the locations where the edits started.
-            // These are the four locations that represent the top left pixel of all edited areas.
-            Point topLeftEditLocation = new(drawingImageLocation.X + LeftBoundary, drawingImageLocation.Y + UpperBoundary);
-            Point lowerRightEditLocation = new(drawingImageLocation.X + UneditedImage!.Width - RightBoundary - 1, drawingImageLocation.Y + UneditedImage.Height - LowerBoundary - 1);
+                // Getting the locations where the edits started.
+                // These are the four locations that represent the top left pixel of all edited areas.
+                Point topLeftEditLocation = new(parameters.DrawingImageLocation.Value.X + LeftBoundary, parameters.DrawingImageLocation.Value.Y + UpperBoundary);
+                Point lowerRightEditLocation = new(parameters.DrawingImageLocation.Value.X + UneditedImage.Width - RightBoundary - 1, parameters.DrawingImageLocation.Value.Y + UneditedImage.Height - LowerBoundary - 1);
 
-            FullMirrorPenCommand undoStep = new(new Bitmap(topLeftUneditedImage), new Bitmap(lowerRightUneditedImage), new(EditedImage), topLeftEditLocation, lowerRightEditLocation);
-            ClearProperties();
-            return undoStep;
+                FullMirrorPenCommand undoStep = new(new Bitmap(topLeftUneditedImage), new Bitmap(lowerRightUneditedImage), new(EditedImage), topLeftEditLocation, lowerRightEditLocation);
+                ClearProperties();
+                return undoStep;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

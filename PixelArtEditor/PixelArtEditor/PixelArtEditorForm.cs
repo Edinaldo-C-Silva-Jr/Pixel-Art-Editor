@@ -322,13 +322,18 @@ namespace PixelArtEditor
         private void ClearOriginalImage()
         {
             NewImageTool tool = new();
-            OptionalImageParameters parameters = new()
+            ImageToolParameters imageParameters = new()
             {
                 BackgroundColor = BackgroundColorTable.GetCurrentColor()
             };
 
-            tool.UseTool(Images.EditOriginalImage, parameters);
-            UndoHandler.TrackChange(tool.CreateUndoStep(new(0,0)));
+            UndoParameters undoParameters = new UndoParameters()
+            {
+                BackgroundColor = BackgroundColorTable.GetCurrentColor()
+            };
+
+            tool.UseTool(Images.EditOriginalImage, imageParameters);
+            UndoHandler.TrackChange(tool.CreateUndoStep(undoParameters));
             Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
         }
@@ -359,7 +364,7 @@ namespace PixelArtEditor
             // Uses the Drawing Tool in the Drawing Box.
             if (MouseOnDrawingBox.HasValue)
             {
-                OptionalToolParameters toolParameters = GetToolParameters(MouseOnDrawingBox.Value);
+                DrawingToolParameters toolParameters = GetToolParameters(MouseOnDrawingBox.Value);
 
                 DrawHandler.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
             }
@@ -415,9 +420,9 @@ namespace PixelArtEditor
         /// </summary>
         /// <param name="mouseLocation">The mouse's current location.</param>
         /// <returns>An OptionalToolParameters object containing the parameters relevant for the current tool.</returns>
-        private OptionalToolParameters GetToolParameters(Point mouseLocation)
+        private DrawingToolParameters GetToolParameters(Point mouseLocation)
         {
-            OptionalToolParameters toolParameters = new();
+            DrawingToolParameters toolParameters = new();
 
             Dictionary<string, bool> properties = DrawingToolButtonPanel.CheckToolDrawProperties();
 
@@ -473,7 +478,7 @@ namespace PixelArtEditor
 
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
 
-                OptionalToolParameters toolParameters = GetToolParameters(e.Location);
+                DrawingToolParameters toolParameters = GetToolParameters(e.Location);
 
                 DrawHandler.DrawClick(ToolFactory.GetTool(), Images.EditDrawingImage, paletteColor, toolParameters);
                 
@@ -512,7 +517,7 @@ namespace PixelArtEditor
 
             if (e.Button == MouseButtons.Left)
             {
-                OptionalToolParameters toolParameters = GetToolParameters(e.Location);
+                DrawingToolParameters toolParameters = GetToolParameters(e.Location);
 
                 DrawHandler.DrawHold(ToolFactory.GetTool(), toolParameters); 
                 
@@ -542,11 +547,15 @@ namespace PixelArtEditor
         {
             if (e.Button == MouseButtons.Left)
             {
-                OptionalToolParameters toolParameters = GetToolParameters(e.Location);
+                DrawingToolParameters toolParameters = GetToolParameters(e.Location);
+                UndoParameters undoParameters = new()
+                {
+                    DrawingImageLocation = Images.DrawingLocation
+                };
 
                 DrawHandler.DrawRelease(ToolFactory.GetTool(), toolParameters);
 
-                UndoHandler.TrackChange(DrawHandler.CreateUndoStepFromTool((IUndoRedoCreator)ToolFactory.GetTool(), Images.DrawingLocation));
+                UndoHandler.TrackChange(DrawHandler.CreateUndoStepFromTool((IUndoRedoCreator)ToolFactory.GetTool(), undoParameters));
 
                 SetUndoRedoButtonAvailability();
 

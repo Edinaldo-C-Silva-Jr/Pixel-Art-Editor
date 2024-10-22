@@ -3,7 +3,7 @@
     /// <summary>
     /// The optional parameters for Drawing Tools that not all of them will need to use.
     /// </summary>
-    public class OptionalToolParameters
+    public class DrawingToolParameters
     {
         /// <summary>
         /// The size of each pixel in the image.

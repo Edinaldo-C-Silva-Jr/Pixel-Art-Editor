@@ -21,7 +21,7 @@ namespace PixelArtEditor.Image_Editing
         /// <param name="image">The image that is being drawn on.</param>
         /// <param name="pixelColor">The color to be used by the tool.</param>
         /// <param name="toolParameters">The parameters to be used by the current tool.</param>
-        public void DrawClick(IDrawingTool tool, Bitmap image, Color pixelColor, OptionalToolParameters toolParameters)
+        public void DrawClick(IDrawingTool tool, Bitmap image, Color pixelColor, DrawingToolParameters toolParameters)
         {
             MouseClicked = true;
 
@@ -34,7 +34,7 @@ namespace PixelArtEditor.Image_Editing
         /// </summary>
         /// <param name="tool">The drawing tool to be used.</param>
         /// <param name="toolParameters">The parameters to be used by the current tool.</param>
-        public void DrawHold(IDrawingTool tool, OptionalToolParameters toolParameters)
+        public void DrawHold(IDrawingTool tool, DrawingToolParameters toolParameters)
         {
             // Only executes the drawing tool if the mouse has been clicked in the control before, to ensure the graphics and brush objects are valid.
             if (!MouseClicked)
@@ -51,7 +51,7 @@ namespace PixelArtEditor.Image_Editing
         /// </summary>
         /// <param name="tool">The drawing tool to be used.</param>
         /// <param name="toolParameters">The parameters to be used by the current tool.</param>
-        public void DrawRelease(IDrawingTool tool, OptionalToolParameters toolParameters)
+        public void DrawRelease(IDrawingTool tool, DrawingToolParameters toolParameters)
         {
             // Only executes the drawing tool if the mouse has been clicked in the control before, to ensure the graphics and brush objects are valid.
             if (!MouseClicked)
@@ -71,7 +71,7 @@ namespace PixelArtEditor.Image_Editing
         /// <param name="paintGraphics">The graphics from the Paint event in the DrawingBox.</param>
         /// <param name="pixelColor">The color to be used by the tool.</param>
         /// <param name="toolParameters">The parameters to be used by the current tool.</param>
-        public void PreviewTool(IDrawingTool tool, Graphics paintGraphics, Color pixelColor, OptionalToolParameters toolParameters)
+        public void PreviewTool(IDrawingTool tool, Graphics paintGraphics, Color pixelColor, DrawingToolParameters toolParameters)
         {
             // Changes the CompositingMode to SourceCopy to make the preview brush solid.
             paintGraphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
@@ -88,9 +88,9 @@ namespace PixelArtEditor.Image_Editing
         /// <param name="tool">The Drawing Tool used in the concluded drawing cycle.</param>
         /// <param name="drawingImageLocation">The location from where the Drawing Image was taken, to keep track of where the undo should be done.</param>
         /// <returns></returns>
-        public IUndoRedoCommand CreateUndoStepFromTool(IUndoRedoCreator tool, Point drawingImageLocation)
+        public IUndoRedoCommand? CreateUndoStepFromTool(IUndoRedoCreator tool, UndoParameters parameters)
         {
-            return tool.CreateUndoStep(drawingImageLocation);
+            return tool.CreateUndoStep(parameters);
         }
     }
 }

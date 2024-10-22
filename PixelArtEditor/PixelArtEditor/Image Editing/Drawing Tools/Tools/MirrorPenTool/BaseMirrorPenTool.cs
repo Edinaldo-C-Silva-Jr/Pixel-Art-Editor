@@ -174,7 +174,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
             LowerBoundary = LowerBoundary.ValidateMinimum(clickY).ValidateMaximum(imageSize.Height - 1);
         }
 
-        public override void PreviewTool(Graphics paintGraphics, Color pixelColor, OptionalToolParameters toolParameters)
+        public override void PreviewTool(Graphics paintGraphics, Color pixelColor, DrawingToolParameters toolParameters)
         {
             if (toolParameters.ClickLocation.HasValue && toolParameters.ImageSize.HasValue && toolParameters.PixelSize.HasValue)
             {
@@ -183,7 +183,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
             }
         }
 
-        public override void UseToolClick(Bitmap drawingImage, Color drawingColor, OptionalToolParameters toolParameters)
+        public override void UseToolClick(Bitmap drawingImage, Color drawingColor, DrawingToolParameters toolParameters)
         {
             if (toolParameters.ClickLocation.HasValue && toolParameters.ImageSize.HasValue)
             {
@@ -202,7 +202,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
             }
         }
 
-        public override void UseToolHold(OptionalToolParameters toolParameters)
+        public override void UseToolHold(DrawingToolParameters toolParameters)
         {
             if (toolParameters.ClickLocation.HasValue && toolParameters.ImageSize.HasValue)
             {
@@ -218,24 +218,31 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
             }
         }
 
-        public override void UseToolRelease(OptionalToolParameters toolParameters)
+        public override void UseToolRelease(DrawingToolParameters toolParameters)
         {
             return;
         }
 
-        public override IUndoRedoCommand CreateUndoStep(Point drawingImageLocation)
+        public override IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
         {
-            // Getting only the edited portion of the images.
-            Rectangle editedArea = new(LeftBoundary, UpperBoundary, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
-            UneditedImage = UneditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
-            EditedImage = EditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
+            if (parameters.DrawingImageLocation.HasValue && UneditedImage is not null && EditedImage is not null)
+            {
+                // Getting only the edited portion of the images.
+                Rectangle editedArea = new(LeftBoundary, UpperBoundary, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
+                UneditedImage = UneditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
+                EditedImage = EditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
 
-            // Getting the location where the edits started.
-            Point editLocation = new(drawingImageLocation.X + LeftBoundary, drawingImageLocation.Y + UpperBoundary);
+                // Getting the location where the edits started.
+                Point editLocation = new(parameters.DrawingImageLocation.Value.X + LeftBoundary, parameters.DrawingImageLocation.Value.Y + UpperBoundary);
 
-            PenCommand undoStep = new(new Bitmap(UneditedImage), new Bitmap(EditedImage), editLocation);
-            ClearProperties();
-            return undoStep;
+                PenCommand undoStep = new(new Bitmap(UneditedImage), new Bitmap(EditedImage), editLocation);
+                ClearProperties();
+                return undoStep;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>

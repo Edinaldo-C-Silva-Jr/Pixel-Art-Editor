@@ -59,7 +59,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool
         /// <param name="zoom">The size of each pixel in the image.</param>
         protected abstract void DrawLine(Graphics drawGraphics, SolidBrush drawBrush, int zoom);
 
-        public override void PreviewTool(Graphics paintGraphics, Color drawingColor, OptionalToolParameters toolParameters)
+        public override void PreviewTool(Graphics paintGraphics, Color drawingColor, DrawingToolParameters toolParameters)
         {
             if (StartingPoint.HasValue && toolParameters.PixelSize.HasValue)
             {
@@ -68,7 +68,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool
             }
         }
 
-        public override void UseToolClick(Bitmap drawingImage, Color drawingColor, OptionalToolParameters toolParameters)
+        public override void UseToolClick(Bitmap drawingImage, Color drawingColor, DrawingToolParameters toolParameters)
         {
             if (toolParameters.ClickLocation.HasValue)
             {
@@ -84,7 +84,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool
             }
         }
 
-        public override void UseToolHold(OptionalToolParameters toolParameters)
+        public override void UseToolHold(DrawingToolParameters toolParameters)
         {
             if (StartingPoint.HasValue && toolParameters.ClickLocation.HasValue)
             {
@@ -93,7 +93,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool
             }
         }
 
-        public override void UseToolRelease(OptionalToolParameters toolParameters)
+        public override void UseToolRelease(DrawingToolParameters toolParameters)
         {
             if (StartingPoint.HasValue && toolParameters.ClickLocation.HasValue)
             {
@@ -104,32 +104,39 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.LineTool
             }
         }
 
-        public override IUndoRedoCommand CreateUndoStep(Point drawingImageLocation)
+        public override IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
         {
-            // Validates the EndPoint to make sure it's within the image.
-            int endPointX = EndPoint!.Value.X;
-            endPointX = endPointX.ValidateMaximum(UneditedImage!.Width - 1).ValidateMinimum(0);
-            int endPointY = EndPoint!.Value.Y;
-            endPointY = endPointY.ValidateMaximum(UneditedImage!.Height - 1).ValidateMinimum(0);
+            if (parameters.DrawingImageLocation.HasValue && StartingPoint.HasValue && EndPoint.HasValue && UneditedImage is not null && EditedImage is not null)
+            {
+                // Validates the EndPoint to make sure it's within the image.
+                int endPointX = EndPoint.Value.X;
+                endPointX = endPointX.ValidateMaximum(UneditedImage.Width - 1).ValidateMinimum(0);
+                int endPointY = EndPoint.Value.Y;
+                endPointY = endPointY.ValidateMaximum(UneditedImage.Height - 1).ValidateMinimum(0);
 
-            Point firstPoint = StartingPoint!.Value;
-            Point lastPoint = new(endPointX, endPointY);
+                Point firstPoint = StartingPoint.Value;
+                Point lastPoint = new(endPointX, endPointY);
 
-            // Makes sure the first point is always smaller than the last point.
-            (firstPoint.X, lastPoint.X) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.X, lastPoint.X);
-            (firstPoint.Y, lastPoint.Y) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.Y, lastPoint.Y);
+                // Makes sure the first point is always smaller than the last point.
+                (firstPoint.X, lastPoint.X) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.X, lastPoint.X);
+                (firstPoint.Y, lastPoint.Y) = DrawingCalculations.OrderCoordinatesWithSmallerFirst(firstPoint.Y, lastPoint.Y);
 
-            // Getting only the edited portion of the images.
-            Rectangle editedArea = new(firstPoint.X, firstPoint.Y, lastPoint.X - firstPoint.X + 1, lastPoint.Y - firstPoint.Y + 1);
-            UneditedImage = UneditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
-            EditedImage = EditedImage!.Clone(editedArea, PixelFormat.Format32bppArgb);
+                // Getting only the edited portion of the images.
+                Rectangle editedArea = new(firstPoint.X, firstPoint.Y, lastPoint.X - firstPoint.X + 1, lastPoint.Y - firstPoint.Y + 1);
+                UneditedImage = UneditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
+                EditedImage = EditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
 
-            // Getting the location where the edits started.
-            Point editLocation = new(drawingImageLocation.X + firstPoint.X, drawingImageLocation.Y + firstPoint.Y);
+                // Getting the location where the edits started.
+                Point editLocation = new(parameters.DrawingImageLocation.Value.X + firstPoint.X, parameters.DrawingImageLocation.Value.Y + firstPoint.Y);
 
-            LineCommand undoStep = new(new Bitmap(UneditedImage), new Bitmap(EditedImage), editLocation);
-            ClearProperties();
-            return undoStep;
+                LineCommand undoStep = new(new Bitmap(UneditedImage), new Bitmap(EditedImage), editLocation);
+                ClearProperties();
+                return undoStep;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
