@@ -129,28 +129,6 @@ namespace PixelArtEditor.Files
         }
 
         /// <summary>
-        /// Creates a blank new image with the current size values and the defined color and transparency.
-        /// </summary>s
-        /// <param name="backgroundColor">The color used for the image's background.</param>
-        /// <param name="transparent">Defines whether the image will have a transparent background or not.</param>
-        public void CreateNewBlankImage(Color backgroundColor, bool transparent)
-        {
-            // Creates the image and fills its background with the desired color.
-            EditOriginalImage?.Dispose();
-            EditOriginalImage = new(OriginalImageSize.Width, OriginalImageSize.Height);
-            using Graphics imageFiller = Graphics.FromImage(EditOriginalImage);
-            imageFiller.Clear(backgroundColor);
-
-            // Changes transparency, if applicable.
-            if (transparent)
-            {
-                EditOriginalImage.MakeTransparent(backgroundColor);
-            }
-
-            CreateNewDisplayOriginalImage();
-        }
-
-        /// <summary>
         /// Replaces the Original Image with a new one, while maintaining the image's size.
         /// </summary>
         /// <param name="newOriginalImage">The new image that will be set in place of the current Original Image.</param>

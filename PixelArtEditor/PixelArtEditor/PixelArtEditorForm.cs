@@ -3,6 +3,7 @@ using PixelArtEditor.Files;
 using PixelArtEditor.Grids;
 using PixelArtEditor.Image_Editing;
 using PixelArtEditor.Image_Editing.Drawing_Tools;
+using PixelArtEditor.Image_Editing.Image_Tools;
 using PixelArtEditor.Image_Editing.Undo_Redo;
 
 namespace PixelArtEditor
@@ -76,7 +77,7 @@ namespace PixelArtEditor
             // Initializes the Drawing and Viewing Boxes.
             SetViewingSizeValues();
             SetDrawingSizeValues();
-            CreateNewImageForBoxes();
+            SetNewImageOnBoxes();
 
             ReorganizeControls();
         }
@@ -168,7 +169,7 @@ namespace PixelArtEditor
         /// </summary>
         private void ViewPixelSizeNumberBar_ValueChanged(object sender, EventArgs e)
         {
-            ViewPixelSizeNumberBox.Value = ViewPixelSizeNumberBar.Value;
+            ViewPixelSizeNumberBox.Value = ViewPixelSizeNumberBar.Value; // Syncs both NumberBox and NumberBar.
         }
 
         /// <summary>
@@ -247,7 +248,7 @@ namespace PixelArtEditor
         /// </summary>
         private void DrawPixelSizeNumberBar_ValueChanged(object sender, EventArgs e)
         {
-            DrawPixelSizeNumberBox.Value = DrawPixelSizeNumberBar.Value;
+            DrawPixelSizeNumberBox.Value = DrawPixelSizeNumberBar.Value; // Syncs both NumberBox and NumberBar.
         }
 
         /// <summary>
@@ -303,28 +304,32 @@ namespace PixelArtEditor
         /// </summary>
         private void SetNewImageButton_Click(object sender, EventArgs e)
         {
-            CreateNewImageForBoxes();
+            SetNewImageOnBoxes();
         }
 
         /// <summary>
         /// Creates a new image for both the Viewing Box and the Drawing Box.
         /// </summary>
-        private void CreateNewImageForBoxes()
+        private void SetNewImageOnBoxes()
         {
-            CreateImageForViewingBox();
+            ClearOriginalImage();
             SetImageOnDrawingBox(new Point(0, 0));
         }
 
         /// <summary>
-        /// Creates a new blank image for the Viewing Box, using the current background color and transparency value.
+        /// Uses the NewImageTool to clear the Original Image.
         /// </summary>
-        private void CreateImageForViewingBox()
+        private void ClearOriginalImage()
         {
-            // Gets the color and transparency values.
-            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
-            bool transparent = TransparencyCheckBox.Checked;
+            NewImageTool tool = new();
+            OptionalImageParameters parameters = new()
+            {
+                BackgroundColor = BackgroundColorTable.GetCurrentColor()
+            };
 
-            Images.CreateNewBlankImage(backgroundColor, transparent);
+            tool.UseTool(Images.EditOriginalImage, parameters);
+            UndoHandler.TrackChange(tool.CreateUndoStep(new(0,0)));
+            Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
         }
 

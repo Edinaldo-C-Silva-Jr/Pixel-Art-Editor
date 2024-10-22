@@ -17,8 +17,6 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
 
                 using Graphics imageGraphics = Graphics.FromImage(OriginalImage);
                 imageGraphics.Clear(parameters.BackgroundColor.Value);
-
-                CreateUndoStep(new(0,0));
             }
         }
 
