@@ -4,7 +4,7 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
 {
     public class NewImageTool : BaseImageTool
     {
-        Bitmap? UneditedImage { get; set; }
+        private Bitmap? UneditedImage { get; set; }
 
         public override void UseTool(Bitmap OriginalImage, ImageToolParameters parameters)
         {
@@ -19,9 +19,9 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
 
         public override IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
         {
-            if (parameters.BackgroundColor.HasValue)
+            if (parameters.BackgroundColor.HasValue && UneditedImage is not null)
             {
-                NewImageCommand command = new(new(UneditedImage!), parameters.BackgroundColor.Value);
+                NewImageCommand command = new(new(UneditedImage), parameters.BackgroundColor.Value);
                 ClearProperties();
                 return command;
             }
