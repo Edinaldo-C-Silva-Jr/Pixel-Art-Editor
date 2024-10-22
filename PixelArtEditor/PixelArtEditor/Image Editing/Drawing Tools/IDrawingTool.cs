@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// An interface that defines the methods used by the Drawing Tools.
+    /// These tools are used to draw onto the Drawing Image.
     /// </summary>
     public interface IDrawingTool
     {

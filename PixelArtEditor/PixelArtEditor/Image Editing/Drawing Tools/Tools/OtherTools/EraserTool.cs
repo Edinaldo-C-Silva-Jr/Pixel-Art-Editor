@@ -136,7 +136,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.OtherTools
 
                 // Makes the eraser a white square with a black outline.
                 paintGraphics.FillRectangle(Brushes.Black, location.X * zoom, location.Y * zoom, zoom, zoom);
-                paintGraphics.FillRectangle(Brushes.Black, location.X * zoom + 1, location.Y * zoom + 1, zoom - 2, zoom - 2);
+                paintGraphics.FillRectangle(Brushes.White, location.X * zoom + 1, location.Y * zoom + 1, zoom - 2, zoom - 2);
             }
         }
 
