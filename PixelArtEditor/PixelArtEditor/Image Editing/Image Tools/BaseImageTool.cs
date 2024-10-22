@@ -2,10 +2,10 @@
 
 namespace PixelArtEditor.Image_Editing.Image_Tools
 {
-    public abstract class ImageTool : IOriginalImageTool, IUndoRedoCreator
+    public abstract class BaseImageTool : IOriginalImageTool, IUndoRedoCreator
     {
+        public abstract void UseTool(Bitmap OriginalImage, OptionalImageParameters parameters);
+        
         public abstract IUndoRedoCommand CreateUndoStep(Point drawingImageLocation);
-
-        public abstract void UseTool(Bitmap OriginalImage);
     }
 }

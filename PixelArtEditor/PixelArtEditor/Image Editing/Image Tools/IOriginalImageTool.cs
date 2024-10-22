@@ -10,6 +10,6 @@
         /// Implementes the function of the current tool.
         /// </summary>
         /// <param name="OriginalImage">The original image, that will be affected by the tool.</param>
-        public void UseTool(Bitmap OriginalImage);
+        public void UseTool(Bitmap OriginalImage, OptionalImageParameters parameters);
     }
 }
