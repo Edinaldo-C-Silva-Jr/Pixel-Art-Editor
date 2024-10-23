@@ -114,6 +114,7 @@ namespace PixelArtEditor.Files
             using Graphics newSizeGraphics = Graphics.FromImage(imageWithNewSize);
 
             // Draws the Original Image on top of the new image, then assigns it to the Original Image.
+            newSizeGraphics.Clear(Color.White);
             newSizeGraphics.DrawImage(EditOriginalImage, 0, 0);
             EditOriginalImage?.Dispose();
             EditOriginalImage = new(imageWithNewSize);

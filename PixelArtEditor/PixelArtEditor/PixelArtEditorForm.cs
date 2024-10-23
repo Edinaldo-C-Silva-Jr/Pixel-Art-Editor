@@ -4,6 +4,7 @@ using PixelArtEditor.Grids;
 using PixelArtEditor.Image_Editing;
 using PixelArtEditor.Image_Editing.Drawing_Tools;
 using PixelArtEditor.Image_Editing.Image_Tools;
+using PixelArtEditor.Image_Editing.Image_Tools.Tools;
 using PixelArtEditor.Image_Editing.Undo_Redo;
 
 namespace PixelArtEditor
@@ -77,7 +78,6 @@ namespace PixelArtEditor
             // Initializes the Drawing and Viewing Boxes.
             SetViewingSizeValues();
             SetDrawingSizeValues();
-            SetNewImageOnBoxes();
 
             ReorganizeControls();
         }
@@ -844,8 +844,8 @@ namespace PixelArtEditor
         /// </summary>
         private void LoadImageButton_Click(object sender, EventArgs e)
         {
-            using Bitmap imageLoaded = FileSaverLoader.LoadImage();
-            if (imageLoaded != null) // Null check in case no image is loaded.
+            using Bitmap? imageLoaded = FileSaverLoader.LoadImage();
+            if (imageLoaded is not null) // Null check in case no image is loaded.
             {
                 int currentPixelSize = (int)ViewPixelSizeNumberBox.Value;
                 ViewPixelSizeNumberBox.Value = 1;

@@ -1,6 +1,6 @@
 ﻿using PixelArtEditor.Image_Editing.Undo_Redo;
 
-namespace PixelArtEditor.Image_Editing.Image_Tools
+namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 {
     public class NewImageCommand : IUndoRedoCommand
     {

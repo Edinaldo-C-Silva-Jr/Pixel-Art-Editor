@@ -1,6 +1,6 @@
 ﻿using PixelArtEditor.Image_Editing.Undo_Redo;
 
-namespace PixelArtEditor.Image_Editing.Image_Tools
+namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 {
     public class ReplaceColorTool : BaseImageTool
     {
@@ -33,7 +33,7 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
         {
             if (parameters.ChangeCellColor is not null && parameters.OldColor.HasValue && parameters.NewColor.HasValue && UneditedImage is not null && EditedImage is not null)
             {
-                BackgroundColorCommand command = new(new(UneditedImage), new(EditedImage), parameters.ChangeCellColor, parameters.OldColor.Value, parameters.NewColor.Value);
+                ReplaceColorCommand command = new(new(UneditedImage), new(EditedImage), parameters.ChangeCellColor, parameters.OldColor.Value, parameters.NewColor.Value);
                 ClearProperties();
                 return command;
             }

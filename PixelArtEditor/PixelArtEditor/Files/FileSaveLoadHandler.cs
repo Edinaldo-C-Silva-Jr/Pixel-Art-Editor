@@ -92,7 +92,7 @@ namespace PixelArtEditor.Files
         /// It sets the default directory for images saved by the program in the OpenFileDialog.
         /// </summary>
         /// <returns>The Bitmap loaded from the file, or null, in case no image was loaded.</returns>
-        public Bitmap LoadImage()
+        public Bitmap? LoadImage()
         {
             string directory = DefineFileDirectory("SavedImages");
 
@@ -107,7 +107,7 @@ namespace PixelArtEditor.Files
             {
                 imageLoaded = new(loadImageForm.ImageLoaded!);
             }
-            return imageLoaded!;
+            return imageLoaded;
         }
 
         /// <summary>

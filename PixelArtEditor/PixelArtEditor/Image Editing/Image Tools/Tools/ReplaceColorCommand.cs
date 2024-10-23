@@ -1,8 +1,8 @@
 ﻿using PixelArtEditor.Image_Editing.Undo_Redo;
 
-namespace PixelArtEditor.Image_Editing.Image_Tools
+namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 {
-    public class BackgroundColorCommand : IUndoRedoCommand
+    public class ReplaceColorCommand : IUndoRedoCommand
     {
         private Bitmap UneditedImage { get; set; }
 
@@ -14,7 +14,7 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
 
         private Color NewColor { get; set; }
 
-        public BackgroundColorCommand(Bitmap oldImage, Bitmap newImage, Action<Color> changeCellColor, Color oldColor, Color newColor)
+        public ReplaceColorCommand(Bitmap oldImage, Bitmap newImage, Action<Color> changeCellColor, Color oldColor, Color newColor)
         {
             UneditedImage = oldImage;
             EditedImage = newImage;
