@@ -334,6 +334,8 @@ namespace PixelArtEditor
 
             tool.UseTool(Images.EditOriginalImage, imageParameters);
             UndoHandler.TrackChange(tool.CreateUndoStep(undoParameters));
+            SetUndoRedoButtonAvailability();
+
             Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
         }
@@ -556,7 +558,6 @@ namespace PixelArtEditor
                 DrawHandler.DrawRelease(ToolFactory.GetTool(), toolParameters);
 
                 UndoHandler.TrackChange(DrawHandler.CreateUndoStepFromTool((IUndoRedoCreator)ToolFactory.GetTool(), undoParameters));
-
                 SetUndoRedoButtonAvailability();
 
                 Images.CreateNewDisplayDrawingImage();
@@ -735,7 +736,7 @@ namespace PixelArtEditor
                     if (cellParent.Name == "BackgroundColorTable" ||
                         (cellParent.Name != "GridColorTable" && !cell.DefaultColor && ColorChangeCheckBox.Checked && cell.BackColor != BackgroundColorTable.GetCurrentColor()))
                     {
-                        SwapColorInImage(cell.BackColor, ColorPickerDialog.Color);
+                        SwapColorInImage(cell.BackColor, ColorPickerDialog.Color, cell.ChangeCellColor);
                         colorWasSwaped = true;
                     }
 
@@ -774,7 +775,7 @@ namespace PixelArtEditor
         /// </summary>
         /// <param name="oldColor">The color to be replaced in the image.</param>
         /// <param name="newColor">The new color to apply to the image in place of the old one.</param>
-        private void SwapColorInImage(Color oldColor, Color newColor)
+        private void SwapColorInImage(Color oldColor, Color newColor, Action<Color> changeCellColor)
         {
             Color backgroundColor = BackgroundColorTable.GetCurrentColor();
 
@@ -784,15 +785,23 @@ namespace PixelArtEditor
                 Images.MakeImageNotTransparent(backgroundColor);
             }
 
-            BackgroundColorTool tool = new();
+            ReplaceColorTool tool = new();
             ImageToolParameters imageParameters = new()
             {
-                BackgroundColor = oldColor,
+                OldColor = oldColor,
+                NewColor = newColor
+            };
+
+            UndoParameters undoParameters = new()
+            {
+                ChangeCellColor = changeCellColor,
+                OldColor = oldColor,
                 NewColor = newColor
             };
 
             tool.UseTool(Images.EditOriginalImage, imageParameters);
-            UndoHandler.TrackChange(tool.CreateUndoStep(new UndoParameters()));
+            UndoHandler.TrackChange(tool.CreateUndoStep(undoParameters));
+            SetUndoRedoButtonAvailability();
 
             // Restored transparency to image if needed.
             if (TransparencyCheckBox.Checked)

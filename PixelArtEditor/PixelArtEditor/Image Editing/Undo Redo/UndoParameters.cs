@@ -5,5 +5,11 @@
         public Point? DrawingImageLocation { get; set; }
 
         public Color? BackgroundColor { get; set; }
+
+        public Color? OldColor { get; set; }
+
+        public Color? NewColor { get; set; }
+
+        public Action<Color>? ChangeCellColor { get; set; }
     }
 }

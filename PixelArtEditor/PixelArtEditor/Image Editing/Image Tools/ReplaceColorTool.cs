@@ -2,7 +2,7 @@
 
 namespace PixelArtEditor.Image_Editing.Image_Tools
 {
-    public class BackgroundColorTool : BaseImageTool
+    public class ReplaceColorTool : BaseImageTool
     {
         private Bitmap? UneditedImage { get; set; }
 
@@ -10,13 +10,13 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
 
         public override void UseTool(Bitmap originalImage, ImageToolParameters parameters)
         {
-            if (parameters.BackgroundColor.HasValue && parameters.NewColor.HasValue)
+            if (parameters.OldColor.HasValue && parameters.NewColor.HasValue)
             {
                 UneditedImage = new(originalImage);
 
                 // Creates a temporary image, making background color (to be replaced) transparent.
                 using Bitmap temporaryImage = (Bitmap)originalImage.Clone();
-                temporaryImage.MakeTransparent(parameters.BackgroundColor.Value);
+                temporaryImage.MakeTransparent(parameters.OldColor.Value);
 
                 // Clears the original image with the newly desired color.
                 using Graphics imageGraphics = Graphics.FromImage(originalImage);
@@ -31,9 +31,9 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
 
         public override IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
         {
-            if (UneditedImage is not null && EditedImage is not null)
+            if (parameters.ChangeCellColor is not null && parameters.OldColor.HasValue && parameters.NewColor.HasValue && UneditedImage is not null && EditedImage is not null)
             {
-                BackgroundColorCommand command = new(new(UneditedImage), new(EditedImage));
+                BackgroundColorCommand command = new(new(UneditedImage), new(EditedImage), parameters.ChangeCellColor, parameters.OldColor.Value, parameters.NewColor.Value);
                 ClearProperties();
                 return command;
             }

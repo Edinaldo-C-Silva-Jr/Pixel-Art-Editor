@@ -11,7 +11,12 @@
         public Color? BackgroundColor { get; set; }
 
         /// <summary>
-        /// The new color to use when coloring something.
+        /// A color value, representing an old color that will be replaced in the image.
+        /// </summary>
+        public Color? OldColor { get; set; }
+
+        /// <summary>
+        /// A color value, representing a color that will replace the Old Color property.
         /// </summary>
         public Color? NewColor { get; set; }
     }
