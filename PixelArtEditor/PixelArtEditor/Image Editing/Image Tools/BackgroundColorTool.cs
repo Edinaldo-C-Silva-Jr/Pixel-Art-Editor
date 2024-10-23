@@ -31,7 +31,7 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
 
         public override IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
         {
-            if (parameters.BackgroundColor.HasValue && UneditedImage is not null && EditedImage is not null)
+            if (UneditedImage is not null && EditedImage is not null)
             {
                 BackgroundColorCommand command = new(new(UneditedImage), new(EditedImage));
                 ClearProperties();
@@ -47,6 +47,8 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
         {
             UneditedImage?.Dispose();
             UneditedImage = null;
+            EditedImage?.Dispose();
+            EditedImage = null;
         }
     }
 }

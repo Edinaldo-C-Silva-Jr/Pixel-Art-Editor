@@ -327,7 +327,7 @@ namespace PixelArtEditor
                 BackgroundColor = BackgroundColorTable.GetCurrentColor()
             };
 
-            UndoParameters undoParameters = new UndoParameters()
+            UndoParameters undoParameters = new()
             {
                 BackgroundColor = BackgroundColorTable.GetCurrentColor()
             };
@@ -749,6 +749,7 @@ namespace PixelArtEditor
                     // Only reload the image if there was a color swap.
                     if (colorWasSwaped)
                     {
+                        Images.CreateNewDisplayOriginalImage();
                         ViewingBox.SetNewImage(Images.DisplayOriginalImage);
                         Images.CreateImageToDraw();
                         DrawingBox.SetNewImage(Images.DisplayDrawingImage);
@@ -783,15 +784,15 @@ namespace PixelArtEditor
                 Images.MakeImageNotTransparent(backgroundColor);
             }
 
-            // Makes all pixels of the color to be replaced transparent...
-            Images.MakeImageTransparent(oldColor);
+            BackgroundColorTool tool = new();
+            ImageToolParameters imageParameters = new()
+            {
+                BackgroundColor = oldColor,
+                NewColor = newColor
+            };
 
-            // Then applies the new color to all transparent pixels.
-            using Bitmap auxiliaryImage = new(Images.EditOriginalImage);
-            using Graphics auxiliaryGraphics = Graphics.FromImage(auxiliaryImage);
-            auxiliaryGraphics.Clear(newColor);
-            auxiliaryGraphics.DrawImage(Images.EditOriginalImage, 0, 0);
-            Images.ReplaceOriginalImage(auxiliaryImage);
+            tool.UseTool(Images.EditOriginalImage, imageParameters);
+            UndoHandler.TrackChange(tool.CreateUndoStep(new UndoParameters()));
 
             // Restored transparency to image if needed.
             if (TransparencyCheckBox.Checked)
