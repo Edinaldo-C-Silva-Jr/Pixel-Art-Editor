@@ -77,7 +77,9 @@ namespace PixelArtEditor
 
             // Initializes the Drawing and Viewing Boxes.
             SetViewingSizeValues();
+            SetViewingZoom();
             SetDrawingSizeValues();
+            SetDrawingZoom();
 
             ReorganizeControls();
         }
@@ -122,7 +124,7 @@ namespace PixelArtEditor
         }
         #endregion
 
-        #region Viewing Box Size and Clicking
+        #region Viewing Box Size, Zoom and Clicking
         /// <summary>
         /// Saves the size values in the ImageHandler class.
         /// Then changes the size of the Viewing Box and generates a new grid for it based on the size values.
@@ -130,6 +132,10 @@ namespace PixelArtEditor
         private void ViewingBoxSizeButton_Click(object sender, EventArgs e)
         {
             SetViewingSizeValues();
+
+            // Also sets the Drawing Box values to ensure they're still valid.
+            // They'll be invalid if the new Viewing Box size is smaller than the current Drawing Box size.
+            SetDrawingSizeValues();
         }
 
         /// <summary>
@@ -140,36 +146,10 @@ namespace PixelArtEditor
         {
             int width = (int)ViewWidthNumberBox.Value;
             int height = (int)ViewHeightNumberBox.Value;
-            int zoom = (int)ViewPixelSizeNumberBox.Value;
 
-            Images.ChangeOriginalImageSize(width, height, zoom);
-
-            SetViewingBoxSize();
-
-            // Sets the Drawing Box values as well to ensure they're still valid.
-            // They'll be invalid if the new Viewing Box size is smaller than the current Drawing Box size.
-            SetDrawingSizeValues();
-        }
-
-        /// <summary>
-        /// Changes the Original Image Pixel Size in the ImageHandler class, then resizes the image and the Viewing Box.
-        /// </summary>
-        private void ViewPixelSizeNumberBox_ValueChanged(object sender, EventArgs e)
-        {
-            ViewPixelSizeNumberBar.Value = (int)ViewPixelSizeNumberBox.Value; // Syncs both NumberBox and NumberBar.
-
-            int zoom = (int)ViewPixelSizeNumberBox.Value;
-            Images.ChangeOriginalImageZoom(zoom);
+            Images.ChangeOriginalImageSize(width, height);
 
             SetViewingBoxSize();
-        }
-
-        /// <summary>
-        /// Updates the Pixel Size value in the ViewPixelSizeNumberBox.
-        /// </summary>
-        private void ViewPixelSizeNumberBar_ValueChanged(object sender, EventArgs e)
-        {
-            ViewPixelSizeNumberBox.Value = ViewPixelSizeNumberBar.Value; // Syncs both NumberBox and NumberBar.
         }
 
         /// <summary>
@@ -183,6 +163,34 @@ namespace PixelArtEditor
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
             ChangeViewingBoxGrid();
             ReorganizeControls();
+        }
+
+        /// <summary>
+        /// Changes the Original Image Pixel Size in the ImageHandler class, then resizes the image and the Viewing Box.
+        /// </summary>
+        private void ViewPixelSizeNumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            ViewPixelSizeNumberBar.Value = (int)ViewPixelSizeNumberBox.Value; // Syncs both NumberBox and NumberBar.
+            SetViewingZoom();
+        }
+
+        /// <summary>
+        /// Updates the Pixel Size value in the ViewPixelSizeNumberBox.
+        /// </summary>
+        private void ViewPixelSizeNumberBar_ValueChanged(object sender, EventArgs e)
+        {
+            ViewPixelSizeNumberBox.Value = ViewPixelSizeNumberBar.Value; // Syncs both NumberBox and NumberBar.
+        }
+
+        /// <summary>
+        /// Changes the zoom value of the Original Image in the ImageHandler class and updates the ViewingBox size.
+        /// </summary>
+        private void SetViewingZoom()
+        {
+            int zoom = (int)ViewPixelSizeNumberBox.Value;
+            Images.ChangeOriginalImageZoom(zoom);
+
+            SetViewingBoxSize();
         }
 
         /// <summary>
@@ -201,7 +209,7 @@ namespace PixelArtEditor
         }
         #endregion
 
-        #region Drawing Box Size
+        #region Drawing Box Size and Zoom
         /// <summary>
         /// Saves the size values in the ImageHandler class.
         /// Then changes the size of the Drawing Box and generates a new grid for it based on the size values.
@@ -219,36 +227,14 @@ namespace PixelArtEditor
         {
             int width = (int)DrawWidthNumberBox.Value;
             int height = (int)DrawHeightNumberBox.Value;
-            int zoom = (int)DrawPixelSizeNumberBox.Value;
 
-            Images.ChangeDrawingImageSize(width, height, zoom);
+            Images.ChangeDrawingImageSize(width, height);
 
-            // Updates the number box values due to the image size value possibly being changed by validation.
+            // Updates the number box values, since they have possibly been changed again by the validation of the Drawing Image Size.
             DrawWidthNumberBox.Value = Images.DrawingImageSize.Width;
             DrawHeightNumberBox.Value = Images.DrawingImageSize.Height;
 
             SetDrawingBoxSize();
-        }
-
-        /// <summary>
-        /// Changes the Drawing Image Pixel Size in the ImageHandler class, then resizes the image and the Drawing Box.
-        /// </summary>
-        private void DrawPixelSizeNumberBox_ValueChanged(object sender, EventArgs e)
-        {
-            DrawPixelSizeNumberBar.Value = (int)DrawPixelSizeNumberBox.Value; // Syncs both NumberBox and NumberBar.
-
-            int zoom = (int)DrawPixelSizeNumberBox.Value;
-            Images.ChangeDrawingImageZoom(zoom);
-
-            SetDrawingBoxSize();
-        }
-
-        /// <summary>
-        /// Updates the Pixel Size value in the DrawPixelSizeNumberBox.
-        /// </summary>
-        private void DrawPixelSizeNumberBar_ValueChanged(object sender, EventArgs e)
-        {
-            DrawPixelSizeNumberBox.Value = DrawPixelSizeNumberBar.Value; // Syncs both NumberBox and NumberBar.
         }
 
         /// <summary>
@@ -262,6 +248,34 @@ namespace PixelArtEditor
             DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             ChangeDrawingBoxGrid();
             ReorganizeControls();
+        }
+
+        /// <summary>
+        /// Changes the Drawing Image Pixel Size in the ImageHandler class, then resizes the image and the Drawing Box.
+        /// </summary>
+        private void DrawPixelSizeNumberBox_ValueChanged(object sender, EventArgs e)
+        {
+            DrawPixelSizeNumberBar.Value = (int)DrawPixelSizeNumberBox.Value; // Syncs both NumberBox and NumberBar.
+            SetDrawingZoom();
+        }
+
+        /// <summary>
+        /// Updates the Pixel Size value in the DrawPixelSizeNumberBox.
+        /// </summary>
+        private void DrawPixelSizeNumberBar_ValueChanged(object sender, EventArgs e)
+        {
+            DrawPixelSizeNumberBox.Value = DrawPixelSizeNumberBar.Value; // Syncs both NumberBox and NumberBar.
+        }
+
+        /// <summary>
+        /// Changes the zoom value of the Drawing Image in the ImageHandler class and updates the ViewingBox size.
+        /// </summary>
+        private void SetDrawingZoom()
+        {
+            int zoom = (int)DrawPixelSizeNumberBox.Value;
+            Images.ChangeDrawingImageZoom(zoom);
+
+            SetDrawingBoxSize();
         }
         #endregion
 

@@ -94,13 +94,21 @@ namespace PixelArtEditor.Files
         /// </summary>
         /// <param name="pixelWidth">The width of the image, in pixels.</param>
         /// <param name="pixelHeight">The height of the image, in pixels.</param>
-        /// <param name="zoom">The amount of zoom to apply to the image.</param>
-        public void ChangeOriginalImageSize(int pixelWidth, int pixelHeight, int zoom)
+        public void ChangeOriginalImageSize(int pixelWidth, int pixelHeight)
         {
             OriginalImageSize = new Size(pixelWidth, pixelHeight);
-            OriginalImageZoom = zoom;
 
             ChangeSizeButPreserveOriginalImage();
+            CreateNewDisplayOriginalImage();
+        }
+
+        /// <summary>
+        /// Changes the zoom value of the Original Image. Also creates a new display image with the new value.
+        /// </summary>
+        /// <param name="zoom">The new zoom value to use for the Original Image</param>
+        public void ChangeOriginalImageZoom(int zoom)
+        {
+            OriginalImageZoom = zoom;
             CreateNewDisplayOriginalImage();
         }
 
@@ -148,15 +156,23 @@ namespace PixelArtEditor.Files
         /// </summary>
         /// <param name="pixelWidth">The width of the image, in pixels.</param>
         /// <param name="pixelHeight">The height of the image, in pixels.</param>
-        /// <param name="zoom">The amount of zoom to apply to the image.</param>
-        public void ChangeDrawingImageSize(int pixelWidth, int pixelHeight, int zoom)
+        public void ChangeDrawingImageSize(int pixelWidth, int pixelHeight)
         {
             (pixelWidth, pixelHeight) = ValidateDrawingSize(pixelWidth, pixelHeight);
 
             DrawingImageSize = new Size(pixelWidth, pixelHeight);
-            DrawingImageZoom = zoom;
 
             ChangeDrawingImageLocation();
+        }
+
+        /// <summary>
+        /// Changes only the zoom value of the Drawing Image. Also creates a new display image with the new value.
+        /// </summary>
+        /// <param name="zoom">The new zoom value to use for the Drawing Image.</param>
+        public void ChangeDrawingImageZoom(int zoom)
+        {
+            DrawingImageZoom = zoom;
+            CreateNewDisplayDrawingImage();
         }
 
         /// <summary>
@@ -292,28 +308,6 @@ namespace PixelArtEditor.Files
         {
             DisplayDrawingImage?.Dispose();
             DisplayDrawingImage = EditDrawingImage.ApplyZoomNearestNeighbor(DrawingImageSize.Width * DrawingImageZoom, DrawingImageSize.Height * DrawingImageZoom);
-        }
-        #endregion
-
-        #region Changing and Applying Zoom
-        /// <summary>
-        /// Changes only the zoom value of the Original Image. Also creates a new display image with the new value.
-        /// </summary>
-        /// <param name="zoom">The new zoom value to use for the Original Image</param>
-        public void ChangeOriginalImageZoom(int zoom)
-        {
-            OriginalImageZoom = zoom;
-            CreateNewDisplayOriginalImage();
-        }
-
-        /// <summary>
-        /// Changes only the zoom value of the Drawing Image. Also creates a new display image with the new value.
-        /// </summary>
-        /// <param name="zoom">The new zoom value to use for the Drawing Image.</param>
-        public void ChangeDrawingImageZoom(int zoom)
-        {
-            DrawingImageZoom = zoom;
-            CreateNewDisplayDrawingImage();
         }
         #endregion
 
