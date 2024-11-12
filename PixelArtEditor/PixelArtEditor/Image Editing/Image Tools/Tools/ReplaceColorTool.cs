@@ -2,13 +2,13 @@
 
 namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 {
-    public class ReplaceColorTool : BaseImageTool
+    public class ReplaceColorTool : IImageTool, IUndoRedoCreator
     {
         private Bitmap? UneditedImage { get; set; }
 
         private Bitmap? EditedImage { get; set; }
 
-        public override void UseTool(Bitmap originalImage, ImageToolParameters parameters)
+        public void UseTool(Bitmap originalImage, ImageToolParameters parameters)
         {
             if (parameters.OldColor.HasValue && parameters.NewColor.HasValue)
             {
@@ -29,7 +29,7 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
             }
         }
 
-        public override IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
+        public IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
         {
             if (parameters.ChangeCellColor is not null && parameters.OldColor.HasValue && parameters.NewColor.HasValue && UneditedImage is not null && EditedImage is not null)
             {

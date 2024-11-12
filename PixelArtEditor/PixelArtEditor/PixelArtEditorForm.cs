@@ -4,7 +4,6 @@ using PixelArtEditor.Grids;
 using PixelArtEditor.Image_Editing;
 using PixelArtEditor.Image_Editing.Drawing_Tools;
 using PixelArtEditor.Image_Editing.Image_Tools;
-using PixelArtEditor.Image_Editing.Image_Tools.Tools;
 using PixelArtEditor.Image_Editing.Undo_Redo;
 
 namespace PixelArtEditor
@@ -27,9 +26,14 @@ namespace PixelArtEditor
         private DrawingHandler DrawHandler { get; }
 
         /// <summary>
+        /// A factory class that handles the creation and recovery of ImageTools.
+        /// </summary>
+        private ImageToolFactory ImageFactory { get; set; }
+
+        /// <summary>
         /// A factory class that handles the creation and recovery of DrawingTools.
         /// </summary>
-        private DrawingToolFactory ToolFactory { get; set; }
+        private DrawingToolFactory DrawFactory { get; set; }
 
         /// <summary>
         /// A factory class that handles creation and recovery of Grids.
@@ -58,8 +62,9 @@ namespace PixelArtEditor
             FileSaverLoader = new();
             UndoHandler = new();
             DrawHandler = new();
+            ImageFactory = new();
 
-            ToolFactory = new();
+            DrawFactory = new();
             GridFactory = new();
             Selector = new();
 
@@ -335,7 +340,7 @@ namespace PixelArtEditor
         /// </summary>
         private void ClearOriginalImage()
         {
-            NewImageTool tool = new();
+            IImageTool tool = ImageFactory.ChangeCurrentTool(0);
             ImageToolParameters imageParameters = new()
             {
                 BackgroundColor = BackgroundColorTable.GetCurrentColor()
@@ -347,7 +352,11 @@ namespace PixelArtEditor
             };
 
             tool.UseTool(Images.EditOriginalImage, imageParameters);
-            UndoHandler.TrackChange(tool.CreateUndoStep(undoParameters));
+
+            if (tool is IUndoRedoCreator undoTool)
+            {
+                UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
+            }
             SetUndoRedoButtonAvailability();
 
             Images.CreateNewDisplayOriginalImage();
@@ -382,7 +391,7 @@ namespace PixelArtEditor
             {
                 DrawingToolParameters toolParameters = GetToolParameters(MouseOnDrawingBox.Value);
 
-                DrawHandler.PreviewTool(ToolFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
+                DrawHandler.PreviewTool(DrawFactory.GetTool(), e.Graphics, PaletteColorTable.GetCurrentColor(), toolParameters);
             }
 
             // Draws the selection in the box, if the selection's image type matches the passed image type.
@@ -426,7 +435,7 @@ namespace PixelArtEditor
             }
 
             buttonPanel.ChangeCurrentButton(toolButton);
-            ToolFactory.ChangeCurrentTool(toolButton.ToolValue);
+            DrawFactory.ChangeCurrentTool(toolButton.ToolValue);
 
             MouseOnDrawingBox = null;
         }
@@ -496,7 +505,7 @@ namespace PixelArtEditor
 
                 DrawingToolParameters toolParameters = GetToolParameters(e.Location);
 
-                DrawHandler.DrawClick(ToolFactory.GetTool(), Images.EditDrawingImage, paletteColor, toolParameters);
+                DrawHandler.DrawClick(DrawFactory.GetTool(), Images.EditDrawingImage, paletteColor, toolParameters);
                 
                 Images.CreateNewDisplayDrawingImage();
                 DrawingBox.SetNewImage(Images.DisplayDrawingImage);
@@ -535,7 +544,7 @@ namespace PixelArtEditor
             {
                 DrawingToolParameters toolParameters = GetToolParameters(e.Location);
 
-                DrawHandler.DrawHold(ToolFactory.GetTool(), toolParameters); 
+                DrawHandler.DrawHold(DrawFactory.GetTool(), toolParameters); 
                 
                 Images.CreateNewDisplayDrawingImage();
                 DrawingBox.SetNewImage(Images.DisplayDrawingImage);
@@ -569,9 +578,9 @@ namespace PixelArtEditor
                     DrawingImageLocation = Images.DrawingLocation
                 };
 
-                DrawHandler.DrawRelease(ToolFactory.GetTool(), toolParameters);
+                DrawHandler.DrawRelease(DrawFactory.GetTool(), toolParameters);
 
-                UndoHandler.TrackChange(DrawHandler.CreateUndoStepFromTool((IUndoRedoCreator)ToolFactory.GetTool(), undoParameters));
+                UndoHandler.TrackChange(DrawHandler.CreateUndoStepFromTool((IUndoRedoCreator)DrawFactory.GetTool(), undoParameters));
                 SetUndoRedoButtonAvailability();
 
                 Images.CreateNewDisplayDrawingImage();
@@ -799,7 +808,7 @@ namespace PixelArtEditor
                 Images.MakeImageNotTransparent(backgroundColor);
             }
 
-            ReplaceColorTool tool = new();
+            IImageTool tool = ImageFactory.ChangeCurrentTool(1);
             ImageToolParameters imageParameters = new()
             {
                 OldColor = oldColor,
@@ -814,7 +823,11 @@ namespace PixelArtEditor
             };
 
             tool.UseTool(Images.EditOriginalImage, imageParameters);
-            UndoHandler.TrackChange(tool.CreateUndoStep(undoParameters));
+
+            if (tool is IUndoRedoCreator undoTool)
+            {
+                UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
+            }
             SetUndoRedoButtonAvailability();
 
             // Restored transparency to image if needed.
