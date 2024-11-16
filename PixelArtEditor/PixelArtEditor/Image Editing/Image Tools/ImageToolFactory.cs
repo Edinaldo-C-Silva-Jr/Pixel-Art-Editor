@@ -21,15 +21,6 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
         }
 
         /// <summary>
-        /// Returns the current tool available, which is the last one generated.
-        /// </summary>
-        /// <returns>The last generated Image Tool.</returns>
-        public IImageTool GetTool()
-        {
-            return Tool;
-        }
-
-        /// <summary>
         /// Generates a new Image Tool based on the value passed.
         /// </summary>
         /// <param name="toolValue">The value of the tool to be used.</param>
@@ -38,6 +29,7 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
         {
             Tool = toolValue switch
             {
+                2 => new SaveImageTool(),
                 1 => new ReplaceColorTool(),
                 _ => new NewImageTool()
             };

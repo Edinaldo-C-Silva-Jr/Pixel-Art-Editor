@@ -47,24 +47,6 @@ namespace PixelArtEditor.Files
         }
 
         /// <summary>
-        /// A method to save an image file.
-        /// It sets the default directory for images saved by the program and the default filename and extension for the image.
-        /// </summary>
-        /// <param name="originalImage">The image to be saved as a file.</param>
-        public void SaveImage(Bitmap originalImage, Size originalDimensions)
-        {
-            string directory = DefineFileDirectory("SavedImages");
-
-            DialogForSavingFiles.InitialDirectory = directory;
-            DialogForSavingFiles.Filter = "PNG Image|*.png";
-            DialogForSavingFiles.DefaultExt = "png";
-            DialogForSavingFiles.Title = "Save the current image";
-
-            using SaveImageForm saveImageForm = new(originalImage, originalDimensions, DialogForSavingFiles);
-            saveImageForm.ShowDialog();
-        }
-
-        /// <summary>
         /// A method to save a palette file, which is a file containing all the color values for a color palette on the application.
         /// It sets the default directory for palettes saved by the program and the default filename and extension for the file.
         /// </summary>

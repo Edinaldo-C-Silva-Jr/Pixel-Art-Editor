@@ -6,13 +6,13 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
     {
         private Bitmap? UneditedImage { get; set; }
 
-        public void UseTool(Bitmap OriginalImage, ImageToolParameters parameters)
+        public void UseTool(Bitmap originalImage, ImageToolParameters parameters)
         {
             if (parameters.BackgroundColor.HasValue)
             {
-                UneditedImage = new(OriginalImage);
+                UneditedImage = new(originalImage);
 
-                using Graphics imageGraphics = Graphics.FromImage(OriginalImage);
+                using Graphics imageGraphics = Graphics.FromImage(originalImage);
                 imageGraphics.Clear(parameters.BackgroundColor.Value);
             }
         }

@@ -23,7 +23,7 @@ namespace PixelArtEditor.Files.File_Forms
         /// <summary>
         /// The Save File Dialog used to save the image.
         /// </summary>
-        private SaveFileDialog DialogForSavingImages { get; set; }
+        private SaveFileDialog SaveDialog { get; set; }
         #endregion
 
         /// <summary>
@@ -32,12 +32,12 @@ namespace PixelArtEditor.Files.File_Forms
         /// </summary>
         /// <param name="originalImage">The original image that will be saved.</param>
         /// <param name="originalSize">The size of the original image, without the zoom applied.</param>
-        /// <param name="dialogForSavingImages">The dialog that will be used for saving the image, which already has its properties set.</param>
-        public SaveImageForm(Bitmap originalImage, Size originalSize, SaveFileDialog dialogForSavingImages)
+        /// <param name="saveDialog">The dialog that will be used for saving the image, which already has its properties set.</param>
+        public SaveImageForm(Bitmap originalImage, Size originalSize, SaveFileDialog saveDialog)
         {
             InitializeComponent();
 
-            DialogForSavingImages = dialogForSavingImages;
+            SaveDialog = saveDialog;
             SaveImagePictureBox.Image = new Bitmap(originalImage);
             OriginalImageWidth = originalSize.Width;
             OriginalImageHeight = originalSize.Height;
@@ -87,6 +87,7 @@ namespace PixelArtEditor.Files.File_Forms
             SaveImageHeightLabel.Text = $"Height: {zoomHeight} ({OriginalImageHeight})";
         }
 
+        // TODO: Change to Extension Method.
         /// <summary>
         /// Applies the zoom to an image.
         /// </summary>
@@ -143,12 +144,12 @@ namespace PixelArtEditor.Files.File_Forms
         /// </summary>
         private void SaveFullImage()
         {
-            DialogForSavingImages.FileName = "PixelImage_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".png";
-            DialogResult result = DialogForSavingImages.ShowDialog();
+            SaveDialog.FileName = "PixelImage_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ff") + ".png";
+            DialogResult result = SaveDialog.ShowDialog();
 
-            if (result == DialogResult.OK && DialogForSavingImages.FileName != string.Empty)
+            if (result == DialogResult.OK && SaveDialog.FileName != string.Empty)
             {
-                using FileStream imageStream = (FileStream)DialogForSavingImages.OpenFile();
+                using FileStream imageStream = (FileStream)SaveDialog.OpenFile();
                 SaveImagePictureBox.Image.Save(imageStream, ImageFormat.Png);
             }
         }
@@ -160,8 +161,6 @@ namespace PixelArtEditor.Files.File_Forms
         {
             Close();
         }
-
-
         #endregion
     }
 }

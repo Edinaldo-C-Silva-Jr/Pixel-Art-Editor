@@ -9,7 +9,7 @@
         /// <summary>
         /// Implementes the function of the current tool.
         /// </summary>
-        /// <param name="OriginalImage">The original image, that will be affected by the tool.</param>
-        public void UseTool(Bitmap OriginalImage, ImageToolParameters parameters);
+        /// <param name="originalImage">The original image, that will be affected by the tool.</param>
+        public void UseTool(Bitmap originalImage, ImageToolParameters parameters);
     }
 }

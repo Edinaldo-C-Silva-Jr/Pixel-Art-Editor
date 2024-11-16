@@ -863,7 +863,13 @@ namespace PixelArtEditor
         /// </summary>
         private void SaveImageButton_Click(object sender, EventArgs e)
         {
-            FileSaverLoader.SaveImage(Images.EditOriginalImage, Images.OriginalImageSize);
+            IImageTool tool = ImageFactory.ChangeCurrentTool(2);
+            ImageToolParameters imageParameters = new()
+            {
+                OriginalImagesize = Images.OriginalImageSize
+            };
+
+            tool.UseTool(Images.EditOriginalImage, imageParameters);
         }
 
         /// <summary>
