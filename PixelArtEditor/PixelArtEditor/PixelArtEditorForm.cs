@@ -873,21 +873,15 @@ namespace PixelArtEditor
         }
 
         /// <summary>
-        /// The methods that loads an image from a file into the program.
+        /// The method that loads an image from a file into the program.
         /// </summary>
         private void LoadImageButton_Click(object sender, EventArgs e)
         {
-            using Bitmap? imageLoaded = FileSaverLoader.LoadImage();
-            if (imageLoaded is not null) // Null check in case no image is loaded.
-            {
-                int currentPixelSize = (int)ViewPixelSizeNumberBox.Value;
-                ViewPixelSizeNumberBox.Value = 1;
+            IImageTool tool = ImageFactory.ChangeCurrentTool(3);
+            ImageToolParameters imageParameters = new();
+            tool.UseTool(Images.EditOriginalImage, imageParameters);
 
-                Images.ReplaceOriginalImage(imageLoaded);
-
-                ViewPixelSizeNumberBox.Value = currentPixelSize;
-            }
-
+            Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
             Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DisplayDrawingImage);

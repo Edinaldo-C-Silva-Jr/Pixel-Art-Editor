@@ -70,29 +70,6 @@ namespace PixelArtEditor.Files
         }
 
         /// <summary>
-        /// A method to load an image file into the application.
-        /// It sets the default directory for images saved by the program in the OpenFileDialog.
-        /// </summary>
-        /// <returns>The Bitmap loaded from the file, or null, in case no image was loaded.</returns>
-        public Bitmap? LoadImage()
-        {
-            string directory = DefineFileDirectory("SavedImages");
-
-            DialogForOpeningFiles.InitialDirectory = directory;
-            DialogForOpeningFiles.Title = "Load an image into the editor";
-
-            using LoadImageForm loadImageForm = new(DialogForOpeningFiles);
-            DialogResult result = loadImageForm.ShowDialog();
-
-            Bitmap? imageLoaded = null;
-            if (result == DialogResult.OK)
-            {
-                imageLoaded = new(loadImageForm.ImageLoaded!);
-            }
-            return imageLoaded;
-        }
-
-        /// <summary>
         /// A method to load a palette file into the application.
         /// It sets the default directory for images saved by the program in the OpenFileDialog. 
         /// </summary>

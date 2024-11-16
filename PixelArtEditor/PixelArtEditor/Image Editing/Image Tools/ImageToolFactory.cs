@@ -29,6 +29,7 @@ namespace PixelArtEditor.Image_Editing.Image_Tools
         {
             Tool = toolValue switch
             {
+                3 => new LoadImageTool(),
                 2 => new SaveImageTool(),
                 1 => new ReplaceColorTool(),
                 _ => new NewImageTool()

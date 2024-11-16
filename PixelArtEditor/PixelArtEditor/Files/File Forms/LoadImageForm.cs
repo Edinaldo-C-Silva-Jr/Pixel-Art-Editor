@@ -13,7 +13,7 @@ namespace PixelArtEditor.Files.File_Forms
         /// <summary>
         /// The dialog used to load the images from files.
         /// </summary>
-        private OpenFileDialog DialogForOpeningImages { get; set; }
+        private OpenFileDialog OpenDialog { get; set; }
 
         /// <summary>
         /// The type of zoom currently selected to zoom the image.
@@ -72,7 +72,7 @@ namespace PixelArtEditor.Files.File_Forms
         {
             InitializeComponent();
 
-            DialogForOpeningImages = dialogForOpeningImages;
+            OpenDialog = dialogForOpeningImages;
             ZoomedGrid = new();
             Disposed += OnDispose;
 
@@ -117,12 +117,12 @@ namespace PixelArtEditor.Files.File_Forms
         /// </summary>
         private void OpenImageButton_Click(object sender, EventArgs e)
         {
-            DialogResult result = DialogForOpeningImages.ShowDialog();
+            DialogResult result = OpenDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
                 DisableZoomPanel();
 
-                LoadImagePictureBox.Image = new Bitmap(DialogForOpeningImages.FileName);
+                LoadImagePictureBox.Image = new Bitmap(OpenDialog.FileName);
                 LoadImagePictureBox.Size = LoadImagePictureBox.Image.Size;
                 LoadImageBackgroundPanel.ResizePanelToFitControls();
                 ImageLoadedOriginalSizeLabel.Visible = true;
