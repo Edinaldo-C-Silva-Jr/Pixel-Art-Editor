@@ -879,7 +879,17 @@ namespace PixelArtEditor
         {
             IImageTool tool = ImageFactory.ChangeCurrentTool(3);
             ImageToolParameters imageParameters = new();
+            UndoParameters undoParameters = new()
+            {
+                BackgroundColor = BackgroundColorTable.GetCurrentColor()
+            };
             tool.UseTool(Images.EditOriginalImage, imageParameters);
+
+            if (tool is IUndoRedoCreator undoTool)
+            {
+                UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
+            }
+            SetUndoRedoButtonAvailability();
 
             Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
