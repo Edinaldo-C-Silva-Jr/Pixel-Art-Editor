@@ -14,7 +14,7 @@ namespace PixelArtEditor.Files
         /// The full image that is being made in the editor. 
         /// This version is used for editting. It has no zoom.
         /// </summary>
-        public Bitmap EditOriginalImage { get; private set; }
+        public Bitmap EditOriginalImage { get; set; }
 
         /// <summary>
         /// The original image used to be displayed in the editor. It is zoomed.
@@ -97,8 +97,6 @@ namespace PixelArtEditor.Files
         public void ChangeOriginalImageSize(int pixelWidth, int pixelHeight)
         {
             OriginalImageSize = new Size(pixelWidth, pixelHeight);
-
-            ChangeSizeButPreserveOriginalImage();
             CreateNewDisplayOriginalImage();
         }
 
@@ -110,22 +108,6 @@ namespace PixelArtEditor.Files
         {
             OriginalImageZoom = zoom;
             CreateNewDisplayOriginalImage();
-        }
-
-        /// <summary>
-        /// Creates a new image to use as the current Original Image, with the currently defined size, while preserving the Original Image.
-        /// </summary>
-        private void ChangeSizeButPreserveOriginalImage()
-        {
-            // Creates a new image with the currently defined size.
-            using Bitmap imageWithNewSize = new(OriginalImageSize.Width, OriginalImageSize.Height);
-            using Graphics newSizeGraphics = Graphics.FromImage(imageWithNewSize);
-
-            // Draws the Original Image on top of the new image, then assigns it to the Original Image.
-            newSizeGraphics.Clear(Color.White);
-            newSizeGraphics.DrawImage(EditOriginalImage, 0, 0);
-            EditOriginalImage?.Dispose();
-            EditOriginalImage = new(imageWithNewSize);
         }
 
         /// <summary>

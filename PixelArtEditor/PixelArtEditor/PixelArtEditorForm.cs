@@ -4,6 +4,7 @@ using PixelArtEditor.Grids;
 using PixelArtEditor.Image_Editing;
 using PixelArtEditor.Image_Editing.Drawing_Tools;
 using PixelArtEditor.Image_Editing.Image_Tools;
+using PixelArtEditor.Image_Editing.Image_Tools.Tools;
 using PixelArtEditor.Image_Editing.Undo_Redo;
 
 namespace PixelArtEditor
@@ -153,6 +154,24 @@ namespace PixelArtEditor
             int height = (int)ViewHeightNumberBox.Value;
 
             Images.ChangeOriginalImageSize(width, height);
+
+            IImageToolBitmap tool = new ResizeImageTool();
+            ImageToolParameters imageParameters = new()
+            {
+                OriginalImagesize = Images.OriginalImageSize
+            };
+
+            UndoParameters undoParameters = new()
+            {
+            };
+
+            Images.EditOriginalImage = tool.UseTool(Images.EditOriginalImage, imageParameters);
+
+            if (tool is IUndoRedoCreator undoTool)
+            {
+                UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
+                SetUndoRedoButtonAvailability();
+            }
 
             SetViewingBoxSize();
         }
@@ -356,8 +375,8 @@ namespace PixelArtEditor
             if (tool is IUndoRedoCreator undoTool)
             {
                 UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
+                SetUndoRedoButtonAvailability();
             }
-            SetUndoRedoButtonAvailability();
 
             Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
@@ -506,7 +525,7 @@ namespace PixelArtEditor
                 DrawingToolParameters toolParameters = GetToolParameters(e.Location);
 
                 DrawHandler.DrawClick(DrawFactory.GetTool(), Images.EditDrawingImage, paletteColor, toolParameters);
-                
+
                 Images.CreateNewDisplayDrawingImage();
                 DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             }
@@ -544,8 +563,8 @@ namespace PixelArtEditor
             {
                 DrawingToolParameters toolParameters = GetToolParameters(e.Location);
 
-                DrawHandler.DrawHold(DrawFactory.GetTool(), toolParameters); 
-                
+                DrawHandler.DrawHold(DrawFactory.GetTool(), toolParameters);
+
                 Images.CreateNewDisplayDrawingImage();
                 DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             }
@@ -827,8 +846,8 @@ namespace PixelArtEditor
             if (tool is IUndoRedoCreator undoTool)
             {
                 UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
+                SetUndoRedoButtonAvailability();
             }
-            SetUndoRedoButtonAvailability();
 
             // Restored transparency to image if needed.
             if (TransparencyCheckBox.Checked)
@@ -888,8 +907,8 @@ namespace PixelArtEditor
             if (tool is IUndoRedoCreator undoTool)
             {
                 UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
+                SetUndoRedoButtonAvailability();
             }
-            SetUndoRedoButtonAvailability();
 
             Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
