@@ -155,17 +155,18 @@ namespace PixelArtEditor
 
             Images.ChangeOriginalImageSize(width, height);
 
-            IImageToolBitmap tool = new ResizeImageTool();
+            IImageTool tool = ImageFactory.ChangeCurrentTool(4);
             ImageToolParameters imageParameters = new()
             {
-                OriginalImagesize = Images.OriginalImageSize
+                OriginalImagesize = Images.OriginalImageSize,
+                UpdateOriginalImage = Images.UpdateOriginalImage
             };
 
             UndoParameters undoParameters = new()
             {
             };
 
-            Images.EditOriginalImage = tool.UseTool(Images.EditOriginalImage, imageParameters);
+            tool.UseTool(Images.EditOriginalImage, imageParameters);
 
             if (tool is IUndoRedoCreator undoTool)
             {

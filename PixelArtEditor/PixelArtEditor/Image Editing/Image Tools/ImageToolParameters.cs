@@ -24,5 +24,7 @@
         /// A color value, representing a color that will replace the Old Color property.
         /// </summary>
         public Color? NewColor { get; set; }
+
+        public Action<Bitmap>? UpdateOriginalImage { get; set; }
     }
 }

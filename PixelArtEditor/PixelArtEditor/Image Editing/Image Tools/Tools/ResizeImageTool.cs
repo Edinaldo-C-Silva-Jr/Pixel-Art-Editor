@@ -1,10 +1,10 @@
 ﻿namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 {
-    public class ResizeImageTool : IImageToolBitmap
+    public class ResizeImageTool : IImageTool
     {
-        public Bitmap UseTool(Bitmap originalImage, ImageToolParameters parameters)
+        public void UseTool(Bitmap originalImage, ImageToolParameters parameters)
         {
-            if (parameters.OriginalImagesize.HasValue)
+            if (parameters.OriginalImagesize.HasValue && parameters.UpdateOriginalImage is not null)
             {
                 // Creates a new image with the currently defined size.
                 using Bitmap imageWithNewSize = new(parameters.OriginalImagesize.Value.Width, parameters.OriginalImagesize.Value.Height);
@@ -13,11 +13,9 @@
                 // Draws the Original Image on top of the new image, then assigns it to the Original Image.
                 newSizeGraphics.Clear(Color.White);
                 newSizeGraphics.DrawImage(originalImage, 0, 0);
-                originalImage.Dispose();
-                originalImage = new(imageWithNewSize);
-            }
 
-            return originalImage;
+                parameters.UpdateOriginalImage(imageWithNewSize);
+            }
         }
     }
 }

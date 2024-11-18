@@ -14,7 +14,7 @@ namespace PixelArtEditor.Files
         /// The full image that is being made in the editor. 
         /// This version is used for editting. It has no zoom.
         /// </summary>
-        public Bitmap EditOriginalImage { get; set; }
+        public Bitmap EditOriginalImage { get; private set; }
 
         /// <summary>
         /// The original image used to be displayed in the editor. It is zoomed.
@@ -86,6 +86,12 @@ namespace PixelArtEditor.Files
             ClipboardDrawingImage = new(1, 1);
             DrawingImageSize = new(1, 1);
             DrawingImageZoom = 1;
+        }
+
+        public void UpdateOriginalImage(Bitmap newImage)
+        {
+            EditOriginalImage?.Dispose();
+            EditOriginalImage = new(newImage);
         }
 
         #region Original Image Size, Creation and Changing
