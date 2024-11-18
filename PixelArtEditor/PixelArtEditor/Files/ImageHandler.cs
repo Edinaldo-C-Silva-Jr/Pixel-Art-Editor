@@ -92,6 +92,7 @@ namespace PixelArtEditor.Files
         {
             EditOriginalImage?.Dispose();
             EditOriginalImage = new(newImage);
+            CreateNewDisplayOriginalImage();
         }
 
         #region Original Image Size, Creation and Changing
@@ -103,7 +104,6 @@ namespace PixelArtEditor.Files
         public void ChangeOriginalImageSize(int pixelWidth, int pixelHeight)
         {
             OriginalImageSize = new Size(pixelWidth, pixelHeight);
-            CreateNewDisplayOriginalImage();
         }
 
         /// <summary>

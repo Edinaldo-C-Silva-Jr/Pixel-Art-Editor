@@ -11,5 +11,9 @@
         public Color? NewColor { get; set; }
 
         public Action<Color>? ChangeCellColor { get; set; }
+
+        public Action<Bitmap>? UpdateOriginalImage { get; set; }
+
+        public Action<int, int>? ChangeOriginalImageSize { get; set; }
     }
 }

@@ -164,6 +164,8 @@ namespace PixelArtEditor
 
             UndoParameters undoParameters = new()
             {
+                UpdateOriginalImage = Images.UpdateOriginalImage,
+                ChangeOriginalImageSize = Images.ChangeOriginalImageSize
             };
 
             tool.UseTool(Images.EditOriginalImage, imageParameters);
@@ -975,7 +977,7 @@ namespace PixelArtEditor
             Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             Images.CreateNewDisplayOriginalImage();
-            ViewingBox.SetNewImage(Images.DisplayOriginalImage);
+            SetViewingBoxSize();
         }
 
         private void RedoButton_Click(object sender, EventArgs e)
@@ -992,7 +994,7 @@ namespace PixelArtEditor
             Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             Images.CreateNewDisplayOriginalImage();
-            ViewingBox.SetNewImage(Images.DisplayOriginalImage);
+            SetViewingBoxSize();
         }
 
         private void SetUndoRedoButtonAvailability()
