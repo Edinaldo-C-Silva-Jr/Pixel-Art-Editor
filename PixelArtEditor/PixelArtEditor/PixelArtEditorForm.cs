@@ -82,9 +82,7 @@ namespace PixelArtEditor
             InitializeControlValues();
 
             // Initializes the Drawing and Viewing Boxes.
-            SetViewingSizeValues();
             SetViewingZoom();
-            SetDrawingSizeValues();
             SetDrawingZoom();
 
             ReorganizeControls();

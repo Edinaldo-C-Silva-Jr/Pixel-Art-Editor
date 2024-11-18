@@ -75,17 +75,21 @@ namespace PixelArtEditor.Files
         /// </summary>
         public ImageHandler()
         {
-            EditOriginalImage = new(1, 1);
-            DisplayOriginalImage = new(1, 1);
+            EditOriginalImage = new(64, 64);
+            DisplayOriginalImage = new(256, 256);
             ClipboardOriginalImage = new(1, 1);
-            OriginalImageSize = new(1, 1);
-            OriginalImageZoom = 1;
+            OriginalImageSize = new(64, 64);
+            OriginalImageZoom = 4;
+            using Graphics originalGraphics = Graphics.FromImage(EditOriginalImage);
+            originalGraphics.Clear(Color.White);
 
-            EditDrawingImage = new(1, 1);
-            DisplayDrawingImage = new(1, 1);
+            EditDrawingImage = new(16, 16);
+            DisplayDrawingImage = new(256, 256);
             ClipboardDrawingImage = new(1, 1);
-            DrawingImageSize = new(1, 1);
-            DrawingImageZoom = 1;
+            DrawingImageSize = new(16, 16);
+            DrawingImageZoom = 16;
+            using Graphics drawingGraphics = Graphics.FromImage(EditDrawingImage);
+            drawingGraphics.Clear(Color.White);
         }
 
         public void UpdateOriginalImage(Bitmap newImage)
