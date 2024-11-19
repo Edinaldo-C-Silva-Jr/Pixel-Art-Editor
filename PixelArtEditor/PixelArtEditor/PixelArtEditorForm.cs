@@ -703,7 +703,34 @@ namespace PixelArtEditor
         /// </summary>
         private void PasteImage()
         {
-            Images.PasteSelectionOnImage(Selector.SelectedArea, Selector.CurrentImageType);
+            IImageTool tool = ImageFactory.ChangeCurrentTool(6);
+            ImageToolParameters imageParameters = new()
+            {
+                PasteLocation = Selector.SelectedArea.Location
+            };
+
+            if (Selector.CurrentImageType == ImageType.OriginalImage)
+            {
+                imageParameters.PasteImage = Images.PasteOriginalImage;
+                imageParameters.ClipboardImageSize = Images.ClipboardOriginalImage.Size;
+
+                tool.UseTool(Images.EditOriginalImage, imageParameters);
+            }
+            else
+            {
+                imageParameters.PasteImage = Images.PasteDrawingImage;
+                imageParameters.ClipboardImageSize = Images.ClipboardDrawingImage.Size;
+
+                tool.UseTool(Images.EditDrawingImage, imageParameters);
+            }
+
+            UndoParameters undoParameters = new();
+
+            if (tool is IUndoRedoCreator undoTool)
+            {
+                UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
+                SetUndoRedoButtonAvailability();
+            }
 
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
             DrawingBox.SetNewImage(Images.DisplayDrawingImage);

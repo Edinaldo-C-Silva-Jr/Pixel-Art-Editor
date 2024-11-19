@@ -30,5 +30,11 @@
         public Action<Rectangle>? CopyImage { get; set; }
 
         public Rectangle? SelectedArea { get; set; }
+
+        public Action<Point>? PasteImage { get; set; }
+
+        public Point? PasteLocation { get; set; }
+
+        public Size? ClipboardImageSize { get; set; }
     }
 }

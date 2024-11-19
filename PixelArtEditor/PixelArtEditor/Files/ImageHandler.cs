@@ -111,6 +111,24 @@ namespace PixelArtEditor.Files
             ClipboardDrawingImage = EditDrawingImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
         }
 
+        public void PasteOriginalImage(Point pasteLocation)
+        {
+            using Graphics pasteGraphics = Graphics.FromImage(EditOriginalImage);
+            pasteGraphics.DrawImage(ClipboardOriginalImage, pasteLocation);
+
+            CreateImageToDraw();
+            CreateNewDisplayOriginalImage();
+        }
+
+        public void PasteDrawingImage(Point pasteLocation)
+        {
+            using Graphics pasteGraphics = Graphics.FromImage(EditDrawingImage);
+            pasteGraphics.DrawImage(ClipboardDrawingImage, pasteLocation);
+
+            ApplyDrawnImage();
+            CreateNewDisplayDrawingImage();
+        }
+
         #region Original Image Size, Creation and Changing
         /// <summary>
         /// Changes the size of the Original Image to the values passed as parameters.
@@ -139,18 +157,6 @@ namespace PixelArtEditor.Files
         {
             DisplayOriginalImage?.Dispose();
             DisplayOriginalImage = EditOriginalImage.ApplyZoomNearestNeighbor(OriginalImageSize.Width * OriginalImageZoom, OriginalImageSize.Height * OriginalImageZoom);
-        }
-
-        /// <summary>
-        /// Replaces the Original Image with a new one, while maintaining the image's size.
-        /// </summary>
-        /// <param name="newOriginalImage">The new image that will be set in place of the current Original Image.</param>
-        public void ReplaceOriginalImage(Bitmap newOriginalImage)
-        {
-            using Graphics originalImageGraphics = Graphics.FromImage(EditOriginalImage);
-            originalImageGraphics.DrawImage(newOriginalImage, 0, 0);
-
-            CreateNewDisplayOriginalImage();
         }
         #endregion
 
@@ -345,39 +351,6 @@ namespace PixelArtEditor.Files
             EditOriginalImage = temporaryImage;
 
             CreateNewDisplayOriginalImage();
-        }
-        #endregion
-
-        #region Copy and Paste
-
-        /// <summary>
-        /// Pastes the previously copied portion of the image into the current selection position.
-        /// Which image gets pasted depends on the ImageType parameter.
-        /// </summary>
-        /// <param name="selectedArea">The rectangle area selected on the image.</param>
-        /// <param name="currentImage">Which of the images is currently selected.</param>
-        public void PasteSelectionOnImage(Rectangle selectedArea, ImageType currentImage)
-        {
-            if (selectedArea != Rectangle.Empty)
-            {
-                if (currentImage == ImageType.OriginalImage) // Pastes the Clipboard Original Image into the Original Image.
-                {
-                    using Graphics pasteGraphics = Graphics.FromImage(EditOriginalImage);
-                    pasteGraphics.DrawImage(ClipboardOriginalImage, new Point(selectedArea.X, selectedArea.Y));
-
-                    CreateImageToDraw();
-                    CreateNewDisplayOriginalImage();
-                }
-                
-                if (currentImage == ImageType.DrawingImage) // Pastes the Clipboard Drawing Image into the Drawing Image.
-                {
-                    using Graphics pasteGraphics = Graphics.FromImage(EditDrawingImage);
-                    pasteGraphics.DrawImage(ClipboardDrawingImage, new Point(selectedArea.X, selectedArea.Y));
-
-                    ApplyDrawnImage();
-                    CreateNewDisplayDrawingImage();
-                }
-            }
         }
         #endregion
 
