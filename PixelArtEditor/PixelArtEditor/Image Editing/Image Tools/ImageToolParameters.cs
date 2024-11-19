@@ -26,5 +26,9 @@
         public Color? NewColor { get; set; }
 
         public Action<Bitmap>? UpdateOriginalImage { get; set; }
+
+        public Action<Rectangle>? CopyImage { get; set; }
+
+        public Rectangle? SelectedArea { get; set; }
     }
 }

@@ -677,7 +677,24 @@ namespace PixelArtEditor
         /// </summary>
         private void CopyImage()
         {
-            Images.CopySelectionFromImage(Selector.SelectedArea, Selector.CurrentImageType);
+            IImageTool tool = ImageFactory.ChangeCurrentTool(5);
+            ImageToolParameters imageParameters = new()
+            {
+                SelectedArea = Selector.SelectedArea
+            };
+
+            if (Selector.CurrentImageType == ImageType.OriginalImage)
+            {
+                imageParameters.CopyImage = Images.CopyOriginalImage;
+
+                tool.UseTool(Images.EditOriginalImage, imageParameters);
+            }
+            else
+            {
+                imageParameters.CopyImage = Images.CopyDrawingImage;
+
+                tool.UseTool(Images.EditDrawingImage, imageParameters);
+            }
         }
 
         /// <summary>
@@ -946,7 +963,7 @@ namespace PixelArtEditor
                 switch (e.KeyCode)
                 {
                     case Keys.C: // Control C: Copy.
-                        Images.CopySelectionFromImage(Selector.SelectedArea, Selector.CurrentImageType);
+                        CopyImage();
                         break;
                     case Keys.V: // Control V: Paste.
                         PasteImage();

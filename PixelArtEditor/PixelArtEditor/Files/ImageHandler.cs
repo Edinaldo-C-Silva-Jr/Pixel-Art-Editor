@@ -99,6 +99,18 @@ namespace PixelArtEditor.Files
             CreateNewDisplayOriginalImage();
         }
 
+        public void CopyOriginalImage(Rectangle selectedArea)
+        {
+            ClipboardOriginalImage?.Dispose();
+            ClipboardOriginalImage = EditOriginalImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
+        }
+
+        public void CopyDrawingImage(Rectangle selectedArea)
+        {
+            ClipboardDrawingImage?.Dispose();
+            ClipboardDrawingImage = EditDrawingImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
+        }
+
         #region Original Image Size, Creation and Changing
         /// <summary>
         /// Changes the size of the Original Image to the values passed as parameters.
@@ -291,6 +303,7 @@ namespace PixelArtEditor.Files
         {
             using Graphics mergeGraphics = Graphics.FromImage(EditOriginalImage);
             mergeGraphics.DrawImage(EditDrawingImage, DrawingLocation);
+            CreateNewDisplayOriginalImage();
         }
 
         /// <summary>
@@ -336,28 +349,6 @@ namespace PixelArtEditor.Files
         #endregion
 
         #region Copy and Paste
-        /// <summary>
-        /// Copies the portion of the image that corresponds to the selection area.
-        /// Which image gets copied depends on the ImageType parameter.
-        /// </summary>
-        /// <param name="selectedArea">The rectangle area selected on the image.</param>
-        /// <param name="currentImage">Which of the images is currently selected.</param>
-        public void CopySelectionFromImage(Rectangle selectedArea, ImageType currentImage)
-        {
-            if (selectedArea != Rectangle.Empty)
-            {
-                if (currentImage == ImageType.OriginalImage) // Copies the Original Image.
-                {
-                    ClipboardOriginalImage?.Dispose();
-                    ClipboardOriginalImage = EditOriginalImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
-                }
-                else // Copies the Drawing Image.
-                {
-                    ClipboardDrawingImage?.Dispose();
-                    ClipboardDrawingImage = EditDrawingImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
-                }
-            }
-        }
 
         /// <summary>
         /// Pastes the previously copied portion of the image into the current selection position.
