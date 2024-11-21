@@ -3,12 +3,17 @@ using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 {
-    internal class ImageTransparencyTool : IImageTool, IUndoRedoCreator
+    public class ImageTransparencyTool : IImageTool, IUndoRedoCreator
     {
+        private Bitmap? UneditedImage { get; set; }
+        private Bitmap? EditedImage { get; set; }
+
         public void UseTool(Bitmap originalImage, ImageToolParameters parameters)
         {
             if (parameters.MakeImageTransparent.HasValue && parameters.BackgroundColor.HasValue)
             {
+                UneditedImage = new(originalImage);
+
                 if (parameters.MakeImageTransparent.Value)
                 {
                     originalImage.MakeTransparent(parameters.BackgroundColor.Value);
@@ -20,12 +25,31 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
                     imageGraphics.Clear(parameters.BackgroundColor.Value);
                     imageGraphics.DrawImage(temporaryImage, 0, 0);
                 }
+
+                EditedImage = new(originalImage);
             }
         }
 
         public IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
         {
-            return null;
+            if (UneditedImage is not null && EditedImage is not null)
+            {
+                ImageTransparencyCommand command = new(new(UneditedImage), new(EditedImage));
+                ClearProperties();
+                return command;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        protected void ClearProperties()
+        {
+            UneditedImage?.Dispose();
+            UneditedImage = null;
+            EditedImage?.Dispose();
+            EditedImage = null;
         }
     }
 }

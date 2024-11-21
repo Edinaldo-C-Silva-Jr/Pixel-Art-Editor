@@ -15,5 +15,7 @@
         public Action<Bitmap>? UpdateOriginalImage { get; set; }
 
         public Action<int, int>? ChangeOriginalImageSize { get; set; }
+
+        public bool? MakeImageTransparent { get; set; }
     }
 }
