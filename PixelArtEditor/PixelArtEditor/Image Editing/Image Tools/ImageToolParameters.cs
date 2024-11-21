@@ -36,5 +36,7 @@
         public Point? PasteLocation { get; set; }
 
         public Size? ClipboardImageSize { get; set; }
+
+        public bool? MakeImageTransparent { get; set; }
     }
 }

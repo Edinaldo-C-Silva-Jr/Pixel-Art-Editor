@@ -791,6 +791,27 @@ namespace PixelArtEditor
             ResumeLayout();
         }
 
+        private void ChangeImageTransparency(bool transparency)
+        {
+            IImageTool tool = ImageFactory.ChangeCurrentTool(7);
+
+            ImageToolParameters imageParameters = new()
+            {
+                MakeImageTransparent = transparency,
+                BackgroundColor = BackgroundColorTable.GetCurrentColor()
+            };
+
+            UndoParameters undoParameters = new();
+
+            tool.UseTool(Images.EditOriginalImage, imageParameters);
+
+            if (tool is IUndoRedoCreator undoTool)
+            {
+                UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
+                SetUndoRedoButtonAvailability();
+            }
+        }
+
         /// <summary>
         /// The event of when any cell in the Color Tables is clicked.
         /// For a right click, it opens a Color Pick Dialog to allow picking the color, and changes the color in the image if needed.
@@ -825,13 +846,14 @@ namespace PixelArtEditor
                         (cellParent.Name != "GridColorTable" && !cell.DefaultColor && ColorChangeCheckBox.Checked && cell.BackColor != BackgroundColorTable.GetCurrentColor()))
                     {
                         SwapColorInImage(cell.BackColor, ColorPickerDialog.Color, cell.ChangeCellColor);
+                        cell.ChangeCellColor(ColorPickerDialog.Color);
                         colorWasSwaped = true;
                     }
 
                     // If the swap was done to the background, check if the background should be shown as transparent
                     if (cellParent.Name == "BackgroundColorTable" && TransparencyCheckBox.Checked)
                     {
-                        Images.MakeImageTransparent(ColorPickerDialog.Color);
+                        ChangeImageTransparency(true);
                         colorWasSwaped = true;
                     }
 
@@ -865,12 +887,10 @@ namespace PixelArtEditor
         /// <param name="newColor">The new color to apply to the image in place of the old one.</param>
         private void SwapColorInImage(Color oldColor, Color newColor, Action<Color> changeCellColor)
         {
-            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
-
             // If the image has a transparent background, temportarily remove the transparency.
             if (TransparencyCheckBox.Checked)
             {
-                Images.MakeImageNotTransparent(backgroundColor);
+                ChangeImageTransparency(false);
             }
 
             IImageTool tool = ImageFactory.ChangeCurrentTool(1);
@@ -898,25 +918,24 @@ namespace PixelArtEditor
             // Restored transparency to image if needed.
             if (TransparencyCheckBox.Checked)
             {
-                Images.MakeImageTransparent(backgroundColor);
+                ChangeImageTransparency(true);
             }
         }
 
         private void TransparencyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            Color backgroundColor = BackgroundColorTable.GetCurrentColor();
+            ChangeImageTransparency(TransparencyCheckBox.Checked);
 
             if (TransparencyCheckBox.Checked)
             {
-                Images.MakeImageTransparent(backgroundColor);
                 BackgroundColorLabel.Text = "Transparency Color";
             }
             else
             {
-                Images.MakeImageNotTransparent(backgroundColor);
                 BackgroundColorLabel.Text = "Background Color";
             }
 
+            Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
             Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DisplayDrawingImage);
