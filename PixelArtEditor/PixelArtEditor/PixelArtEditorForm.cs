@@ -4,7 +4,6 @@ using PixelArtEditor.Grids;
 using PixelArtEditor.Image_Editing;
 using PixelArtEditor.Image_Editing.Drawing_Tools;
 using PixelArtEditor.Image_Editing.Image_Tools;
-using PixelArtEditor.Image_Editing.Image_Tools.Tools;
 using PixelArtEditor.Image_Editing.Undo_Redo;
 
 namespace PixelArtEditor
@@ -156,7 +155,7 @@ namespace PixelArtEditor
             IImageTool tool = ImageFactory.ChangeCurrentTool(4);
             ImageToolParameters imageParameters = new()
             {
-                OriginalImagesize = Images.OriginalImageSize,
+                Imagesize = Images.OriginalImageSize,
                 UpdateOriginalImage = Images.UpdateOriginalImage
             };
 
@@ -713,6 +712,7 @@ namespace PixelArtEditor
             {
                 imageParameters.PasteImage = Images.PasteOriginalImage;
                 imageParameters.ClipboardImageSize = Images.ClipboardOriginalImage.Size;
+                imageParameters.Imagesize = Images.OriginalImageSize;
 
                 tool.UseTool(Images.EditOriginalImage, imageParameters);
             }
@@ -720,6 +720,7 @@ namespace PixelArtEditor
             {
                 imageParameters.PasteImage = Images.PasteDrawingImage;
                 imageParameters.ClipboardImageSize = Images.ClipboardDrawingImage.Size;
+                imageParameters.Imagesize = Images.DrawingImageSize;
 
                 tool.UseTool(Images.EditDrawingImage, imageParameters);
             }
@@ -761,7 +762,7 @@ namespace PixelArtEditor
         private void ChangeSelectionOnOriginalImage(Point location)
         {
             (int width, int height) = GetViewingSelectionDimensions();
-            Selector.ChangeSelectionArea(location, ViewingBox.Size, width, height);
+            Selector.ChangeSelectionArea(location, Images.OriginalImageSize, width, height);
             ViewingBox.Invalidate();
         }
 
@@ -772,7 +773,7 @@ namespace PixelArtEditor
         /// <param name="location">The current location of the mouse cursor.</param>
         private void ChangeSelectionOnDrawingImage(Point location)
         {
-            Selector.ChangeSelectionArea(location, DrawingBox.Size);
+            Selector.ChangeSelectionArea(location, Images.DrawingImageSize);
             DrawingBox.Invalidate();
         }
         #endregion
@@ -930,7 +931,7 @@ namespace PixelArtEditor
             IImageTool tool = ImageFactory.ChangeCurrentTool(2);
             ImageToolParameters imageParameters = new()
             {
-                OriginalImagesize = Images.OriginalImageSize
+                Imagesize = Images.OriginalImageSize
             };
 
             tool.UseTool(Images.EditOriginalImage, imageParameters);

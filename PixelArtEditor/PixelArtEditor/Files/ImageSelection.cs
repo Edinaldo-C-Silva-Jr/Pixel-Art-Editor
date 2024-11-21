@@ -65,10 +65,10 @@ namespace PixelArtEditor.Files
         /// Changes the selection area based on the initial and final locations, along with an optional size multiplier.
         /// </summary>
         /// <param name="selectionEnd">The current click location, which is where the selecion ends.</param>
-        /// <param name="boxSize">The size of the current Image's Box.</param>
+        /// <param name="imageSize">The size of the current Image.</param>
         /// <param name="selectionWidth">The width to increase the selection. If no value is given, it defaults to 1 pixel.</param>
         /// <param name="selectionHeight">The height to increase the selection. If no value is given, it defaults to 1 pixel.</param>
-        public void ChangeSelectionArea(Point selectionEnd, Size boxSize, int selectionWidth = 1, int selectionHeight = 1)
+        public void ChangeSelectionArea(Point selectionEnd, Size imageSize, int selectionWidth = 1, int selectionHeight = 1)
         {
             Point initialSelecion = SelectionStart;
             Rectangle areaToSelect = new();
@@ -91,8 +91,8 @@ namespace PixelArtEditor.Files
             selectionEnd.Y = selectionEnd.Y - selectionEnd.Y.Modulo(selectionHeight) + selectionHeight;
 
             // Makes sure the end coordinates don't go outside the bottom or right of the box.
-            selectionEnd.X = selectionEnd.X.ValidateMaximum(boxSize.Width - 1);
-            selectionEnd.Y = selectionEnd.Y.ValidateMaximum(boxSize.Height - 1);
+            selectionEnd.X = selectionEnd.X.ValidateMaximum(imageSize.Width);
+            selectionEnd.Y = selectionEnd.Y.ValidateMaximum(imageSize.Height);
 
             // Defines the Selection Area size with the coordinates.
             areaToSelect.Width = selectionEnd.X - areaToSelect.X;

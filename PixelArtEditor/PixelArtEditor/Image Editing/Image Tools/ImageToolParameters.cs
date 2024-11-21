@@ -11,9 +11,9 @@
         public Color? BackgroundColor { get; set; }
 
         /// <summary>
-        /// The original image's dimensions.
+        /// The image's dimensions.
         /// </summary>
-        public Size? OriginalImagesize { get; set; }
+        public Size? Imagesize { get; set; }
 
         /// <summary>
         /// A color value, representing an old color that will be replaced in the image.
