@@ -21,6 +21,7 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 
         public void RollbackChange(Graphics imageGraphics)
         {
+            imageGraphics.Clear(Color.Transparent);
             imageGraphics.DrawImage(UneditedImage, 0, 0);
         }
     }

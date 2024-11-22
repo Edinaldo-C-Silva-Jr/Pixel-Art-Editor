@@ -42,7 +42,6 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool
 
         public void RollbackChange(Graphics imageGraphics)
         {
-            // TODO: Change every command to undo with transparency.
             imageGraphics.SetClip(new Rectangle(EditLocation, UneditedImage.Size));
             imageGraphics.Clear(Color.Transparent);
             imageGraphics.DrawImage(UneditedImage, EditLocation);

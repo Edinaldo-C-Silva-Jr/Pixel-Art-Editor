@@ -24,6 +24,8 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 
         public void RollbackChange(Graphics imageGraphics)
         {
+            imageGraphics.SetClip(new Rectangle(EditLocation, UneditedImage.Size));
+            imageGraphics.Clear(Color.Transparent);
             imageGraphics.DrawImage(UneditedImage, EditLocation);
         }
     }

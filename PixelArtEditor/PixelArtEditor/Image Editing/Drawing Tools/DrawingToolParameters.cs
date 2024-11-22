@@ -24,10 +24,5 @@
         /// The background color of the image.
         /// </summary>
         public Color? BackgroundColor { get; set; }
-
-        /// <summary>
-        /// If the image is using a transparent background or not.
-        /// </summary>
-        public bool? Transparency { get; set; }
     }
 }

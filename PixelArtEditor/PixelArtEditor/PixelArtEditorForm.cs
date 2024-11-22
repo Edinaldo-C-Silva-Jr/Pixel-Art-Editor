@@ -156,6 +156,7 @@ namespace PixelArtEditor
             ImageToolParameters imageParameters = new()
             {
                 Imagesize = Images.OriginalImageSize,
+                BackgroundColor = TransparencyCheckBox.Checked ? Color.Transparent : BackgroundColorTable.GetCurrentColor(),
                 UpdateOriginalImage = Images.UpdateOriginalImage
             };
 
@@ -360,14 +361,15 @@ namespace PixelArtEditor
         private void ClearOriginalImage()
         {
             IImageTool tool = ImageFactory.ChangeCurrentTool(0);
+            Color backgroundColor = TransparencyCheckBox.Checked ? Color.Transparent : BackgroundColorTable.GetCurrentColor();
             ImageToolParameters imageParameters = new()
             {
-                BackgroundColor = BackgroundColorTable.GetCurrentColor()
+                BackgroundColor = backgroundColor
             };
 
             UndoParameters undoParameters = new()
             {
-                BackgroundColor = BackgroundColorTable.GetCurrentColor()
+                BackgroundColor = backgroundColor
             };
 
             tool.UseTool(Images.EditOriginalImage, imageParameters);
@@ -491,14 +493,9 @@ namespace PixelArtEditor
                 toolParameters.ImageSize = Images.EditDrawingImage.Size;
             }
 
-            if (properties["Transparency"])
-            {
-                toolParameters.Transparency = TransparencyCheckBox.Checked;
-            }
-
             if (properties["BackgroundColor"])
             {
-                toolParameters.BackgroundColor = BackgroundColorTable.GetCurrentColor();
+                toolParameters.BackgroundColor = TransparencyCheckBox.Checked ? Color.Transparent : BackgroundColorTable.GetCurrentColor();
             }
 
             if (properties["PixelSize"])

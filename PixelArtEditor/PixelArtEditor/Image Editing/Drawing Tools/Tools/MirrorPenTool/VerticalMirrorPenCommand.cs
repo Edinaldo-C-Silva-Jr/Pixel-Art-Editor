@@ -59,7 +59,12 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
         public void RollbackChange(Graphics imageGraphics)
         {
             // Draws each unedited image to their respective locations.
+            imageGraphics.SetClip(new Rectangle(EditLocations.upper, UpperUneditedImage.Size));
+            imageGraphics.Clear(Color.Transparent);
             imageGraphics.DrawImage(UpperUneditedImage, EditLocations.upper);
+
+            imageGraphics.SetClip(new Rectangle(EditLocations.lower, LowerUneditedImage.Size));
+            imageGraphics.Clear(Color.Transparent);
             imageGraphics.DrawImage(LowerUneditedImage, EditLocations.lower);
         }
     }

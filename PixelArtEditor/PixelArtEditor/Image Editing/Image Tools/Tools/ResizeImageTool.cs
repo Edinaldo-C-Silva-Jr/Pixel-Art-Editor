@@ -9,7 +9,7 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 
         public void UseTool(Bitmap originalImage, ImageToolParameters parameters)
         {
-            if (parameters.Imagesize.HasValue && parameters.UpdateOriginalImage is not null)
+            if (parameters.Imagesize.HasValue && parameters.BackgroundColor.HasValue && parameters.UpdateOriginalImage is not null)
             {
                 UneditedImage = new(originalImage);
                 // Creates a new image with the currently defined size.
@@ -17,13 +17,14 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
                 using Graphics newSizeGraphics = Graphics.FromImage(imageWithNewSize);
 
                 // Draws the Original Image on top of the new image, then assigns it to the Original Image.
-                newSizeGraphics.Clear(Color.White);
+                newSizeGraphics.Clear(parameters.BackgroundColor.Value);
                 newSizeGraphics.DrawImage(originalImage, 0, 0);
 
                 parameters.UpdateOriginalImage(imageWithNewSize);
                 EditedImage = new(imageWithNewSize);
             }
         }
+
         public IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
         {
             if (parameters.UpdateOriginalImage is not null && parameters.ChangeOriginalImageSize is not null 

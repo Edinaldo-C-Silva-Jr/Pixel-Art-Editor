@@ -42,6 +42,8 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.RectangleTool
 
         public void RollbackChange(Graphics imageGraphics)
         {
+            imageGraphics.SetClip(new Rectangle(EditLocation, UneditedImage.Size));
+            imageGraphics.Clear(Color.Transparent);
             imageGraphics.DrawImage(UneditedImage, EditLocation);
         }
     }
