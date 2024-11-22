@@ -196,7 +196,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.OtherTools
                 // Getting the location where the edits started.
                 Point editLocation = new(parameters.DrawingImageLocation.Value.X + LeftBoundary, parameters.DrawingImageLocation.Value.Y + UpperBoundary);
 
-                PenCommand undoStep = new(new Bitmap(UneditedImage), new Bitmap(EditedImage), editLocation);
+                EraserCommand undoStep = new(new Bitmap(UneditedImage), new Bitmap(EditedImage), editLocation);
                 ClearProperties();
                 return undoStep;
             }

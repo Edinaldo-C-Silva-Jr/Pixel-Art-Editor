@@ -308,6 +308,10 @@ namespace PixelArtEditor.Files
         public void ApplyDrawnImage()
         {
             using Graphics mergeGraphics = Graphics.FromImage(EditOriginalImage);
+
+            mergeGraphics.SetClip(new Rectangle(DrawingLocation, EditDrawingImage.Size));
+            mergeGraphics.Clear(Color.Transparent);
+
             mergeGraphics.DrawImage(EditDrawingImage, DrawingLocation);
             CreateNewDisplayOriginalImage();
         }
