@@ -92,7 +92,8 @@ namespace PixelArtEditor.Files
             drawingGraphics.Clear(Color.White);
         }
 
-        public void UpdateOriginalImage(Bitmap newImage)
+        #region Methods for Setting Images
+        public void ChangeOriginalImage(Bitmap newImage)
         {
             EditOriginalImage?.Dispose();
             EditOriginalImage = new(newImage);
@@ -128,6 +129,7 @@ namespace PixelArtEditor.Files
             ApplyDrawnImage();
             CreateNewDisplayDrawingImage();
         }
+        #endregion
 
         #region Original Image Size, Creation and Changing
         /// <summary>
@@ -168,11 +170,9 @@ namespace PixelArtEditor.Files
         /// <param name="pixelHeight">The height of the image, in pixels.</param>
         public void ChangeDrawingImageSize(int pixelWidth, int pixelHeight)
         {
-            (pixelWidth, pixelHeight) = ValidateDrawingSize(pixelWidth, pixelHeight);
-
             DrawingImageSize = new Size(pixelWidth, pixelHeight);
 
-            ChangeDrawingImageLocation();
+            CreateImageToDraw();
         }
 
         /// <summary>
@@ -192,21 +192,11 @@ namespace PixelArtEditor.Files
         /// <param name="pixelWidth">The pixel width of the Drawing Image.</param>
         /// <param name="pixelHeight">The pixel height of the Drawing Image.</param>
         /// <returns>A tuple of width and height values.</returns>
-        private (int, int) ValidateDrawingSize(int pixelWidth, int pixelHeight)
+        private Size ValidateDrawingSize(Size drawingSize)
         {
-            pixelWidth = pixelWidth.ValidateMaximum(OriginalImageSize.Width);
-            pixelHeight = pixelHeight.ValidateMaximum(OriginalImageSize.Height);
-            return (pixelWidth, pixelHeight);
-        }
-
-        /// <summary>
-        /// Defines a new location for the Drawing Image to be taken from the Original Image.
-        /// Uses the current Drawing Location value.
-        /// </summary>
-        private void ChangeDrawingImageLocation()
-        {
-            DrawingLocation = ValidadeDrawingLocation(DrawingLocation);
-            CreateImageToDraw();
+            int pixelWidth = drawingSize.Width.ValidateMaximum(OriginalImageSize.Width);
+            int pixelHeight = drawingSize.Height.ValidateMaximum(OriginalImageSize.Height);
+            return new Size(pixelWidth, pixelHeight);
         }
 
         /// <summary>
@@ -216,7 +206,6 @@ namespace PixelArtEditor.Files
         /// <param name="location">The new location from which the Drawing Image will be copied in the Original Image.</param>
         public void ChangeDrawingImageLocation(Point location)
         {
-            location = ValidadeDrawingLocation(location);
             DrawingLocation = location;
             CreateImageToDraw();
         }
@@ -294,6 +283,9 @@ namespace PixelArtEditor.Files
         /// </summary>
         public void CreateImageToDraw()
         {
+            DrawingImageSize = ValidateDrawingSize(DrawingImageSize);
+            DrawingLocation = ValidadeDrawingLocation(DrawingLocation);
+
             // Defines a rectangle to clone the Drawing Image from the Original Image.
             Rectangle areaToCopyFromOriginalImage = new(DrawingLocation, DrawingImageSize);
             EditDrawingImage?.Dispose();
@@ -323,38 +315,6 @@ namespace PixelArtEditor.Files
         {
             DisplayDrawingImage?.Dispose();
             DisplayDrawingImage = EditDrawingImage.ApplyZoomNearestNeighbor(DrawingImageSize.Width * DrawingImageZoom, DrawingImageSize.Height * DrawingImageZoom);
-        }
-        #endregion
-
-        #region Adding and Removing Transparency
-        /// <summary>
-        /// Makes the image transparent based on the background color.
-        /// </summary>
-        /// <param name="transparencyColor">The color to be made transparent in the image.</param>
-        public void MakeImageTransparent(Color transparencyColor)
-        {
-            EditOriginalImage.MakeTransparent(transparencyColor);
-
-            CreateNewDisplayOriginalImage();
-        }
-
-        /// <summary>
-        /// Removes the transparency of the image, applying a solid color to its background.
-        /// </summary>
-        /// <param name="backgroundColor">The color to be applied as the image's background.</param>
-        public void MakeImageNotTransparent(Color backgroundColor)
-        {
-            // Creates a temporary image and applies the background color to it.
-            Bitmap temporaryImage = new(OriginalImageSize.Width, OriginalImageSize.Height);
-            using Graphics temporaryGraphics = Graphics.FromImage(temporaryImage);
-            temporaryGraphics.Clear(backgroundColor);
-
-            // Then draws the Original Image on top of the solid color image to remove the transparency.
-            temporaryGraphics.DrawImage(EditOriginalImage, 0, 0);
-            EditOriginalImage.Dispose();
-            EditOriginalImage = temporaryImage;
-
-            CreateNewDisplayOriginalImage();
         }
         #endregion
 

@@ -38,11 +38,13 @@
 
                 if (sidePixelLength % gridPieceSize != 0) // Checks if the side length is a multiple of the grid piece size.
                 {
-                    amountOfGridPieces = (int)Math.Pow(sidePixelLength / gridPieceSize + 1, 2); // If it isn't, one extra grid piece will be needed in each line to cover the image, so the division needs to be added 1 before being squared.
+                    // If it isn't, one extra grid piece will be needed in each line to cover the image, so the division needs to be added 1 before being squared.
+                    amountOfGridPieces = (int)Math.Pow(sidePixelLength / gridPieceSize + 1, 2);
                 }
                 else
                 {
-                    amountOfGridPieces = (int)Math.Pow(sidePixelLength / gridPieceSize, 2); // If it is, then just square the division.
+                    // If it is, then just square the division.
+                    amountOfGridPieces = (int)Math.Pow(sidePixelLength / gridPieceSize, 2); 
                 }
 
                 int totalActions = amountOfGridPieces + gridPieceSize * 2;

@@ -157,12 +157,12 @@ namespace PixelArtEditor
             {
                 Imagesize = Images.OriginalImageSize,
                 BackgroundColor = TransparencyCheckBox.Checked ? Color.Transparent : BackgroundColorTable.GetCurrentColor(),
-                UpdateOriginalImage = Images.UpdateOriginalImage
+                UpdateOriginalImage = Images.ChangeOriginalImage
             };
 
             UndoParameters undoParameters = new()
             {
-                UpdateOriginalImage = Images.UpdateOriginalImage,
+                UpdateOriginalImage = Images.ChangeOriginalImage,
                 ChangeOriginalImageSize = Images.ChangeOriginalImageSize
             };
 
@@ -1037,6 +1037,7 @@ namespace PixelArtEditor
             DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             Images.CreateNewDisplayOriginalImage();
             SetViewingBoxSize();
+            SetDrawingBoxSize();
         }
 
         private void RedoButton_Click(object sender, EventArgs e)
@@ -1054,6 +1055,7 @@ namespace PixelArtEditor
             DrawingBox.SetNewImage(Images.DisplayDrawingImage);
             Images.CreateNewDisplayOriginalImage();
             SetViewingBoxSize();
+            SetDrawingBoxSize();
         }
 
         private void SetUndoRedoButtonAvailability()
