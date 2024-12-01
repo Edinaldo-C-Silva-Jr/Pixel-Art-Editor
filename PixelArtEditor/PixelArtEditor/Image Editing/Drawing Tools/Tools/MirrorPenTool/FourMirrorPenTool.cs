@@ -83,19 +83,25 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
                 // For a four mirror pen, the Edited Image only considers the top left quarter of the image, since the other quarters are the same image mirrored.
                 Rectangle editedArea = new(LeftBoundary, UpperBoundary, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
                 using Bitmap topLeftUneditedImage = UneditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
-                EditedImage = EditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
+                using Bitmap topLeftEditedImage = EditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
 
                 // Mirrors the area horizontally, to get the unedited portion of the image on the top right quarter.
                 editedArea = new(UneditedImage.Width - RightBoundary - 1, UpperBoundary, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
                 using Bitmap topRightUneditedImage = UneditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
+                using Bitmap topRightEditedImage = EditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
 
                 // Mirrors the area vertically, to get the unedited portion of the image on the bottom left quarter.
                 editedArea = new(LeftBoundary, UneditedImage.Height - LowerBoundary - 1, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
                 using Bitmap lowerLeftUneditedImage = UneditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
+                using Bitmap lowerLeftEditedImage = EditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
 
                 // Mirrors the area horizontally and vertically, to get the unedited portion of the image on the bottom right quarter.
                 editedArea = new(UneditedImage.Width - RightBoundary - 1, UneditedImage.Height - LowerBoundary - 1, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
                 using Bitmap lowerRightUneditedImage = UneditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
+                using Bitmap lowerRightEditedImage = EditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
+
+                // Changes the edited image to stop it from referencing the original DrawingImage.
+                EditedImage = null;
 
                 // Getting the locations where the edits started.
                 // These are the four locations that represent the top left pixel of all edited areas.
@@ -105,7 +111,8 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
                 Point lowerRightEditLocation = new(parameters.DrawingImageLocation.Value.X + UneditedImage.Width - RightBoundary - 1, parameters.DrawingImageLocation.Value.Y + UneditedImage.Height - LowerBoundary - 1);
 
                 FourMirrorPenCommand undoStep = new(new Bitmap(topLeftUneditedImage), new Bitmap(topRightUneditedImage), new Bitmap(lowerLeftUneditedImage), new Bitmap(lowerRightUneditedImage),
-                    new(EditedImage), topLeftEditLocation, topRightEditLocation, lowerLeftEditLocation, lowerRightEditLocation);
+                    new(topLeftEditedImage), new(topRightEditedImage), new(lowerLeftEditedImage), new(lowerRightEditedImage),
+                    topLeftEditLocation, topRightEditLocation, lowerLeftEditLocation, lowerRightEditLocation);
                 ClearProperties();
                 return undoStep;
             }
@@ -113,7 +120,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
             {
                 return null;
             }
-            
+
         }
     }
 }

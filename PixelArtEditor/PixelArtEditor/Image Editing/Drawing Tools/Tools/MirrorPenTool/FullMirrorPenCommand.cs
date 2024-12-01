@@ -18,9 +18,14 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
         private Bitmap BottomRightUneditedImage { get; }
 
         /// <summary>
-        /// The portion of the drawing image that was drawn on, after it was edited.
+        /// The top left portion of the drawing image that was drawn on, after it was edited.
         /// </summary>
-        private Bitmap EditedImage { get; }
+        private Bitmap TopLeftEditedImage { get; }
+
+        /// <summary>
+        /// The bottom right portion of the drawing image that was drawn on, after it was edited.
+        /// </summary>
+        private Bitmap BottomRightEditedImage { get; }
 
         /// <summary>
         /// The four locations of the original image where the edit was done.
@@ -35,24 +40,20 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
         /// <param name="newImage">The part of the image that was drawn on, after it was edited.</param>
         /// <param name="topLeft">The location where the top left edit was done.</param>
         /// <param name="bottomRight">The location where the bottom right edit was done.</param>
-        public FullMirrorPenCommand(Bitmap topLeftOldImage, Bitmap bottomRightOldImage, Bitmap newImage, Point topLeft, Point bottomRight)
+        public FullMirrorPenCommand(Bitmap topLeftOldImage, Bitmap bottomRightOldImage, Bitmap topLeftNewImage, Bitmap bottomRightNewImage, Point topLeft, Point bottomRight)
         {
             TopLeftUneditedImage = topLeftOldImage;
             BottomRightUneditedImage = bottomRightOldImage;
-            EditedImage = newImage;
+            TopLeftEditedImage = topLeftNewImage;
+            BottomRightEditedImage = bottomRightNewImage;
             EditLocations = (topLeft, bottomRight);
         }
 
         public void ExecuteChange(Graphics imageGraphics)
         {
-            // Draws the edited image on the top left edit point.
-            imageGraphics.DrawImage(EditedImage, EditLocations.topLeft);
-
-            using Bitmap mirroredImage = new(EditedImage);
-
-            // Flips the edited image horizontally and draws it on the bottom right edit point.
-            mirroredImage.RotateFlip(RotateFlipType.RotateNoneFlipXY);
-            imageGraphics.DrawImage(mirroredImage, EditLocations.bottomRight);
+            // Draws each edited image to their respective locations.
+            imageGraphics.DrawImage(TopLeftEditedImage, EditLocations.topLeft);
+            imageGraphics.DrawImage(BottomRightEditedImage, EditLocations.bottomRight);
         }
 
         public void RollbackChange(Graphics imageGraphics)

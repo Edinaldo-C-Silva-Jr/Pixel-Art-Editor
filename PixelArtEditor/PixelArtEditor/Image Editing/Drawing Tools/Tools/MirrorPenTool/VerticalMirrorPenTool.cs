@@ -55,18 +55,22 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
                 // For a vertical mirror pen, the Edited Image only considers the upper half of the image, since the lower half is the same image mirrored.
                 Rectangle editedArea = new(LeftBoundary, UpperBoundary, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
                 using Bitmap upperUneditedImage = UneditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
-                EditedImage = EditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
+                using Bitmap upperEditedImage = EditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
 
                 // Mirrors the area vertically, to get the unedited portion of the image on the lower half.
                 editedArea = new(LeftBoundary, UneditedImage.Height - LowerBoundary - 1, RightBoundary - LeftBoundary + 1, LowerBoundary - UpperBoundary + 1);
                 using Bitmap lowerUneditedImage = UneditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
+                using Bitmap lowerEditedImage = EditedImage.Clone(editedArea, PixelFormat.Format32bppArgb);
+
+                // Changes the edited image to stop it from referencing the original DrawingImage.
+                EditedImage = null;
 
                 // Getting the locations where the edits started.
                 // These are the two locations that represent the top left pixel of both edited areas.
                 Point upperEditLocation = new(parameters.DrawingImageLocation.Value.X + LeftBoundary, parameters.DrawingImageLocation.Value.Y + UpperBoundary);
                 Point lowerEditLocation = new(parameters.DrawingImageLocation.Value.X + LeftBoundary, parameters.DrawingImageLocation.Value.Y + UneditedImage.Height - LowerBoundary - 1);
 
-                VerticalMirrorPenCommand undoStep = new(new Bitmap(upperUneditedImage), new Bitmap(lowerUneditedImage), new(EditedImage), upperEditLocation, lowerEditLocation);
+                VerticalMirrorPenCommand undoStep = new(new Bitmap(upperUneditedImage), new Bitmap(lowerUneditedImage), new(upperEditedImage), new(lowerEditedImage), upperEditLocation, lowerEditLocation);
                 ClearProperties();
                 return undoStep;
             }

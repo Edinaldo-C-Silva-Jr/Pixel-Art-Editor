@@ -52,8 +52,6 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
         {
             // Draws each edited image to their respective locations.
             imageGraphics.DrawImage(LeftEditedImage, EditLocations.left);
-
-            // Draws the mirrored edited image on the right edit point.
             imageGraphics.DrawImage(RightEditedImage, EditLocations.right);
         }
 

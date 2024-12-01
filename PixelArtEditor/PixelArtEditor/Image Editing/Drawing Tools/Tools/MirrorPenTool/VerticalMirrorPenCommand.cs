@@ -8,19 +8,24 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
     public class VerticalMirrorPenCommand : IUndoRedoCommand
     {
         /// <summary>
-        /// The top portion of the drawing image that was drawn on, before it was edited.
+        /// The upper portion of the drawing image that was drawn on, before it was edited.
         /// </summary>
         private Bitmap UpperUneditedImage { get; }
 
         /// <summary>
-        /// The bottom portion of the drawing image that was drawn on, before it was edited.
+        /// The lower portion of the drawing image that was drawn on, before it was edited.
         /// </summary>
         private Bitmap LowerUneditedImage { get; }
 
         /// <summary>
-        /// The portion of the drawing image that was drawn on, after it was edited.
+        /// The upper portion of the drawing image that was drawn on, after it was edited.
         /// </summary>
-        private Bitmap EditedImage { get; }
+        private Bitmap UpperEditedImage { get; }
+
+        /// <summary>
+        /// The lower portion of the drawing image that was drawn on, after it was edited.
+        /// </summary>
+        private Bitmap LowerEditedImage { get; }
 
         /// <summary>
         /// The two locations of the original image where the edit was done.
@@ -35,25 +40,20 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
         /// <param name="newImage">The part of the image that was drawn on, after it was edited.</param>
         /// <param name="upperLocation">The location where the upper edit was done.</param>
         /// <param name="lowerLocation">The location where the lower edit was done.</param>
-        public VerticalMirrorPenCommand(Bitmap upperOldImage, Bitmap lowerOldImage, Bitmap newImage, Point upperLocation, Point lowerLocation)
+        public VerticalMirrorPenCommand(Bitmap upperOldImage, Bitmap lowerOldImage, Bitmap upperNewImage, Bitmap lowerNewImage, Point upperLocation, Point lowerLocation)
         {
             UpperUneditedImage = upperOldImage;
             LowerUneditedImage = lowerOldImage;
-            EditedImage = newImage;
+            UpperEditedImage = upperNewImage;
+            LowerEditedImage = lowerNewImage;
             EditLocations = (upperLocation, lowerLocation);
         }
 
         public void ExecuteChange(Graphics imageGraphics)
         {
-            // Draws the edited image on the upper edit point.
-            imageGraphics.DrawImage(EditedImage, EditLocations.upper);
-
-            // Flips the edited image vertically.
-            using Bitmap mirroredImage = new(EditedImage);
-            mirroredImage.RotateFlip(RotateFlipType.RotateNoneFlipY);
-
-            // Draws the mirrored edited image on the lower edit point.
-            imageGraphics.DrawImage(mirroredImage, EditLocations.lower);
+            // Draws each edited image to their respective locations.
+            imageGraphics.DrawImage(UpperEditedImage, EditLocations.upper);
+            imageGraphics.DrawImage(LowerEditedImage, EditLocations.lower);
         }
 
         public void RollbackChange(Graphics imageGraphics)
