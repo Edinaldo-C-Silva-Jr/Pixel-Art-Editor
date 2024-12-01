@@ -18,9 +18,13 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
         private Bitmap RightUneditedImage { get; }
 
         /// <summary>
-        /// The portion of the drawing image that was drawn on, after it was edited.
+        /// The left portion of the drawing image that was drawn on, after it was edited.
         /// </summary>
-        private Bitmap EditedImage { get; }
+        private Bitmap LeftEditedImage { get; }
+        /// <summary>
+        /// The right portion of the drawing image that was drawn on, after it was edited.
+        /// </summary>
+        private Bitmap RightEditedImage { get; }
 
         /// <summary>
         /// The two locations of the original image where the edit was done.
@@ -35,25 +39,22 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
         /// <param name="newImage">The part of the image that was drawn on, after it was edited.</param>
         /// <param name="leftLocation">The location where the left edit was done.</param>
         /// <param name="rightLocation">The location where the right edit was done.</param>
-        public HorizontalMirrorPenCommand(Bitmap leftOldImage, Bitmap rightOldImage, Bitmap newImage, Point leftLocation, Point rightLocation)
+        public HorizontalMirrorPenCommand(Bitmap leftOldImage, Bitmap rightOldImage, Bitmap leftNewImage, Bitmap rightNewImage, Point leftLocation, Point rightLocation)
         {
             LeftUneditedImage = leftOldImage;
             RightUneditedImage = rightOldImage;
-            EditedImage = newImage;
+            LeftEditedImage = leftNewImage;
+            RightEditedImage = rightNewImage;
             EditLocations = (leftLocation, rightLocation);
         }
 
         public void ExecuteChange(Graphics imageGraphics)
         {
-            // Draws the edited image on the left edit point.
-            imageGraphics.DrawImage(EditedImage, EditLocations.left);
-
-            // Flips the edited image horizontally.
-            using Bitmap mirroredImage = new(EditedImage);
-            mirroredImage.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            // Draws each edited image to their respective locations.
+            imageGraphics.DrawImage(LeftEditedImage, EditLocations.left);
 
             // Draws the mirrored edited image on the right edit point.
-            imageGraphics.DrawImage(mirroredImage, EditLocations.right);
+            imageGraphics.DrawImage(RightEditedImage, EditLocations.right);
         }
 
         public void RollbackChange(Graphics imageGraphics)
@@ -62,7 +63,6 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
             imageGraphics.SetClip(new Rectangle(EditLocations.left, LeftUneditedImage.Size));
             imageGraphics.Clear(Color.Transparent);
             imageGraphics.DrawImage(LeftUneditedImage, EditLocations.left);
-
 
             imageGraphics.SetClip(new Rectangle(EditLocations.right, RightUneditedImage.Size));
             imageGraphics.Clear(Color.Transparent);
