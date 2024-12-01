@@ -163,7 +163,8 @@ namespace PixelArtEditor
             UndoParameters undoParameters = new()
             {
                 UpdateOriginalImage = Images.ChangeOriginalImage,
-                ChangeOriginalImageSize = Images.ChangeOriginalImageSize
+                ChangeOriginalImageSize = Images.ChangeOriginalImageSize,
+                ChangeViewNumberBoxes = UpdateViewNumberBoxes
             };
 
             tool.UseTool(Images.EditOriginalImage, imageParameters);
@@ -175,6 +176,12 @@ namespace PixelArtEditor
             }
 
             SetViewingBoxSize();
+        }
+
+        private void UpdateViewNumberBoxes()
+        {
+            ViewWidthNumberBox.Value = Images.OriginalImageSize.Width;
+            ViewHeightNumberBox.Value = Images.OriginalImageSize.Height;
         }
 
         /// <summary>

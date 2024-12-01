@@ -16,6 +16,8 @@
 
         public Action<int, int>? ChangeOriginalImageSize { get; set; }
 
+        public Action? ChangeViewNumberBoxes { get; set; }
+
         public bool? MakeImageTransparent { get; set; }
     }
 }

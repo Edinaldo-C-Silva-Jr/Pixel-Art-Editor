@@ -27,10 +27,10 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 
         public IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
         {
-            if (parameters.UpdateOriginalImage is not null && parameters.ChangeOriginalImageSize is not null 
+            if (parameters.UpdateOriginalImage is not null && parameters.ChangeOriginalImageSize is not null && parameters.ChangeViewNumberBoxes is not null
                 && UneditedImage is not null && EditedImage is not null)
             {
-                ResizeImageCommand command = new(new(UneditedImage), new(EditedImage), parameters.UpdateOriginalImage, parameters.ChangeOriginalImageSize);
+                ResizeImageCommand command = new(new(UneditedImage), new(EditedImage), parameters.UpdateOriginalImage, parameters.ChangeOriginalImageSize, parameters.ChangeViewNumberBoxes);
                 ClearProperties();
                 return command;
             }
