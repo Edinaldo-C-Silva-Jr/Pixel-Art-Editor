@@ -80,6 +80,13 @@
             SeelctionSizeLabel = new Label();
             SelectionSizeComboBox = new ComboBox();
             TopBarPanel = new Panel();
+            ReplaceColorPanel = new Panel();
+            ReplacementColorLabel = new Label();
+            ReplacementColorTable = new Controls.ColorTable();
+            ColorToReplaceLabel = new Label();
+            ColorToReplaceTable = new Controls.ColorTable();
+            ReplaceColorButton = new Button();
+            ReplaceColorLabel = new Label();
             ImageOptionsPanel = new Panel();
             RedoButton = new Button();
             UndoButton = new Button();
@@ -93,6 +100,7 @@
             ViewingDivisionPanel = new Panel();
             DrawingBoxSizePanel = new Panel();
             ViewingBoxSizePanel = new Panel();
+            PickColorToReplaceButton = new Button();
             ((System.ComponentModel.ISupportInitialize)ViewWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewPixelSizeNumberBox).BeginInit();
@@ -105,6 +113,7 @@
             ((System.ComponentModel.ISupportInitialize)DrawHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DrawWidthNumberBox).BeginInit();
             TopBarPanel.SuspendLayout();
+            ReplaceColorPanel.SuspendLayout();
             ImageOptionsPanel.SuspendLayout();
             ColorPalettePanel.SuspendLayout();
             DrawingDivisionPanel.SuspendLayout();
@@ -754,6 +763,7 @@
             // TopBarPanel
             // 
             TopBarPanel.BackColor = Color.Silver;
+            TopBarPanel.Controls.Add(ReplaceColorPanel);
             TopBarPanel.Controls.Add(ImageOptionsPanel);
             TopBarPanel.Controls.Add(ColorPalettePanel);
             TopBarPanel.Controls.Add(DrawingToolButtonPanel);
@@ -761,6 +771,96 @@
             TopBarPanel.Name = "TopBarPanel";
             TopBarPanel.Size = new Size(1110, 160);
             TopBarPanel.TabIndex = 36;
+            // 
+            // ReplaceColorPanel
+            // 
+            ReplaceColorPanel.BackColor = Color.Gainsboro;
+            ReplaceColorPanel.BorderStyle = BorderStyle.FixedSingle;
+            ReplaceColorPanel.Controls.Add(PickColorToReplaceButton);
+            ReplaceColorPanel.Controls.Add(ReplacementColorLabel);
+            ReplaceColorPanel.Controls.Add(ReplacementColorTable);
+            ReplaceColorPanel.Controls.Add(ColorToReplaceLabel);
+            ReplaceColorPanel.Controls.Add(ColorToReplaceTable);
+            ReplaceColorPanel.Controls.Add(ReplaceColorButton);
+            ReplaceColorPanel.Controls.Add(ReplaceColorLabel);
+            ReplaceColorPanel.Location = new Point(400, 5);
+            ReplaceColorPanel.Name = "ReplaceColorPanel";
+            ReplaceColorPanel.Size = new Size(100, 150);
+            ReplaceColorPanel.TabIndex = 35;
+            // 
+            // ReplacementColorLabel
+            // 
+            ReplacementColorLabel.Location = new Point(5, 90);
+            ReplacementColorLabel.Name = "ReplacementColorLabel";
+            ReplacementColorLabel.Size = new Size(65, 20);
+            ReplacementColorLabel.TabIndex = 43;
+            ReplacementColorLabel.Text = "New Color";
+            ReplacementColorLabel.TextAlign = ContentAlignment.TopCenter;
+            // 
+            // ReplacementColorTable
+            // 
+            ReplacementColorTable.BackColor = SystemColors.Control;
+            ReplacementColorTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            ReplacementColorTable.CellSize = 16;
+            ReplacementColorTable.CellVisibleSelection = false;
+            ReplacementColorTable.ColumnCount = 1;
+            ReplacementColorTable.ColumnStyles.Add(new ColumnStyle());
+            ReplacementColorTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            ReplacementColorTable.Location = new Point(70, 90);
+            ReplacementColorTable.MaximumCellAmount = 1;
+            ReplacementColorTable.Name = "ReplacementColorTable";
+            ReplacementColorTable.RowCount = 2;
+            ReplacementColorTable.RowStyles.Add(new RowStyle());
+            ReplacementColorTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            ReplacementColorTable.Size = new Size(20, 20);
+            ReplacementColorTable.TabIndex = 42;
+            // 
+            // ColorToReplaceLabel
+            // 
+            ColorToReplaceLabel.Location = new Point(5, 25);
+            ColorToReplaceLabel.Name = "ColorToReplaceLabel";
+            ColorToReplaceLabel.Size = new Size(60, 20);
+            ColorToReplaceLabel.TabIndex = 41;
+            ColorToReplaceLabel.Text = "Old Color";
+            ColorToReplaceLabel.TextAlign = ContentAlignment.TopCenter;
+            // 
+            // ColorToReplaceTable
+            // 
+            ColorToReplaceTable.BackColor = SystemColors.Control;
+            ColorToReplaceTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            ColorToReplaceTable.CellSize = 16;
+            ColorToReplaceTable.CellVisibleSelection = false;
+            ColorToReplaceTable.ColumnCount = 1;
+            ColorToReplaceTable.ColumnStyles.Add(new ColumnStyle());
+            ColorToReplaceTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            ColorToReplaceTable.Location = new Point(70, 25);
+            ColorToReplaceTable.MaximumCellAmount = 1;
+            ColorToReplaceTable.Name = "ColorToReplaceTable";
+            ColorToReplaceTable.RowCount = 2;
+            ColorToReplaceTable.RowStyles.Add(new RowStyle());
+            ColorToReplaceTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            ColorToReplaceTable.Size = new Size(20, 20);
+            ColorToReplaceTable.TabIndex = 40;
+            // 
+            // ReplaceColorButton
+            // 
+            ReplaceColorButton.Location = new Point(5, 115);
+            ReplaceColorButton.Name = "ReplaceColorButton";
+            ReplaceColorButton.Size = new Size(90, 30);
+            ReplaceColorButton.TabIndex = 39;
+            ReplaceColorButton.Text = "Replace Color";
+            ReplaceColorButton.UseVisualStyleBackColor = true;
+            // 
+            // ReplaceColorLabel
+            // 
+            ReplaceColorLabel.Dock = DockStyle.Top;
+            ReplaceColorLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            ReplaceColorLabel.Location = new Point(0, 0);
+            ReplaceColorLabel.Name = "ReplaceColorLabel";
+            ReplaceColorLabel.Size = new Size(98, 15);
+            ReplaceColorLabel.TabIndex = 38;
+            ReplaceColorLabel.Text = "Replace Color";
+            ReplaceColorLabel.TextAlign = ContentAlignment.TopCenter;
             // 
             // ImageOptionsPanel
             // 
@@ -931,6 +1031,16 @@
             ViewingBoxSizePanel.Size = new Size(550, 32);
             ViewingBoxSizePanel.TabIndex = 40;
             // 
+            // PickColorToReplaceButton
+            // 
+            PickColorToReplaceButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            PickColorToReplaceButton.Location = new Point(5, 50);
+            PickColorToReplaceButton.Name = "PickColorToReplaceButton";
+            PickColorToReplaceButton.Size = new Size(90, 30);
+            PickColorToReplaceButton.TabIndex = 44;
+            PickColorToReplaceButton.Text = "Pick old color";
+            PickColorToReplaceButton.UseVisualStyleBackColor = true;
+            // 
             // PixelArtEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -962,6 +1072,7 @@
             ((System.ComponentModel.ISupportInitialize)DrawHeightNumberBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)DrawWidthNumberBox).EndInit();
             TopBarPanel.ResumeLayout(false);
+            ReplaceColorPanel.ResumeLayout(false);
             ImageOptionsPanel.ResumeLayout(false);
             ColorPalettePanel.ResumeLayout(false);
             ColorPalettePanel.PerformLayout();
@@ -1039,5 +1150,13 @@
         private Controls.ToolButton DitheringPenButton;
         private Panel DrawingBoxSizePanel;
         private Panel ViewingBoxSizePanel;
+        private Panel ReplaceColorPanel;
+        private Label ReplaceColorLabel;
+        private Label ColorToReplaceLabel;
+        private Controls.ColorTable ColorToReplaceTable;
+        private Button ReplaceColorButton;
+        private Label ReplacementColorLabel;
+        private Controls.ColorTable ReplacementColorTable;
+        private Button PickColorToReplaceButton;
     }
 }

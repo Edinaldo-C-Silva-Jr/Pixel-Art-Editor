@@ -109,6 +109,8 @@ namespace PixelArtEditor
             GridColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked), Color.LightGray);
             BackgroundColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked), Color.White);
             PaletteColorTable.GenerateColorGrid(64, new EventHandler(ColorCellClicked));
+            ColorToReplaceTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked), Color.White);
+            ReplacementColorTable.GenerateColorGrid(1, new EventHandler(ColorCellClicked), Color.White);
 
             // Defines the values for the GridType ComboBox based on the GridType Enum values.
             GridTypeComboBox.DataSource = Enum.GetValues(typeof(GridType));
