@@ -31,7 +31,7 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 
         public IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
         {
-            if (parameters.ChangeCellColor is not null && parameters.OldColor.HasValue && parameters.NewColor.HasValue && UneditedImage is not null && EditedImage is not null)
+            if (parameters.OldColor.HasValue && parameters.NewColor.HasValue && UneditedImage is not null && EditedImage is not null)
             {
                 ReplaceColorCommand command = new(new(UneditedImage), new(EditedImage), parameters.ChangeCellColor, parameters.OldColor.Value, parameters.NewColor.Value);
                 ClearProperties();

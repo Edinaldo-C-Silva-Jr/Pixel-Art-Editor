@@ -119,7 +119,6 @@ namespace PixelArtEditor
             GridTypeComboBox.SelectedItem = GridType.None;
             SelectionSizeComboBox.SelectedIndex = 0;
             TransparencyCheckBox.Checked = false;
-            ColorChangeCheckBox.Checked = true;
             ViewPixelSizeNumberBar.Value = 4;
             DrawPixelSizeNumberBar.Value = 16;
 
@@ -809,14 +808,14 @@ namespace PixelArtEditor
             ResumeLayout();
         }
 
-        private void ChangeImageTransparency(bool transparency)
+        private void ChangeImageTransparency(bool transparency, Color? transparentColor = null)
         {
             IImageTool tool = ImageFactory.ChangeCurrentTool(7);
 
             ImageToolParameters imageParameters = new()
             {
                 MakeImageTransparent = transparency,
-                BackgroundColor = BackgroundColorTable.GetCurrentColor()
+                BackgroundColor = transparentColor ?? BackgroundColorTable.GetCurrentColor()
             };
 
             UndoParameters undoParameters = new();
@@ -856,28 +855,13 @@ namespace PixelArtEditor
 
                 if (colorpicked == DialogResult.OK)
                 {
-                    bool colorWasSwaped = false;
-
-                    // The color will always be swaped for the image's background, and never be swapped when changing the grid color.
-                    // Otherwise only if: The Change Color option is enabled, the cell is not in its default color and the color isn't the background color.
-                    if (cellParent.Name == "BackgroundColorTable" ||
-                        (cellParent.Name != "GridColorTable" && !cell.DefaultColor && ColorChangeCheckBox.Checked && cell.BackColor != BackgroundColorTable.GetCurrentColor()))
+                    // The color will only be swaped for the image's background
+                    if (cellParent.Name == "BackgroundColorTable")
                     {
                         SwapColorInImage(cell.BackColor, ColorPickerDialog.Color, cell.ChangeCellColor);
                         cell.ChangeCellColor(ColorPickerDialog.Color);
-                        colorWasSwaped = true;
-                    }
 
-                    // If the swap was done to the background, check if the background should be shown as transparent
-                    if (cellParent.Name == "BackgroundColorTable" && TransparencyCheckBox.Checked)
-                    {
-                        ChangeImageTransparency(true);
-                        colorWasSwaped = true;
-                    }
-
-                    // Only reload the image if there was a color swap.
-                    if (colorWasSwaped)
-                    {
+                        // Reload the image if there was a color swap.
                         Images.CreateNewDisplayOriginalImage();
                         ViewingBox.SetNewImage(Images.DisplayOriginalImage);
                         Images.CreateImageToDraw();
@@ -903,7 +887,7 @@ namespace PixelArtEditor
         /// </summary>
         /// <param name="oldColor">The color to be replaced in the image.</param>
         /// <param name="newColor">The new color to apply to the image in place of the old one.</param>
-        private void SwapColorInImage(Color oldColor, Color newColor, Action<Color> changeCellColor)
+        private void SwapColorInImage(Color oldColor, Color newColor, Action<Color>? changeCellColor)
         {
             // If the image has a transparent background, temportarily remove the transparency.
             if (TransparencyCheckBox.Checked)
@@ -936,7 +920,7 @@ namespace PixelArtEditor
             // Restored transparency to image if needed.
             if (TransparencyCheckBox.Checked)
             {
-                ChangeImageTransparency(true);
+                ChangeImageTransparency(true, newColor);
             }
         }
 
@@ -1093,6 +1077,16 @@ namespace PixelArtEditor
             DrawingBox.MouseUp -= DrawingBox_MouseUp;
 
             DrawingBox.MouseDown += DrawingBox_MouseDown_ReplaceColor;
+        }
+
+        private void ReplaceColorButton_Click(object sender, EventArgs e)
+        {
+            SwapColorInImage(ColorToReplaceTable.GetCurrentColor(), ReplacementColorTable.GetCurrentColor(), null);
+
+            Images.CreateNewDisplayOriginalImage();
+            ViewingBox.SetNewImage(Images.DisplayOriginalImage);
+            Images.CreateImageToDraw();
+            DrawingBox.SetNewImage(Images.DisplayDrawingImage);
         }
     }
 }

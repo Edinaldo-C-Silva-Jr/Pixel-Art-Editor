@@ -43,7 +43,6 @@
             DrawingBox = new Controls.DrawBox();
             PaletteColorTable = new Controls.ColorTable();
             BackgroundColorTable = new Controls.ColorTable();
-            ColorChangeCheckBox = new CheckBox();
             BackgroundColorLabel = new Label();
             GridColorTable = new Controls.ColorTable();
             GridColorLabel = new Label();
@@ -281,15 +280,6 @@
             BackgroundColorTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             BackgroundColorTable.Size = new Size(20, 20);
             BackgroundColorTable.TabIndex = 14;
-            // 
-            // ColorChangeCheckBox
-            // 
-            ColorChangeCheckBox.Location = new Point(115, 35);
-            ColorChangeCheckBox.Name = "ColorChangeCheckBox";
-            ColorChangeCheckBox.Size = new Size(150, 20);
-            ColorChangeCheckBox.TabIndex = 13;
-            ColorChangeCheckBox.Text = "Change Color in Image";
-            ColorChangeCheckBox.UseVisualStyleBackColor = true;
             // 
             // BackgroundColorLabel
             // 
@@ -861,6 +851,7 @@
             ReplaceColorButton.TabIndex = 39;
             ReplaceColorButton.Text = "Replace Color";
             ReplaceColorButton.UseVisualStyleBackColor = true;
+            ReplaceColorButton.Click += ReplaceColorButton_Click;
             // 
             // ReplaceColorLabel
             // 
@@ -932,7 +923,6 @@
             ColorPalettePanel.Controls.Add(SavePaletteButton);
             ColorPalettePanel.Controls.Add(BackgroundColorTable);
             ColorPalettePanel.Controls.Add(TransparencyCheckBox);
-            ColorPalettePanel.Controls.Add(ColorChangeCheckBox);
             ColorPalettePanel.Controls.Add(LoadPaletteButton);
             ColorPalettePanel.Controls.Add(BackgroundColorLabel);
             ColorPalettePanel.Controls.Add(GridColorLabel);
@@ -1105,7 +1095,6 @@
         private Label BackgroundColorLabel;
         private Controls.ColorTable PaletteColorTable;
         private CheckBox TransparencyCheckBox;
-        private CheckBox ColorChangeCheckBox;
         private Button LoadImageButton;
         private Button CopyButton;
         private Button PasteButton;

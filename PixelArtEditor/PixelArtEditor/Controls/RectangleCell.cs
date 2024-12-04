@@ -16,12 +16,6 @@
         private bool VisibleSelection { get; set; }
 
         /// <summary>
-        /// Whether the cell is currently set to its default color or not.
-        /// The default color is the color the cell is set to when it is instanced.
-        /// </summary>
-        public bool DefaultColor { get; private set; }
-
-        /// <summary>
         /// Constructor for a Rectangle Cell.
         /// Defines a few default values to the cell's properties: No margin, dock style to fill.
         /// </summary>
@@ -32,7 +26,6 @@
         {
             CellSize = cellSize;
             VisibleSelection = selectable;
-            DefaultColor = true;
 
             Dock = DockStyle.Fill;
             Size = new Size(cellSize, cellSize);
@@ -77,7 +70,6 @@
         public void ChangeCellColor(Color color)
         {
             BackColor = color;
-            DefaultColor = false;
         }
     }
 }

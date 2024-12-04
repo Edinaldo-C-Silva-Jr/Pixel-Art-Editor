@@ -8,13 +8,13 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 
         private Bitmap EditedImage { get; set; }
 
-        private Action<Color> ChangeCellColor { get; set; }
+        private Action<Color>? ChangeCellColor { get; set; }
 
         private Color OldColor { get; set; }
 
         private Color NewColor { get; set; }
 
-        public ReplaceColorCommand(Bitmap oldImage, Bitmap newImage, Action<Color> changeCellColor, Color oldColor, Color newColor)
+        public ReplaceColorCommand(Bitmap oldImage, Bitmap newImage, Action<Color>? changeCellColor, Color oldColor, Color newColor)
         {
             UneditedImage = oldImage;
             EditedImage = newImage;
@@ -26,13 +26,13 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
         public void ExecuteChange(Graphics imageGraphics)
         {
             imageGraphics.DrawImage(EditedImage, 0, 0);
-            ChangeCellColor.Invoke(NewColor);
+            ChangeCellColor?.Invoke(NewColor);
         }
 
         public void RollbackChange(Graphics imageGraphics)
         {
             imageGraphics.DrawImage(UneditedImage, 0, 0);
-            ChangeCellColor.Invoke(OldColor);
+            ChangeCellColor?.Invoke(OldColor);
         }
     }
 }
