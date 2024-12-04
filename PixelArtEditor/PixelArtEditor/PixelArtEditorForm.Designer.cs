@@ -81,6 +81,7 @@
             SelectionSizeComboBox = new ComboBox();
             TopBarPanel = new Panel();
             ReplaceColorPanel = new Panel();
+            PickColorToReplaceButton = new Button();
             ReplacementColorLabel = new Label();
             ReplacementColorTable = new Controls.ColorTable();
             ColorToReplaceLabel = new Label();
@@ -100,7 +101,6 @@
             ViewingDivisionPanel = new Panel();
             DrawingBoxSizePanel = new Panel();
             ViewingBoxSizePanel = new Panel();
-            PickColorToReplaceButton = new Button();
             ((System.ComponentModel.ISupportInitialize)ViewWidthNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewHeightNumberBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ViewPixelSizeNumberBox).BeginInit();
@@ -788,6 +788,17 @@
             ReplaceColorPanel.Size = new Size(100, 150);
             ReplaceColorPanel.TabIndex = 35;
             // 
+            // PickColorToReplaceButton
+            // 
+            PickColorToReplaceButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            PickColorToReplaceButton.Location = new Point(5, 50);
+            PickColorToReplaceButton.Name = "PickColorToReplaceButton";
+            PickColorToReplaceButton.Size = new Size(90, 30);
+            PickColorToReplaceButton.TabIndex = 44;
+            PickColorToReplaceButton.Text = "Pick old color";
+            PickColorToReplaceButton.UseVisualStyleBackColor = true;
+            PickColorToReplaceButton.Click += PickColorToReplaceButton_Click;
+            // 
             // ReplacementColorLabel
             // 
             ReplacementColorLabel.Location = new Point(5, 90);
@@ -1030,16 +1041,6 @@
             ViewingBoxSizePanel.Name = "ViewingBoxSizePanel";
             ViewingBoxSizePanel.Size = new Size(550, 32);
             ViewingBoxSizePanel.TabIndex = 40;
-            // 
-            // PickColorToReplaceButton
-            // 
-            PickColorToReplaceButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            PickColorToReplaceButton.Location = new Point(5, 50);
-            PickColorToReplaceButton.Name = "PickColorToReplaceButton";
-            PickColorToReplaceButton.Size = new Size(90, 30);
-            PickColorToReplaceButton.TabIndex = 44;
-            PickColorToReplaceButton.Text = "Pick old color";
-            PickColorToReplaceButton.UseVisualStyleBackColor = true;
             // 
             // PixelArtEditorForm
             // 

@@ -515,12 +515,24 @@ namespace PixelArtEditor
             return toolParameters;
         }
 
+        private void DrawingBox_MouseDown_ReplaceColor(object? sender, MouseEventArgs e)
+        {
+            Point location = new(e.X / Images.DrawingImageZoom, e.Y / Images.DrawingImageZoom);
+            ColorToReplaceTable.Controls[0].BackColor = Images.EditDrawingImage.GetPixel(location.X, location.Y);
+
+            DrawingBox.MouseDown -= DrawingBox_MouseDown_ReplaceColor;
+
+            DrawingBox.MouseDown += DrawingBox_MouseDown;
+            DrawingBox.MouseMove += DrawingBox_MouseMove;
+            DrawingBox.MouseUp += DrawingBox_MouseUp;
+        }
+
         /// <summary>
         /// Uses the current tool's Mouse Click method.
         /// Sets the mouse location and fires the Paint event for the tool's preview.
         /// Defines the start of the image selection on right click.
         /// </summary>
-        private void DrawingBox_MouseDown(object sender, MouseEventArgs e)
+        private void DrawingBox_MouseDown(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -558,7 +570,7 @@ namespace PixelArtEditor
         /// Sets the mouse location and fires the Paint event for the tool's preview.
         /// Changes the image selection.
         /// </summary>
-        private void DrawingBox_MouseMove(object sender, MouseEventArgs e)
+        private void DrawingBox_MouseMove(object? sender, MouseEventArgs e)
         {
             if (e.X < 0 || e.Y < 0 || e.X >= Images.DisplayDrawingImage.Width || e.Y >= Images.DisplayDrawingImage.Height)
             {
@@ -593,7 +605,7 @@ namespace PixelArtEditor
         /// <summary>
         /// Uses the current tool's Mouse Release method.
         /// </summary>
-        private void DrawingBox_MouseUp(object sender, MouseEventArgs e)
+        private void DrawingBox_MouseUp(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -1072,6 +1084,15 @@ namespace PixelArtEditor
             (bool undoAvailable, bool redoAvailable) = UndoHandler.UndoRedoAvailable();
             UndoButton.Enabled = undoAvailable;
             RedoButton.Enabled = redoAvailable;
+        }
+
+        private void PickColorToReplaceButton_Click(object sender, EventArgs e)
+        {
+            DrawingBox.MouseDown -= DrawingBox_MouseDown;
+            DrawingBox.MouseMove -= DrawingBox_MouseMove;
+            DrawingBox.MouseUp -= DrawingBox_MouseUp;
+
+            DrawingBox.MouseDown += DrawingBox_MouseDown_ReplaceColor;
         }
     }
 }
