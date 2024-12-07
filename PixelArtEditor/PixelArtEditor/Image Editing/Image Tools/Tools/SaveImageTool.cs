@@ -6,7 +6,7 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
     {
         public void UseTool(Bitmap originalImage, ImageToolParameters parameters)
         {
-            if (parameters.Imagesize.HasValue)
+            if (parameters.OriginalImageSize.HasValue)
             {
                 string directory = "C:\\Users\\" + Environment.UserName + "\\Documents\\PixelEditor\\SavedImages\\";
                 if (!Directory.Exists(directory))
@@ -23,7 +23,7 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
                     Title = "Save the current image"
                 };
 
-                using SaveImageForm saveImageForm = new(originalImage, parameters.Imagesize.Value, saveDialog);
+                using SaveImageForm saveImageForm = new(originalImage, parameters.OriginalImageSize.Value, saveDialog);
                 saveImageForm.ShowDialog();
             }
         }

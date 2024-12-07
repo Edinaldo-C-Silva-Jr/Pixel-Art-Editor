@@ -9,11 +9,11 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 
         public void UseTool(Bitmap originalImage, ImageToolParameters parameters)
         {
-            if (parameters.Imagesize.HasValue && parameters.BackgroundColor.HasValue && parameters.UpdateOriginalImage is not null)
+            if (parameters.OriginalImageSize.HasValue && parameters.BackgroundColor.HasValue && parameters.UpdateOriginalImage is not null)
             {
                 UneditedImage = new(originalImage);
                 // Creates a new image with the currently defined size.
-                using Bitmap imageWithNewSize = new(parameters.Imagesize.Value.Width, parameters.Imagesize.Value.Height);
+                using Bitmap imageWithNewSize = new(parameters.OriginalImageSize.Value.Width, parameters.OriginalImageSize.Value.Height);
                 using Graphics newSizeGraphics = Graphics.FromImage(imageWithNewSize);
 
                 // Draws the Original Image on top of the new image, then assigns it to the Original Image.

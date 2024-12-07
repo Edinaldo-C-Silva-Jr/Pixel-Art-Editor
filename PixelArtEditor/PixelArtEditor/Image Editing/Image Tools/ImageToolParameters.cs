@@ -11,11 +11,6 @@
         public Color? BackgroundColor { get; set; }
 
         /// <summary>
-        /// The image's dimensions.
-        /// </summary>
-        public Size? Imagesize { get; set; }
-
-        /// <summary>
         /// A color value, representing an old color that will be replaced in the image.
         /// </summary>
         public Color? OldColor { get; set; }
@@ -25,17 +20,24 @@
         /// </summary>
         public Color? NewColor { get; set; }
 
-        public Action<Bitmap>? UpdateOriginalImage { get; set; }
+        /// <summary>
+        /// The image's dimensions.
+        /// </summary>
+        public Size? OriginalImageSize { get; set; }
 
-        public Action<Rectangle>? CopyImage { get; set; }
+        public Action<Bitmap>? UpdateOriginalImage { get; set; }
 
         public Rectangle? SelectedArea { get; set; }
 
-        public Action<Point>? PasteImage { get; set; }
+        public Action<Rectangle>? CopyImage { get; set; }
 
         public Point? PasteLocation { get; set; }
 
+        public Action<Point>? PasteImage { get; set; }
+
         public Size? ClipboardImageSize { get; set; }
+
+        public Size? ImageSize { get; set; }
 
         public bool? MakeImageTransparent { get; set; }
     }

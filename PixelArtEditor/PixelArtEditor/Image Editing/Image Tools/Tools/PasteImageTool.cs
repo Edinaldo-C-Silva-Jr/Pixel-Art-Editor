@@ -11,19 +11,19 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 
         public void UseTool(Bitmap originalImage, ImageToolParameters parameters)
         {
-            if (parameters.PasteLocation.HasValue && parameters.ClipboardImageSize.HasValue && parameters.Imagesize.HasValue && parameters.PasteImage is not null)
+            if (parameters.PasteLocation.HasValue && parameters.ClipboardImageSize.HasValue && parameters.ImageSize.HasValue && parameters.PasteImage is not null)
             {
                 int pasteImageWidth = parameters.ClipboardImageSize.Value.Width;
                 int pasteImageheight = parameters.ClipboardImageSize.Value.Height;
 
-                if (parameters.PasteLocation.Value.X + parameters.ClipboardImageSize.Value.Width > parameters.Imagesize.Value.Width)
+                if (parameters.PasteLocation.Value.X + parameters.ClipboardImageSize.Value.Width > parameters.ImageSize.Value.Width)
                 {
-                    pasteImageWidth = parameters.Imagesize.Value.Width - parameters.PasteLocation.Value.X;
+                    pasteImageWidth = parameters.ImageSize.Value.Width - parameters.PasteLocation.Value.X;
                 }
 
-                if (parameters.PasteLocation.Value.Y + parameters.ClipboardImageSize.Value.Height > parameters.Imagesize.Value.Height)
+                if (parameters.PasteLocation.Value.Y + parameters.ClipboardImageSize.Value.Height > parameters.ImageSize.Value.Height)
                 {
-                    pasteImageheight = parameters.Imagesize.Value.Height- parameters.PasteLocation.Value.Y;
+                    pasteImageheight = parameters.ImageSize.Value.Height- parameters.PasteLocation.Value.Y;
                 }
 
                 Rectangle clipboardArea = new(parameters.PasteLocation.Value, new Size(pasteImageWidth, pasteImageheight));
