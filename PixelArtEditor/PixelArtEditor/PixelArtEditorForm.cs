@@ -153,28 +153,10 @@ namespace PixelArtEditor
 
             Images.ChangeOriginalImageSize(width, height);
 
-            IImageTool tool = ImageFactory.ChangeCurrentTool(4);
-            ImageToolParameters imageParameters = new()
-            {
-                OriginalImageSize = Images.OriginalImageSize,
-                BackgroundColor = TransparencyCheckBox.Checked ? Color.Transparent : BackgroundColorTable.GetCurrentColor(),
-                UpdateOriginalImage = Images.ChangeOriginalImage
-            };
+            string[] imageProperties = new string[3] { "OriginalImageSize", "BackgroundColor", "UpdateOriginalImage" };
+            string[] undoProperties = new string[3] { "UpdateOriginalImage", "ChangeOriginalImageSize", "ChangeViewNumberBoxes"};
 
-            UndoParameters undoParameters = new()
-            {
-                UpdateOriginalImage = Images.ChangeOriginalImage,
-                ChangeOriginalImageSize = Images.ChangeOriginalImageSize,
-                ChangeViewNumberBoxes = UpdateViewNumberBoxes
-            };
-
-            tool.UseTool(Images.EditOriginalImage, imageParameters);
-
-            if (tool is IUndoRedoCreator undoTool)
-            {
-                UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
-                SetUndoRedoButtonAvailability();
-            }
+            UseImageTool(4, imageProperties, undoProperties);
 
             SetViewingBoxSize();
         }
@@ -677,24 +659,12 @@ namespace PixelArtEditor
         /// </summary>
         private void CopyImage()
         {
-            IImageTool tool = ImageFactory.ChangeCurrentTool(5);
-            ImageToolParameters imageParameters = new()
-            {
-                SelectedArea = Selector.SelectedArea
-            };
+            string[] imageProperties = new string[2] { "SelectedArea", "CopyImage" };
+            string[] undoProperties = Array.Empty<string>();
+            Bitmap imageToCopy = Selector.CurrentImageType == ImageType.OriginalImage ?
+                Images.EditOriginalImage : Images.EditDrawingImage;
 
-            if (Selector.CurrentImageType == ImageType.OriginalImage)
-            {
-                imageParameters.CopyImage = Images.CopyOriginalImage;
-
-                tool.UseTool(Images.EditOriginalImage, imageParameters);
-            }
-            else
-            {
-                imageParameters.CopyImage = Images.CopyDrawingImage;
-
-                tool.UseTool(Images.EditDrawingImage, imageParameters);
-            }
+            UseImageTool(5, imageProperties, undoProperties, imageToCopy);
         }
 
         /// <summary>
@@ -703,36 +673,12 @@ namespace PixelArtEditor
         /// </summary>
         private void PasteImage()
         {
-            IImageTool tool = ImageFactory.ChangeCurrentTool(6);
-            ImageToolParameters imageParameters = new()
-            {
-                PasteLocation = Selector.SelectedArea.Location
-            };
+            string[] imageProperties = new string[4] { "PasteLocation", "PasteImage", "ClipboardImageSize", "ImageSize" };
+            string[] undoProperties = Array.Empty<string>();
+            Bitmap imageToPaste = Selector.CurrentImageType == ImageType.OriginalImage ?
+                Images.EditOriginalImage : Images.EditDrawingImage;
 
-            if (Selector.CurrentImageType == ImageType.OriginalImage)
-            {
-                imageParameters.PasteImage = Images.PasteOriginalImage;
-                imageParameters.ClipboardImageSize = Images.ClipboardOriginalImage.Size;
-                imageParameters.OriginalImageSize = Images.OriginalImageSize;
-
-                tool.UseTool(Images.EditOriginalImage, imageParameters);
-            }
-            else
-            {
-                imageParameters.PasteImage = Images.PasteDrawingImage;
-                imageParameters.ClipboardImageSize = Images.ClipboardDrawingImage.Size;
-                imageParameters.OriginalImageSize = Images.DrawingImageSize;
-
-                tool.UseTool(Images.EditDrawingImage, imageParameters);
-            }
-
-            UndoParameters undoParameters = new();
-
-            if (tool is IUndoRedoCreator undoTool)
-            {
-                UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
-                SetUndoRedoButtonAvailability();
-            }
+            UseImageTool(6, imageProperties, undoProperties, imageToPaste);
 
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
             DrawingBox.SetNewImage(Images.DisplayDrawingImage);
@@ -794,23 +740,10 @@ namespace PixelArtEditor
 
         private void ChangeImageTransparency(bool transparency)
         {
-            IImageTool tool = ImageFactory.ChangeCurrentTool(7);
+            string[] imageProperties = new string[2] { "BackgroundColor", "MakeImageTransparent" };
+            string[] undoProperties = Array.Empty<string>();
 
-            ImageToolParameters imageParameters = new()
-            {
-                MakeImageTransparent = transparency,
-                BackgroundColor = BackgroundColorTable.GetCurrentColor()
-            };
-
-            UndoParameters undoParameters = new();
-
-            tool.UseTool(Images.EditOriginalImage, imageParameters);
-
-            if (tool is IUndoRedoCreator undoTool)
-            {
-                UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
-                SetUndoRedoButtonAvailability();
-            }
+            UseImageTool(7, imageProperties, undoProperties);
         }
 
         /// <summary>
@@ -920,13 +853,10 @@ namespace PixelArtEditor
         /// </summary>
         private void SaveImageButton_Click(object sender, EventArgs e)
         {
-            IImageTool tool = ImageFactory.ChangeCurrentTool(2);
-            ImageToolParameters imageParameters = new()
-            {
-                OriginalImageSize = Images.OriginalImageSize
-            };
+            string[] imageProperties = new string[1] { "OriginalImageSize" };
+            string[] undoProperties = Array.Empty<string>();
 
-            tool.UseTool(Images.EditOriginalImage, imageParameters);
+            UseImageTool(2, imageProperties, undoProperties);
         }
 
         /// <summary>
@@ -934,19 +864,10 @@ namespace PixelArtEditor
         /// </summary>
         private void LoadImageButton_Click(object sender, EventArgs e)
         {
-            IImageTool tool = ImageFactory.ChangeCurrentTool(3);
-            ImageToolParameters imageParameters = new();
-            UndoParameters undoParameters = new()
-            {
-                BackgroundColor = BackgroundColorTable.GetCurrentColor()
-            };
-            tool.UseTool(Images.EditOriginalImage, imageParameters);
+            string[] imageProperties = Array.Empty<string>();
+            string[] undoProperties = new string[1] { "BackgroundColor" };
 
-            if (tool is IUndoRedoCreator undoTool)
-            {
-                UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
-                SetUndoRedoButtonAvailability();
-            }
+            UseImageTool(3, imageProperties, undoProperties);
 
             Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
