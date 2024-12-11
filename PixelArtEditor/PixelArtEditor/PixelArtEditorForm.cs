@@ -368,25 +368,9 @@ namespace PixelArtEditor
         /// </summary>
         private void ClearOriginalImage()
         {
-            IImageTool tool = ImageFactory.ChangeCurrentTool(0);
-            Color backgroundColor = TransparencyCheckBox.Checked ? Color.Transparent : BackgroundColorTable.GetCurrentColor();
-            ImageToolParameters imageParameters = new()
-            {
-                BackgroundColor = backgroundColor
-            };
-
-            UndoParameters undoParameters = new()
-            {
-                BackgroundColor = backgroundColor
-            };
-
-            tool.UseTool(Images.EditOriginalImage, imageParameters);
-
-            if (tool is IUndoRedoCreator undoTool)
-            {
-                UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
-                SetUndoRedoButtonAvailability();
-            }
+            string[] imageProperties = new string[1] { "BackgroundColor" };
+            string[] undoProperties = new string[1] { "BackgroundColor" };
+            UseImageTool(0, imageProperties, undoProperties);
 
             Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
@@ -858,9 +842,12 @@ namespace PixelArtEditor
                     // The color will only be swaped for the image's background
                     if (cellParent.Name == "BackgroundColorTable")
                     {
-                        Color oldColor = cell.BackColor;
+                        // TODO: Probably make this less hacky.
+                        ColorToReplaceTable.Controls[0].BackColor = cell.BackColor;
+                        ReplacementColorTable.Controls[0].BackColor = ColorPickerDialog.Color;
                         cell.ChangeCellColor(ColorPickerDialog.Color);
-                        SwapColorInImage(oldColor, cell.BackColor, cell.ChangeCellColor);
+
+                        SwapColorInImage(true);
 
                         // Reload the image if there was a color swap.
                         Images.CreateNewDisplayOriginalImage();
@@ -888,7 +875,7 @@ namespace PixelArtEditor
         /// </summary>
         /// <param name="oldColor">The color to be replaced in the image.</param>
         /// <param name="newColor">The new color to apply to the image in place of the old one.</param>
-        private void SwapColorInImage(Color oldColor, Color newColor, Action<Color>? changeCellColor)
+        private void SwapColorInImage(bool changeCellColor)
         {
             // If the image has a transparent background, temportarily remove the transparency.
             if (TransparencyCheckBox.Checked)
@@ -896,27 +883,10 @@ namespace PixelArtEditor
                 ChangeImageTransparency(false);
             }
 
-            IImageTool tool = ImageFactory.ChangeCurrentTool(1);
-            ImageToolParameters imageParameters = new()
-            {
-                OldColor = oldColor,
-                NewColor = newColor
-            };
-
-            UndoParameters undoParameters = new()
-            {
-                ChangeCellColor = changeCellColor,
-                OldColor = oldColor,
-                NewColor = newColor
-            };
-
-            tool.UseTool(Images.EditOriginalImage, imageParameters);
-
-            if (tool is IUndoRedoCreator undoTool)
-            {
-                UndoHandler.TrackChange(undoTool.CreateUndoStep(undoParameters));
-                SetUndoRedoButtonAvailability();
-            }
+            string[] imageProperties = new string[2] { "OldColor", "NewColor" };
+            string[] undoProperties = changeCellColor ? 
+                new string[3] { "OldColor", "NewColor", "ChangeCellColor" } : new string[2] { "OldColor", "NewColor" };
+            UseImageTool(1, imageProperties, undoProperties);
 
             // Restored transparency to image if needed.
             if (TransparencyCheckBox.Checked)
@@ -1082,7 +1052,7 @@ namespace PixelArtEditor
 
         private void ReplaceColorButton_Click(object sender, EventArgs e)
         {
-            SwapColorInImage(ColorToReplaceTable.GetCurrentColor(), ReplacementColorTable.GetCurrentColor(), null);
+            SwapColorInImage(false);
 
             Images.CreateNewDisplayOriginalImage();
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
@@ -1091,12 +1061,12 @@ namespace PixelArtEditor
         }
 
         #region Image Tools
-        private void UseImageTool(int toolNumber, Bitmap? imageForTool = null)
+        private void UseImageTool(int toolNumber, string[] imageProperties, string[] undoProperties, Bitmap? imageForTool = null)
         {
             IImageTool tool = ImageFactory.ChangeCurrentTool(toolNumber);
 
-            ImageToolParameters imageParameters = new();
-            UndoParameters undoParameters = new();
+            ImageToolParameters imageParameters = GetImageToolParameters(imageProperties);
+            UndoParameters undoParameters = GetUndoParameters(undoProperties);
 
             Bitmap image = imageForTool is not null ? imageForTool : Images.EditOriginalImage;
 
@@ -1109,60 +1079,60 @@ namespace PixelArtEditor
             }
         }
 
-        private ImageToolParameters GetImageToolParameters(Dictionary<string, bool> properties)
+        private ImageToolParameters GetImageToolParameters(string[] properties)
         {
             ImageToolParameters imageParameters = new();
 
-            if (properties["BackgroundColor"])
+            if (properties.Contains("BackgroundColor"))
             {
                 Color backgroundColor = TransparencyCheckBox.Checked ? Color.Transparent : BackgroundColorTable.GetCurrentColor();
                 imageParameters.BackgroundColor = backgroundColor;
             }
-            if (properties["OldColor"])
+            if (properties.Contains("OldColor"))
             {
                 imageParameters.OldColor = ColorToReplaceTable.GetCurrentColor();
             }
-            if (properties["NewColor"])
+            if (properties.Contains("NewColor"))
             {
                 imageParameters.NewColor = ReplacementColorTable.GetCurrentColor();
             }
-            if (properties["OriginalImageSize"])
+            if (properties.Contains("OriginalImageSize"))
             {
                 imageParameters.OriginalImageSize = Images.OriginalImageSize;
             }
-            if (properties["UpdateOriginalImage"])
+            if (properties.Contains("UpdateOriginalImage"))
             {
                 imageParameters.UpdateOriginalImage = Images.ChangeOriginalImage;
             }
-            if (properties["SelectedArea"])
+            if (properties.Contains("SelectedArea"))
             {
                 imageParameters.SelectedArea = Selector.SelectedArea;
             }
-            if (properties["CopyImage"])
+            if (properties.Contains("CopyImage"))
             {
                 imageParameters.CopyImage = Selector.CurrentImageType == ImageType.OriginalImage ? 
                     Images.CopyOriginalImage : Images.CopyDrawingImage;
             }
-            if (properties["PasteLocation"])
+            if (properties.Contains("PasteLocation"))
             {
                 imageParameters.PasteLocation = Selector.SelectedArea.Location;
             }
-            if (properties["PasteImage"])
+            if (properties.Contains("PasteImage"))
             {
                 imageParameters.PasteImage = Selector.CurrentImageType == ImageType.OriginalImage ? 
                     Images.PasteOriginalImage : Images.PasteDrawingImage;
             }
-            if (properties["ClipboardImageSize"])
+            if (properties.Contains("ClipboardImageSize"))
             {
                 imageParameters.ClipboardImageSize = Selector.CurrentImageType == ImageType.OriginalImage ? 
                     Images.ClipboardOriginalImage.Size : Images.ClipboardDrawingImage.Size;
             }
-            if (properties["ImageSize"])
+            if (properties.Contains("ImageSize"))
             {
                 imageParameters.ImageSize = Selector.CurrentImageType == ImageType.OriginalImage ?
                     Images.OriginalImageSize : Images.DrawingImageSize;
             }
-            if (properties["MakeImageTransparent"])
+            if (properties.Contains("MakeImageTransparent"))
             {
                 imageParameters.MakeImageTransparent = TransparencyCheckBox.Checked;
             }
@@ -1170,40 +1140,40 @@ namespace PixelArtEditor
             return imageParameters;
         }
 
-        private UndoParameters GetUndoParameters(Dictionary<string, bool> properties)
+        private UndoParameters GetUndoParameters(string[] properties)
         {
             UndoParameters undoParameters = new();
 
-            if (properties["DrawingImageLocation"])
+            if (properties.Contains("DrawingImageLocation"))
             {
                 undoParameters.DrawingImageLocation = Images.DrawingLocation;
             }
-            if (properties["BackgroundColor"])
+            if (properties.Contains("BackgroundColor"))
             {
                 Color backgroundColor = TransparencyCheckBox.Checked ? Color.Transparent : BackgroundColorTable.GetCurrentColor();
                 undoParameters.BackgroundColor = backgroundColor;
             }
-            if (properties["OldColor"])
+            if (properties.Contains("OldColor"))
             {
                 undoParameters.OldColor = ColorToReplaceTable.GetCurrentColor();
             }
-            if (properties["NewColor"])
+            if (properties.Contains("NewColor"))
             {
                 undoParameters.NewColor = ReplacementColorTable.GetCurrentColor();
             }
-            if (properties["ChangeCellColor"] && BackgroundColorTable.Controls[0] is RectangleCell cell)
+            if (properties.Contains("ChangeCellColor") && BackgroundColorTable.Controls[0] is RectangleCell cell)
             {
                 undoParameters.ChangeCellColor = cell.ChangeCellColor;
             }
-            if (properties["UpdateOriginalImage"])
+            if (properties.Contains("UpdateOriginalImage"))
             {
                 undoParameters.UpdateOriginalImage = Images.ChangeOriginalImage;
             }
-            if (properties["ChangeOriginalImageSize"])
+            if (properties.Contains("ChangeOriginalImageSize"))
             {
                 undoParameters.ChangeOriginalImageSize = Images.ChangeOriginalImageSize;
             }
-            if (properties["ChangeViewNumberBoxes"])
+            if (properties.Contains("ChangeViewNumberBoxes"))
             {
                 undoParameters.ChangeViewNumberBoxes = UpdateViewNumberBoxes;
             }
