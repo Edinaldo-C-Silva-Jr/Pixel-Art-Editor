@@ -664,7 +664,7 @@ namespace PixelArtEditor
             Bitmap imageToCopy = Selector.CurrentImageType == ImageType.OriginalImage ?
                 Images.EditOriginalImage : Images.EditDrawingImage;
 
-            UseImageTool(5, imageProperties, undoProperties, imageToCopy);
+            UseImageTool(5, imageProperties, undoProperties, imageForTool: imageToCopy);
         }
 
         /// <summary>
@@ -678,7 +678,7 @@ namespace PixelArtEditor
             Bitmap imageToPaste = Selector.CurrentImageType == ImageType.OriginalImage ?
                 Images.EditOriginalImage : Images.EditDrawingImage;
 
-            UseImageTool(6, imageProperties, undoProperties, imageToPaste);
+            UseImageTool(6, imageProperties, undoProperties, imageForTool: imageToPaste);
 
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
             DrawingBox.SetNewImage(Images.DisplayDrawingImage);
@@ -740,10 +740,12 @@ namespace PixelArtEditor
 
         private void ChangeImageTransparency(bool transparency)
         {
-            string[] imageProperties = new string[2] { "BackgroundColor", "MakeImageTransparent" };
+            ImageToolParameters imageParameters = new() { MakeImageTransparent = transparency };
+
+            string[] imageProperties = new string[1] { "BackgroundColor" };
             string[] undoProperties = Array.Empty<string>();
 
-            UseImageTool(7, imageProperties, undoProperties);
+            UseImageTool(7, imageProperties, undoProperties, imageParameters: imageParameters);
         }
 
         /// <summary>
@@ -775,12 +777,7 @@ namespace PixelArtEditor
                     // The color will only be swaped for the image's background
                     if (cellParent.Name == "BackgroundColorTable")
                     {
-                        // TODO: Probably make this less hacky.
-                        ColorToReplaceTable.Controls[0].BackColor = cell.BackColor;
-                        ReplacementColorTable.Controls[0].BackColor = ColorPickerDialog.Color;
-                        cell.ChangeCellColor(ColorPickerDialog.Color);
-
-                        SwapColorInImage(true);
+                        SwapColorInImage(true, cell.BackColor, ColorPickerDialog.Color);
 
                         // Reload the image if there was a color swap.
                         Images.CreateNewDisplayOriginalImage();
@@ -808,7 +805,7 @@ namespace PixelArtEditor
         /// </summary>
         /// <param name="oldColor">The color to be replaced in the image.</param>
         /// <param name="newColor">The new color to apply to the image in place of the old one.</param>
-        private void SwapColorInImage(bool changeCellColor)
+        private void SwapColorInImage(bool changeCellColor, Color? oldColor = null, Color? newColor = null)
         {
             // If the image has a transparent background, temportarily remove the transparency.
             if (TransparencyCheckBox.Checked)
@@ -816,10 +813,24 @@ namespace PixelArtEditor
                 ChangeImageTransparency(false);
             }
 
-            string[] imageProperties = new string[2] { "OldColor", "NewColor" };
-            string[] undoProperties = changeCellColor ? 
-                new string[3] { "OldColor", "NewColor", "ChangeCellColor" } : new string[2] { "OldColor", "NewColor" };
-            UseImageTool(1, imageProperties, undoProperties);
+            string[] imageProperties, undoProperties;
+            ImageToolParameters? imageParameters = null;
+            UndoParameters? undoParameters = null;
+
+            if (oldColor is not null && newColor is not null)
+            {
+                imageParameters = new() { OldColor = oldColor, NewColor = newColor };
+                undoParameters = new() { OldColor = oldColor, NewColor = newColor };
+
+                imageProperties = Array.Empty<string>();
+                undoProperties = changeCellColor ? new string[1] { "ChangeCellColor" } : Array.Empty<string>();
+            } 
+            else
+            {
+                imageProperties = new string[2] { "OldColor", "NewColor" };
+                undoProperties = changeCellColor ? new string[3] { "OldColor", "NewColor", "ChangeCellColor" } : new string[2] { "OldColor", "NewColor" };
+            }
+            UseImageTool(1, imageProperties, undoProperties, imageParameters: imageParameters, undoParameters: undoParameters);
 
             // Restored transparency to image if needed.
             if (TransparencyCheckBox.Checked)
@@ -982,12 +993,14 @@ namespace PixelArtEditor
         }
 
         #region Image Tools
-        private void UseImageTool(int toolNumber, string[] imageProperties, string[] undoProperties, Bitmap? imageForTool = null)
+        private void UseImageTool(int toolNumber, string[] imageProperties, string[] undoProperties, 
+            ImageToolParameters? imageParameters = null, UndoParameters? undoParameters = null,
+            Bitmap? imageForTool = null)
         {
             IImageTool tool = ImageFactory.ChangeCurrentTool(toolNumber);
 
-            ImageToolParameters imageParameters = GetImageToolParameters(imageProperties);
-            UndoParameters undoParameters = GetUndoParameters(undoProperties);
+            imageParameters = GetImageToolParameters(imageProperties, imageParameters);
+            undoParameters = GetUndoParameters(undoProperties, undoParameters);
 
             Bitmap image = imageForTool is not null ? imageForTool : Images.EditOriginalImage;
 
@@ -1000,14 +1013,16 @@ namespace PixelArtEditor
             }
         }
 
-        private ImageToolParameters GetImageToolParameters(string[] properties)
+        private ImageToolParameters GetImageToolParameters(string[] properties, ImageToolParameters? imageParameters)
         {
-            ImageToolParameters imageParameters = new();
+            if (imageParameters is null)
+            {
+                imageParameters = new();
+            }
 
             if (properties.Contains("BackgroundColor"))
             {
-                Color backgroundColor = TransparencyCheckBox.Checked ? Color.Transparent : BackgroundColorTable.GetCurrentColor();
-                imageParameters.BackgroundColor = backgroundColor;
+                imageParameters.BackgroundColor = BackgroundColorTable.GetCurrentColor();
             }
             if (properties.Contains("OldColor"))
             {
@@ -1061,9 +1076,12 @@ namespace PixelArtEditor
             return imageParameters;
         }
 
-        private UndoParameters GetUndoParameters(string[] properties)
+        private UndoParameters GetUndoParameters(string[] properties, UndoParameters? undoParameters)
         {
-            UndoParameters undoParameters = new();
+            if (undoParameters is null)
+            {
+                undoParameters = new();
+            }
 
             if (properties.Contains("DrawingImageLocation"))
             {
