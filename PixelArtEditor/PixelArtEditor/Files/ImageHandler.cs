@@ -100,6 +100,11 @@ namespace PixelArtEditor.Files
             CreateNewDisplayOriginalImage();
         }
 
+        public Bitmap GetOriginalImageReference()
+        {
+            return EditOriginalImage;
+        }
+
         public void CopyOriginalImage(Rectangle selectedArea)
         {
             ClipboardOriginalImage?.Dispose();

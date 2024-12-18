@@ -875,8 +875,8 @@ namespace PixelArtEditor
         /// </summary>
         private void LoadImageButton_Click(object sender, EventArgs e)
         {
-            string[] imageProperties = Array.Empty<string>();
-            string[] undoProperties = new string[1] { "BackgroundColor" };
+            string[] imageProperties = { "UseImageTool", "GetImageReference", "ChangeOriginalImageSize", "ChangeViewNumberBoxes" };
+            string[] undoProperties = { "BackgroundColor" };
 
             UseImageTool(3, imageProperties, undoProperties);
 
@@ -884,6 +884,8 @@ namespace PixelArtEditor
             ViewingBox.SetNewImage(Images.DisplayOriginalImage);
             Images.CreateImageToDraw();
             DrawingBox.SetNewImage(Images.DisplayDrawingImage);
+            SetViewingBoxSize();
+            SetDrawingBoxSize();
         }
 
         /// <summary>
@@ -1071,6 +1073,22 @@ namespace PixelArtEditor
             if (properties.Contains("MakeImageTransparent"))
             {
                 imageParameters.MakeImageTransparent = TransparencyCheckBox.Checked;
+            }
+            if (properties.Contains("UseImageTool"))
+            {
+                imageParameters.UseImageTool = UseImageTool;
+            }
+            if (properties.Contains("GetImageReference"))
+            {
+                imageParameters.GetImageReference = Images.GetOriginalImageReference;
+            }
+            if (properties.Contains("ChangeOriginalImageSize"))
+            {
+                imageParameters.ChangeOriginalImageSize = Images.ChangeOriginalImageSize;
+            }
+            if (properties.Contains("ChangeViewNumberBoxes"))
+            {
+                imageParameters.ChangeViewNumberBoxes = UpdateViewNumberBoxes;
             }
 
             return imageParameters;

@@ -1,4 +1,6 @@
-﻿namespace PixelArtEditor.Image_Editing.Image_Tools
+﻿using PixelArtEditor.Image_Editing.Undo_Redo;
+
+namespace PixelArtEditor.Image_Editing.Image_Tools
 {
     /// <summary>
     /// The optional parameters used by Image Tools.
@@ -40,5 +42,13 @@
         public Size? ImageSize { get; set; }
 
         public bool? MakeImageTransparent { get; set; }
+
+        public Action<int, string[], string[], ImageToolParameters?, UndoParameters?, Bitmap?>? UseImageTool { get; set; }
+
+        public Func<Bitmap>? GetImageReference { get; set; }
+
+        public Action<int, int>? ChangeOriginalImageSize { get; set; }
+
+        public Action? ChangeViewNumberBoxes { get; set; }
     }
 }

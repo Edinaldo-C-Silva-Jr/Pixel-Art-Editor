@@ -57,6 +57,8 @@ namespace PixelArtEditor.Files.File_Forms
         /// </summary>
         private GridGeneratorFactory ZoomedGrid { get; set; }
 
+        public bool ResizeAfterLoad { get; set; } = false;
+
         /// <summary>
         /// The image after being loaded and zoom applied, which will be returned to the editor.
         /// </summary>
@@ -255,7 +257,7 @@ namespace PixelArtEditor.Files.File_Forms
         private void LoadImageAcceptZoomButton_Click(object sender, EventArgs e)
         {
             DisableZoomPanel();
-            
+
             AcceptZoomAndImageDimensions();
             ShowImageIfValid();
 
@@ -451,5 +453,10 @@ namespace PixelArtEditor.Files.File_Forms
             }
         }
         #endregion
+
+        private void ResizeAfterLoadCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            ResizeAfterLoad = ResizeAfterLoadCheckBox.Checked;
+        }
     }
 }

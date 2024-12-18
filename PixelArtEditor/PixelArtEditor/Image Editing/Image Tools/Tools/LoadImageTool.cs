@@ -25,10 +25,27 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
             using LoadImageForm loadImageForm = new(openDialog);
             DialogResult result = loadImageForm.ShowDialog();
 
-            if (result == DialogResult.OK)
+            if (result == DialogResult.OK && loadImageForm.ImageLoaded is not null)
             {
                 UneditedImage = new(originalImage);
-                using Bitmap imageLoaded = new(loadImageForm.ImageLoaded!);
+
+                if (loadImageForm.ResizeAfterLoad 
+                    && parameters.UseImageTool is not null && parameters.GetImageReference is not null 
+                    && parameters.ChangeOriginalImageSize is not null && parameters.ChangeViewNumberBoxes is not null)
+                {
+                    parameters.ChangeOriginalImageSize(loadImageForm.ImageLoaded.Size.Width, loadImageForm.ImageLoaded.Size.Height);
+                    parameters.ChangeViewNumberBoxes();
+
+                    ImageToolParameters imageParameters = new() { OriginalImageSize = loadImageForm.ImageLoaded.Size };
+
+                    string[] imageProperties = { "BackgroundColor", "UpdateOriginalImage" };
+                    string[] undoProperties = { "UpdateOriginalImage", "ChangeOriginalImageSize", "ChangeViewNumberBoxes" };
+                    parameters.UseImageTool(4, imageProperties, undoProperties, imageParameters, null, null);
+
+                    originalImage = parameters.GetImageReference();
+                }
+
+                using Bitmap imageLoaded = new(loadImageForm.ImageLoaded);
                 using Graphics originalImageGraphics = Graphics.FromImage(originalImage);
                 originalImageGraphics.DrawImage(imageLoaded, 0, 0);
                 EditedImage = new(originalImage);

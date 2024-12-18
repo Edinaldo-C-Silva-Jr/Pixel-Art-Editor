@@ -49,6 +49,7 @@
             LoadImageZoomedPictureBox = new PictureBox();
             ImageLoadedOriginalSizeLabel = new Label();
             LoadedImageZoomedSizeLabel = new Label();
+            ResizeAfterLoadCheckBox = new CheckBox();
             LoadImageBackgroundPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)LoadImagePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)LoadImageZoomNumberBox).BeginInit();
@@ -271,6 +272,16 @@
             LoadedImageZoomedSizeLabel.TabIndex = 15;
             LoadedImageZoomedSizeLabel.Text = "Image to be Loaded";
             // 
+            // ResizeAfterLoadCheckBox
+            // 
+            ResizeAfterLoadCheckBox.Location = new Point(410, 60);
+            ResizeAfterLoadCheckBox.Name = "ResizeAfterLoadCheckBox";
+            ResizeAfterLoadCheckBox.Size = new Size(110, 40);
+            ResizeAfterLoadCheckBox.TabIndex = 16;
+            ResizeAfterLoadCheckBox.Text = "Resize ViewBox to fit image";
+            ResizeAfterLoadCheckBox.UseVisualStyleBackColor = true;
+            ResizeAfterLoadCheckBox.CheckedChanged += ResizeAfterLoadCheckBox_CheckedChanged;
+            // 
             // LoadImageForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -278,6 +289,7 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(634, 461);
+            Controls.Add(ResizeAfterLoadCheckBox);
             Controls.Add(LoadedImageZoomedSizeLabel);
             Controls.Add(ImageLoadedOriginalSizeLabel);
             Controls.Add(LoadImageZoomedBackgroundPanel);
@@ -328,5 +340,6 @@
         private PictureBox LoadImageZoomedPictureBox;
         private Label ImageLoadedOriginalSizeLabel;
         private Label LoadedImageZoomedSizeLabel;
+        private CheckBox ResizeAfterLoadCheckBox;
     }
 }
