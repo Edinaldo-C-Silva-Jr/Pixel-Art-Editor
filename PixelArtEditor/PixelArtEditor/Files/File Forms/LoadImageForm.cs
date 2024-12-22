@@ -1,4 +1,5 @@
-﻿using PixelArtEditor.Grids;
+﻿using PixelArtEditor.Extension_Methods;
+using PixelArtEditor.Grids;
 using System.Drawing.Drawing2D;
 
 namespace PixelArtEditor.Files.File_Forms
@@ -9,12 +10,7 @@ namespace PixelArtEditor.Files.File_Forms
     /// </summary>
     public partial class LoadImageForm : Form
     {
-        #region Properties
-        /// <summary>
-        /// The dialog used to load the images from files.
-        /// </summary>
-        private OpenFileDialog OpenDialog { get; set; }
-
+        #region Loading Window Properties
         /// <summary>
         /// The type of zoom currently selected to zoom the image.
         /// </summary>
@@ -26,30 +22,38 @@ namespace PixelArtEditor.Files.File_Forms
         private ZoomType AppliedZoomType { get; set; }
 
         /// <summary>
+        /// The amount of zoom that has been applied to the image.
+        /// </summary>
+        private int AppliedZoom { get; set; }
+
+        /// <summary>
         /// Whether the editor will do a zoom preview or not.
         /// The zoom preview is used while changing the zoom, but before clicking the Accept button.
         /// </summary>
         private bool PreviewZoom { get; set; }
 
         /// <summary>
-        /// Defines whether the image has a valid size to be loaded into the program.
-        /// </summary>
-        private bool ImageIsValid { get; set; } = false;
-
-        /// <summary>
-        /// The size of the image as it is loaded from a file into the form.
+        /// The size of the image as it is when loading from a file.
         /// </summary>
         private Size InitialImageSize { get; set; }
 
         /// <summary>
-        /// The size of the image after applying zoom, as it will be passed to the editor.
+        /// The size of the image after applying zoom. This is the size it will have in the editor.
         /// </summary>
         private Size ImageLoadedSize { get; set; }
 
         /// <summary>
-        /// The amount of zoom that has been applied to the image.
+        /// Defines if the image has a valid size to be loaded into the program.
+        /// The maximum allowed size is 1024 x 1024.
         /// </summary>
-        private int AppliedZoom { get; set; }
+        private bool ImageIsValid { get; set; } = false;
+        #endregion
+
+        #region Load Properties
+        /// <summary>
+        /// The dialog used to load the images from files.
+        /// </summary>
+        private OpenFileDialog OpenDialog { get; set; }
 
         /// <summary>
         /// The factory that generates the grid applied to the original image..
@@ -57,10 +61,13 @@ namespace PixelArtEditor.Files.File_Forms
         /// </summary>
         private GridGeneratorFactory ZoomedGrid { get; set; }
 
+        /// <summary>
+        /// Defines if the editor will resize the ViewingBox after loading, in order to completely fit the loaded image.
+        /// </summary>
         public bool ResizeAfterLoad { get; set; } = false;
 
         /// <summary>
-        /// The image after being loaded and zoom applied, which will be returned to the editor.
+        /// The image to load, after applying the appropriate zoom, which will be returned to the editor.
         /// </summary>
         public Bitmap? ImageLoaded { get; set; }
         #endregion
@@ -100,6 +107,7 @@ namespace PixelArtEditor.Files.File_Forms
             LoadImageEnlargeImageButton.Visible = false;
             LoadedImageZoomedSizeLabel.Visible = false;
             ConfirmLoadButton.Enabled = false;
+            ResizeAfterLoadCheckBox.Checked = false;
         }
 
         /// <summary>
@@ -112,7 +120,7 @@ namespace PixelArtEditor.Files.File_Forms
         }
         #endregion
 
-        #region Open, Confirm and Cancel Buttons
+        #region Open Image / Confirm and Cancel Load / Resize CheckBox.
         /// <summary>
         /// Utilizes the OpenFileDialog to load an image from a file into the PictureBox.
         /// Then checks if the image size is valid and loads the size values into the labels.
@@ -124,6 +132,8 @@ namespace PixelArtEditor.Files.File_Forms
             {
                 DisableZoomPanel();
 
+                // Loads the image.
+                LoadImagePictureBox.Image?.Dispose();
                 LoadImagePictureBox.Image = new Bitmap(OpenDialog.FileName);
                 LoadImagePictureBox.Size = LoadImagePictureBox.Image.Size;
                 LoadImageBackgroundPanel.ResizePanelToFitControls();
@@ -131,7 +141,7 @@ namespace PixelArtEditor.Files.File_Forms
 
                 AppliedZoom = 1;
                 AppliedZoomType = ZoomType.None;
-                ImageLoadedSize = InitialImageSize = LoadImagePictureBox.Size;
+                ImageLoadedSize = InitialImageSize = LoadImagePictureBox.Image.Size;
                 LoadImageWidthLabel.Text = $"Width: {InitialImageSize.Width}";
                 LoadImageHeightLabel.Text = $"Height: {InitialImageSize.Height}";
 
@@ -163,6 +173,14 @@ namespace PixelArtEditor.Files.File_Forms
         private void CancelLoadButton_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
+        }
+
+        /// <summary>
+        /// Defines whether the ViewingBox will be resized to fit the image after loading.
+        /// </summary>
+        private void ResizeAfterLoadCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            ResizeAfterLoad = ResizeAfterLoadCheckBox.Checked;
         }
         #endregion
 
@@ -203,10 +221,12 @@ namespace PixelArtEditor.Files.File_Forms
             if (smallerDimension >= 320) // If both image dimensions are equal to or bigger than 320...
             {
                 return 64; // Then the reduce zoom can be set to 64x.
-            }
-            else // Otherwise...
+            } 
+            else
             {
-                return smallerDimension / 5; // Set the reduce zoom so that the smaller dimension can't be less than 5.
+                // Set the reduce zoom so that the smaller dimension can't be less than 5.
+                // Also make sure it isn't lower than 1.
+                return (smallerDimension / 5).ValidateMinimum(1);
             }
         }
 
@@ -229,7 +249,9 @@ namespace PixelArtEditor.Files.File_Forms
             }
             else // Otherwise...
             {
-                return 1024 / biggerDimension; // Set the maximum zoom so that the bigger dimension won't be larger than 2014.
+                // Set the maximum zoom so that the bigger dimension won't be larger than 1024.
+                // Also make sure it isn't higher than 99, so it doesn't break the NumberBar.
+                return (1024 / biggerDimension).ValidateMaximum(99);
             }
         }
 
@@ -312,7 +334,7 @@ namespace PixelArtEditor.Files.File_Forms
         private void ValidateImageDimensions()
         {
             bool valid = true;
-            if (ImageLoadedSize.Width > 1024)
+            if (ImageLoadedSize.Width > 1024 || ImageLoadedSize.Width < 5)
             {
                 LoadPixelWidthLabel.ForeColor = Color.Red;
                 valid = false;
@@ -322,7 +344,7 @@ namespace PixelArtEditor.Files.File_Forms
                 LoadPixelWidthLabel.ForeColor = Color.Green;
             }
 
-            if (ImageLoadedSize.Height > 1024)
+            if (ImageLoadedSize.Height > 1024 || ImageLoadedSize.Width < 5)
             {
                 LoadPixelHeightLabel.ForeColor = Color.Red;
                 valid = false;
@@ -415,6 +437,7 @@ namespace PixelArtEditor.Files.File_Forms
 
             // Draws the original image onto the zoomed image, using the new size and interpolation mode defined.
             zoomGraphics.DrawImage(originalImage, 0, 0, zoomWidth, zoomHeight);
+            originalImage?.Dispose();
             return zoomedImage;
         }
         #endregion
@@ -453,10 +476,5 @@ namespace PixelArtEditor.Files.File_Forms
             }
         }
         #endregion
-
-        private void ResizeAfterLoadCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            ResizeAfterLoad = ResizeAfterLoadCheckBox.Checked;
-        }
     }
 }
