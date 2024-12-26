@@ -7,7 +7,6 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
     {
         private Bitmap? UneditedImage { get; set; }
         private Bitmap? EditedImage { get; set; }
-        private Point? EditLocation { get; set; }
 
         public void UseTool(Bitmap originalImage, ImageToolParameters parameters)
         {
@@ -29,7 +28,6 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
                 Rectangle clipboardArea = new(parameters.PasteLocation.Value, new Size(pasteImageWidth, pasteImageheight));
 
                 UneditedImage = originalImage.Clone(clipboardArea, PixelFormat.Format32bppArgb);
-                EditLocation = parameters.PasteLocation.Value;
 
                 parameters.PasteImage(parameters.PasteLocation.Value);
 
@@ -39,9 +37,9 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 
         public IUndoRedoCommand? CreateUndoStep(UndoParameters parameters)
         {
-            if (UneditedImage is not null && EditedImage is not null && EditLocation.HasValue)
+            if (UneditedImage is not null && EditedImage is not null && parameters.PasteLocation.HasValue)
             {
-                PasteImageCommand command = new(new(UneditedImage), new(EditedImage), EditLocation.Value);
+                PasteImageCommand command = new(new(UneditedImage), new(EditedImage), parameters.PasteLocation.Value);
                 ClearProperties();
                 return command;
             }
@@ -57,8 +55,6 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
             UneditedImage = null;
             EditedImage?.Dispose();
             EditedImage = null;
-
-            EditLocation = null;
         }
     }
 }

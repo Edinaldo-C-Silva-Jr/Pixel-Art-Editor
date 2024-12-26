@@ -17,5 +17,7 @@
         public Action<int, int>? ChangeOriginalImageSize { get; set; }
 
         public Action? ChangeViewNumberBoxes { get; set; }
+
+        public Point? PasteLocation { get; set; }
     }
 }

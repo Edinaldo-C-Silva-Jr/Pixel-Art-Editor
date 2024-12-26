@@ -153,8 +153,8 @@ namespace PixelArtEditor
 
             Images.ChangeOriginalImageSize(width, height);
 
-            string[] imageProperties = new string[3] { "OriginalImageSize", "BackgroundColor", "UpdateOriginalImage" };
-            string[] undoProperties = new string[3] { "UpdateOriginalImage", "ChangeOriginalImageSize", "ChangeViewNumberBoxes"};
+            string[] imageProperties = { "OriginalImageSize", "BackgroundColor", "UpdateOriginalImage" };
+            string[] undoProperties = { "UpdateOriginalImage", "ChangeOriginalImageSize", "ChangeViewNumberBoxes"};
 
             UseImageTool(4, imageProperties, undoProperties);
 
@@ -350,8 +350,8 @@ namespace PixelArtEditor
         /// </summary>
         private void ClearOriginalImage()
         {
-            string[] imageProperties = new string[1] { "BackgroundColor" };
-            string[] undoProperties = new string[1] { "BackgroundColor" };
+            string[] imageProperties = { "BackgroundColor" };
+            string[] undoProperties = { "BackgroundColor" };
             UseImageTool(0, imageProperties, undoProperties);
 
             Images.CreateNewDisplayOriginalImage();
@@ -659,7 +659,7 @@ namespace PixelArtEditor
         /// </summary>
         private void CopyImage()
         {
-            string[] imageProperties = new string[2] { "SelectedArea", "CopyImage" };
+            string[] imageProperties = { "SelectedArea", "CopyImage" };
             string[] undoProperties = Array.Empty<string>();
             Bitmap imageToCopy = Selector.CurrentImageType == ImageType.OriginalImage ?
                 Images.EditOriginalImage : Images.EditDrawingImage;
@@ -673,8 +673,8 @@ namespace PixelArtEditor
         /// </summary>
         private void PasteImage()
         {
-            string[] imageProperties = new string[4] { "PasteLocation", "PasteImage", "ClipboardImageSize", "ImageSize" };
-            string[] undoProperties = Array.Empty<string>();
+            string[] imageProperties = { "PasteLocation", "PasteImage", "ClipboardImageSize", "ImageSize" };
+            string[] undoProperties = { "PasteLocation" };
             Bitmap imageToPaste = Selector.CurrentImageType == ImageType.OriginalImage ?
                 Images.EditOriginalImage : Images.EditDrawingImage;
 
@@ -742,7 +742,7 @@ namespace PixelArtEditor
         {
             ImageToolParameters imageParameters = new() { MakeImageTransparent = transparency };
 
-            string[] imageProperties = new string[1] { "BackgroundColor" };
+            string[] imageProperties = { "BackgroundColor" };
             string[] undoProperties = Array.Empty<string>();
 
             UseImageTool(7, imageProperties, undoProperties, imageParameters: imageParameters);
@@ -864,7 +864,7 @@ namespace PixelArtEditor
         /// </summary>
         private void SaveImageButton_Click(object sender, EventArgs e)
         {
-            string[] imageProperties = new string[1] { "OriginalImageSize" };
+            string[] imageProperties = { "OriginalImageSize" };
             string[] undoProperties = Array.Empty<string>();
 
             UseImageTool(2, imageProperties, undoProperties);
@@ -1133,6 +1133,11 @@ namespace PixelArtEditor
             if (properties.Contains("ChangeViewNumberBoxes"))
             {
                 undoParameters.ChangeViewNumberBoxes = UpdateViewNumberBoxes;
+            }
+            if (properties.Contains("PasteLocation"))
+            {
+                undoParameters.PasteLocation = Selector.CurrentImageType == ImageType.OriginalImage ?
+                    Selector.SelectedArea.Location : new(Images.DrawingLocation.X + Selector.SelectedArea.Location.X, Images.DrawingLocation.Y + Selector.SelectedArea.Location.Y);
             }
 
             return undoParameters;
