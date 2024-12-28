@@ -71,7 +71,7 @@ namespace PixelArtEditor.Files
         #endregion
 
         /// <summary>
-        /// Default constructor, instances all images and the image selector.
+        /// Default constructor. Instances the images with the default size and makes them white.
         /// </summary>
         public ImageHandler()
         {
@@ -92,31 +92,44 @@ namespace PixelArtEditor.Files
             drawingGraphics.Clear(Color.White);
         }
 
-        #region Methods for Setting Images
+        #region Original Image
+        #region Getting and Setting Image
+        /// <summary>
+        /// Gets the reference to the Original Image.
+        /// </summary>
+        /// <returns>The reference to the Original Image.</returns>
+        public Bitmap GetOriginalImageReference()
+        {
+            return EditOriginalImage;
+        }
+
+        /// <summary>
+        /// Changes the Original Image to a new image.
+        /// </summary>
+        /// <param name="newImage">The new image to use as the Original Image.</param>
         public void ChangeOriginalImage(Bitmap newImage)
         {
             EditOriginalImage?.Dispose();
             EditOriginalImage = new(newImage);
             CreateNewDisplayOriginalImage();
         }
+        #endregion
 
-        public Bitmap GetOriginalImageReference()
-        {
-            return EditOriginalImage;
-        }
-
+        #region Copying and Pasting Image
+        /// <summary>
+        /// Creates a new Clipboard Original Image by copying an area of the Original Image based on the selected area.
+        /// </summary>
+        /// <param name="selectedArea">The area to copy from the Original Image.</param>
         public void CopyOriginalImage(Rectangle selectedArea)
         {
             ClipboardOriginalImage?.Dispose();
             ClipboardOriginalImage = EditOriginalImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
         }
 
-        public void CopyDrawingImage(Rectangle selectedArea)
-        {
-            ClipboardDrawingImage?.Dispose();
-            ClipboardDrawingImage = EditDrawingImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
-        }
-
+        /// <summary>
+        /// Pastes the ClipboardOriginalImage into the OriginalImage, in the desired location.
+        /// </summary>
+        /// <param name="pasteLocation">The location to paste the clipboard image into the original image.</param>
         public void PasteOriginalImage(Point pasteLocation)
         {
             using Graphics pasteGraphics = Graphics.FromImage(EditOriginalImage);
@@ -125,7 +138,26 @@ namespace PixelArtEditor.Files
             CreateImageToDraw();
             CreateNewDisplayOriginalImage();
         }
+        #endregion
+        #endregion
 
+        #region Drawing Image
+        #region Copying and Pasting Image
+        /// <summary>
+        /// Creates a new Clipboard Drawing Image by copying an area of the Drawing Image based on the selected area.
+        /// </summary>
+        /// <param name="selectedArea">The area to copy from the Drawing Image.</param>
+        public void CopyDrawingImage(Rectangle selectedArea)
+        {
+            ClipboardDrawingImage?.Dispose();
+            ClipboardDrawingImage = EditDrawingImage.Clone(selectedArea, PixelFormat.Format32bppArgb);
+        }
+
+
+        /// <summary>
+        /// Pastes the ClipboardDrawingImage into the DrawingImage, in the desired location.
+        /// </summary>
+        /// <param name="pasteLocation">The location to paste the clipboard image into the drawing image.</param>
         public void PasteDrawingImage(Point pasteLocation)
         {
             using Graphics pasteGraphics = Graphics.FromImage(EditDrawingImage);
@@ -134,7 +166,12 @@ namespace PixelArtEditor.Files
             ApplyDrawnImage();
             CreateNewDisplayDrawingImage();
         }
+
         #endregion
+        #endregion
+
+
+
 
         #region Original Image Size, Creation and Changing
         /// <summary>
@@ -194,9 +231,8 @@ namespace PixelArtEditor.Files
         /// Checks if the Drawing Image Dimensions are bigger than the Original Image Dimensions.
         /// If they are bigger, reduces them to match the Original Image, since the Drawing Image will be a copy of the Original Image.
         /// </summary>
-        /// <param name="pixelWidth">The pixel width of the Drawing Image.</param>
-        /// <param name="pixelHeight">The pixel height of the Drawing Image.</param>
-        /// <returns>A tuple of width and height values.</returns>
+        /// <param name="drawingSize">The size of the Drawing Image.</param>
+        /// <returns>A new size value to use for the Drawing Image.</returns>
         private Size ValidateDrawingSize(Size drawingSize)
         {
             int pixelWidth = drawingSize.Width.ValidateMaximum(OriginalImageSize.Width);

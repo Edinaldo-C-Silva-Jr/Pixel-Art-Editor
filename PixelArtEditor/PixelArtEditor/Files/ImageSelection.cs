@@ -117,6 +117,9 @@ namespace PixelArtEditor.Files
             }
         }
 
+        /// <summary>
+        /// Disposes of unmanaged resources in the class.
+        /// </summary>
         public void Dispose()
         {
             SelectionBrush?.Dispose();
