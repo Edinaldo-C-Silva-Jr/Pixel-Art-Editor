@@ -3,26 +3,43 @@ using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
 {
+    /// <summary>
+    /// A tool that draws a pixel in the location of the mouse click, along with another pixel, mirrored vertically.
+    /// </summary>
     public class VerticalMirrorPenTool : BaseMirrorPenTool
     {
-        protected override void ValidateInitialLocation(int clickX, int clickY, Size imageSize)
+        /// <summary>
+        /// Sets the initial boundaries of the mouse movement.
+        /// In the Vertical Mirror Pen Tool, the click location will always be in the upper half of the image.
+        /// </summary>
+        /// <param name="clickX">X position of the mouse click.</param>
+        /// <param name="clickY">Y position of the mouse click.</param>
+        /// <param name="imageSize">The size of the Drawing Image.</param>
+        protected override void ValidateInitialBoundaries(int clickX, int clickY, Size imageSize)
         {
             // Guarantees the click location represents the upper portion of the image (since the lower portion will be the same, but mirrored).
             if (clickY > (imageSize.Height - 1) / 2)
             {
                 clickY = imageSize.Height - clickY - 1;
             }
-            base.ValidateInitialLocation(clickX, clickY, imageSize);
+            base.ValidateInitialBoundaries(clickX, clickY, imageSize);
         }
 
-        protected override void ValidateMirrorLocation(int clickX, int clickY, Size imageSize)
+        /// <summary>
+        /// Validates the boundaries during each drawing action to account for the mirrored positions.
+        /// In the Vertical Mirror Pen Tool, the click location will always be in the upper half of the image.
+        /// </summary>
+        /// <param name="clickX">X position of the mouse click.</param>
+        /// <param name="clickY">Y position of the mouse click.</param>
+        /// <param name="imageSize">The size of the Drawing Image.</param>
+        protected override void ValidateMirrorBoundaries(int clickX, int clickY, Size imageSize)
         {
             // Guarantees the click location represents the upper portion of the image (since the lower portion will be the same, but mirrored).
             if (clickY > (imageSize.Height - 1) / 2)
             {
                 clickY = imageSize.Height - clickY - 1;
             }
-            base.ValidateMirrorLocation(clickX, clickY, imageSize);
+            base.ValidateMirrorBoundaries(clickX, clickY, imageSize);
         }
 
         protected override void DrawMirrorPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, Size imageSize)

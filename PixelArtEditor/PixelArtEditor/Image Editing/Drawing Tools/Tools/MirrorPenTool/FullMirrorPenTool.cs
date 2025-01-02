@@ -3,6 +3,9 @@ using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
 {
+    /// <summary>
+    /// A tool that draws a pixel in the location of the mouse click, along with another pixel, mirrored horizontally and vertically.
+    /// </summary>
     public class FullMirrorPenTool : BaseMirrorPenTool
     {
         protected override void DrawMirrorPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, Size imageSize)

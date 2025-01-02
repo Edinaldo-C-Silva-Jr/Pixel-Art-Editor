@@ -1,5 +1,4 @@
 ﻿using PixelArtEditor.Extension_Methods;
-using PixelArtEditor.Image_Editing.Drawing_Tools.Tools.PenTool;
 using PixelArtEditor.Image_Editing.Undo_Redo;
 using System.Drawing.Imaging;
 
@@ -48,6 +47,12 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.OtherTools
         private Graphics? DrawingCycleGraphics { get; set; }
         #endregion
 
+        /// <summary>
+        /// Erases a single pixel by setting it to the background color.
+        /// </summary>
+        /// <param name="graphics">The graphics object to use when erasing the pixel.</param>
+        /// <param name="backgroundColor">The background color of the image, which will be used to erase the pixel.</param>
+        /// <param name="location">The location of the pixel to be erased.</param>
         private void ErasePixel(Graphics graphics, Color backgroundColor, Point location)
         {
             // Defines the area that will be erased...
@@ -59,6 +64,12 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.OtherTools
             graphics.Clear(backgroundColor);
         }
 
+        /// <summary>
+        /// Erases a line between the currently clicked pixel and the previous clicked pixel.
+        /// </summary>
+        /// <param name="drawGraphics">The graphics object to use when erasing the pixels.</param>
+        /// <param name="backgroundColor">The background color of the image, used to erase the pixels.</param>
+        /// <param name="location">The location of the currently clicked pixel.</param>
         protected void EraseLineBetweenPixels(Graphics drawGraphics, Color backgroundColor, Point location)
         {
             if (PreviousPoint.HasValue && PreviousPoint != location)
@@ -87,6 +98,17 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.OtherTools
             }
         }
 
+        /// <summary>
+        /// Erases the line pixel by pixel.
+        /// This is done by calculating when to shift the pixel position horizontally or vertically to erase the next pixel.
+        /// </summary>
+        /// <param name="graphics">The graphics object to use when erasing the pixels.</param>
+        /// <param name="bgColor">The background color of the image, used to erase the pixels.</param>
+        /// <param name="lineLength">The length of the line to be erased. This should be the bigger distance between horizontal or vertical.</param>
+        /// <param name="lineRatio">The ratio between the horizontal and vertical distances of the line.</param>
+        /// <param name="horizontalLine">Whether the line will be predominantly horizontal or vertical.</param>
+        /// <param name="rightLine">Defines if the line is pointing to the right or left.</param>
+        /// <param name="downLine">Defines if the line is pointing down or up.</param>
         private void CalculateAndEraseLine(Graphics graphics, Color bgColor, int lineLength, decimal lineRatio, bool horizontalLine, bool rightLine, bool downLine)
         {
             // The line's current position inside each pixel. Defines when to shift to the next pixel.

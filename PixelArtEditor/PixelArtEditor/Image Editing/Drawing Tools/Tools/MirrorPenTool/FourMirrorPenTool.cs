@@ -3,9 +3,19 @@ using System.Drawing.Imaging;
 
 namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
 {
+    /// <summary>
+    /// A tool that draws a pixel in the location of the mouse click, along with three more pixels, mirrored horizontally, vertically, and both.
+    /// </summary>
     public class FourMirrorPenTool : BaseMirrorPenTool
     {
-        protected override void ValidateInitialLocation(int clickX, int clickY, Size imageSize)
+        /// <summary>
+        /// Sets the initial boundaries of the mouse movement.
+        /// In the Four Mirror Pen Tool, the click location will always be in the top left quarter of the image.
+        /// </summary>
+        /// <param name="clickX">X position of the mouse click.</param>
+        /// <param name="clickY">Y position of the mouse click.</param>
+        /// <param name="imageSize">The size of the Drawing Image.</param>
+        protected override void ValidateInitialBoundaries(int clickX, int clickY, Size imageSize)
         {
             // The click location will always be on the top and left since the other 3 quadrants will be mirrored.
             if (clickX > (imageSize.Width - 1) / 2)
@@ -18,10 +28,18 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
                 clickY = imageSize.Height - clickY - 1;
             }
 
-            base.ValidateInitialLocation(clickX, clickY, imageSize);
+            base.ValidateInitialBoundaries(clickX, clickY, imageSize);
         }
 
-        protected override void ValidateMirrorLocation(int clickX, int clickY, Size imageSize)
+        /// <summary>
+        /// Validates the boundaries during each drawing action to account for the mirrored positions.
+        /// In the Four Mirror Pen Tool, the click location will always be in the top left quarter of the image.
+        /// </summary>
+        /// <param name="clickX">X position of the mouse click.</param>
+        /// <param name="clickY">Y position of the mouse click.</param>
+        /// <param name="imageSize">The size of the Drawing Image.</param>
+
+        protected override void ValidateMirrorBoundaries(int clickX, int clickY, Size imageSize)
         {
             // The click location will always be on the top and left since the other 3 quadrants will be mirrored.
             if (clickX > (imageSize.Width - 1) / 2)
@@ -34,7 +52,7 @@ namespace PixelArtEditor.Image_Editing.Drawing_Tools.Tools.MirrorPenTool
                 clickY = imageSize.Height - clickY - 1;
             }
 
-            base.ValidateMirrorLocation(clickX, clickY, imageSize);
+            base.ValidateMirrorBoundaries(clickX, clickY, imageSize);
         }
 
         protected override void DrawMirrorPixel(Graphics drawGraphics, SolidBrush drawBrush, Point location, Size imageSize)

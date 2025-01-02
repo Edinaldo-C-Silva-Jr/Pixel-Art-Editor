@@ -100,6 +100,9 @@
             }
         }
 
+        /// <summary>
+        /// Disposes of the previously used Grid.
+        /// </summary>
         public void Dispose()
         {
             LineGridPiece?.Dispose();

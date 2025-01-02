@@ -51,6 +51,9 @@ namespace PixelArtEditor.Grids
             Grid.GenerateGrid(imageWidth, imageHeight, cellSize, gridColor);
         }
 
+        /// <summary>
+        /// Disposes of the previously used Grid.
+        /// </summary>
         public void Dispose()
         {
             Grid?.Dispose();
