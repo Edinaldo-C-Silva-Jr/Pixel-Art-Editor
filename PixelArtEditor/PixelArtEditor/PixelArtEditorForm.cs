@@ -50,6 +50,8 @@ namespace PixelArtEditor
         /// Used in the Paint event to define the tool preview location.
         /// </summary>
         private Point? MouseOnDrawingBox { get; set; }
+
+        private bool UndoExecuted { get; set; }
         #endregion
 
         #region Form Initialization and Closing
@@ -382,7 +384,7 @@ namespace PixelArtEditor
         private void DrawingBox_Paint(object sender, PaintEventArgs e)
         {
             // Uses the Drawing Tool in the Drawing Box.
-            if (MouseOnDrawingBox.HasValue)
+            if (MouseOnDrawingBox.HasValue && !UndoExecuted)
             {
                 DrawingToolParameters toolParameters = GetToolParameters(MouseOnDrawingBox.Value);
 
@@ -501,6 +503,7 @@ namespace PixelArtEditor
         {
             if (e.Button == MouseButtons.Left)
             {
+                UndoExecuted = false;
                 Selector.ClearSelection(ImageType.DrawingImage);
 
                 Color paletteColor = PaletteColorTable.GetCurrentColor();
@@ -542,7 +545,7 @@ namespace PixelArtEditor
                 MouseOnDrawingBox = e.Location;
             }
 
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left && !UndoExecuted)
             {
                 DrawingToolParameters toolParameters = GetToolParameters(e.Location);
 
@@ -572,7 +575,7 @@ namespace PixelArtEditor
         /// </summary>
         private void DrawingBox_MouseUp(object? sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left && !UndoExecuted)
             {
                 DrawingToolParameters toolParameters = GetToolParameters(e.Location);
                 UndoParameters undoParameters = new()
@@ -939,6 +942,7 @@ namespace PixelArtEditor
 
         private void UndoAction()
         {
+            UndoExecuted = true;
             UndoHandler.UndoChange(Images.EditOriginalImage);
 
             SetUndoRedoButtonAvailability();
@@ -957,6 +961,7 @@ namespace PixelArtEditor
 
         private void RedoAction()
         {
+            UndoExecuted = true;
             UndoHandler.RedoChange(Images.EditOriginalImage);
 
             SetUndoRedoButtonAvailability();

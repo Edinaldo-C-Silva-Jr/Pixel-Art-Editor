@@ -437,7 +437,6 @@ namespace PixelArtEditor.Files.File_Forms
 
             // Draws the original image onto the zoomed image, using the new size and interpolation mode defined.
             zoomGraphics.DrawImage(originalImage, 0, 0, zoomWidth, zoomHeight);
-            originalImage?.Dispose();
             return zoomedImage;
         }
         #endregion
