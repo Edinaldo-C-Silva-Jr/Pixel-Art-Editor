@@ -777,7 +777,7 @@ namespace PixelArtEditor
 
                 if (colorpicked == DialogResult.OK)
                 {
-                    // The color will only be swaped for the image's background
+                    // The color will only be swaped for the image's background.
                     if (cellParent.Name == "BackgroundColorTable")
                     {
                         SwapColorInImage(true, cell.BackColor, ColorPickerDialog.Color);

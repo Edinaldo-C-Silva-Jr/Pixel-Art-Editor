@@ -1,6 +1,10 @@
 ﻿namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 {
-    internal class CopyImageTool : IImageTool
+    /// <summary>
+    /// A tool used to copy a portion of an image, which can be the DrawingImage or the OriginalImage,
+    /// It uses an existing method provided by the Image Handler to copy a portion of the image into the corresponding Clipboard Image.
+    /// </summary>
+    public class CopyImageTool : IImageTool
     {
         public void UseTool(Bitmap originalImage, ImageToolParameters parameters)
         {

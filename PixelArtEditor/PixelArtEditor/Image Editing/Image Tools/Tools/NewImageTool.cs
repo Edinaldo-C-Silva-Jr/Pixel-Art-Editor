@@ -2,8 +2,15 @@
 
 namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
 {
+    /// <summary>
+    /// A tool used to create a new blank image in the editor.
+    /// It clears the Original image with the current background color.
+    /// </summary>
     public class NewImageTool : IImageTool, IUndoRedoCreator
     {
+        /// <summary>
+        /// The old image, before being replaced by a blank one.
+        /// </summary>
         private Bitmap? UneditedImage { get; set; }
 
         public void UseTool(Bitmap originalImage, ImageToolParameters parameters)
@@ -12,6 +19,7 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
             {
                 UneditedImage = new(originalImage);
 
+                // Clears the entire image with the background color to create a new blank image.
                 using Graphics imageGraphics = Graphics.FromImage(originalImage);
                 imageGraphics.Clear(parameters.BackgroundColor.Value);
             }
@@ -31,6 +39,9 @@ namespace PixelArtEditor.Image_Editing.Image_Tools.Tools
             }
         }
 
+        /// <summary>
+        /// Disposes of unmanaged resources and clears properties used by the tool.
+        /// </summary>
         protected void ClearProperties()
         {
             UneditedImage?.Dispose();
