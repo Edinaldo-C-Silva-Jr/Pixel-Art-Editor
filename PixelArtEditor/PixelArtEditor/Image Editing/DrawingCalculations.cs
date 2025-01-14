@@ -2,6 +2,9 @@
 
 namespace PixelArtEditor.Image_Editing
 {
+    /// <summary>
+    /// A class with calculation methods used in the drawing methods.
+    /// </summary>
     public static class DrawingCalculations
     {
         /// <summary>
